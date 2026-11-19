@@ -2445,6 +2445,21 @@ void Object::clearAndSetModelConditionFlagsForHorde(const int *clear, const int 
 // FUNCTION: BFME2 0x00293DAC size=92 name=?setWeaponSetFlagForHorde@Object@@QAEXW4WeaponSetType@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00293E08 size=92 name=?clearWeaponSetFlagForHorde@Object@@QAEXW4WeaponSetType@@@Z evidence=N:ledger tier=A
+void Object::clearWeaponSetFlagForHorde(WeaponSetType flag)
+{
+	Object *leader = rva002931F5(false);
+	if (leader)
+	{
+		HordeContainInterface *horde = leader->rva0028C197();
+		if (horde)
+		{
+			ContainmentListView members = horde->hordeSlot66();
+			for (ContainmentList::const_iterator it = members.objects().begin(); it != members.objects().end(); ++it)
+				(*it)->clearWeaponSetFlag(flag);
+			leader->clearWeaponSetFlag(flag);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x00293E64 size=155 name=?rva00293E64@Object@@QAEXPAVDict@@@Z evidence=?:placeholder tier=A
 
