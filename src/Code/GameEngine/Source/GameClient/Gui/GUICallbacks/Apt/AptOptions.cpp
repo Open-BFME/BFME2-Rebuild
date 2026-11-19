@@ -7,7 +7,7 @@
 #include "GameClient/GadgetComboBox.h"
 #include "GameClient/GadgetCheckBox.h"
 #include "stdlib.h"
-#include "Draft/GameLODManager.h"
+#include "Common/GameLOD.h"
 #include "GameClient/GameText.h"
 #include "GameClient/Display.h"
 #include "Common/GameAudio.h"
@@ -15,7 +15,6 @@
 void Rva00518262Enable(void);
 #include "Common/UnicodeString.h"
 extern const char *rva00202B6CNames[];
-extern GameLODManager *TheGameLODManager;
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *, const unsigned char *);
 extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *);
 extern int g_Va00A04908;
@@ -255,7 +254,7 @@ void AptOptions::rva00518FEA(int level, int kind)
 	{
 		if (level <= m_detailLevel)
 			return;
-		if (level <= TheGameLODManager->m_unk0x17C4)
+		if (level <= TheGameLODManager->m_idealDetailLevel)
 			return;
 	}
 	rva00518B05(AsciiString("APT:WarnHighGraphicSettings"), kind);

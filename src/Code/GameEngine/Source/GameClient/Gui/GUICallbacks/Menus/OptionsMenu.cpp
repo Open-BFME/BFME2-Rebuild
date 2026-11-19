@@ -22,10 +22,9 @@ extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *
 
 // The LOD enum table (BfmeEnumTableEntry, declared in Common/OptionPreferences.h).
 #include "GameLogic/ScriptEngine.h"
-#include "Draft/GameLODManager.h"
+#include "Common/GameLOD.h"
 #include "Common/GameAudio.h"
 #include "Common/AudioSettings.h"
-extern GameLODManager *TheGameLODManager;
 extern BfmeEnumTableEntry BfmeEnumTable[];
 extern const char *StaticGameLODNames[];	// VA 0x00DB95F4: VeryLow .. Custom (GameLOD.cpp; Zero Hour's name)
 // The five volume preference keys (SFXVolume, VoiceVolume, MusicVolume, AmbientVolume,
@@ -36,7 +35,7 @@ extern const char g_volumePreferenceKeys[][20];
 // FUNCTION: BFME2 0x002E427D size=30 name=?getStaticGameDetail@OptionPreferences@@QAEHXZ evidence=N:ledger
 Int OptionPreferences::getStaticGameDetail()
 {
-	Int level = TheGameLODManager->m_staticLevel;
+	Int level = TheGameLODManager->m_currentStaticLOD;
 	return getEnumIndex("StaticGameLOD", StaticGameLODNames, 6, level);
 }
 
