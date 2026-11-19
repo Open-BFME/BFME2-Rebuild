@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G0008F6E1",
+  "rows": [
+    {
+      "rva": "0x0075FE23",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0075FE2D",
+      "name": "$L348",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0075FE2D;X:shared by 27 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-some-parents-unassigned",
+      "parent_rvas": "0x0008F6E1;0x0008F71B;0x0008F755;0x0008F78F;0x0008F7C9;0x0008F803;0x0008F83D;0x0008F877;0x0008F8B1;0x0008F8EB;0x0008F925;0x0008F95F;0x0008F999;0x0008F9D3;0x0008FA0D;0x0008FA47;0x0008FA81;0x0008FABB;0x0008FAF5;0x0008FB2F;0x0008FB69;0x0008FBA3;0x0008FBDD;0x0008FC17;0x0008FC63;0x0008FCAE;0x0008FF84",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G0008F6E1",
+      "accepted_names": [
+        "$L348"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0075FE2D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0075FE2D",
+      "name": "__ehhandler$?Rva0008F6E1Create@@YGPAVRva000A0891@@PAX@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00902AD0;X:parent-by-prologue;X:EH stub shared by 27 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-some-parents-unassigned",
+      "parent_rvas": "0x0008F6E1;0x0008F71B;0x0008F755;0x0008F78F;0x0008F7C9;0x0008F803;0x0008F83D;0x0008F877;0x0008F8B1;0x0008F8EB;0x0008F925;0x0008F95F;0x0008F999;0x0008F9D3;0x0008FA0D;0x0008FA47;0x0008FA81;0x0008FABB;0x0008FAF5;0x0008FB2F;0x0008FB69;0x0008FBA3;0x0008FBDD;0x0008FC17;0x0008FC63;0x0008FCAE;0x0008FF84",
+      "parent_evidence": "X:handler-operand(27 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G0008F6E1",
+      "accepted_names": [
+        "__ehhandler$?Rva0008F6E1Create@@YGPAVRva000A0891@@PAX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004DE700",
+  "rows": [
+    {
+      "rva": "0x004DE74D",
+      "size": 26,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004DE74D",
+      "name": "?push_back@?$list@UBfmeSpecialPowerTimer8@@V?$allocator@UBfmeSpecialPowerTimer8@@@_STL@@@_STL@@QAEXABUBfmeSpecialPowerTimer8@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O004DE700",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004DE700",
+      "accepted_names": [
+        "?push_back@?$list@UBfmeSpecialPowerTimer8@@V?$allocator@UBfmeSpecialPowerTimer8@@@_STL@@@_STL@@QAEXABUBfmeSpecialPowerTimer8@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0079172C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004DE767",
+      "fold_group": "",
+      "name": "Unwind@00b9172c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079173F",
+      "object_id": "O004DE700",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004DE767",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004DE767",
+      "object": "O004DE700",
+      "accepted_names": [
+        "Unwind@00b9172c"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00791734",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004DE767",
+      "fold_group": "",
+      "name": "uw_00791734",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079173F",
+      "object_id": "O004DE700",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004DE767",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004DE767",
+      "object": "O004DE700",
+      "accepted_names": [
+        "uw_00791734"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0079173F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004DE767",
+      "fold_group": "",
+      "name": "__ehhandler$??1ObjectSMCHelper@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009438AC;X:parent-by-prologue",
+      "object_id": "O004DE700",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004DE767",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004DE767",
+      "object": "O004DE700",
+      "accepted_names": [
+        "__ehhandler$??1ObjectSMCHelper@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

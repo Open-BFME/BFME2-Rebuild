@@ -1,0 +1,53 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0069E230",
+  "rows": [
+    {
+      "rva": "0x0069E440",
+      "size": 1,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F0069E440",
+      "name": "?debugIgnoreLeaks@?$StringBase@D@@QAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O0069E230",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0069E230",
+      "accepted_names": [
+        "?debugIgnoreLeaks@?$StringBase@D@@QAEXXZ",
+        "??3@YAXPAX0@Z",
+        "?PreDestroy@AptValue@@UAEXXZ",
+        "_piConnectFree",
+        "_ciUserTableElementFreeFn",
+        "_piXpingTableElementFreeFn",
+        "_piJoinRoomFree",
+        "_piPlayersTableElementFreeFn",
+        "_piRoomNameChangedFree",
+        "_piRoomModeChangedFree",
+        "_piNewPlayerListFree",
+        "_piAutoMatchStatusFree",
+        "?IgnoreAllocatorAssertion@@YAXPBDPAX@Z",
+        "?Reset@TextureMapperClass@@UAEXXZ",
+        "??1LightEnvironmentClass@@QAE@XZ",
+        "?Update_Sub_Object_Transforms@RenderObjClass@@UAEXXZ",
+        "?RegisterReferences@AptBoolean@@UBEXXZ",
+        "?RegisterReferences@AptFloat@@UBEXXZ",
+        "?RegisterReferences@AptInteger@@UBEXXZ",
+        "?EmergencyFlush@DebugIOOds@@UAEXXZ",
+        "?EmergencyFlush@DebugIONet@@UAEXXZ",
+        "?EmergencyFlush@DebugIOCon@@UAEXXZ",
+        "?DX8_Assert@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

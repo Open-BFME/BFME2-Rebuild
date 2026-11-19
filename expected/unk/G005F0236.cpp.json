@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G005F0236",
+  "rows": [
+    {
+      "rva": "0x007A4B3F",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005F0383",
+      "fold_group": "",
+      "name": "$L1254",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A4B54",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005F0383",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005F0383",
+      "object": "G005F0236",
+      "accepted_names": [
+        "$L1254"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A4B4C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005F0383",
+      "fold_group": "",
+      "name": "$L1255",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A4B54",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005F0383",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005F0383",
+      "object": "G005F0236",
+      "accepted_names": [
+        "$L1255"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A4B54",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005F0383",
+      "fold_group": "",
+      "name": "__ehhandler$?GetButtonImage@StrategicInGameUI@@YAPBVImage@@PBUStrategicButtonImageView@@H@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095D670;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005F0383",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005F0383",
+      "object": "G005F0236",
+      "accepted_names": [
+        "__ehhandler$?GetButtonImage@StrategicInGameUI@@YAPBVImage@@PBUStrategicButtonImageView@@H@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

@@ -1,0 +1,3729 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "objects": 2104,
+  "map_objects": 3051,
+  "source_files": 2104,
+  "owned_functions": 33451,
+  "owned_row_tiers": {
+    "B": 18008,
+    "L": 1598,
+    "A": 13845
+  },
+  "owned_bytes_by_tier": {
+    "B": 2728204,
+    "L": 252651,
+    "A": 2561970
+  },
+  "library_objects": 122,
+  "held": [
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/GameMemory.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0002FC80"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O000A9D36.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O000A91FD"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O000CF074.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O000CF074"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/statistics.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "",
+        "O00129470",
+        "unknown"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/NameKey/NameKey.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00148A98"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/segline.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0015E150"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/hrawanim.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0018D1E0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/agg_def.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O001A3110"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarResizer.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O001DB6FD"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Eva.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O001DCDAF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INITerrain.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00200A01"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/HeaderTemplate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00201998"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/GameLOD.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0020200D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GameFont.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002173FA"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/GlobalData.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0023428D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GameClient.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00238E25"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/Upgrade.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0026EDC4"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/FunctionLexicon.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002D2235"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/System/Smudge.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002D269B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Audio/AudioEventRTS.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002D94DD"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldPlayer.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002E074E"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GameText.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002E5611"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/ai.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O002FD73B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MapUtil.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003004A5"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/DataChunk.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00306C08"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/MessageStream.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0030F463"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GameWindowGlobal.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00314C1D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GameWindowManagerScript.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00314EEE"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/TerrainTypes.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00317BA5"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/GlobalWeatherSystem.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0031842A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarScheme.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0031ED2C"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/ScriptEngine/LuaScriptEngine.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00332B7A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/LoadScreen.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00355DC5"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandButton.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0035AED4"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GameWindowTransitionsStyles.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0035D45A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/LaserUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00362EEE"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/GiantBirdAIUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00367518"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RadiusDecalUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003913E4"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/CastleSystem.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003955AF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/ExperienceTracker.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0039ABFF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/LifetimeUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003A49D1"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O003ECCD0.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003ECA81"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/LargeGroupAudio/LargeGroupAudioAudioMap.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003EE1BE"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldRegion.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003EFCD1"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/matrix3.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O003FBF50"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00403A5B.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004030EF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/VictorySystem.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0040471B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/CreateAHeroHero.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00406DE3"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/AwardSystem.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0040A68F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveSciencePurchasePointBonus.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004135CD"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveResourceBonus.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00413DCC"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0041B80F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/CaveSystem.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0042755D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MessageStream/SelectionXlat.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0042FA0D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/StatsCollector.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00437607"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0044E12F.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0044E12F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/SpecialAbilityUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0044E5E7"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0045314E.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004530D0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004561BB.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004561A2"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00456556"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeScaffoldBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00458279"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004599DF.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004599DF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0045A291.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0045A1D9"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0045ADDA.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0045ADC1"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SlowDeathBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0045D1BD",
+        "O0045E8A9",
+        "unknown"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/ShipSlowDeathBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0045E9F4"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0045ED9D.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0045ED9D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004619A7.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0046183B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00477098.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00477098"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00479BCA.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00479ADA"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0047EBA9.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0047EB78"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/PropagandaTowerBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048180C"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/FireWeaponWhenDeadBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00482BDB"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/RebuildHoleBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004831CB"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SupplyWarehouseCripplingBehavior.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004839D3"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00483C63.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00483C35"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/CreateObjectDie.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048593D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00485EE3.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00485EC3"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/DestroyDie.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004864AA"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/FXListDie.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00486579"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/SpecialPowerCompletionDie.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004869FC"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/UpgradeDie.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00486B56"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AssistedTargetingUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00486E18"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/DefaultProductionExitUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00487F3A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048B95F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0048E0F4.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048DC51"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/HeightDieUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048FBBA"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0049125E.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004911AE"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O00491DEC.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00491DD3"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoFindHealingUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049506E"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/CommandButtonHuntUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049529F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/OneRingPenaltyUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00499934"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoDepositUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049A1AB"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0049A67C.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049A64B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0049ACC5.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049AC94"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0049BFD7.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049BFB7"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProneUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0049FE7B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004A13E0.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004A13E0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/StructureCollapseUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004A4214"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RubbleRiseUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004A4C19"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/SupplyCenterProductionExitUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004A653D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004A750A.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004A750A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004AB897.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AB7EB"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004AC93C.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AC8EF"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004ACE11.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004ACD73"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004AD9DA.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AD9B0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004AE4DC.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AE4DC"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004B018E.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B0164"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004B0876.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B0802"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004B2394.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B237B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004B7B81.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B7B20"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004B7F21.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B7F01"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/LockWeaponCreate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B8C0E"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Damage/BoneFXDamage.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004B96E5"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004BAC83.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004BAC83"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/DefectorSpecialPower.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004C2970"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/OCLSpecialPower.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004C30BC"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004C6C56.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004C6C56"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004C6F71.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004C6F71"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004C8D3B.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004C8D1B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004CC653.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004CC63A"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O004CD3D5.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004CD3D5"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/ActivateModuleSpecialPower.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004CDD33"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004CF032"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/WindowVideoManager.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0053F06C"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AIDock.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00544095"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AIHarvest.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00544C03"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AITNGuard.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00545B4F"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/RankPointValue.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00559B4B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/PartitionSolver.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00566EDD"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/NetCommandWrapperList.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0058BFA8"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/font3d.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O005CC966"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O005CF9B2.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O005CF937"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/DownloadManager.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O005E048B"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/File.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00602412"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/unk/O0060D565.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0060D565"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/random.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O006192D0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/rawfile.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00619FD0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/bufffile.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0061ADE0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/mpmath.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0061B710"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/VideoPlayer/VideoPlayer.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00688750"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/string/EAString.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O006D3870"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptDate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O006F39A0"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptActionInterpreter.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O006FB960"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptObject/AptScriptFunction.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00709670"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptNativeHash.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0070A610"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O0048B03E"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoPickUpUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O00495C48"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RainOfFireUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AC24D"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DetachableRiderUpdate.cpp",
+      "action": "hold-row-contract",
+      "proposed_objects": [
+        "O004AE78E"
+      ],
+      "reason": "populated or leased file; new map changes complete owned/emitted membership or extent"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/memorypool/memorypool_allocator.cpp",
+      "map_object": "O0002FC80",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/GUI/W3DAptAux.cpp",
+      "map_object": "O000A91FD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O000CF074.cpp",
+      "map_object": "O000CF074",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/statistics.cpp",
+      "map_object": "O00129470",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/NameKey/NameKey.cpp",
+      "map_object": "O00148A98",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/segline.cpp",
+      "map_object": "O0015E150",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/hrawanim.cpp",
+      "map_object": "O0018D1E0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/agg_def.cpp",
+      "map_object": "O001A3110",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarResizer.cpp",
+      "map_object": "O001DB6FD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Eva.cpp",
+      "map_object": "O001DCDAF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INITerrain.cpp",
+      "map_object": "O00200A01",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/HeaderTemplate.cpp",
+      "map_object": "O00201998",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/GameLOD.cpp",
+      "map_object": "O0020200D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/GameFont.cpp",
+      "map_object": "O002173FA",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/GlobalData.cpp",
+      "map_object": "O0023428D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GameClient.cpp",
+      "map_object": "O00238E25",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/Upgrade.cpp",
+      "map_object": "O0026EDC4",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/FunctionLexicon.cpp",
+      "map_object": "O002D2235",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/System/Smudge.cpp",
+      "map_object": "O002D269B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Audio/AudioEventRTS.cpp",
+      "map_object": "O002D94DD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldPlayer.cpp",
+      "map_object": "O002E074E",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GameText.cpp",
+      "map_object": "O002E5611",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AI.cpp",
+      "map_object": "O002FD73B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MapUtil.cpp",
+      "map_object": "O003004A5",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/DataChunk.cpp",
+      "map_object": "O00306C08",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/MessageStream.cpp",
+      "map_object": "O0030F463",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/GameWindowGlobal.cpp",
+      "map_object": "O00314C1D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/GameWindowManagerScript.cpp",
+      "map_object": "O00314EEE",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/TerrainTypes.cpp",
+      "map_object": "O00317BA5",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/GlobalWeatherSystem.cpp",
+      "map_object": "O0031842A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarScheme.cpp",
+      "map_object": "O0031ED2C",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/ScriptEngine/LuaScriptEngine.cpp",
+      "map_object": "O00332B7A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/LoadScreen.cpp",
+      "map_object": "O00355DC5",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandButton.cpp",
+      "map_object": "O0035AED4",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/Transitions/MainMenuScaleUpTransition.cpp",
+      "map_object": "O0035D45A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/LaserUpdate.cpp",
+      "map_object": "O00362EEE",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/GiantBirdAIUpdate.cpp",
+      "map_object": "O00367518",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RadiusDecalUpdate.cpp",
+      "map_object": "O003913E4",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/CastleSystem.cpp",
+      "map_object": "O003955AF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/ExperienceTracker.cpp",
+      "map_object": "O0039ABFF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/LifetimeUpdate.cpp",
+      "map_object": "O003A49D1",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ThreatFinderUpdate.cpp",
+      "map_object": "O003ECA81",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/LargeGroupAudio/LargeGroupAudioAudioMap.cpp",
+      "map_object": "O003EE1BE",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldRegion.cpp",
+      "map_object": "O003EFCD1",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/matrix3.cpp",
+      "map_object": "O003FBF50",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/AttributeModifier.cpp",
+      "map_object": "O004030EF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/VictorySystem.cpp",
+      "map_object": "O0040471B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/CreateAHeroHero.cpp",
+      "map_object": "O00406DE3",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/AwardSystem.cpp",
+      "map_object": "O0040A68F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveSciencePurchasePointBonus.cpp",
+      "map_object": "O004135CD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveResourceBonus.cpp",
+      "map_object": "O00413DCC",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp",
+      "map_object": "O0041B80F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/CaveSystem.cpp",
+      "map_object": "O0042755D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MessageStream/SelectionXlat.cpp",
+      "map_object": "O0042FA0D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/StatsCollector.cpp",
+      "map_object": "O00437607",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/BloodthirstyUpdate.cpp",
+      "map_object": "O0044E12F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/SpecialAbilityUpdate.cpp",
+      "map_object": "O0044E5E7",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/GettingBuiltBehavior.cpp",
+      "map_object": "O004530D0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004561A2.cpp",
+      "map_object": "O004561A2",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeBehavior.cpp",
+      "map_object": "O00456556",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeScaffoldBehavior.cpp",
+      "map_object": "O00458279",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004599DF.cpp",
+      "map_object": "O004599DF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp",
+      "map_object": "O0045A1D9",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0045ADC1.cpp",
+      "map_object": "O0045ADC1",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SlowDeathBehavior.cpp",
+      "map_object": "O0045D1BD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0045E8A9.cpp",
+      "map_object": "O0045E8A9",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/ShipSlowDeathBehavior.cpp",
+      "map_object": "O0045E9F4",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0045ED9D.cpp",
+      "map_object": "O0045ED9D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/FakePathfindPortalBehaviour.cpp",
+      "map_object": "O0046183B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Contain/HordeContain/HordeTransportContain.cpp",
+      "map_object": "O00477098",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Contain/HordeContain/HordeGarrisonContain.cpp",
+      "map_object": "O00479ADA",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/AnimalAIUpdate.cpp",
+      "map_object": "O0047EB78",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/PropagandaTowerBehavior.cpp",
+      "map_object": "O0048180C",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/FireWeaponWhenDeadBehavior.cpp",
+      "map_object": "O00482BDB",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/RebuildHoleBehavior.cpp",
+      "map_object": "O004831CB",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SupplyWarehouseCripplingBehavior.cpp",
+      "map_object": "O004839D3",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O00483C35.cpp",
+      "map_object": "O00483C35",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/CreateObjectDie.cpp",
+      "map_object": "O0048593D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O00485EC3.cpp",
+      "map_object": "O00485EC3",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/DestroyDie.cpp",
+      "map_object": "O004864AA",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/FXListDie.cpp",
+      "map_object": "O00486579",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/SpecialPowerCompletionDie.cpp",
+      "map_object": "O004869FC",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/UpgradeDie.cpp",
+      "map_object": "O00486B56",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AssistedTargetingUpdate.cpp",
+      "map_object": "O00486E18",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/DefaultProductionExitUpdate.cpp",
+      "map_object": "O00487F3A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdate.cpp",
+      "map_object": "O0048B03E",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdate.cpp",
+      "map_object": "O0048B95F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0048DC51.cpp",
+      "map_object": "O0048DC51",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/HeightDieUpdate.cpp",
+      "map_object": "O0048FBBA",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004911AE.cpp",
+      "map_object": "O004911AE",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdate.cpp",
+      "map_object": "O00491DD3",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoFindHealingUpdate.cpp",
+      "map_object": "O0049506E",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/CommandButtonHuntUpdate.cpp",
+      "map_object": "O0049529F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoPickUpUpdate.cpp",
+      "map_object": "O00495C48",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/OneRingPenaltyUpdate.cpp",
+      "map_object": "O00499934",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoDepositUpdate.cpp",
+      "map_object": "O0049A1AB",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/HordeAIUpdate.cpp",
+      "map_object": "O0049A64B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0049AC94.cpp",
+      "map_object": "O0049AC94",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0049BFB7.cpp",
+      "map_object": "O0049BFB7",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProneUpdate.cpp",
+      "map_object": "O0049FE7B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004A13E0.cpp",
+      "map_object": "O004A13E0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/StructureCollapseUpdate.cpp",
+      "map_object": "O004A4214",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RubbleRiseUpdate.cpp",
+      "map_object": "O004A4C19",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/SupplyCenterProductionExitUpdate.cpp",
+      "map_object": "O004A653D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004A750A.cpp",
+      "map_object": "O004A750A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004AB7EB.cpp",
+      "map_object": "O004AB7EB",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/RainOfFireUpdate.cpp",
+      "map_object": "O004AC24D",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004AC8EF.cpp",
+      "map_object": "O004AC8EF",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/RousingSpeechUpdate.cpp",
+      "map_object": "O004ACD73",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/ToggleMountedSpecialAbilityUpdate.cpp",
+      "map_object": "O004AD9B0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004AE4DC.cpp",
+      "map_object": "O004AE4DC",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DetachableRiderUpdate.cpp",
+      "map_object": "O004AE78E",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004B0164.cpp",
+      "map_object": "O004B0164",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIGateUpdate.cpp",
+      "map_object": "O004B0802",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/EntEnraged.cpp",
+      "map_object": "O004B237B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004B7B20.cpp",
+      "map_object": "O004B7B20",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004B7F01.cpp",
+      "map_object": "O004B7F01",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/LockWeaponCreate.cpp",
+      "map_object": "O004B8C0E",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Damage/BoneFXDamage.cpp",
+      "map_object": "O004B96E5",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004BAC83.cpp",
+      "map_object": "O004BAC83",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/DefectorSpecialPower.cpp",
+      "map_object": "O004C2970",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/OCLSpecialPower.cpp",
+      "map_object": "O004C30BC",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004C6C56.cpp",
+      "map_object": "O004C6C56",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004C6F71.cpp",
+      "map_object": "O004C6F71",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004C8D1B.cpp",
+      "map_object": "O004C8D1B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004CC63A.cpp",
+      "map_object": "O004CC63A",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O004CD3D5.cpp",
+      "map_object": "O004CD3D5",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/ActivateModuleSpecialPower.cpp",
+      "map_object": "O004CDD33",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp",
+      "map_object": "O004CF032",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GUI/WindowVideoManager.cpp",
+      "map_object": "O0053F06C",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AIDock.cpp",
+      "map_object": "O00544095",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Ai/AIHarvest.cpp",
+      "map_object": "O00544C03",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AITNGuard.cpp",
+      "map_object": "O00545B4F",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/RankPointValue.cpp",
+      "map_object": "O00559B4B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/PartitionSolver.cpp",
+      "map_object": "O00566EDD",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/NetCommandWrapperList.cpp",
+      "map_object": "O0058BFA8",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/font3d.cpp",
+      "map_object": "O005CC966",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/StrategicInGameUIBattleResolver.cpp",
+      "map_object": "O005CF937",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/DownloadManager.cpp",
+      "map_object": "O005E048B",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/File.cpp",
+      "map_object": "O00602412",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/xfer/xfer_debug.cpp",
+      "map_object": "O0060D565",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/random.cpp",
+      "map_object": "O006192D0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/bufffile.cpp",
+      "map_object": "O00619FD0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/unk/O0061ADE0.cpp",
+      "map_object": "O0061ADE0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/mpmath.cpp",
+      "map_object": "O0061B710",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/VideoPlayer/VideoPlayer.cpp",
+      "map_object": "O00688750",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/string/EAString.cpp",
+      "map_object": "O006D3870",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptDate.cpp",
+      "map_object": "O006F39A0",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptActionInterpreter.cpp",
+      "map_object": "O006FB960",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptObject/AptScriptFunction.cpp",
+      "map_object": "O00709670",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptNativeHash.cpp",
+      "map_object": "O0070A610",
+      "action": "hold-proposed-object",
+      "reason": "intersects preserved populated/leased TU; non-overlapping new rows remain explicitly unseeded"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/multilist.cpp",
+      "map_object": "O00065858",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/wwmath.cpp",
+      "map_object": "O000658BA",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/boxrobj.cpp",
+      "map_object": "O0006614F",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/aabox.cpp",
+      "map_object": "O0007E535",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/lightenvironment.cpp",
+      "map_object": "O0011C320",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+      "map_object": "O00126071",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/dx8caps.cpp",
+      "map_object": "O0012A640",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/dx8caps.cpp",
+      "map_object": "O00137510",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/rendobj.cpp",
+      "map_object": "O0013B160",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/rendobj.cpp",
+      "map_object": "O0013B430",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/matpass.cpp",
+      "map_object": "O0013EDD0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/lightenvironment.cpp",
+      "map_object": "O0013F2E0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/aabtree.cpp",
+      "map_object": "O00168C00",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/boxrobj.cpp",
+      "map_object": "O00174C80",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/mapper.cpp",
+      "map_object": "O00182120",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/mapper.cpp",
+      "map_object": "O00187660",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/aabtree.cpp",
+      "map_object": "O00197B40",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/part_ldr.cpp",
+      "map_object": "O001A0F80",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/part_ldr.cpp",
+      "map_object": "O001AF650",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/matpass.cpp",
+      "map_object": "O0030D3AD",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/widestring.cpp",
+      "map_object": "O0060F100",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/systimer.cpp",
+      "map_object": "O006103F0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/multilist.cpp",
+      "map_object": "O00610640",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+      "map_object": "O00610EA0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/xpipe.cpp",
+      "map_object": "O00615A50",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/widestring.cpp",
+      "map_object": "O00619B30",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/systimer.cpp",
+      "map_object": "O0061AD40",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/xpipe.cpp",
+      "map_object": "O0061B4C0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/wwmath.cpp",
+      "map_object": "O00711AD0",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/aabox.cpp",
+      "map_object": "O00719730",
+      "action": "hold-duplicate-map-path",
+      "reason": "multiple separate map objects propose one source path; no automatic TU merge"
+    }
+  ],
+  "retained": [
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/AsciiString.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00038150"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/debug/debug_purecall.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0003B810"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/debug/debug_stack.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0003B9E0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/debug/debug_except.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0003C7A0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/debug/debug_internal.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0003E450"
+    },
+    {
+      "tu": "src/Code/GameEngineDevice/Source/Win32Device/GameClient/Win32Mouse.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00041839"
+    },
+    {
+      "tu": "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DSmudge.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O000A60F0"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Thing/DrawModule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O000B19BD"
+    },
+    {
+      "tu": "src/unk/O000CFF4C.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O000CFF4C"
+    },
+    {
+      "tu": "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/TerrainTex.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O000EF2A0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/scene.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00140C60"
+    },
+    {
+      "tu": "src/Code/Tools/WW3D/max2w3d/bchannel.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00160110"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/line3d.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00166A70"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/nullrobj.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00180E60"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Audio/AudioEventInfo.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001D982B"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INITerrainBridge.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001DAEB8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INICommandButton.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001DAF81"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIControlBarScheme.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001DB68C"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIDrawGroupInfo.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001DCC9F"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIMappedImage.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001ED63C"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIMiscAudio.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001ED6EE"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIMultiplayer.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001EF367"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIObject.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001EFFC6"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INITerrainRoad.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O001FF288"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIWater.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00200BEB"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Input/Keyboard.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O002306B8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/IMEManager.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00232DB4"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/GameCommon.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00238954"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Thing/ModuleFactory.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00255C5E"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GameWindowManager.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O002C08EF"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/WeaponSet.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O002C726C"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/DiscreteCircle.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O002DF82C"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O002E427D"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Water.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00309CF8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/ParabolicEase.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0030E51F"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/RadiusDecal.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00330CDD"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProjectileStreamUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0033EE25"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/DisplayString.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00358933"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/Shell/Shell.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0035BD00"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/System/CrateSystem.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0035C972"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittervolumemodule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O003AFA64"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/RTS/Handicap.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O003B0EA2"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O003E3C66"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandSet.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0040A092"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/SaveGame/GameStateMap.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0041AC6A"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MessageStream/HintSpy.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00428C43"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/GameClientDispatch.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00428D66"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/MessageStream/CommandXlat.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00428DEA"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004331C6"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0043B9E8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/LanLobbyMenu.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0044D2AC"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/AutoHealBehavior.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0045235E"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeTowerBehavior.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004586C7"
+    },
+    {
+      "tu": "src/unk/O0045B4E2.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0045B4E2"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehavior.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0045F2F8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Contain/CaveContain.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004663B2"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Contain/HealContain.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00466AD0"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Behavior/PoisonedBehavior.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00482ED9"
+    },
+    {
+      "tu": "src/unk/O004848E6.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004848E6"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDie.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004866F3"
+    },
+    {
+      "tu": "src/unk/O0048C258.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0048C258"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/FlammableUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0048C50D"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/AssaultTransportAIUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0048F365"
+    },
+    {
+      "tu": "src/unk/O00490D70.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00490D70"
+    },
+    {
+      "tu": "src/unk/O004921AA.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004921AA"
+    },
+    {
+      "tu": "src/unk/O00492433.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00492433"
+    },
+    {
+      "tu": "src/unk/O00492C8A.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00492C8A"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SpecialPowerModule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00492FC2"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DemoTrapUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00495916"
+    },
+    {
+      "tu": "src/unk/O0049B5D6.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0049B5D6"
+    },
+    {
+      "tu": "src/unk/O0049C3F6.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0049C3F6"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DockUpdate/RepairDockUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004A1170"
+    },
+    {
+      "tu": "src/unk/O004A34C0.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004A34C0"
+    },
+    {
+      "tu": "src/unk/O004A3871.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004A3871"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/SpawnPointProductionExitUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004A3B35"
+    },
+    {
+      "tu": "src/unk/O004AC12F.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004AC12F"
+    },
+    {
+      "tu": "src/unk/O004AE1A6.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004AE1A6"
+    },
+    {
+      "tu": "src/unk/O004B6AB9.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B6AB9"
+    },
+    {
+      "tu": "src/unk/O004B6FF7.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B6FF7"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/CreateModule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B8CF7"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/SupplyCenterCreate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B8D81"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/SupplyWarehouseCreate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B8E78"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/GrantUpgradeCreate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B8F62"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/PreorderCreate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B9257"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Create/SpecialPowerCreate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B9345"
+    },
+    {
+      "tu": "src/unk/O004B9452.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004B9452"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Collide/FireWeaponCollide.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004BB6FC"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Collide/CrateCollide/CrateCollide.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004BC515"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/CashHackSpecialPower.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C2626"
+    },
+    {
+      "tu": "src/unk/O004C2B3F.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C2B3F"
+    },
+    {
+      "tu": "src/unk/O004C4022.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C4022"
+    },
+    {
+      "tu": "src/unk/O004C4381.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C4381"
+    },
+    {
+      "tu": "src/unk/O004C693D.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C693D"
+    },
+    {
+      "tu": "src/unk/O004C820D.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C820D"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Drawable/Update/AnimatedParticleSysBoneClientUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C8FE8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C908B"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004C9598"
+    },
+    {
+      "tu": "src/unk/O004CC9B9.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004CC9B9"
+    },
+    {
+      "tu": "src/unk/O004CCDB0.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004CCDB0"
+    },
+    {
+      "tu": "src/unk/O004CE037.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004CE037"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/Transport.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004D4A59"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004F5385"
+    },
+    {
+      "tu": "src/unk/O00508F0C.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00508F0C"
+    },
+    {
+      "tu": "src/unk/O005092B2.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O005092B2"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/WeaponEffects/MetaImpactNugget.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00509DF8"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarCommandProcessing.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00539997"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarOCLTimer.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0053E17E"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarUnderConstruction.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0053E3E6"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/AI/AIGuardRetaliate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00545211"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittercylindervolumemodule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0055D741"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittercylindervelocitymodule.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0055EB84"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/DockUpdate/DockUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0058964F"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/NetCommandList.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0058B06A"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameNetwork/Connection.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0058B960"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameClient/Gui/ProcessAnimateWindow.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O005C5069"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/refcount.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O005D1A7D"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/System/RAMFile.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006054E7"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/file/StreamingArchiveFile.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00605A28"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/registry.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0060F150"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/thread.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00610430"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/ffactory.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006131C0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/mutex.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006139F0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/hash.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00613B90"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/TARGA.CPP",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00613DF0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/chunkio.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00614DB0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/straw.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006154D0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/ini.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00615B80"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/crc.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006199B0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/pipe.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0061B0A0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/b64pipe.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0061B170"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/b64straw.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0061B350"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/partitionmanager/partitionmanager_filter.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00625790"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/profile/profile_funclevel.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006C8360"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptValue/AptValueVector.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O006E6CF0"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptRenderingContext.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0070E330"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/gridcull.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00719E60"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/vp.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0071CE10"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/cullsys.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O007244C0"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/Common/INI/INIVideo.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0075A4DC"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/PhysicsUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00390119"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/BoneFXUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O0048707A"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/ArrowStormUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O00490628"
+    },
+    {
+      "tu": "src/Code/GameEngine/Source/GameLogic/Object/Update/StealthDetectorUpdate.cpp",
+      "action": "apply-identical-row-contract",
+      "map_object": "O004A2BD1"
+    }
+  ],
+  "case_moves": {
+    "src/Code/GameEngine/Source/GameClient/GUI/GameWindowTransitions.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GameWindowTransitions.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/Shell/ShellMenuScheme.cpp": "src/Code/GameEngine/Source/GameClient/Gui/Shell/ShellMenuScheme.cpp",
+    "src/Code/GameEngine/Source/Common/Rts/playeraitype.cpp": "src/Code/GameEngine/Source/Common/RTS/playeraitype.cpp",
+    "src/Code/GameEngine/Source/Common/Ini/INIVictorySystem.cpp": "src/Code/GameEngine/Source/Common/INI/INIVictorySystem.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/AptPlayer.cpp": "src/Code/GameEngine/Source/GameClient/Gui/AptPlayer.cpp",
+    "src/Code/GameEngine/Source/Common/Rts/Command.cpp": "src/Code/GameEngine/Source/Common/RTS/Command.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/GameWindow.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GameWindow.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBar.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBar.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/WinInstanceData.cpp": "src/Code/GameEngine/Source/GameClient/Gui/WinInstanceData.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/Gadget/GadgetComboBox.cpp": "src/Code/GameEngine/Source/GameClient/Gui/Gadget/GadgetComboBox.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/Gadget/GadgetListBox.cpp": "src/Code/GameEngine/Source/GameClient/Gui/Gadget/GadgetListBox.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Ai/AerialPathfind.cpp": "src/Code/GameEngine/Source/GameLogic/AI/AerialPathfind.cpp",
+    "src/Code/GameEngine/Source/Common/Rts/UnitRevivalTracker.cpp": "src/Code/GameEngine/Source/Common/RTS/UnitRevivalTracker.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/GUICallbacks/ControlBarPopupDescription.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/ControlBarPopupDescription.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/MapSelectMenu.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/MapSelectMenu.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarBeacon.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarBeacon.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarObserver.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarObserver.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/WindowLayout.cpp": "src/Code/GameEngine/Source/GameClient/Gui/WindowLayout.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/AnimateWindowManager.cpp": "src/Code/GameEngine/Source/GameClient/Gui/AnimateWindowManager.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarCommand.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarCommand.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarMultiSelect.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarMultiSelect.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarStructureInventory.cpp": "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarStructureInventory.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Ai/GroupOrders/MoveToGroupOrder.cpp": "src/Code/GameEngine/Source/GameLogic/AI/GroupOrders/MoveToGroupOrder.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Ai/GroupOrders/MoveToFormationGroupOrder.cpp": "src/Code/GameEngine/Source/GameLogic/AI/GroupOrders/MoveToFormationGroupOrder.cpp",
+    "src/Code/GameEngine/Source/Common/Rts/MpGameRules.cpp": "src/Code/GameEngine/Source/Common/RTS/MpGameRules.cpp",
+    "src/Code/gameengine/source/gameclient/system/fxparticlesystem/fxpsbutterflydrawmodule.cpp": "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsbutterflydrawmodule.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/WOLLoginMenu.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/WOLLoginMenu.cpp",
+    "src/Code/GameEngine/Source/GameClient/GUI/GameStats.cpp": "src/Code/GameEngine/Source/GameClient/Gui/GameStats.cpp",
+    "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Gui/W3DAptComponentView3D.cpp": "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/GUI/W3DAptComponentView3D.cpp",
+    "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Gui/W3DAptComponentColorPicker.cpp": "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/GUI/W3DAptComponentColorPicker.cpp"
+  },
+  "removed_untouched": [
+    "src/unk/O00308AA4.cpp",
+    "src/unk/O004059BE.cpp",
+    "src/unk/O00660D00.cpp",
+    "src/unk/O00583BE6.cpp",
+    "src/unk/O005B9501.cpp",
+    "src/unk/O005CE9B4.cpp",
+    "src/unk/O00546F6C.cpp",
+    "src/unk/O00513838.cpp",
+    "src/unk/O0031860D.cpp",
+    "src/unk/O00180AA0.cpp",
+    "src/unk/O00216035.cpp",
+    "src/unk/O0022244D.cpp",
+    "src/unk/O00308FE1.cpp",
+    "src/unk/O000D1776.cpp",
+    "src/unk/O000A52A2.cpp",
+    "src/unk/O005AB130.cpp",
+    "src/unk/O0053EC7D.cpp",
+    "src/unk/O00431B76.cpp",
+    "src/unk/O0043B696.cpp",
+    "src/unk/O005AC866.cpp",
+    "src/unk/O005411A3.cpp",
+    "src/unk/O005A9CBE.cpp",
+    "src/unk/O004EE072.cpp",
+    "src/unk/O0028576D.cpp",
+    "src/unk/O005E189B.cpp",
+    "src/unk/O003AFDF1.cpp",
+    "src/unk/O004C187F.cpp",
+    "src/unk/O005E56B6.cpp",
+    "src/unk/O004E0777.cpp",
+    "src/unk/O003FDDAC.cpp",
+    "src/unk/O005EA052.cpp",
+    "src/unk/O0056A9C6.cpp",
+    "src/unk/O00494AD9.cpp",
+    "src/unk/O00481273.cpp",
+    "src/unk/O0040D251.cpp",
+    "src/unk/O00546B34.cpp",
+    "src/unk/O005E215E.cpp",
+    "src/unk/O004E846A.cpp",
+    "src/unk/O005AA652.cpp",
+    "src/unk/O00210202.cpp",
+    "src/unk/O005B2B6D.cpp",
+    "src/unk/O0051B125.cpp",
+    "src/unk/O005DAC6D.cpp",
+    "src/unk/O004E1398.cpp",
+    "src/unk/O00359E04.cpp",
+    "src/unk/O0043DDBE.cpp",
+    "src/unk/O0030C4A6.cpp",
+    "src/unk/O00151CEE.cpp",
+    "src/unk/O00319E76.cpp",
+    "src/unk/O005E712A.cpp",
+    "src/unk/O0008EFD8.cpp",
+    "src/unk/O005277BA.cpp",
+    "src/unk/O005127F3.cpp",
+    "src/unk/O00362702.cpp",
+    "src/unk/O006F1F30.cpp",
+    "src/unk/O00546CB8.cpp",
+    "src/unk/O001B2E69.cpp",
+    "src/unk/O0030C1FC.cpp",
+    "src/unk/O003F81D3.cpp",
+    "src/unk/O005770CB.cpp",
+    "src/unk/O00540131.cpp",
+    "src/unk/O002146E1.cpp",
+    "src/unk/O0015140A.cpp",
+    "src/unk/O005B8018.cpp",
+    "src/unk/O00062908.cpp",
+    "src/unk/O00362493.cpp",
+    "src/unk/O004E30C6.cpp",
+    "src/unk/O000E4886.cpp",
+    "src/unk/O005FA8CD.cpp",
+    "src/unk/O00584C69.cpp",
+    "src/unk/O003F4AD8.cpp",
+    "src/unk/O005A9916.cpp",
+    "src/unk/O002C61AF.cpp",
+    "src/unk/O005F5694.cpp",
+    "src/unk/O004E56EB.cpp",
+    "src/unk/O0050EBC5.cpp",
+    "src/unk/O002D35C7.cpp",
+    "src/unk/O003B8DD7.cpp",
+    "src/unk/O0020D7AC.cpp",
+    "src/unk/O0051483C.cpp",
+    "src/unk/O00583726.cpp",
+    "src/unk/O0059B19A.cpp",
+    "src/unk/O0030CD7D.cpp",
+    "src/unk/O004C9E19.cpp",
+    "src/unk/O005F4881.cpp",
+    "src/unk/O004C5736.cpp",
+    "src/unk/O0056DDC1.cpp",
+    "src/unk/O005A9AD8.cpp",
+    "src/unk/O00567A27.cpp",
+    "src/unk/O004C0A65.cpp",
+    "src/unk/O0035D133.cpp",
+    "src/unk/O0043A0B2.cpp",
+    "src/unk/O00289180.cpp",
+    "src/unk/O005E4995.cpp",
+    "src/unk/O005F4B48.cpp",
+    "src/unk/O0007490F.cpp",
+    "src/unk/O005D1358.cpp",
+    "src/unk/O0020EB07.cpp",
+    "src/unk/O005CE349.cpp",
+    "src/unk/O00576B99.cpp",
+    "src/unk/O005C3513.cpp",
+    "src/unk/O005AB314.cpp",
+    "src/unk/O005AE68F.cpp",
+    "src/unk/O003FCD58.cpp",
+    "src/unk/O004CABCD.cpp",
+    "src/unk/O0007BEA7.cpp",
+    "src/unk/O004C1BCE.cpp",
+    "src/unk/O003730F6.cpp",
+    "src/unk/O00434132.cpp",
+    "src/unk/O00547AAE.cpp",
+    "src/unk/O00740169.cpp",
+    "src/unk/O0014CDB5.cpp",
+    "src/unk/O001042EB.cpp",
+    "src/unk/O0057662B.cpp",
+    "src/unk/O003114A7.cpp",
+    "src/unk/O005CC984.cpp",
+    "src/unk/O00516EA7.cpp",
+    "src/unk/O006C07F0.cpp",
+    "src/unk/O005E69D0.cpp",
+    "src/unk/O003F7D5E.cpp",
+    "src/unk/O0054719D.cpp",
+    "src/unk/O00135E3A.cpp",
+    "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Gui/W3DAptAux.cpp",
+    "src/Code/GameEngineDevice/Source/Win32Device/Common/Win32LocalFileSystem.cpp",
+    "src/Code/Libraries/Source/Apt/AptCharacter.cpp",
+    "src/Code/GameEngine/Source/GameLogic/SkirmishAI/AISpecialPowers/AISPecialPowerTargetAoE.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Contain/HordeContain/HordeTransportContain.cpp",
+    "src/Code/GameEngine/Source/GameClient/System/ParticleSys.cpp"
+  ],
+  "pending_branch_sources_protected": [
+    "src/Code/GameEngine/Source/Common/Audio/AudioEventInfo.cpp",
+    "src/Code/GameEngine/Source/Common/Audio/AudioEventRTS.cpp",
+    "src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp",
+    "src/Code/GameEngine/Source/Common/DiscreteCircle.cpp",
+    "src/Code/GameEngine/Source/Common/GameLOD.cpp",
+    "src/Code/GameEngine/Source/Common/GlobalData.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INICommandButton.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIControlBarScheme.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIDrawGroupInfo.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIMappedImage.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIMiscAudio.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIMultiplayer.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIObject.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INITerrain.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INITerrainBridge.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INITerrainRoad.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIVideo.cpp",
+    "src/Code/GameEngine/Source/Common/INI/INIWater.cpp",
+    "src/Code/GameEngine/Source/Common/MessageStream.cpp",
+    "src/Code/GameEngine/Source/Common/PartitionSolver.cpp",
+    "src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp",
+    "src/Code/GameEngine/Source/Common/RTS/Handicap.cpp",
+    "src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp",
+    "src/Code/GameEngine/Source/Common/StatsCollector.cpp",
+    "src/Code/GameEngine/Source/Common/System/AsciiString.cpp",
+    "src/Code/GameEngine/Source/Common/System/DataChunk.cpp",
+    "src/Code/GameEngine/Source/Common/System/File.cpp",
+    "src/Code/GameEngine/Source/Common/System/FunctionLexicon.cpp",
+    "src/Code/GameEngine/Source/Common/System/GameCommon.cpp",
+    "src/Code/GameEngine/Source/Common/System/GameMemory.cpp",
+    "src/Code/GameEngine/Source/Common/System/RAMFile.cpp",
+    "src/Code/GameEngine/Source/Common/System/SaveGame/GameStateMap.cpp",
+    "src/Code/GameEngine/Source/Common/System/Upgrade.cpp",
+    "src/Code/GameEngine/Source/Common/TerrainTypes.cpp",
+    "src/Code/GameEngine/Source/Common/Thing/DrawModule.cpp",
+    "src/Code/GameEngine/Source/Common/Thing/ModuleFactory.cpp",
+    "src/Code/GameEngine/Source/GameClient/DisplayString.cpp",
+    "src/Code/GameEngine/Source/GameClient/Drawable/Update/AnimatedParticleSysBoneClientUpdate.cpp",
+    "src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp",
+    "src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp",
+    "src/Code/GameEngine/Source/GameClient/Eva.cpp",
+    "src/Code/GameEngine/Source/GameClient/GameClient.cpp",
+    "src/Code/GameEngine/Source/GameClient/GameClientDispatch.cpp",
+    "src/Code/GameEngine/Source/GameClient/GameText.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandButton.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandSet.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarCommandProcessing.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarOCLTimer.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarResizer.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarScheme.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBarUnderConstruction.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/LanLobbyMenu.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GameFont.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GameWindowGlobal.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GameWindowManager.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GameWindowManagerScript.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/GameWindowTransitionsStyles.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/HeaderTemplate.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/IMEManager.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/LoadScreen.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/ProcessAnimateWindow.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/Shell/Shell.cpp",
+    "src/Code/GameEngine/Source/GameClient/Gui/WindowVideoManager.cpp",
+    "src/Code/GameEngine/Source/GameClient/Input/Keyboard.cpp",
+    "src/Code/GameEngine/Source/GameClient/MessageStream/CommandXlat.cpp",
+    "src/Code/GameEngine/Source/GameClient/MessageStream/HintSpy.cpp",
+    "src/Code/GameEngine/Source/GameClient/MessageStream/SelectionXlat.cpp",
+    "src/Code/GameEngine/Source/GameClient/ParabolicEase.cpp",
+    "src/Code/GameEngine/Source/GameClient/RadiusDecal.cpp",
+    "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittercylindervelocitymodule.cpp",
+    "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittercylindervolumemodule.cpp",
+    "src/Code/GameEngine/Source/GameClient/System/FXParticleSystem/fxpsemittervolumemodule.cpp",
+    "src/Code/GameEngine/Source/GameClient/System/Smudge.cpp",
+    "src/Code/GameEngine/Source/GameClient/Water.cpp",
+    "src/Code/GameEngine/Source/GameLogic/AI/AIDock.cpp",
+    "src/Code/GameEngine/Source/GameLogic/AI/AIGuardRetaliate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/AI/AIHarvest.cpp",
+    "src/Code/GameEngine/Source/GameLogic/AI/AITNGuard.cpp",
+    "src/Code/GameEngine/Source/GameLogic/AI/ai.cpp",
+    "src/Code/GameEngine/Source/GameLogic/LargeGroupAudio/LargeGroupAudioAudioMap.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/AutoHealBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeScaffoldBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeTowerBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/FireWeaponWhenDeadBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/PoisonedBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/PropagandaTowerBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/RebuildHoleBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/ShipSlowDeathBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SlowDeathBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Behavior/SupplyWarehouseCripplingBehavior.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Collide/CrateCollide/CrateCollide.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Collide/FireWeaponCollide.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Contain/CaveContain.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Contain/HealContain.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/CreateModule.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/GrantUpgradeCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/LockWeaponCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/PreorderCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/SpecialPowerCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/SupplyCenterCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Create/SupplyWarehouseCreate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/CreateAHeroHero.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Damage/BoneFXDamage.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/CreateObjectDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/DestroyDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/FXListDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/SpecialPowerCompletionDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Die/UpgradeDie.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/ExperienceTracker.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/ActivateModuleSpecialPower.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/CashHackSpecialPower.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/DefectorSpecialPower.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/OCLSpecialPower.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SpecialPowerModule.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/AssaultTransportAIUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/GiantBirdAIUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ArrowStormUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AssistedTargetingUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoDepositUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoFindHealingUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/AutoPickUpUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/BoneFXUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/CommandButtonHuntUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/DemoTrapUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/DetachableRiderUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/DockUpdate/DockUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/DockUpdate/RepairDockUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/FlammableUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/HeightDieUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/LaserUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/LifetimeUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/OneRingPenaltyUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/PhysicsUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/DefaultProductionExitUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/SpawnPointProductionExitUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/SupplyCenterProductionExitUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ProjectileStreamUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/ProneUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/RadiusDecalUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/RainOfFireUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/RubbleRiseUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/SpecialAbilityUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/StealthDetectorUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/Update/StructureCollapseUpdate.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/VictorySystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/WeaponEffects/MetaImpactNugget.cpp",
+    "src/Code/GameEngine/Source/GameLogic/Object/WeaponSet.cpp",
+    "src/Code/GameEngine/Source/GameLogic/ScriptEngine/LuaScriptEngine.cpp",
+    "src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/AwardSystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/CastleSystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/CaveSystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/CrateSystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/GlobalWeatherSystem.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveResourceBonus.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/AutoResolve/LivingWorldAutoResolveSciencePurchasePointBonus.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldPlayer.cpp",
+    "src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldRegion.cpp",
+    "src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp",
+    "src/Code/GameEngine/Source/GameNetwork/DownloadManager.cpp",
+    "src/Code/GameEngine/Source/GameNetwork/RankPointValue.cpp",
+    "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/TerrainTex.cpp",
+    "src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DSmudge.cpp",
+    "src/Code/GameEngineDevice/Source/Win32Device/GameClient/Win32Mouse.cpp",
+    "src/Code/Libraries/Source/Apt/AptActionInterpreter.cpp",
+    "src/Code/Libraries/Source/Apt/AptValue/AptValueVector.cpp",
+    "src/Code/Libraries/Source/Apt/string/EAString.cpp",
+    "src/Code/Libraries/Source/NameKey/NameKey.cpp",
+    "src/Code/Libraries/Source/VideoPlayer/VideoPlayer.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/agg_def.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/font3d.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/hrawanim.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/line3d.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/nullrobj.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/scene.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/segline.cpp",
+    "src/Code/Libraries/Source/WWVegas/WW3D2/statistics.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/TARGA.CPP",
+    "src/Code/Libraries/Source/WWVegas/WWLib/b64pipe.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/b64straw.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/bufffile.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/chunkio.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/crc.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/cstraw.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/ffactory.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/hash.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/ini.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/mpmath.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/mutex.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/pipe.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/random.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/rawfile.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/refcount.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/registry.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/straw.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/systimer.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/thread.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/widestring.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/wwstring.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/xpipe.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWLib/xstraw.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWMath/cullsys.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWMath/gridcull.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWMath/matrix3.cpp",
+    "src/Code/Libraries/Source/WWVegas/WWMath/vp.cpp",
+    "src/Code/Libraries/Source/debug/debug_except.cpp",
+    "src/Code/Libraries/Source/debug/debug_internal.cpp",
+    "src/Code/Libraries/Source/debug/debug_purecall.cpp",
+    "src/Code/Libraries/Source/debug/debug_stack.cpp",
+    "src/Code/Libraries/Source/file/StreamingArchiveFile.cpp",
+    "src/Code/Libraries/Source/partitionmanager/partitionmanager_filter.cpp",
+    "src/Code/Libraries/Source/profile/profile_funclevel.cpp",
+    "src/Code/Tools/WW3D/max2w3d/bchannel.cpp",
+    "src/unk/O000A9D36.cpp",
+    "src/unk/O000CF074.cpp",
+    "src/unk/O000CFF4C.cpp",
+    "src/unk/O003ECCD0.cpp",
+    "src/unk/O00403A5B.cpp",
+    "src/unk/O0044E12F.cpp",
+    "src/unk/O0045314E.cpp",
+    "src/unk/O004561BB.cpp",
+    "src/unk/O004599DF.cpp",
+    "src/unk/O0045A291.cpp",
+    "src/unk/O0045ADDA.cpp",
+    "src/unk/O0045B4E2.cpp",
+    "src/unk/O0045ED9D.cpp",
+    "src/unk/O004619A7.cpp",
+    "src/unk/O00477098.cpp",
+    "src/unk/O00479BCA.cpp",
+    "src/unk/O0047EBA9.cpp",
+    "src/unk/O00483C63.cpp",
+    "src/unk/O004848E6.cpp",
+    "src/unk/O00485EE3.cpp",
+    "src/unk/O0048C258.cpp",
+    "src/unk/O0048E0F4.cpp",
+    "src/unk/O00490D70.cpp",
+    "src/unk/O0049125E.cpp",
+    "src/unk/O00491DEC.cpp",
+    "src/unk/O004921AA.cpp",
+    "src/unk/O00492433.cpp",
+    "src/unk/O00492C8A.cpp",
+    "src/unk/O0049A67C.cpp",
+    "src/unk/O0049ACC5.cpp",
+    "src/unk/O0049B5D6.cpp",
+    "src/unk/O0049BFD7.cpp",
+    "src/unk/O0049C3F6.cpp",
+    "src/unk/O004A13E0.cpp",
+    "src/unk/O004A34C0.cpp",
+    "src/unk/O004A3871.cpp",
+    "src/unk/O004A750A.cpp",
+    "src/unk/O004AB897.cpp",
+    "src/unk/O004AC12F.cpp",
+    "src/unk/O004AC93C.cpp",
+    "src/unk/O004ACE11.cpp",
+    "src/unk/O004AD9DA.cpp",
+    "src/unk/O004AE1A6.cpp",
+    "src/unk/O004AE4DC.cpp",
+    "src/unk/O004B018E.cpp",
+    "src/unk/O004B0876.cpp",
+    "src/unk/O004B2394.cpp",
+    "src/unk/O004B6AB9.cpp",
+    "src/unk/O004B6FF7.cpp",
+    "src/unk/O004B7B81.cpp",
+    "src/unk/O004B7F21.cpp",
+    "src/unk/O004B9452.cpp",
+    "src/unk/O004BAC83.cpp",
+    "src/unk/O004C2B3F.cpp",
+    "src/unk/O004C4022.cpp",
+    "src/unk/O004C4381.cpp",
+    "src/unk/O004C693D.cpp",
+    "src/unk/O004C6C56.cpp",
+    "src/unk/O004C6F71.cpp",
+    "src/unk/O004C820D.cpp",
+    "src/unk/O004C8D3B.cpp",
+    "src/unk/O004CC653.cpp",
+    "src/unk/O004CC9B9.cpp",
+    "src/unk/O004CCDB0.cpp",
+    "src/unk/O004CD3D5.cpp",
+    "src/unk/O004CE037.cpp",
+    "src/unk/O00508F0C.cpp",
+    "src/unk/O005092B2.cpp",
+    "src/unk/O005CF9B2.cpp",
+    "src/unk/O0060D565.cpp"
+  ],
+  "header_policy": "all live headers byte-preserved; historical deletions preserved; no new Draft needed",
+  "identity_changes": 1163,
+  "class_key_data_aliases": 82,
+  "additions": [
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptCharacter.cpp",
+      "object": "O006EBD30",
+      "owned": 42,
+      "tier": "A",
+      "why": "W-in-F contradiction",
+      "contradicted_rows": [
+        "0x006ECFC0"
+      ]
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptCIH.cpp",
+      "object": "O006E0440",
+      "owned": 54,
+      "tier": "A",
+      "why": "W-in-F contradiction",
+      "contradicted_rows": [
+        "0x006E0F40",
+        "0x006E1020",
+        "0x006E1170"
+      ]
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/aabtree.cpp",
+      "object": "O00197B40",
+      "owned": 18,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/boxrobj.cpp",
+      "object": "O00174C80",
+      "owned": 30,
+      "tier": "B",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/dx8caps.cpp",
+      "object": "O0012A640",
+      "owned": 27,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/lightenvironment.cpp",
+      "object": "O0011C320",
+      "owned": 8,
+      "tier": "B",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/mapper.cpp",
+      "object": "O00182120",
+      "owned": 86,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/matpass.cpp",
+      "object": "O0013EDD0",
+      "owned": 8,
+      "tier": "B",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/part_ldr.cpp",
+      "object": "O001AF650",
+      "owned": 67,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/rendobj.cpp",
+      "object": "O0013B430",
+      "owned": 36,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+      "object": "O00610EA0",
+      "owned": 47,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/multilist.cpp",
+      "object": "O00610640",
+      "owned": 8,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/systimer.cpp",
+      "object": "O0061AD40",
+      "owned": 4,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/widestring.cpp",
+      "object": "O00619B30",
+      "owned": 12,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/xpipe.cpp",
+      "object": "O0061B4C0",
+      "owned": 4,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/aabox.cpp",
+      "object": "O00719730",
+      "owned": 3,
+      "tier": "L",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/wwmath.cpp",
+      "object": "O000658BA",
+      "owned": 11,
+      "tier": "B",
+      "why": "duplicate path",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptValue/AptInteger.cpp",
+      "object": "O006D84E0",
+      "owned": 3,
+      "tier": "B",
+      "why": "unit named by the assert file .\\AptValue/AptInteger.inl in Create 0x006D8520; rows moved from unknown: 0x006D84C0, 0x006D8520, 0x006D8630, 0x006D8670",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptValue/AptFloat.cpp",
+      "object": "O006D86C0",
+      "owned": 3,
+      "tier": "B",
+      "why": "unit named by the assert file .\\AptValue/AptFloat.inl in Create 0x006D8700; rows moved from unknown: 0x006D86A0, 0x006D8700, 0x006D8810, 0x006D8820",
+      "contradicted_rows": []
+    },
+    {
+      "tu": "src/Code/Libraries/Source/Apt/AptValue/AptBoolean.cpp",
+      "object": "O006D8880",
+      "owned": 4,
+      "tier": "B",
+      "why": "unit named by the assert file .\\AptValue/AptBoolean.inl in Create 0x006D88C0; rows moved from unknown: 0x006D8860, 0x006D88C0, 0x006D89D0, 0x006D89E0, 0x006D8A20",
+      "contradicted_rows": []
+    }
+  ],
+  "held_after_additions": [
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/aabtree.cpp",
+      "map_object": "O00168C00",
+      "reason": "same path as O00197B40, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/boxrobj.cpp",
+      "map_object": "O0006614F",
+      "reason": "same path as O00174C80, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/dx8caps.cpp",
+      "map_object": "O00137510",
+      "reason": "same path as O0012A640, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/lightenvironment.cpp",
+      "map_object": "O0013F2E0",
+      "reason": "same path as O0011C320, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/mapper.cpp",
+      "map_object": "O00187660",
+      "reason": "same path as O00182120, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/matpass.cpp",
+      "map_object": "O0030D3AD",
+      "reason": "same path as O0013EDD0, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/part_ldr.cpp",
+      "map_object": "O001A0F80",
+      "reason": "same path as O001AF650, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WW3D2/rendobj.cpp",
+      "map_object": "O0013B160",
+      "reason": "same path as O0013B430, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+      "map_object": "O00126071",
+      "reason": "same path as O00610EA0, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/multilist.cpp",
+      "map_object": "O00065858",
+      "reason": "same path as O00610640, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/systimer.cpp",
+      "map_object": "O006103F0",
+      "reason": "same path as O0061AD40, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/widestring.cpp",
+      "map_object": "O0060F100",
+      "reason": "same path as O00619B30, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWLib/xpipe.cpp",
+      "map_object": "O00615A50",
+      "reason": "same path as O0061B4C0, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/aabox.cpp",
+      "map_object": "O0007E535",
+      "reason": "same path as O00719730, which has more owned rows"
+    },
+    {
+      "tu": "src/Code/Libraries/Source/WWVegas/WWMath/wwmath.cpp",
+      "map_object": "O00711AD0",
+      "reason": "same path as O000658BA, which has more owned rows"
+    }
+  ]
+}

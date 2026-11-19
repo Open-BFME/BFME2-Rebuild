@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G005114B7",
+  "rows": [
+    {
+      "rva": "0x00794C94",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005114C6",
+      "fold_group": "",
+      "name": "uw_00794c94",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794CA8",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005114C6",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005114C6",
+      "object": "G005114B7",
+      "accepted_names": [
+        "uw_00794c94"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00794C9E",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005114C6",
+      "fold_group": "",
+      "name": "uw_00794c9e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794CA8",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005114C6",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005114C6",
+      "object": "G005114B7",
+      "accepted_names": [
+        "uw_00794c9e"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00794CA8",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005114C6",
+      "fold_group": "",
+      "name": "__ehhandler$?createMessenger@AptMessengerFactory@@UAEPAVRva005114C6Messenger@@PAX@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00947FEC;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005114C6",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005114C6",
+      "object": "G005114B7",
+      "accepted_names": [
+        "__ehhandler$?createMessenger@AptMessengerFactory@@UAEPAVRva005114C6Messenger@@PAX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

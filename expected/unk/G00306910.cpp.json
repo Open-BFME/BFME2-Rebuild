@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G00306910",
+  "rows": [
+    {
+      "rva": "0x00779B5A",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00306910",
+      "fold_group": "",
+      "name": "Unwind@00b79b5a",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00779B6A",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00306910",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00306910",
+      "object": "G00306910",
+      "accepted_names": [
+        "Unwind@00b79b5a"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00779B62",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00306910",
+      "fold_group": "",
+      "name": "Unwind@00b79b62",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00779B6A",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00306910",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00306910",
+      "object": "G00306910",
+      "accepted_names": [
+        "Unwind@00b79b62"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00779B6A",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00306910",
+      "fold_group": "",
+      "name": "__ehhandler$?xfer@Rva00306910@@QAEXPAVXfer@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009222B8;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00306910",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00306910",
+      "object": "G00306910",
+      "accepted_names": [
+        "__ehhandler$?xfer@Rva00306910@@QAEXPAVXfer@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

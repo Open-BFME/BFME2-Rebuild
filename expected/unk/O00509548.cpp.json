@@ -1,0 +1,83 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00509548",
+  "rows": [
+    {
+      "rva": "0x00509548",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GDamageFieldNugget@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00509548",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00509548",
+      "accepted_names": [
+        "??_GDamageFieldNugget@@UAEPAXI@Z",
+        "??_GMade002CC774@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007942F8",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00509564",
+      "fold_group": "",
+      "name": "$L1200",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794300",
+      "object_id": "O00509548",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00509564",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00509564",
+      "object": "O00509548",
+      "accepted_names": [
+        "$L1200"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00794300",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00509564",
+      "fold_group": "",
+      "name": "__ehhandler$??1DamageFieldNugget@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009472CC;X:parent-by-prologue",
+      "object_id": "O00509548",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00509564",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00509564",
+      "object": "O00509548",
+      "accepted_names": [
+        "__ehhandler$??1DamageFieldNugget@@UAE@XZ",
+        "__ehhandler$??1Made002CC774@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

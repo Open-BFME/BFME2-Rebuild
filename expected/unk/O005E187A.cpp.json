@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005E187A",
+  "rows": [
+    {
+      "rva": "0x005E1A87",
+      "size": 47,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$__copy@PAUTreeHintRef00217D4C@@PAU1@H@_STL@@YAPAUTreeHintRef00217D4C@@PAU1@00ABUrandom_access_iterator_tag@0@PAH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O005E187A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O005E187A",
+      "accepted_names": [
+        "??$__copy@PAUTreeHintRef00217D4C@@PAU1@H@_STL@@YAPAUTreeHintRef00217D4C@@PAU1@00ABUrandom_access_iterator_tag@0@PAH@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x007A3323",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E1928",
+      "fold_group": "",
+      "name": "$L356",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A332B",
+      "object_id": "O005E187A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E1928",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E1928",
+      "object": "O005E187A",
+      "accepted_names": [
+        "$L356"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A332B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005E1928",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005E1928@Rva005E1928@@QAEXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095B520;X:parent-by-prologue",
+      "object_id": "O005E187A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E1928",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E1928",
+      "object": "O005E187A",
+      "accepted_names": [
+        "__ehhandler$?rva005E1928@Rva005E1928@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A3335",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E19CA",
+      "fold_group": "",
+      "name": "$L5813",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A333D",
+      "object_id": "O005E187A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E19CA",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x005E19CA",
+      "object": "O005E187A",
+      "accepted_names": [
+        "$L5813"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x007A333D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005E19CA",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005E19CA@Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAEXH@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095B544;X:parent-by-prologue",
+      "object_id": "O005E187A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E19CA",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x005E19CA",
+      "object": "O005E187A",
+      "accepted_names": [
+        "__ehhandler$?rva005E19CA@Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAEXH@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

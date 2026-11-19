@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00255A72",
+  "rows": [
+    {
+      "rva": "0x00771D97",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255A72",
+      "fold_group": "",
+      "name": "Unwind@00b71d97",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771DAA",
+      "object_id": "O00255A72",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255A72",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255A72",
+      "object": "O00255A72",
+      "accepted_names": [
+        "Unwind@00b71d97"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771D9F",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255A72",
+      "fold_group": "",
+      "name": "Unwind@00b71d9f",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771DAA",
+      "object_id": "O00255A72",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255A72",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255A72",
+      "object": "O00255A72",
+      "accepted_names": [
+        "Unwind@00b71d9f"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771DAA",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00255A72",
+      "fold_group": "",
+      "name": "__ehhandler$??0UnitCrateCollideModuleData@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009186D0;X:parent-by-prologue",
+      "object_id": "O00255A72",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255A72",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255A72",
+      "object": "O00255A72",
+      "accepted_names": [
+        "__ehhandler$??0UnitCrateCollideModuleData@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

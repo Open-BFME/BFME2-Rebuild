@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0048C191",
+  "rows": [
+    {
+      "rva": "0x0048C1DB",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GOilSpillUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0048C191",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0048C191",
+      "accepted_names": [
+        "??_GOilSpillUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0078C5D1",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048C191",
+      "fold_group": "",
+      "name": "Unwind@00b8c5d1",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C5E4",
+      "object_id": "O0048C191",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048C191",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0048C191",
+      "object": "O0048C191",
+      "accepted_names": [
+        "Unwind@00b8c5d1"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078C5D9",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048C191",
+      "fold_group": "",
+      "name": "Unwind@00b8c5d9",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C5E4",
+      "object_id": "O0048C191",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048C191",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0048C191",
+      "object": "O0048C191",
+      "accepted_names": [
+        "Unwind@00b8c5d9"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078C5E4",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048C191",
+      "fold_group": "",
+      "name": "__ehhandler$??1OilSpillUpdateModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093BD58;X:parent-by-prologue",
+      "object_id": "O0048C191",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048C191",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0048C191",
+      "object": "O0048C191",
+      "accepted_names": [
+        "__ehhandler$??1OilSpillUpdateModuleData@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

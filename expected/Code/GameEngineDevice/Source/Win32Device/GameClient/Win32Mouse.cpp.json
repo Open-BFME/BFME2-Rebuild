@@ -1,0 +1,132 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00041839",
+  "rows": [
+    {
+      "rva": "0x00041A06",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x001EDDBB",
+      "fold_group": "",
+      "name": "?rva00041A06@Win32Mouse@@QAEXXZ",
+      "name_evidence": "X:proven (vtable+position)",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O00041839",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x001EDDBB",
+      "object": "O00041839",
+      "accepted_names": [
+        "?rva00041A06@Win32Mouse@@QAEXXZ",
+        "?rva00041A06@Rva00041A06@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00041A0B",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x001EDE3A",
+      "fold_group": "",
+      "name": "?update@Win32Mouse@@UAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O00041839",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x001EDE3A",
+      "object": "O00041839",
+      "accepted_names": [
+        "?update@Win32Mouse@@UAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00041B69",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GWin32Mouse@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00041839",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00041839",
+      "accepted_names": [
+        "??_GWin32Mouse@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0075CF18",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00041BA6",
+      "fold_group": "",
+      "name": "Unwind@00b5cf18",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0075CF20",
+      "object_id": "O00041839",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00041BA6",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00041BA6",
+      "object": "O00041839",
+      "accepted_names": [
+        "Unwind@00b5cf18"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0075CF20",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00041BA6",
+      "fold_group": "",
+      "name": "__ehhandler$?initCursorResources@Win32Mouse@@UAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x008FED24;X:parent-by-prologue",
+      "object_id": "O00041839",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00041BA6",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00041BA6",
+      "object": "O00041839",
+      "accepted_names": [
+        "__ehhandler$?initCursorResources@Win32Mouse@@UAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

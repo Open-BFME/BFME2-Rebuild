@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O001EFFC6",
+  "rows": [
+    {
+      "rva": "0x0076AF8E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x001EFFC6",
+      "fold_group": "",
+      "name": "$L33191",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076AF96",
+      "object_id": "O001EFFC6",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x001EFFC6",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x001EFFC6",
+      "object": "O001EFFC6",
+      "accepted_names": [
+        "$L33191"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0076AF96",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x001EFFC6",
+      "fold_group": "",
+      "name": "__ehhandler$?parseObjectDefinition@INI@@SAXPAV1@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00910398;X:parent-by-prologue",
+      "object_id": "O001EFFC6",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x001EFFC6",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x001EFFC6",
+      "object": "O001EFFC6",
+      "accepted_names": [
+        "__ehhandler$?parseObjectDefinition@INI@@SAXPAV1@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0076AFA0",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0076AFB0",
+      "name": "$L33211",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076AFB0;X:shared by 2 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-some-parents-unassigned",
+      "parent_rvas": "0x001F0016;0x001F008C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O001EFFC6",
+      "accepted_names": [
+        "$L33211"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0076AFA8",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0076AFB0",
+      "name": "$L33212",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076AFB0;X:shared by 2 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-some-parents-unassigned",
+      "parent_rvas": "0x001F0016;0x001F008C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O001EFFC6",
+      "accepted_names": [
+        "$L33212"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0076AFB0",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0076AFB0",
+      "name": "__ehhandler$?parseObjectReskinDefinition@INI@@SAXPAV1@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009103C4;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-some-parents-unassigned",
+      "parent_rvas": "0x001F0016;0x001F008C",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O001EFFC6",
+      "accepted_names": [
+        "__ehhandler$?parseObjectReskinDefinition@INI@@SAXPAV1@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

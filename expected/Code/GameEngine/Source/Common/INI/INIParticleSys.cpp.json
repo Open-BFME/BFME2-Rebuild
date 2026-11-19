@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O001FD0B4",
+  "rows": [
+    {
+      "rva": "0x0076BA96",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x001FD0B4",
+      "fold_group": "",
+      "name": "$L1496",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076BAAC",
+      "object_id": "O001FD0B4",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x001FD0B4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x001FD0B4",
+      "object": "O001FD0B4",
+      "accepted_names": [
+        "$L1496"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:Z"
+    },
+    {
+      "rva": "0x0076BA9E",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x001FD0B4",
+      "fold_group": "",
+      "name": "uw_0076ba9e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076BAAC",
+      "object_id": "O001FD0B4",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x001FD0B4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x001FD0B4",
+      "object": "O001FD0B4",
+      "accepted_names": [
+        "uw_0076ba9e"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:Z"
+    },
+    {
+      "rva": "0x0076BAAC",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x001FD0B4",
+      "fold_group": "",
+      "name": "__ehhandler$?parseParticleSystemDefinition@INI@@SAXPAV1@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0091120C;X:parent-by-prologue",
+      "object_id": "O001FD0B4",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x001FD0B4",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x001FD0B4",
+      "object": "O001FD0B4",
+      "accepted_names": [
+        "__ehhandler$?parseParticleSystemDefinition@INI@@SAXPAV1@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:Z"
+    }
+  ]
+}

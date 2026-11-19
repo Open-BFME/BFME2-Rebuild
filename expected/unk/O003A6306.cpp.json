@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O003A6306",
+  "rows": [
+    {
+      "rva": "0x003A633F",
+      "size": 78,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_EDefaultColorModuleInfo@FXParticleSystem@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:special-deleting-dtor",
+      "object_id": "O003A6306",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003A6306",
+      "accepted_names": [
+        "??_EDefaultColorModuleInfo@FXParticleSystem@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x003A638D",
+      "size": 64,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0?$DefaultModuleTemplate@$0A@@FXParticleSystem@@QAE@ABV01@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O003A6306",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003A6306",
+      "accepted_names": [
+        "??0?$DefaultModuleTemplate@$0A@@FXParticleSystem@@QAE@ABV01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x003A63CD",
+      "size": 33,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??4?$DefaultModuleTemplate@$0A@@FXParticleSystem@@QAEAAV01@ABV01@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O003A6306",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003A6306",
+      "accepted_names": [
+        "??4?$DefaultModuleTemplate@$0A@@FXParticleSystem@@QAEAAV01@ABV01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+NOTICE
+
+This repository is a reconstruction of the engine code of the game Battle for
+Middle-earth II (version 1.06), rebuilt as source that compiles to the retail
+program's machine code. It is a modified, derived work. It is not the original
+program, is not an Electronic Arts product, and has no affiliation or
+association with Electronic Arts Inc. or its affiliates or their employees.
+
+Portions of this repository are derived from the source code of Command &
+Conquer Generals and Command & Conquer Generals Zero Hour, Copyright 2025
+Electronic Arts Inc. (individual files also carry earlier lines such as
+"(c) 2001-2003 Electronic Arts Inc."), which Electronic Arts Inc. released
+under the GNU General Public License, version 3 or (at your option) any later
+version, with additional terms. The release is published at
+https://github.com/electronicarts/CnC_Generals_Zero_Hour. Files in this
+repository that contain text from that release carry the line
+
+    // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+
+The licence text in LICENSE is the file EA ships with that release
+(LICENSE.md), copied without change: the GPL version 3 followed by EA's
+additional terms. Those terms apply to the parts of this repository derived
+from the release. As EA's terms require, they are reproduced here:
+
+    ADDITIONAL TERMS per GNU GPL Section 7
+
+    No trademark or publicity rights are granted. This license does NOT give you
+    any right, title or interest in "Command & Conquer" or any other Electronic Arts
+    trademark. You may not distribute any modification of this program using any
+    Electronic Arts trademark or claim any affiliation or association with
+    Electronic Arts Inc. or its affiliates or their employees.
+
+    Any propagation or conveyance of this program must include this copyright
+    notice and these terms.
+
+    If you convey this program (or any modifications of it) and assume
+    contractual liability for the program to recipients of it, you agree to
+    indemnify Electronic Arts for any liability that those contractual
+    assumptions impose on Electronic Arts.
+
+    You may not misrepresent the origins of this program; modified versions of
+    the program must be marked as such and not identified as the original program.
+
+    This disclaimer supplements the one included in the General Public License.
+    TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, THIS PROGRAM IS
+    PROVIDED TO YOU "AS IS," WITH ALL FAULTS, WITHOUT WARRANTY OF ANY KIND, AND
+    YOUR USE IS AT YOUR SOLE RISK. THE ENTIRE RISK OF SATISFACTORY QUALITY AND
+    PERFORMANCE RESIDES WITH YOU. ELECTRONIC ARTS DISCLAIMS ANY AND ALL EXPRESS,
+    IMPLIED OR STATUTORY WARRANTIES, INCLUDING IMPLIED WARRANTIES OF
+    MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE,
+    NONINFRINGEMENT OF THIRD PARTY RIGHTS, AND WARRANTIES (IF ANY) ARISING FROM A
+    COURSE OF DEALING, USAGE, OR TRADE PRACTICE. ELECTRONIC ARTS DOES NOT WARRANT
+    AGAINST INTERFERENCE WITH YOUR ENJOYMENT OF THE PROGRAM; THAT THE PROGRAM WILL
+    MEET YOUR REQUIREMENTS; THAT OPERATION OF THE PROGRAM WILL BE UNINTERRUPTED OR
+    ERROR-FREE, OR THAT THE PROGRAM WILL BE COMPATIBLE WITH THIRD PARTY SOFTWARE
+    OR THAT ANY ERRORS IN THE PROGRAM WILL BE CORRECTED. NO ORAL OR WRITTEN ADVICE
+    PROVIDED BY ELECTRONIC ARTS OR ANY AUTHORIZED REPRESENTATIVE SHALL CREATE A
+    WARRANTY. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF OR LIMITATIONS ON
+    IMPLIED WARRANTIES OR THE LIMITATIONS ON THE APPLICABLE STATUTORY RIGHTS OF A
+    CONSUMER, SO SOME OR ALL OF THE ABOVE EXCLUSIONS AND LIMITATIONS MAY NOT APPLY
+    TO YOU.
+
+"Command & Conquer" and "Battle for Middle-earth" are named in this repository
+only to say which games the code belongs to. This repository is not endorsed by
+and does not speak for any owner of those names.
+
+EA PPMalloc (used with credit; not GPL, not open source). The text used for
+the game's allocator library comes from PPMalloc 1.26.11 (the
+EA::Allocator::GeneralAllocator library), which Electronic Arts published
+inside its EAWebKit 16.4.2.0.0 source archive
+(https://gpl.ea.com/packages/EAWebKit_16.4.2.0.0.zip, archive SHA-256
+e36a38b7074c837ef8c91496925f144a4fd5c484cf7712e0dd556d671ba43cfd, package
+EAWebKitSupportPackages/PPMalloc/local_1.26.11). It is Copyright (c) 2004,
+Electronic Arts. All Rights Reserved, as its files say; the package's manifest
+names its licence as "EA Proprietary (Internal Use Only)". It is not licensed
+to this project under the GPL or any other open-source licence. The GPL-3
+grant described above covers the Zero Hour source and does not come from EA
+for these files. The project owner decided to use this text and to credit
+Electronic Arts as its author. EA's files are kept byte-identical in include/upstream/ppmalloc-1.26.11/; the
+files changed to reproduce retail's older copy are in
+include/upstream/ppmalloc-1.26.11-bfme/ and src/ppmalloc-1.26.11/, each changed
+hunk marked with a BFME-RETAIL 0x<address> comment (list in
+include/upstream/ppmalloc-1.26.11-bfme/PROVENANCE.md). Files that contain it
+carry the line
+
+    // Portions derived from EA PPMalloc 1.26.11 (EAWebKit 16.4.2.0.0 source release), Copyright (c) 2004 Electronic Arts Inc.; used with credit, see NOTICE.
+
+This repository's GPL-3 licence statement does not extend to those files.
+
+Third-party libraries. The retail program contains the libraries below. They
+are not covered by EA's release and keep their own licences; where a file here
+carries text from one of them, the upstream notice stays in that file.
+
+  zlib 1.1.4 (Jean-loup Gailly and Mark Adler; zlib licence).
+    Pristine upstream text in include/upstream/zlib-1.1.4/ and
+    src/zlib-1.1.4/. Source: https://www.zlib.net/fossils/zlib-1.1.4.tar.gz
+    The licence is in zlib.h's header comment, unchanged.
+
+  Lua 4.0.1 (Copyright (C) 1994-2000 TeCGraf, PUC-Rio; Lua 4 licence).
+    Pristine upstream text in include/upstream/lua-4.0.1/ (with its
+    COPYRIGHT file). Source: https://www.lua.org/ftp/lua-4.0.1.tar.gz
+    Retail links a modified Lua 4.0.1 (it adds a boolean type). The
+    modified files are in include/upstream/lua-4.0.1-bfme/ and
+    src/lua-4.0.1/Lua/; each altered file carries a "BFME-ALTERED:" notice and
+    each changed hunk a "BFME-RETAIL 0x<address>" comment, as the Lua licence
+    asks for altered versions. include/upstream/lua-4.0.1-bfme/PROVENANCE.md
+    lists the changes. The altered files are not the original Lua package.
+
+  STLport 4.6 (Copyright Boris Fomitchev; portions Hewlett-Packard Company and
+    Silicon Graphics Computer Systems, Inc.; permissive notice in each STLport
+    file). Retail links this release. The rebuild is compiled against an
+    unmodified copy of STLport 4.6 that is not stored in this repository.
+    Any STLport text that is added here keeps its notice, and a modified
+    STLport file is marked as modified.
+
+  GameSpy SDK (GameSpy Industries, Inc.). The GameSpy source and headers
+    carried under src/gamespy-sdk/ and the GameSpy library source tree under
+    src/Code/Libraries/Source/GameSpy/ include GameSpy SDK text. Existing
+    GameSpy copyright and confidentiality notices are retained where present.
+    This repository's GPL-3 licence statement does not extend to GameSpy SDK
+    text. Rebuild-specific changes and shims are identified in source.
+
+  LZH-Light (LZH Light Library, by Sergey Ignatchenko). The rebuild also carries
+    LZH-Light library text under src/lzhl-1.0/. Its own notices govern that
+    text. The GPL-3 grant described above does not come from Electronic Arts
+    for these files.
+
+The unmodified Generals and Zero Hour source snapshot in
+reference/CnC_Generals_Zero_Hour/ carries its own upstream LICENSE.md and
+the copyright notices in the original sources.

@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00596C6B",
+  "rows": [
+    {
+      "rva": "0x00596C85",
+      "size": 57,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva00596CDF@@QAE@I@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIBuildableWallSegment;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00596C6B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00596C6B",
+      "accepted_names": [
+        "??0Rva00596CDF@@QAE@I@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00596CDF",
+      "size": 11,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1Rva00596CDF@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIBuildableWallSegment;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00596C6B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00596C6B",
+      "accepted_names": [
+        "??1Rva00596CDF@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00596D7D",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRva00596CDF@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00596C6B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00596C6B",
+      "accepted_names": [
+        "??_GRva00596CDF@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0079D379",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00596E15",
+      "fold_group": "",
+      "name": "$L738",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079D381",
+      "object_id": "O00596C6B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00596E15",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00596E15",
+      "object": "O00596C6B",
+      "accepted_names": [
+        "$L738"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0079D381",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00596E15",
+      "fold_group": "",
+      "name": "__ehhandler$?canMake@AIBuildableWallSegment@@UAEHPAVPlayer@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095321C;X:parent-by-prologue",
+      "object_id": "O00596C6B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00596E15",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00596E15",
+      "object": "O00596C6B",
+      "accepted_names": [
+        "__ehhandler$?canMake@AIBuildableWallSegment@@UAEHPAVPlayer@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

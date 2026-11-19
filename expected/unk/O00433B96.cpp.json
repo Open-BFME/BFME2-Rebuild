@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00433B96",
+  "rows": [
+    {
+      "rva": "0x00433B96",
+      "size": 39,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$__find@U?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@_STL@@VUnicodeString@@@_STL@@YA?AU?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@0@U10@0ABVUnicodeString@@ABUinput_iterator_tag@0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00433B96",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00433B96",
+      "accepted_names": [
+        "??$__find@U?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@_STL@@VUnicodeString@@@_STL@@YA?AU?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@0@U10@0ABVUnicodeString@@ABUinput_iterator_tag@0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00433BBD",
+      "size": 26,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?push_back@?$list@VUnicodeString@@V?$allocator@VUnicodeString@@@_STL@@@_STL@@QAEXABVUnicodeString@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00433B96",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00433B96",
+      "accepted_names": [
+        "?push_back@?$list@VUnicodeString@@V?$allocator@VUnicodeString@@@_STL@@@_STL@@QAEXABVUnicodeString@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00433BD7",
+      "size": 23,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1?$_List_base@VUnicodeString@@V?$allocator@VUnicodeString@@@_STL@@@_STL@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00433B96",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00433B96",
+      "accepted_names": [
+        "??1?$_List_base@VUnicodeString@@V?$allocator@VUnicodeString@@@_STL@@@_STL@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00433BEE",
+      "size": 42,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$find@U?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@_STL@@VUnicodeString@@@_STL@@YA?AU?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@0@U10@0ABVUnicodeString@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00433B96",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00433B96",
+      "accepted_names": [
+        "??$find@U?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@_STL@@VUnicodeString@@@_STL@@YA?AU?$_List_iterator@VUnicodeString@@U?$_Nonconst_traits@VUnicodeString@@@_STL@@@0@U10@0ABVUnicodeString@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

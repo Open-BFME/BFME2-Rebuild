@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G000A8F13",
+  "rows": [
+    {
+      "rva": "0x00760DD1",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x000A8F98",
+      "fold_group": "",
+      "name": "uw_00760dd1",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00760DDB",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x000A8F98",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x000A8F98",
+      "object": "G000A8F13",
+      "accepted_names": [
+        "uw_00760dd1"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00760DDB",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x000A8F98",
+      "fold_group": "",
+      "name": "__ehhandler$?Rva000A8F98@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00903F68;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x000A8F98",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x000A8F98",
+      "object": "G000A8F13",
+      "accepted_names": [
+        "__ehhandler$?Rva000A8F98@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

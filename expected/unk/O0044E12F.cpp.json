@@ -1,0 +1,144 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0044E12F",
+  "rows": [
+    {
+      "rva": "0x0044E315",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GBloodthirstyUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0044E12F",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GBloodthirstyUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0044E12F",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00789A20",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00789A33",
+      "name": "uw_00789a20",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789A33;X:shared by 2 functions",
+      "object_id": "O0044E12F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0044E2AC;0x0044E331",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "retained:O0044E12F",
+      "accepted_names": [
+        "uw_00789a20"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00789A28",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00789A33",
+      "name": "uw_00789a28",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789A33;X:shared by 2 functions",
+      "object_id": "O0044E12F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0044E2AC;0x0044E331",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "retained:O0044E12F",
+      "accepted_names": [
+        "uw_00789a28"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00789A33",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00789A33",
+      "name": "__ehhandler$??0BloodthirstyUpdateModuleData@@QAE@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00937DAC;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O0044E12F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0044E2AC;0x0044E331",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "retained:O0044E12F",
+      "accepted_names": [
+        "__ehhandler$??0BloodthirstyUpdateModuleData@@QAE@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00789A3D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0044E374",
+      "fold_group": "",
+      "name": "uw_00789a3d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789A45",
+      "object_id": "retained:O0044E12F",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_00789a3d"
+      ],
+      "parent": "0x0044E374",
+      "object": "retained:O0044E12F",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00789A45",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0044E374",
+      "fold_group": "",
+      "name": "__ehhandler$?sacrificeHorde@BloodthirstyUpdate@@UAEXPAVObject@@W4CommandSourceType@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00937DD0;X:parent-by-prologue",
+      "object_id": "retained:O0044E12F",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?sacrificeHorde@BloodthirstyUpdate@@UAEXPAVObject@@W4CommandSourceType@@@Z"
+      ],
+      "parent": "0x0044E374",
+      "object": "retained:O0044E12F",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

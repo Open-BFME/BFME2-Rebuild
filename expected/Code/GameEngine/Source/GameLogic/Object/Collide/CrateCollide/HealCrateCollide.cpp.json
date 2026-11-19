@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004BC80F",
+  "rows": [
+    {
+      "rva": "0x004BC89D",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GHealCrateCollide@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004BC80F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O004BC80F",
+      "accepted_names": [
+        "??_GHealCrateCollide@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078F71E",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004BC858",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F72B",
+      "object_id": "O004BC80F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004BC858",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x004BC858",
+      "object": "O004BC80F",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078F72B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004BC858",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@HealCrateCollide@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00940808;X:parent-by-prologue",
+      "object_id": "O004BC80F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004BC858",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x004BC858",
+      "object": "O004BC80F",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@HealCrateCollide@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078F735",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004BC8B9",
+      "fold_group": "",
+      "name": "Unwind@00b8f735",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F740",
+      "object_id": "O004BC80F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004BC8B9",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x004BC8B9",
+      "object": "O004BC80F",
+      "accepted_names": [
+        "Unwind@00b8f735"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078F740",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004BC8B9",
+      "fold_group": "",
+      "name": "__ehhandler$?executeCrateBehavior@HealCrateCollide@@MAE_NPAVObject@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094082C;X:parent-by-prologue",
+      "object_id": "O004BC80F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004BC8B9",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x004BC8B9",
+      "object": "O004BC80F",
+      "accepted_names": [
+        "__ehhandler$?executeCrateBehavior@HealCrateCollide@@MAE_NPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

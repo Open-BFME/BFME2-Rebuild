@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0043216D",
+  "rows": [
+    {
+      "rva": "0x00787A9C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0043218A",
+      "fold_group": "",
+      "name": "uw_00787a9c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00787AB1",
+      "object_id": "O0043216D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0043218A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0043218A",
+      "object": "O0043216D",
+      "accepted_names": [
+        "uw_00787a9c"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00787AA4",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0043218A",
+      "fold_group": "",
+      "name": "$L6505",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00787AB1",
+      "object_id": "O0043216D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0043218A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0043218A",
+      "object": "O0043216D",
+      "accepted_names": [
+        "$L6505"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00787AB1",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0043218A",
+      "fold_group": "",
+      "name": "__ehhandler$?translateGameMessage@PlaceEventTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00935328;X:parent-by-prologue",
+      "object_id": "O0043216D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0043218A",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0043218A",
+      "object": "O0043216D",
+      "accepted_names": [
+        "__ehhandler$?translateGameMessage@PlaceEventTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007B8369",
+      "size": 10,
+      "section": ".text",
+      "role": "terminator",
+      "parent_rva": "0x00A03238",
+      "fold_group": "",
+      "name": "_$E4",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:atexit-registered-by 0x0043218A;X:global-by-this",
+      "object_id": "O0043216D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00A03238",
+      "object": "O0043216D",
+      "accepted_names": [
+        "_$E4"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G005D870D",
+  "rows": [
+    {
+      "rva": "0x007A281B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D874A",
+      "fold_group": "",
+      "name": "uw_007a281b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A2833",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005D874A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005D874A",
+      "object": "G005D870D",
+      "accepted_names": [
+        "uw_007a281b"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A2823",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D874A",
+      "fold_group": "",
+      "name": "uw_007a2823",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A2833",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005D874A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005D874A",
+      "object": "G005D870D",
+      "accepted_names": [
+        "uw_007a2823"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A282B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D874A",
+      "fold_group": "",
+      "name": "$L1497",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A2833",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005D874A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005D874A",
+      "object": "G005D870D",
+      "accepted_names": [
+        "$L1497"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A2833",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005D874A",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005D874A@Rva005EEDB5Picker@@QAE_NPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095A448;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005D874A",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005D874A",
+      "object": "G005D870D",
+      "accepted_names": [
+        "__ehhandler$?rva005D874A@Rva005EEDB5Picker@@QAE_NPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

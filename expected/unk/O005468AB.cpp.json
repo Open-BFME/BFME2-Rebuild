@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005468AB",
+  "rows": [
+    {
+      "rva": "0x00546966",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GSynchronizeGroupOrder@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O005468AB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O005468AB",
+      "accepted_names": [
+        "??_GSynchronizeGroupOrder@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00798073",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0079807B",
+      "name": "$L4507",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079807B;X:shared by 4 functions",
+      "object_id": "O005468AB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005468E1;0x00546926;0x00546982;0x005469BD",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O005468AB",
+      "accepted_names": [
+        "$L4507"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0079807B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0079807B",
+      "name": "__ehhandler$??0SynchronizeGroupOrder@@QAE@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C2C0;X:parent-by-prologue;X:EH stub shared by 4 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O005468AB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005468E1;0x00546926;0x00546982;0x005469BD",
+      "parent_evidence": "X:handler-operand(4 parents, shared handler)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O005468AB",
+      "accepted_names": [
+        "__ehhandler$??0SynchronizeGroupOrder@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00798085",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005469FD",
+      "fold_group": "",
+      "name": "uw_00798085",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079808F",
+      "object_id": "O005468AB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005469FD",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005469FD",
+      "object": "O005468AB",
+      "accepted_names": [
+        "uw_00798085"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0079808F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005469FD",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005469FD@SynchronizeGroupOrder@@UAEPAV1@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C2E4;X:parent-by-prologue",
+      "object_id": "O005468AB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005469FD",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005469FD",
+      "object": "O005468AB",
+      "accepted_names": [
+        "__ehhandler$?rva005469FD@SynchronizeGroupOrder@@UAEPAV1@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00656F70",
+  "rows": [
+    {
+      "rva": "0x00657660",
+      "size": 7,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1Rva00657670@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen_007ea670|ServiceHubImpl;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00656F70",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00656F70",
+      "accepted_names": [
+        "??1Rva00657670@@UAE@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00657670",
+      "size": 31,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRva00657670@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:special-deleting-dtor",
+      "object_id": "O00656F70",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00656F70",
+      "accepted_names": [
+        "??_GRva00657670@@UAEPAXI@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00657690",
+      "size": 625,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1ServiceHubImpl@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen_007ea670|BfmeThingECKa;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00656F70",
+      "object_evidence": "F",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00656F70",
+      "accepted_names": [
+        "??1ServiceHubImpl@@QAE@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00657DD0",
+      "size": 780,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0ServiceHubImpl@@QAE@PAX00000@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BfmeThingECKb|BfmeDirtyBase;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00656F70",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00656F70",
+      "accepted_names": [
+        "??0ServiceHubImpl@@QAE@PAX00000@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x006580E0",
+      "size": 35,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GServiceHubImpl@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00656F70",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00656F70",
+      "accepted_names": [
+        "??_GServiceHubImpl@@UAEPAXI@Z",
+        "??_GGen007EB140@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

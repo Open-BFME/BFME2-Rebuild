@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004C42D2",
+  "rows": [
+    {
+      "rva": "0x004C42D2",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GWeaponChangeSpecialPowerModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004C42D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004C42D2",
+      "accepted_names": [
+        "??_GWeaponChangeSpecialPowerModuleData@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00790004",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C42EE",
+      "fold_group": "",
+      "name": "Unwind@00b90004",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079001A",
+      "object_id": "O004C42D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C42EE",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C42EE",
+      "object": "O004C42D2",
+      "accepted_names": [
+        "Unwind@00b90004"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0079000C",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C42EE",
+      "fold_group": "",
+      "name": "Unwind@00b9000c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0079001A",
+      "object_id": "O004C42D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C42EE",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C42EE",
+      "object": "O004C42D2",
+      "accepted_names": [
+        "Unwind@00b9000c"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0079001A",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004C42EE",
+      "fold_group": "",
+      "name": "__ehhandler$??1WeaponChangeSpecialPowerModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00941564;X:parent-by-prologue",
+      "object_id": "O004C42D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C42EE",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C42EE",
+      "object": "O004C42D2",
+      "accepted_names": [
+        "__ehhandler$??1WeaponChangeSpecialPowerModuleData@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

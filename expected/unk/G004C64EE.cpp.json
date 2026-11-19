@@ -1,0 +1,90 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G004C64EE",
+  "rows": [
+    {
+      "rva": "0x007901B4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C6588",
+      "fold_group": "",
+      "name": "$L4827",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007901C9",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004C6588",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004C6588",
+      "object": "G004C64EE",
+      "accepted_names": [
+        "$L4827"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007901BC",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C6588",
+      "fold_group": "",
+      "name": "$L4828",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007901C9",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004C6588",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004C6588",
+      "object": "G004C64EE",
+      "accepted_names": [
+        "$L4828"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007901C9",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004C6588",
+      "fold_group": "",
+      "name": "__ehhandler$?initiateIntentToDoSpecialPower@SiegeDeployHordeSpecialPower@@UAEXPBVSpecialPowerTemplate@@PBVObject@@PBVCoord3D@@IPBVWaypoint@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00941808;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004C6588",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004C6588",
+      "object": "G004C64EE",
+      "accepted_names": [
+        "__ehhandler$?initiateIntentToDoSpecialPower@SiegeDeployHordeSpecialPower@@UAEXPBVSpecialPowerTemplate@@PBVObject@@PBVCoord3D@@IPBVWaypoint@@@Z",
+        "__ehhandler$?initiateIntentToDoSpecialPower@SiegeDeployHordeSpecialPower@@UAEXPBVSpecialPowerTemplate@@PBVObject@@PBUCoord3D@@IPBVWaypoint@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?initiateIntentToDoSpecialPower@SiegeDeployHordeSpecialPower@@UAEXPBVSpecialPowerTemplate@@PBVObject@@PBUCoord3D@@IPBVWaypoint@@@Z",
+          "name": "__ehhandler$?initiateIntentToDoSpecialPower@SiegeDeployHordeSpecialPower@@UAEXPBVSpecialPowerTemplate@@PBVObject@@PBVCoord3D@@IPBVWaypoint@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

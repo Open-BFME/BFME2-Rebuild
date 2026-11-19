@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00255474",
+  "rows": [
+    {
+      "rva": "0x00771CC8",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255474",
+      "fold_group": "",
+      "name": "uw_00771cc8",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771CFA",
+      "object_id": "O00255474",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255474",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255474",
+      "object": "O00255474",
+      "accepted_names": [
+        "uw_00771cc8"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771CD0",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255474",
+      "fold_group": "",
+      "name": "uw_00771cd0",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771CFA",
+      "object_id": "O00255474",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255474",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255474",
+      "object": "O00255474",
+      "accepted_names": [
+        "uw_00771cd0"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771CDE",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255474",
+      "fold_group": "",
+      "name": "uw_00771cde",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771CFA",
+      "object_id": "O00255474",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255474",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255474",
+      "object": "O00255474",
+      "accepted_names": [
+        "uw_00771cde"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771CEC",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00255474",
+      "fold_group": "",
+      "name": "uw_00771cec",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00771CFA",
+      "object_id": "O00255474",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255474",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255474",
+      "object": "O00255474",
+      "accepted_names": [
+        "uw_00771cec"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00771CFA",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00255474",
+      "fold_group": "",
+      "name": "__ehhandler$??0InvisibilityUpdateModuleData@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009185E4;X:parent-by-prologue",
+      "object_id": "O00255474",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00255474",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00255474",
+      "object": "O00255474",
+      "accepted_names": [
+        "__ehhandler$??0InvisibilityUpdateModuleData@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G004474C7",
+  "rows": [
+    {
+      "rva": "0x00789235",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004474C7",
+      "fold_group": "",
+      "name": "Unwind@00b89235",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789255",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004474C7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004474C7",
+      "object": "G004474C7",
+      "accepted_names": [
+        "Unwind@00b89235"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078923D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004474C7",
+      "fold_group": "",
+      "name": "uw_0078923d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789255",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004474C7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004474C7",
+      "object": "G004474C7",
+      "accepted_names": [
+        "uw_0078923d"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00789245",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004474C7",
+      "fold_group": "",
+      "name": "Unwind@00b89245",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789255",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004474C7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004474C7",
+      "object": "G004474C7",
+      "accepted_names": [
+        "Unwind@00b89245"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078924D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004474C7",
+      "fold_group": "",
+      "name": "Unwind@00b8924d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00789255",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004474C7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004474C7",
+      "object": "G004474C7",
+      "accepted_names": [
+        "Unwind@00b8924d"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00789255",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004474C7",
+      "fold_group": "",
+      "name": "__ehhandler$?PopulatePlayerTemplateComboBox@@YAXHQAPAVGameWindow@@PAVGameInfo@@_N@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00937308;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004474C7",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004474C7",
+      "object": "G004474C7",
+      "accepted_names": [
+        "__ehhandler$?PopulatePlayerTemplateComboBox@@YAXHQAPAVGameWindow@@PAVGameInfo@@_N@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0050BD81",
+  "rows": [
+    {
+      "rva": "0x0050BD81",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GLuaEventNugget@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0050BD81",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0050BD81",
+      "accepted_names": [
+        "??_GLuaEventNugget@@UAEPAXI@Z",
+        "??_GMade002CCC90@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007944AB",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0050BD9D",
+      "fold_group": "",
+      "name": "Unwind@00b944ab",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007944B3",
+      "object_id": "O0050BD81",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0050BD9D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0050BD9D",
+      "object": "O0050BD81",
+      "accepted_names": [
+        "Unwind@00b944ab"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007944B3",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0050BD9D",
+      "fold_group": "",
+      "name": "__ehhandler$??1LuaEventNugget@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00947578;X:parent-by-prologue",
+      "object_id": "O0050BD81",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0050BD9D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0050BD9D",
+      "object": "O0050BD81",
+      "accepted_names": [
+        "__ehhandler$??1LuaEventNugget@@UAE@XZ",
+        "__ehhandler$??1Made002CCC90@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

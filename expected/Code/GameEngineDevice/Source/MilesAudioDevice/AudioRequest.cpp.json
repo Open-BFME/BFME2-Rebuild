@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O000A870E",
+  "rows": [
+    {
+      "rva": "0x00760CC8",
+      "size": 25,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x000A870E",
+      "fold_group": "",
+      "name": "?rva00760CC8@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00760CE9",
+      "object_id": "O000A870E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x000A870E",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x000A870E",
+      "object": "O000A870E",
+      "accepted_names": [
+        "?rva00760CC8@@YAXXZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00760CE1",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x000A870E",
+      "fold_group": "",
+      "name": "$L1227",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00760CE9",
+      "object_id": "O000A870E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x000A870E",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x000A870E",
+      "object": "O000A870E",
+      "accepted_names": [
+        "$L1227"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00760CE9",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x000A870E",
+      "fold_group": "",
+      "name": "__ehhandler$?getNameOfRequestType@@YA?AVAsciiString@@H@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00903E1C;X:parent-by-prologue",
+      "object_id": "O000A870E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x000A870E",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x000A870E",
+      "object": "O000A870E",
+      "accepted_names": [
+        "__ehhandler$?getNameOfRequestType@@YA?AVAsciiString@@H@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    }
+  ]
+}

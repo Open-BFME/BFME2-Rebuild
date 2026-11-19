@@ -1,0 +1,57 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G00508D2F",
+  "rows": [
+    {
+      "rva": "0x0079427E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00508D7C",
+      "fold_group": "",
+      "name": "Unwind@00b9427e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794286",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00508D7C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00508D7C",
+      "object": "G00508D2F",
+      "accepted_names": [
+        "Unwind@00b9427e"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00794286",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00508D7C",
+      "fold_group": "",
+      "name": "__ehhandler$?rva00508D7C@SpecialModelConditionNugget@@QAEXHPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00947208;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00508D7C",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00508D7C",
+      "object": "G00508D2F",
+      "accepted_names": [
+        "__ehhandler$?rva00508D7C@SpecialModelConditionNugget@@QAEXHPAVObject@@@Z",
+        "__ehhandler$?rva00508D7C@Made002CC6AE@@QAEXHPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

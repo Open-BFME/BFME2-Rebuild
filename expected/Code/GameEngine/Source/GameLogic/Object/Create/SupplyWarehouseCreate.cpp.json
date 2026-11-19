@@ -1,0 +1,108 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004B8E78",
+  "rows": [
+    {
+      "rva": "0x004B8EA8",
+      "size": 25,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1SupplyWarehouseCreate@@UAE@XZ",
+      "name_evidence": "S:strong (vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-SupplyWarehouseCreate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O004B8E78",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004B8E78",
+      "accepted_names": [
+        "??1SupplyWarehouseCreate@@UAE@XZ",
+        "??1Rva004B8EA8@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x004B8F06",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GSupplyWarehouseCreate@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004B8E78",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004B8E78",
+      "accepted_names": [
+        "??_GSupplyWarehouseCreate@@UAEPAXI@Z",
+        "??_GRva004B8EA8@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078F206",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B8EC1",
+      "fold_group": "",
+      "name": "$L306",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F213",
+      "object_id": "O004B8E78",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B8EC1",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004B8EC1",
+      "object": "O004B8E78",
+      "accepted_names": [
+        "$L306"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078F213",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B8EC1",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@SupplyWarehouseCreate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009400C0;X:parent-by-prologue",
+      "object_id": "O004B8E78",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B8EC1",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004B8EC1",
+      "object": "O004B8E78",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@SupplyWarehouseCreate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

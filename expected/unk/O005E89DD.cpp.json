@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005E89DD",
+  "rows": [
+    {
+      "rva": "0x005E8943",
+      "size": 95,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva005E8908@@QAE@ABV0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-StrategicInGameUI::BuildQueueDetailsPanel::Impl|StrategicInGameUI::BuildBuildingButton;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O005E89DD",
+      "accepted_names": [
+        "??0Rva005E8908@@QAE@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A3F3E",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E8A31",
+      "fold_group": "",
+      "name": "$L607",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A3F50",
+      "object_id": "O005E89DD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E8A31",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E8A31",
+      "object": "O005E89DD",
+      "accepted_names": [
+        "$L607"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A3F48",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E8A31",
+      "fold_group": "",
+      "name": "Unwind@00ba3f48",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A3F50",
+      "object_id": "O005E89DD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E8A31",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E8A31",
+      "object": "O005E89DD",
+      "accepted_names": [
+        "Unwind@00ba3f48"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A3F50",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005E8A31",
+      "fold_group": "",
+      "name": "__ehhandler$?clone@Rva005E8AAF@@UBE?AURva005F888CRef@@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095C560;X:parent-by-prologue",
+      "object_id": "O005E89DD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E8A31",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E8A31",
+      "object": "O005E89DD",
+      "accepted_names": [
+        "__ehhandler$?clone@Rva005E8AAF@@UBE?AURva005F888CRef@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

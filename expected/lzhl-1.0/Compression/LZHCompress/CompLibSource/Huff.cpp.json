@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00691880",
+  "rows": [
+    {
+      "rva": "0x007A7BE0",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H007A7BE8",
+      "name": "uw_007a7be0",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A7BE8;X:shared by 6 functions",
+      "object_id": "O00691880",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00691AA0;0x00691B20;0x00692180;0x00692200;0x006922A0;0x00692300",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00691880",
+      "accepted_names": [
+        "uw_007a7be0"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    },
+    {
+      "rva": "0x007A7BE8",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H007A7BE8",
+      "name": "__ehhandler$??0LZHLEncoderStat@@QAE@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009615CC;X:parent-by-prologue;X:EH stub shared by 6 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O00691880",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00691AA0;0x00691B20;0x00692180;0x00692200;0x006922A0;0x00692300",
+      "parent_evidence": "X:handler-operand(6 parents, shared handler)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00691880",
+      "accepted_names": [
+        "__ehhandler$??0LZHLEncoderStat@@QAE@XZ"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    }
+  ]
+}

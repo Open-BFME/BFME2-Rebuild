@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G003A5A42",
+  "rows": [
+    {
+      "rva": "0x00781C33",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003A5A58",
+      "fold_group": "",
+      "name": "uw_00781c33",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00781C3B",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A5A58",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003A5A58",
+      "object": "G003A5A42",
+      "accepted_names": [
+        "uw_00781c33"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781C3B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x003A5A58",
+      "fold_group": "",
+      "name": "__ehhandler$?update@Rva003A59C3@@UAEXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092CC24;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A5A58",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003A5A58",
+      "object": "G003A5A42",
+      "accepted_names": [
+        "__ehhandler$?update@Rva003A59C3@@UAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781C45",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00781C58",
+      "name": "$L13575",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00781C58;X:shared by 2 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A5DA0;0x003A5E78",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G003A5A42",
+      "accepted_names": [
+        "$L13575"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781C50",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00781C58",
+      "name": "$L13576",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00781C58;X:shared by 2 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A5DA0;0x003A5E78",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G003A5A42",
+      "accepted_names": [
+        "$L13576"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781C58",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00781C58",
+      "name": "__ehhandler$?Rva003A5DA0WriteWindHeader@@YAXPBXPAVFile@@PAI@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092CC50;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A5DA0;0x003A5E78",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G003A5A42",
+      "accepted_names": [
+        "__ehhandler$?Rva003A5DA0WriteWindHeader@@YAXPBXPAVFile@@PAI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

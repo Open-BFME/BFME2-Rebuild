@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G002D1E55",
+  "rows": [
+    {
+      "rva": "0x00777302",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0077730C",
+      "name": "$L595",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077730C;X:shared by 17 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x002D1E55;0x002D1E8F;0x002D1EC9;0x002D1F03;0x002D1F3D;0x002D1F77;0x002D1FB1;0x002D1FEB;0x002D2025;0x002D205F;0x002D2099;0x002D20D3;0x002D210D;0x002D2147;0x002D2181;0x002D21BB;0x002D21FB",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G002D1E55",
+      "accepted_names": [
+        "$L595"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077730C",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0077730C",
+      "name": "__ehhandler$?Rva002D21BBCreate@@YGPAVAptSkirmish@@PAX@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0091EEE4;X:parent-by-prologue;X:EH stub shared by 17 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x002D1E55;0x002D1E8F;0x002D1EC9;0x002D1F03;0x002D1F3D;0x002D1F77;0x002D1FB1;0x002D1FEB;0x002D2025;0x002D205F;0x002D2099;0x002D20D3;0x002D210D;0x002D2147;0x002D2181;0x002D21BB;0x002D21FB",
+      "parent_evidence": "X:handler-operand(17 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G002D1E55",
+      "accepted_names": [
+        "__ehhandler$?Rva002D21BBCreate@@YGPAVAptSkirmish@@PAX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

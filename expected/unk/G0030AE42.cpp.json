@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G0030AE42",
+  "rows": [
+    {
+      "rva": "0x0030ADED",
+      "size": 85,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??4Rva0030ADED@@QAEAAV0@ABV0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Object|AreaPolygonBase;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G0030AE42",
+      "accepted_names": [
+        "??4Rva0030ADED@@QAEAAV0@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

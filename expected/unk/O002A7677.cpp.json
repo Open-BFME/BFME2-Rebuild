@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O002A7677",
+  "rows": [
+    {
+      "rva": "0x002A7644",
+      "size": 51,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?erase@?$vector@UBfmePod12@@V?$allocator@UBfmePod12@@@_STL@@@_STL@@QAEPAUBfmePod12@@PAU3@0@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O002A7677",
+      "accepted_names": [
+        "?erase@?$vector@UBfmePod12@@V?$allocator@UBfmePod12@@@_STL@@@_STL@@QAEPAUBfmePod12@@PAU3@0@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x002A7695",
+      "size": 11,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?clear@?$vector@UBfmePod12@@V?$allocator@UBfmePod12@@@_STL@@@_STL@@QAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O002A7677",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O002A7677",
+      "accepted_names": [
+        "?clear@?$vector@UBfmePod12@@V?$allocator@UBfmePod12@@@_STL@@@_STL@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x002A76A0",
+      "size": 193,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?_M_insert_overflow@?$vector@URva002A76A0Element@@V?$allocator@URva002A76A0Element@@@_STL@@@_STL@@IAEXPAURva002A76A0Element@@ABU3@ABU__false_type@2@I_N@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O002A7677",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O002A7677",
+      "accepted_names": [
+        "?_M_insert_overflow@?$vector@URva002A76A0Element@@V?$allocator@URva002A76A0Element@@@_STL@@@_STL@@IAEXPAURva002A76A0Element@@ABU3@ABU__false_type@2@I_N@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x002A778D",
+      "size": 52,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?push_back@?$vector@URva002A76A0Element@@V?$allocator@URva002A76A0Element@@@_STL@@@_STL@@QAEXABURva002A76A0Element@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O002A7677",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O002A7677",
+      "accepted_names": [
+        "?push_back@?$vector@URva002A76A0Element@@V?$allocator@URva002A76A0Element@@@_STL@@@_STL@@QAEXABURva002A76A0Element@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

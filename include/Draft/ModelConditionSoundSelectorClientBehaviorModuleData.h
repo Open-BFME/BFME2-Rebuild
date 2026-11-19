@@ -1,0 +1,32 @@
+// DRAFT (h05 fpgen): generated from retail's field-parse table (VA 0x00C5F150).
+// Offsets and size are compile-checked below; no function matches against it yet,
+// so it stays in Draft until one does. Unresolved members: none.
+// ModelConditionSoundSelectorClientBehaviorModuleData.h: the INI data of ModelConditionSoundSelectorClientBehavior. SIZE 0x14.
+// Target facts: ModuleFactory registers the module with operator new 0x14 and
+// constructor RVA 0x004CAEE6; buildFieldParse RVA 0x004CB0F3 adds VA 0x00C5F150 at +0x0.
+// Offsets are the table entries'; each type is what the entry's parse function stores
+// (h05 fpgen: INI::parseReal -> Real, parseDurationUnsignedInt -> UnsignedInt, ...);
+// names are the INI tokens. Byte gaps are bytes no table entry writes.
+#pragma once
+#ifndef BFME2_MODEL_CONDITION_SOUND_SELECTOR_CLIENT_BEHAVIOR_MODULE_DATA_H
+#define BFME2_MODEL_CONDITION_SOUND_SELECTOR_CLIENT_BEHAVIOR_MODULE_DATA_H
+
+#include <stddef.h>
+#include "Common/GameType.h"
+#include "GameLogic/Module/ModuleData.h"
+
+class INI;
+class MultiIniFieldParse;
+
+class ModelConditionSoundSelectorClientBehaviorModuleData : public ModuleData
+{
+public:
+	ModelConditionSoundSelectorClientBehaviorModuleData();
+	static void buildFieldParse(MultiIniFieldParse &parse);
+
+	UnsignedByte m_unk0x8[0xC];
+};
+// SIZE 0x14
+typedef char ModelConditionSoundSelectorClientBehaviorModuleData_size[(sizeof(ModelConditionSoundSelectorClientBehaviorModuleData) == 0x14) ? 1 : -1];
+
+#endif

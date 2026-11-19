@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005F3F14",
+  "rows": [
+    {
+      "rva": "0x005F3F6B",
+      "size": 8,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F005F3F6B",
+      "name": "?rva005F3F6B@Rva005F3F6B@@QAEXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O005F3F14",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O005F3F14",
+      "accepted_names": [
+        "?rva005F3F6B@Rva005F3F6B@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

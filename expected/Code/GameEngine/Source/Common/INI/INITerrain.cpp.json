@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00200A65",
+  "rows": [
+    {
+      "rva": "0x0076C3EB",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0076C3F3",
+      "name": "$L1513",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C3F3;X:shared by 2 functions",
+      "object_id": "O00200A01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00200A65;0x00200AEA",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "retained:O00200A65",
+      "accepted_names": [
+        "$L1513"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0076C3F3",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0076C3F3",
+      "name": "__ehhandler$?iniParseWaterTexturesDefinition@@YAXPAVINI@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911AA8;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O00200A01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00200A65;0x00200AEA",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "retained:O00200A65",
+      "accepted_names": [
+        "__ehhandler$?iniParseWaterTexturesDefinition@@YAXPAVINI@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

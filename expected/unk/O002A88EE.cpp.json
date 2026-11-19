@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O002A88EE",
+  "rows": [
+    {
+      "rva": "0x002A8928",
+      "size": 23,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0BrutalDifficultyCheats@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-CombatChainEntry|Gen_000c8990;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O002A88EE",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O002A88EE",
+      "accepted_names": [
+        "??0BrutalDifficultyCheats@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

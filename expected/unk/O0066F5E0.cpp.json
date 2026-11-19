@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0066F5E0",
+  "rows": [
+    {
+      "rva": "0x0066F860",
+      "size": 104,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva00803890Owner@@QAE@EPAUBfmeOwnerUNC@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BfmeHostSB|BfmeThingVJH;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0066F5E0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O0066F5E0",
+      "accepted_names": [
+        "??0Rva00803890Owner@@QAE@EPAUBfmeOwnerUNC@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0066F8D0",
+      "size": 96,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1Rva00803890Owner@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BfmeHostSB|BfmeThingVJH;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0066F5E0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O0066F5E0",
+      "accepted_names": [
+        "??1Rva00803890Owner@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0066FD50",
+      "size": 32,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GGen00803D10@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0066F5E0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O0066F5E0",
+      "accepted_names": [
+        "??_GGen00803D10@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

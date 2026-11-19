@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005F20C5",
+  "rows": [
+    {
+      "rva": "0x005F21F8",
+      "size": 56,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1Rva005F20C5@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-StrategicHUD::RegionDetailsTerritoryMovieClip|StrategicHUD::ArmyDetailsMovieClip::Impl;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O005F20C5",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O005F20C5",
+      "accepted_names": [
+        "??1Rva005F20C5@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007A4E82",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H007A4E8A",
+      "name": "$L445",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A4E8A;X:shared by 2 functions",
+      "object_id": "O005F20C5",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005F211B;0x005F2188",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O005F20C5",
+      "accepted_names": [
+        "$L445"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A4E8A",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H007A4E8A",
+      "name": "__ehhandler$?apply@Rva005F2230List@@QAEXABURva005F211BCall@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095DA88;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O005F20C5",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005F211B;0x005F2188",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O005F20C5",
+      "accepted_names": [
+        "__ehhandler$?apply@Rva005F2230List@@QAEXABURva005F211BCall@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

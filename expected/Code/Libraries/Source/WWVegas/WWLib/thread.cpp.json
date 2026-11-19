@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00610430",
+  "rows": [
+    {
+      "rva": "0x006105D0",
+      "size": 6,
+      "section": ".text",
+      "role": "import_thunk",
+      "parent_rva": "0x007BA220",
+      "fold_group": "",
+      "name": "?_Get_Current_Thread_ID@ThreadClass@@SAIXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp [IAT 0x007BA220] kernel32.dll!GetCurrentThreadId",
+      "object_id": "O00610430",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x007BA220",
+      "object": "O00610430",
+      "accepted_names": [
+        "?_Get_Current_Thread_ID@ThreadClass@@SAIXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007B53F0",
+      "size": 23,
+      "section": ".text",
+      "role": "initializer",
+      "parent_rva": "0x00A07C00",
+      "fold_group": "",
+      "name": "?rva007B53F0@Rva007B53F0EventInit@@SAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:.CRT$XC slot 0x009A5BA0;X:global-by-store",
+      "object_id": "O00610430",
+      "object_evidence": "X:initializer-votes",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "init-votes",
+      "weakest_link": "init-votes",
+      "parent": "0x00A07C00",
+      "object": "O00610430",
+      "accepted_names": [
+        "?rva007B53F0@Rva007B53F0EventInit@@SAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:init-votes"
+    }
+  ]
+}

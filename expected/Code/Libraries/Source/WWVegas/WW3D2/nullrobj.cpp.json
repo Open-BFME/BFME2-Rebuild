@@ -1,0 +1,83 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00180E60",
+  "rows": [
+    {
+      "rva": "0x00180E80",
+      "size": 30,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRva00180EA0@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00180E60",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00180E60",
+      "accepted_names": [
+        "??_GRva00180EA0@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00180EA0",
+      "size": 11,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1Rva00180EA0@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen_dtor_00972460|Null3DObjClass;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00180E60",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00180E60",
+      "accepted_names": [
+        "??1Rva00180EA0@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00180FD0",
+      "size": 3,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F00180FD0",
+      "name": "?m009EC960@Q1Receiver0134FAAC@@QAEXPAX@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O00180E60",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00180E60",
+      "accepted_names": [
+        "?m009EC960@Q1Receiver0134FAAC@@QAEXPAX@Z",
+        "?Log@DX8RigidFVFCategoryContainer@@UAEX_N@Z",
+        "?Prepare_LOD@RenderObjClass@@UAEXAAVCameraClass@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

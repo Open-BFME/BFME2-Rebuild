@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0018BD89",
+  "rows": [
+    {
+      "rva": "0x0018BE7E",
+      "size": 9,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0SourceNamespace_Fog@FXShaderParameterSourceNamespaceWW3D@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-MeshModelClass|FXShaderParameterSourceNamespaceWW3D;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0018BD89",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0018BD89",
+      "accepted_names": [
+        "??0SourceNamespace_Fog@FXShaderParameterSourceNamespaceWW3D@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0018BF09",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GFXShaderParameterSourceNamespaceWW3D@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0018BD89",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0018BD89",
+      "accepted_names": [
+        "??_GFXShaderParameterSourceNamespaceWW3D@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007687E5",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H007687F8",
+      "name": "$L397",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007687F8;X:shared by 2 functions",
+      "object_id": "O0018BD89",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0018BE87;0x0018BEC7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0018BD89",
+      "accepted_names": [
+        "$L397"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007687ED",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H007687F8",
+      "name": "$L398",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007687F8;X:shared by 2 functions",
+      "object_id": "O0018BD89",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0018BE87;0x0018BEC7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0018BD89",
+      "accepted_names": [
+        "$L398"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007687F8",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H007687F8",
+      "name": "__ehhandler$??0FXShaderParameterSourceNamespaceWW3D@@QAE@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0090D5F0;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O0018BD89",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0018BE87;0x0018BEC7",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0018BD89",
+      "accepted_names": [
+        "__ehhandler$??0FXShaderParameterSourceNamespaceWW3D@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0049053E",
+  "rows": [
+    {
+      "rva": "0x004905B0",
+      "size": 5,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "0x0026E1FC",
+      "fold_group": "F004905B0",
+      "name": "??1Rva004905B0@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:jmp-thunk",
+      "object_id": "O0049053E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x0026E1FC",
+      "object": "O0049053E",
+      "accepted_names": [
+        "??1Rva004905B0@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x004905B5",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GSiegeAIUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0049053E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O0049053E",
+      "accepted_names": [
+        "??_GSiegeAIUpdate@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078C977",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049056B",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C984",
+      "object_id": "O0049053E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0049056B",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0049056B",
+      "object": "O0049053E",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078C984",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049056B",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@SiegeAIUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C31C;X:parent-by-prologue",
+      "object_id": "O0049053E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0049056B",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0049056B",
+      "object": "O0049053E",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@SiegeAIUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O003AEF34",
+  "rows": [
+    {
+      "rva": "0x003AEF6E",
+      "size": 45,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva003AEF6E@@QAE@ABV0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-FXParticleSystem|Host005ED050;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O003AEF34",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003AEF34",
+      "accepted_names": [
+        "??0Rva003AEF6E@@QAE@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x003AEF9B",
+      "size": 91,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva003AEF9B@@QAE@ABV0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-FXParticleSystem|Host005ED050;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O003AEF34",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003AEF34",
+      "accepted_names": [
+        "??0Rva003AEF9B@@QAE@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00781EB5",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00781EBF",
+      "name": "uw_00781eb5",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00781EBF;X:shared by 77 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-in-several-objects",
+      "parent_rvas": "0x003AA3F4;0x003AA49F;0x003AA54A;0x003AA620;0x003AA911;0x003AA948;0x003AAFF3;0x003AB0CC;0x003AB177;0x003AB222;0x003AB2CD;0x003AB378;0x003AB6CE;0x003AB77C;0x003AB991;0x003AB9C8;0x003AC329;0x003AC3A9;0x003AC429;0x003AC59C;0x003AC622;0x003AC6A5;0x003AC725;0x003AC7A5;0x003AC825;0x003AC8A5;0x003AC8D7;0x003AC93E;0x003AC9AF;0x003ACA24;0x003ACA93;0x003ACB08;0x003ACF68;0x003AD03B;0x003AD6DF;0x003AD71B;0x003AD757;0x003AD793;0x003AD7CF;0x003AD80B;0x003AD84A;0x003AD886;0x003AD8C5;0x003AD904;0x003AD940;0x003AD97F;0x003AD9BB;0x003AD9F7;0x003ADA36;0x003ADBD0;0x003AE408;0x003AE4AE;0x003AE538;0x003AE5C2;0x003AE64C;0x003AE758;0x003AE8F1;0x003AE9DB;0x003AEAA3;0x003AEB65;0x003AEC24;0x003AECE6;0x003AEDB2;0x003AEF34;0x003AF012;0x003AF127;0x003AF1D1;0x003AF27B;0x003AF2F2;0x003AF39C;0x003AF446;0x003AF548;0x003AF60E;0x003AF6D4;0x003AF79A;0x003AF860;0x003AF945",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O003AEF34",
+      "accepted_names": [
+        "uw_00781eb5"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781EBF",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00781EBF",
+      "name": "__ehhandler$?createTemplate@?$ConcreteModuleClass@V?$DefaultModuleTag@$06@FXParticleSystem@@@FXParticleSystem@@UBEPAV?$DefaultModuleTemplate@$06@2@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092CE34;X:parent-by-prologue;X:EH stub shared by 77 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-in-several-objects",
+      "parent_rvas": "0x003AA3F4;0x003AA49F;0x003AA54A;0x003AA620;0x003AA911;0x003AA948;0x003AAFF3;0x003AB0CC;0x003AB177;0x003AB222;0x003AB2CD;0x003AB378;0x003AB6CE;0x003AB77C;0x003AB991;0x003AB9C8;0x003AC329;0x003AC3A9;0x003AC429;0x003AC59C;0x003AC622;0x003AC6A5;0x003AC725;0x003AC7A5;0x003AC825;0x003AC8A5;0x003AC8D7;0x003AC93E;0x003AC9AF;0x003ACA24;0x003ACA93;0x003ACB08;0x003ACF68;0x003AD03B;0x003AD6DF;0x003AD71B;0x003AD757;0x003AD793;0x003AD7CF;0x003AD80B;0x003AD84A;0x003AD886;0x003AD8C5;0x003AD904;0x003AD940;0x003AD97F;0x003AD9BB;0x003AD9F7;0x003ADA36;0x003ADBD0;0x003AE408;0x003AE4AE;0x003AE538;0x003AE5C2;0x003AE64C;0x003AE758;0x003AE8F1;0x003AE9DB;0x003AEAA3;0x003AEB65;0x003AEC24;0x003AECE6;0x003AEDB2;0x003AEF34;0x003AF012;0x003AF127;0x003AF1D1;0x003AF27B;0x003AF2F2;0x003AF39C;0x003AF446;0x003AF548;0x003AF60E;0x003AF6D4;0x003AF79A;0x003AF860;0x003AF945",
+      "parent_evidence": "X:handler-operand(77 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O003AEF34",
+      "accepted_names": [
+        "__ehhandler$?createTemplate@?$ConcreteModuleClass@V?$DefaultModuleTag@$06@FXParticleSystem@@@FXParticleSystem@@UBEPAV?$DefaultModuleTemplate@$06@2@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "levels": {
+    "B": 18008,
+    "L": 1598,
+    "A": 13845
+  },
+  "unknown_rows": 13298,
+  "unseeded_rows": 22679,
+  "map_object_count": 3051,
+  "seeded_objects": 2104,
+  "rich_compiled_objects": 1946,
+  "problems": []
+}

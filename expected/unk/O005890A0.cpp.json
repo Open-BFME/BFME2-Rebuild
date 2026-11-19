@@ -1,0 +1,58 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005890A0",
+  "rows": [
+    {
+      "rva": "0x00589079",
+      "size": 39,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1SpecialPowerUpdateModule@@UAE@XZ",
+      "name_evidence": "X:proven (snapshot-name|vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-HordeMeleeAmoeba|AIUpdateModuleData;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O005890A0",
+      "accepted_names": [
+        "??1SpecialPowerUpdateModule@@UAE@XZ",
+        "??1Rva00589079@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x005890FE",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GSpecialPowerUpdateModule@@UAEPAXI@Z",
+      "name_evidence": "S:strong (vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O005890A0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O005890A0",
+      "accepted_names": [
+        "??_GSpecialPowerUpdateModule@@UAEPAXI@Z",
+        "??_GRva00589079@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

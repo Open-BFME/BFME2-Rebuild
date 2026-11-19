@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0038766B",
+  "rows": [
+    {
+      "rva": "0x0038766B",
+      "size": 34,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F0038766B",
+      "name": "?_M_create_node@?$_Rb_tree@URva003876A4Element@@U1@U?$_Identity@URva003876A4Element@@@_STL@@U?$less@URva003876A4Element@@@3@V?$allocator@URva003876A4Element@@@3@@_STL@@IAEPAU?$_Rb_tree_node@URva003876A4Element@@@2@ABURva003876A4Element@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O0038766B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0038766B",
+      "accepted_names": [
+        "?_M_create_node@?$_Rb_tree@URva003876A4Element@@U1@U?$_Identity@URva003876A4Element@@@_STL@@U?$less@URva003876A4Element@@@3@V?$allocator@URva003876A4Element@@@3@@_STL@@IAEPAU?$_Rb_tree_node@URva003876A4Element@@@2@ABURva003876A4Element@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

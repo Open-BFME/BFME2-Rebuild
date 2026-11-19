@@ -1,0 +1,132 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004CEAB7",
+  "rows": [
+    {
+      "rva": "0x00790B4E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004CEB76",
+      "fold_group": "",
+      "name": "$L4248",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00790B6C",
+      "object_id": "O004CEAB7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CEB76",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CEB76",
+      "object": "O004CEAB7",
+      "accepted_names": [
+        "$L4248"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00790B56",
+      "size": 22,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004CEB76",
+      "fold_group": "",
+      "name": "$L4249",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00790B6C",
+      "object_id": "O004CEAB7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CEB76",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CEB76",
+      "object": "O004CEAB7",
+      "accepted_names": [
+        "$L4249"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00790B6C",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004CEB76",
+      "fold_group": "",
+      "name": "__ehhandler$?Rva004CEB76@@YAXAAURva004CEB14List@@VRva004CEAB7@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00942800;X:parent-by-prologue",
+      "object_id": "O004CEAB7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CEB76",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CEB76",
+      "object": "O004CEAB7",
+      "accepted_names": [
+        "__ehhandler$?Rva004CEB76@@YAXAAURva004CEB14List@@VRva004CEAB7@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00790B76",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004CED4B",
+      "fold_group": "",
+      "name": "uw_00790b76",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00790B7E",
+      "object_id": "O004CEAB7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CED4B",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x004CED4B",
+      "object": "O004CEAB7",
+      "accepted_names": [
+        "uw_00790b76"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00790B7E",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004CED4B",
+      "fold_group": "",
+      "name": "__ehhandler$?update@HordeNotifyTargetsOfImminentProbableCrushingUpdate@@UAE?AW4UpdateSleepTime@@XZ",
+      "name_evidence": "S:token",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00942824;X:parent-by-prologue",
+      "object_id": "O004CEAB7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CED4B",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x004CED4B",
+      "object": "O004CEAB7",
+      "accepted_names": [
+        "__ehhandler$?update@HordeNotifyTargetsOfImminentProbableCrushingUpdate@@UAE?AW4UpdateSleepTime@@XZ",
+        "__ehhandler$?update@Rva004CED4BUpdateInterface@@UAE?AW4UpdateSleepTime@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

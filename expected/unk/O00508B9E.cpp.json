@@ -1,0 +1,93 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00508B9E",
+  "rows": [
+    {
+      "rva": "0x00508BE5",
+      "size": 97,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0AttributeModifierNugget@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-DamageNugget|Made002CC6AE;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00508B9E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00508B9E",
+      "accepted_names": [
+        "??0AttributeModifierNugget@@QAE@XZ",
+        "??0Made002CC64B@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0079425A",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00508C46",
+      "fold_group": "",
+      "name": "uw_0079425a",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794262",
+      "object_id": "O00508B9E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00508C46",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00508C46",
+      "object": "O00508B9E",
+      "accepted_names": [
+        "uw_0079425a"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00794262",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00508C46",
+      "fold_group": "",
+      "name": "__ehhandler$?rva00508C46@AttributeModifierNugget@@UAEXPAURva00508987Weapon@@PBVCoord3D@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009471C0;X:parent-by-prologue",
+      "object_id": "O00508B9E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00508C46",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00508C46",
+      "object": "O00508B9E",
+      "accepted_names": [
+        "__ehhandler$?rva00508C46@AttributeModifierNugget@@UAEXPAURva00508987Weapon@@PBVCoord3D@@@Z",
+        "__ehhandler$?rva00508C46@Made002CC64B@@UAEXPAURva00508987Weapon@@PBVCoord3D@@@Z",
+        "__ehhandler$?rva00508C46@Made002CC64B@@UAEXPAURva00508987Weapon@@PBUCoord3D@@@Z",
+        "__ehhandler$?rva00508C46@AttributeModifierNugget@@UAEXPAURva00508987Weapon@@PBUCoord3D@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?rva00508C46@Made002CC64B@@UAEXPAURva00508987Weapon@@PBUCoord3D@@@Z",
+          "name": "__ehhandler$?rva00508C46@Made002CC64B@@UAEXPAURva00508987Weapon@@PBVCoord3D@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

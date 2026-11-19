@@ -1,0 +1,237 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0049ACC5",
+  "rows": [
+    {
+      "rva": "0x0049ACCB",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x0049A7EE",
+      "fold_group": "",
+      "name": "?j_0049accb@@YAXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?j_0049accb@@YAXXZ"
+      ],
+      "parent": "0x0049A7EE",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0049AD9B",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GHordeWorkerAIUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GHordeWorkerAIUpdate@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D64E",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049ACD0",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D65B",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x0049ACD0",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D65B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049ACD0",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@HordeWorkerAIUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093D674;X:parent-by-prologue",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@HordeWorkerAIUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x0049ACD0",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D665",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049AD15",
+      "fold_group": "",
+      "name": "uw_0078d665",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D66D",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_0078d665"
+      ],
+      "parent": "0x0049AD15",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D66D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049AD15",
+      "fold_group": "",
+      "name": "__ehhandler$??0HordeWorkerAIUpdate@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093D698;X:parent-by-prologue",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0HordeWorkerAIUpdate@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x0049AD15",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D677",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049AFFC",
+      "fold_group": "",
+      "name": "$L3853",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D67F",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L3853"
+      ],
+      "parent": "0x0049AFFC",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D67F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049AFFC",
+      "fold_group": "",
+      "name": "__ehhandler$?privateRepair@HordeWorkerAIUpdate@@MAEXPAVObject@@W4CommandSourceType@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093D6BC;X:parent-by-prologue",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?privateRepair@HordeWorkerAIUpdate@@MAEXPAVObject@@W4CommandSourceType@@@Z"
+      ],
+      "parent": "0x0049AFFC",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D689",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049B0BF",
+      "fold_group": "",
+      "name": "Unwind@00b8d689",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D69C",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8d689"
+      ],
+      "parent": "0x0049B0BF",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D694",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049B0BF",
+      "fold_group": "",
+      "name": "Unwind@00b8d694",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D69C",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8d694"
+      ],
+      "parent": "0x0049B0BF",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D69C",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049B0BF",
+      "fold_group": "",
+      "name": "__ehhandler$?rva0049B0BF@Rva0049B0BF@@QAEXPAURva0049B0BFData@@H@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093D6E8;X:parent-by-prologue",
+      "object_id": "retained:O0049ACC5",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?rva0049B0BF@Rva0049B0BF@@QAEXPAURva0049B0BFData@@H@Z"
+      ],
+      "parent": "0x0049B0BF",
+      "object": "retained:O0049ACC5",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

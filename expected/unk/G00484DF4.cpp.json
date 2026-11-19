@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G00484DF4",
+  "rows": [
+    {
+      "rva": "0x0078BEA3",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00484DF4",
+      "fold_group": "",
+      "name": "Unwind@00b8bea3",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BECC",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00484DF4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00484DF4",
+      "object": "G00484DF4",
+      "accepted_names": [
+        "Unwind@00b8bea3"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078BEAB",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00484DF4",
+      "fold_group": "",
+      "name": "Unwind@00b8beab",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BECC",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00484DF4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00484DF4",
+      "object": "G00484DF4",
+      "accepted_names": [
+        "Unwind@00b8beab"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078BEB6",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00484DF4",
+      "fold_group": "",
+      "name": "Unwind@00b8beb6",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BECC",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00484DF4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00484DF4",
+      "object": "G00484DF4",
+      "accepted_names": [
+        "Unwind@00b8beb6"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078BEC1",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00484DF4",
+      "fold_group": "",
+      "name": "Unwind@00b8bec1",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BECC",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00484DF4",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00484DF4",
+      "object": "G00484DF4",
+      "accepted_names": [
+        "Unwind@00b8bec1"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078BECC",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00484DF4",
+      "fold_group": "",
+      "name": "__ehhandler$??0PassiveAreaEffectBehaviorModuleData@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B318;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00484DF4",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00484DF4",
+      "object": "G00484DF4",
+      "accepted_names": [
+        "__ehhandler$??0PassiveAreaEffectBehaviorModuleData@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

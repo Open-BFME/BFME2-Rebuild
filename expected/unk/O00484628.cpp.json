@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00484628",
+  "rows": [
+    {
+      "rva": "0x0078BDE5",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048462E",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BDF2",
+      "object_id": "O00484628",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048462E",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0048462E",
+      "object": "O00484628",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078BDF2",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048462E",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@SlaveWatcherBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B1D4;X:parent-by-prologue",
+      "object_id": "O00484628",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048462E",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0048462E",
+      "object": "O00484628",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@SlaveWatcherBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078BE19",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0078BE21",
+      "name": "$L1635",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BE21;X:shared by 2 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004845CB;0x00484739",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O00484628",
+      "accepted_names": [
+        "$L1635"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078BE21",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0078BE21",
+      "name": "__ehhandler$??0SlaveWatcherBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B224;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004845CB;0x00484739",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O00484628",
+      "accepted_names": [
+        "__ehhandler$??0SlaveWatcherBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

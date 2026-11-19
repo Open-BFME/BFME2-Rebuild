@@ -1,0 +1,119 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00508F0C",
+  "rows": [
+    {
+      "rva": "0x00508F51",
+      "size": 59,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0ParalyzeNugget@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Made002CC6AE|BfmeAimAAE;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00508F0C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00508F0C",
+      "accepted_names": [
+        "??0ParalyzeNugget@@QAE@XZ",
+        "??0Made002CC711@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x00508F8C",
+      "size": 28,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F00508F8C",
+      "name": "??_GParalyzeNugget@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:scalar-deleting-dtor shape",
+      "object_id": "O00508F0C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00508F0C",
+      "accepted_names": [
+        "??_GParalyzeNugget@@UAEPAXI@Z",
+        "??_GMade002CC711@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x007942C2",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0050921D",
+      "fold_group": "",
+      "name": "uw_007942c2",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007942CA",
+      "object_id": "O00508F0C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0050921D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0050921D",
+      "object": "O00508F0C",
+      "accepted_names": [
+        "uw_007942c2"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007942CA",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0050921D",
+      "fold_group": "",
+      "name": "__ehhandler$?rva0050921D@ParalyzeNugget@@UAEXPBUParalyzeContext@@PBVCoord3D@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094727C;X:parent-by-prologue",
+      "object_id": "O00508F0C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0050921D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0050921D",
+      "object": "O00508F0C",
+      "accepted_names": [
+        "__ehhandler$?rva0050921D@ParalyzeNugget@@UAEXPBUParalyzeContext@@PBVCoord3D@@@Z",
+        "__ehhandler$?rva0050921D@Made002CC711@@UAEXPBUParalyzeContext@@PBVCoord3D@@@Z",
+        "__ehhandler$?rva0050921D@Made002CC711@@UAEXPBUParalyzeContext@@PBUCoord3D@@@Z",
+        "__ehhandler$?rva0050921D@ParalyzeNugget@@UAEXPBUParalyzeContext@@PBUCoord3D@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?rva0050921D@Made002CC711@@UAEXPBUParalyzeContext@@PBUCoord3D@@@Z",
+          "name": "__ehhandler$?rva0050921D@Made002CC711@@UAEXPBUParalyzeContext@@PBVCoord3D@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

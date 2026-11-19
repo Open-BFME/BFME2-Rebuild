@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G003235B8",
+  "rows": [
+    {
+      "rva": "0x0077B146",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0032386A",
+      "fold_group": "",
+      "name": "Unwind@00b7b146",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077B151",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x0032386A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x0032386A",
+      "object": "G003235B8",
+      "accepted_names": [
+        "Unwind@00b7b146"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077B151",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0032386A",
+      "fold_group": "",
+      "name": "__ehhandler$?GadgetImageComboBoxInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00923F2C;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x0032386A",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x0032386A",
+      "object": "G003235B8",
+      "accepted_names": [
+        "__ehhandler$?GadgetImageComboBoxInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077B15B",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00323A5B",
+      "fold_group": "",
+      "name": "Unwind@00b7b15b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077B166",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00323A5B",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00323A5B",
+      "object": "G003235B8",
+      "accepted_names": [
+        "Unwind@00b7b15b"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077B166",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00323A5B",
+      "fold_group": "",
+      "name": "__ehhandler$?GadgetImageComboBoxSystem@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00923F50;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00323A5B",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00323A5B",
+      "object": "G003235B8",
+      "accepted_names": [
+        "__ehhandler$?GadgetImageComboBoxSystem@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

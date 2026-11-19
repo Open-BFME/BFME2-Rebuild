@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004CBC2B",
+  "rows": [
+    {
+      "rva": "0x00790791",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004CBC2B",
+      "fold_group": "",
+      "name": "Unwind@00b90791",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00790799",
+      "object_id": "O004CBC2B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CBC2B",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CBC2B",
+      "object": "O004CBC2B",
+      "accepted_names": [
+        "Unwind@00b90791"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00790799",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004CBC2B",
+      "fold_group": "",
+      "name": "__ehhandler$??0RandomSoundSelectorClientBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009421C4;X:parent-by-prologue",
+      "object_id": "O004CBC2B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CBC2B",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CBC2B",
+      "object": "O004CBC2B",
+      "accepted_names": [
+        "__ehhandler$??0RandomSoundSelectorClientBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x007907A3",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004CBCAD",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007907B0",
+      "object_id": "O004CBC2B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CBCAD",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CBCAD",
+      "object": "O004CBC2B",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x007907B0",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004CBCAD",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@RandomSoundSelectorClientBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009421E8;X:parent-by-prologue",
+      "object_id": "O004CBC2B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004CBCAD",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004CBCAD",
+      "object": "O004CBC2B",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@RandomSoundSelectorClientBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    }
+  ]
+}

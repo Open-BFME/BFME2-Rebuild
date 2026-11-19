@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004866F3",
+  "rows": [
+    {
+      "rva": "0x004867DD",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRebuildHoleExposeDie@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004866F3",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004866F3",
+      "accepted_names": [
+        "??_GRebuildHoleExposeDie@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x004867F9",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x0045CE54",
+      "fold_group": "",
+      "name": "??1RebuildHoleExposeDie@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O004866F3",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0045CE54",
+      "object": "O004866F3",
+      "accepted_names": [
+        "??1RebuildHoleExposeDie@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078C0C6",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00486792",
+      "fold_group": "",
+      "name": "$L1514",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C0D3",
+      "object_id": "O004866F3",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00486792",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00486792",
+      "object": "O004866F3",
+      "accepted_names": [
+        "$L1514"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078C0D3",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00486792",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@RebuildHoleExposeDie@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B658;X:parent-by-prologue",
+      "object_id": "O004866F3",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00486792",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00486792",
+      "object": "O004866F3",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@RebuildHoleExposeDie@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

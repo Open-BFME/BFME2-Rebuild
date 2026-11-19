@@ -1,0 +1,69 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005C5069",
+  "rows": [
+    {
+      "rva": "0x005C5990",
+      "size": 28,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F005C5990",
+      "name": "??_GProcessAnimateWindowSlideFromBottomTimed@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:scalar-deleting-dtor shape",
+      "object_id": "O005C5069",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O005C5069",
+      "accepted_names": [
+        "??_GProcessAnimateWindowSlideFromBottomTimed@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromBottom@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromLeft@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromRight@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromRightFast@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromTop@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSlideFromTopFast@@UAEPAXI@Z",
+        "??_GProcessAnimateWindowSpiral@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x005C6317",
+      "size": 7,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F005C6317",
+      "name": "??1ProcessAnimateWindowSlideFromBottomTimed@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O005C5069",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O005C5069",
+      "accepted_names": [
+        "??1ProcessAnimateWindowSlideFromBottomTimed@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromBottom@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromLeft@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromRight@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromRightFast@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromTop@@UAE@XZ",
+        "??1ProcessAnimateWindowSlideFromTopFast@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004ECA01",
+  "rows": [
+    {
+      "rva": "0x007928A4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004ECA01",
+      "fold_group": "",
+      "name": "Unwind@00b928a4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007928B4",
+      "object_id": "O004ECA01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004ECA01",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x004ECA01",
+      "object": "O004ECA01",
+      "accepted_names": [
+        "Unwind@00b928a4"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007928AC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004ECA01",
+      "fold_group": "",
+      "name": "Unwind@00b928ac",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007928B4",
+      "object_id": "O004ECA01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004ECA01",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x004ECA01",
+      "object": "O004ECA01",
+      "accepted_names": [
+        "Unwind@00b928ac"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x007928B4",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004ECA01",
+      "fold_group": "",
+      "name": "__ehhandler$?checkForNewUpgrades@AIBuilder@@QAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009450F4;X:parent-by-prologue",
+      "object_id": "O004ECA01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004ECA01",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x004ECA01",
+      "object": "O004ECA01",
+      "accepted_names": [
+        "__ehhandler$?checkForNewUpgrades@AIBuilder@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

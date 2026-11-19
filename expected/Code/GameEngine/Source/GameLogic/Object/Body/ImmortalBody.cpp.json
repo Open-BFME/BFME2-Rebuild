@@ -1,0 +1,107 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004C086E",
+  "rows": [
+    {
+      "rva": "0x004C089E",
+      "size": 25,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004C089E",
+      "name": "??1Rva004C089E@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O004C086E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004C086E",
+      "accepted_names": [
+        "??1Rva004C089E@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x004C08FC",
+      "size": 28,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004C08FC",
+      "name": "??_GImmortalBody@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:scalar-deleting-dtor shape",
+      "object_id": "O004C086E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004C086E",
+      "accepted_names": [
+        "??_GImmortalBody@@UAEPAXI@Z",
+        "??_GRva004C089E@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078FB39",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C08B7",
+      "fold_group": "",
+      "name": "$L2493",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078FB46",
+      "object_id": "O004C086E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C08B7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004C08B7",
+      "object": "O004C086E",
+      "accepted_names": [
+        "$L2493"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078FB46",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004C08B7",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@ImmortalBody@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00940E24;X:parent-by-prologue",
+      "object_id": "O004C086E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C08B7",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x004C08B7",
+      "object": "O004C086E",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@ImmortalBody@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

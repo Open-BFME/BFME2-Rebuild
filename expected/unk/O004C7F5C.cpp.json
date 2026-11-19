@@ -1,0 +1,115 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004C7F5C",
+  "rows": [
+    {
+      "rva": "0x004C803A",
+      "size": 91,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0PlayerHealSpecialPowerModuleData@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-PlayerHealSpecialPower;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O004C7F5C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004C7F5C",
+      "accepted_names": [
+        "??0PlayerHealSpecialPowerModuleData@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0079039C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C8095",
+      "fold_group": "",
+      "name": "$L681",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007903AC",
+      "object_id": "O004C7F5C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C8095",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C8095",
+      "object": "O004C7F5C",
+      "accepted_names": [
+        "$L681"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007903A4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004C8095",
+      "fold_group": "",
+      "name": "uw_007903a4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007903AC",
+      "object_id": "O004C7F5C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C8095",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C8095",
+      "object": "O004C7F5C",
+      "accepted_names": [
+        "uw_007903a4"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007903AC",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004C8095",
+      "fold_group": "",
+      "name": "__ehhandler$?rva004C8095@PlayerHealSpecialPower@@QAEXPBVCoord3D@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00941B44;X:parent-by-prologue",
+      "object_id": "O004C7F5C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004C8095",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004C8095",
+      "object": "O004C7F5C",
+      "accepted_names": [
+        "__ehhandler$?rva004C8095@PlayerHealSpecialPower@@QAEXPBVCoord3D@@@Z",
+        "__ehhandler$?rva004C8095@PlayerHealSpecialPower@@QAEXPBUCoord3D@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?rva004C8095@PlayerHealSpecialPower@@QAEXPBUCoord3D@@@Z",
+          "name": "__ehhandler$?rva004C8095@PlayerHealSpecialPower@@QAEXPBVCoord3D@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G003EDBAE",
+  "rows": [
+    {
+      "rva": "0x00783773",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003EDBAE",
+      "fold_group": "",
+      "name": "$L883",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078377B",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003EDBAE",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003EDBAE",
+      "object": "G003EDBAE",
+      "accepted_names": [
+        "$L883"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078377B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x003EDBAE",
+      "fold_group": "",
+      "name": "__ehhandler$?parseAudioKeyTokens@Rva003D4920@@SAXPAVINI@@PAX1PBX@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092F6F0;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003EDBAE",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003EDBAE",
+      "object": "G003EDBAE",
+      "accepted_names": [
+        "__ehhandler$?parseAudioKeyTokens@Rva003D4920@@SAXPAVINI@@PAX1PBX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00783785",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003EDD68",
+      "fold_group": "",
+      "name": "$L3947",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007837A6",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003EDD68",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003EDD68",
+      "object": "G003EDBAE",
+      "accepted_names": [
+        "$L3947"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078378D",
+      "size": 25,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003EDD68",
+      "fold_group": "",
+      "name": "?rva0078378d@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007837A6",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003EDD68",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003EDD68",
+      "object": "G003EDBAE",
+      "accepted_names": [
+        "?rva0078378d@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007837A6",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x003EDD68",
+      "fold_group": "",
+      "name": "__ehhandler$?rva003EDD68@Rva0020DXXXElem@@QAE?AVRva003ED658@@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092F71C;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003EDD68",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x003EDD68",
+      "object": "G003EDBAE",
+      "accepted_names": [
+        "__ehhandler$?rva003EDD68@Rva0020DXXXElem@@QAE?AVRva003ED658@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G005C94C8",
+  "rows": [
+    {
+      "rva": "0x007A0EAE",
+      "size": 25,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005C94C8",
+      "fold_group": "",
+      "name": "$L1561",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A0ED7",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005C94C8",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005C94C8",
+      "object": "G005C94C8",
+      "accepted_names": [
+        "$L1561"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A0EC7",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005C94C8",
+      "fold_group": "",
+      "name": "Unwind@00ba0ec7",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A0ED7",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005C94C8",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005C94C8",
+      "object": "G005C94C8",
+      "accepted_names": [
+        "Unwind@00ba0ec7"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A0ECF",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005C94C8",
+      "fold_group": "",
+      "name": "Unwind@00ba0ecf",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A0ED7",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005C94C8",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005C94C8",
+      "object": "G005C94C8",
+      "accepted_names": [
+        "Unwind@00ba0ecf"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x007A0ED7",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005C94C8",
+      "fold_group": "",
+      "name": "__ehhandler$?GetDisplayName@StrategicInGameUI@@YA?AVUnicodeString@@PAX@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00958160;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x005C94C8",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x005C94C8",
+      "object": "G005C94C8",
+      "accepted_names": [
+        "__ehhandler$?GetDisplayName@StrategicInGameUI@@YA?AVUnicodeString@@PAX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

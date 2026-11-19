@@ -1,0 +1,343 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00362EEE",
+  "rows": [
+    {
+      "rva": "0x00362EC7",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0ClientUpdateModule@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BuffManager|LaserUpdate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "accepted_names": [
+        "??0ClientUpdateModule@@QAE@PAVThing@@PBVModuleData@@@Z",
+        "??0Rva00362EC7@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x003630E6",
+      "size": 28,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F003630E6",
+      "name": "??_GRva00362EE3@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GRva00362EE3@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00363177",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GLaserUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GLaserUpdate@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x003631CC",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GLaserUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GLaserUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x003631E8",
+      "size": 75,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1LaserUpdateModuleData@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-LaserUpdate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1LaserUpdateModuleData@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E23C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00362F64",
+      "fold_group": "",
+      "name": "uw_0077e23c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E244",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_0077e23c"
+      ],
+      "parent": "0x00362F64",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E244",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00362F64",
+      "fold_group": "",
+      "name": "__ehhandler$??1LaserUpdate@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00928234;X:parent-by-prologue",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1LaserUpdate@@UAE@XZ"
+      ],
+      "parent": "0x00362F64",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E24E",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00363102",
+      "fold_group": "",
+      "name": "$L306",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E25B",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L306"
+      ],
+      "parent": "0x00363102",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E25B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00363102",
+      "fold_group": "",
+      "name": "__ehhandler$?rva000363102@LaserUpdate@@SA?AW4NameKeyType@@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00928258;X:parent-by-prologue",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?rva000363102@LaserUpdate@@SA?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x00363102",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E265",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003631E8",
+      "fold_group": "",
+      "name": "Unwind@00b7e265",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E283",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b7e265"
+      ],
+      "parent": "0x003631E8",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E26D",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003631E8",
+      "fold_group": "",
+      "name": "Unwind@00b7e26d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E283",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b7e26d"
+      ],
+      "parent": "0x003631E8",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E278",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x003631E8",
+      "fold_group": "",
+      "name": "Unwind@00b7e278",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E283",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b7e278"
+      ],
+      "parent": "0x003631E8",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E283",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x003631E8",
+      "fold_group": "",
+      "name": "__ehhandler$??1LaserUpdateModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092828C;X:parent-by-prologue",
+      "object_id": "retained:O00362EEE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1LaserUpdateModuleData@@UAE@XZ"
+      ],
+      "parent": "0x003631E8",
+      "object": "retained:O00362EEE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0077E28D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0077E295",
+      "name": "$L1564",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077E295;X:shared by 2 functions",
+      "object_id": "O00362EEE",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00363233;0x0036355C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "accepted_names": [
+        "$L1564"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077E295",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0077E295",
+      "name": "__ehhandler$?initLaser@LaserUpdate@@QAEXPBVObject@@PBVCoord3D@@1H@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009282B0;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O00362EEE",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00363233;0x0036355C",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "retained:O00362EEE",
+      "accepted_names": [
+        "__ehhandler$?initLaser@LaserUpdate@@QAEXPBVObject@@PBVCoord3D@@1H@Z",
+        "__ehhandler$?initLaser@LaserUpdate@@QAEXPBVObject@@PBUCoord3D@@1H@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?initLaser@LaserUpdate@@QAEXPBVObject@@PBUCoord3D@@1H@Z",
+          "name": "__ehhandler$?initLaser@LaserUpdate@@QAEXPBVObject@@PBVCoord3D@@1H@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00187660",
+  "rows": [
+    {
+      "rva": "0x00768500",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00768520",
+      "name": "$L2144",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00768520;X:shared by 3 functions",
+      "object_id": "O00187660",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00187690;0x00187850;0x00187AD0",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00187660",
+      "accepted_names": [
+        "$L2144"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00768508",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00768520",
+      "name": "uw_00768508",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00768520;X:shared by 3 functions",
+      "object_id": "O00187660",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00187690;0x00187850;0x00187AD0",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00187660",
+      "accepted_names": [
+        "uw_00768508"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00768510",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00768520",
+      "name": "$L2146",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00768520;X:shared by 3 functions",
+      "object_id": "O00187660",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00187690;0x00187850;0x00187AD0",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00187660",
+      "accepted_names": [
+        "$L2146"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00768518",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00768520",
+      "name": "uw_00768518",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00768520;X:shared by 3 functions",
+      "object_id": "O00187660",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00187690;0x00187850;0x00187AD0",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00187660",
+      "accepted_names": [
+        "uw_00768518"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00768520",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00768520",
+      "name": "__ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0090D2E8;X:parent-by-prologue;X:EH stub shared by 3 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O00187660",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00187690;0x00187850;0x00187AD0",
+      "parent_evidence": "X:handler-operand(3 parents, shared handler)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00187660",
+      "accepted_names": [
+        "__ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004B46F9",
+  "rows": [
+    {
+      "rva": "0x004B471F",
+      "size": 8,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004B471F",
+      "name": "?upgradeRemovalImplementation@RadarUpgrade@@MAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O004B46F9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O004B46F9",
+      "accepted_names": [
+        "?upgradeRemovalImplementation@RadarUpgrade@@MAEXXZ",
+        "?upgradeRemovalImplementation@FireWeaponWhenDeadBehavior@@MAEXXZ",
+        "?upgradeRemovalImplementation@RadiateFearUpdate@@MAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x004B47BF",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRadarUpgrade@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004B46F9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O004B46F9",
+      "accepted_names": [
+        "??_GRadarUpgrade@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078EBEE",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B4727",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078EBFB",
+      "object_id": "O004B46F9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B4727",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004B4727",
+      "object": "O004B46F9",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:Z"
+    },
+    {
+      "rva": "0x0078EBFB",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B4727",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@RadarUpgrade@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093F80C;X:parent-by-prologue",
+      "object_id": "O004B46F9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B4727",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004B4727",
+      "object": "O004B46F9",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@RadarUpgrade@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:Z"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O003B239B",
+  "rows": [
+    {
+      "rva": "0x003B23AF",
+      "size": 10,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F003B23AF",
+      "name": "?setLastCommandSource@AIUpdateInterface@@IAEXW4CommandSourceType@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold 2 distinct names",
+      "object_id": "O003B239B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O003B239B",
+      "accepted_names": [
+        "?setLastCommandSource@AIUpdateInterface@@IAEXW4CommandSourceType@@@Z",
+        "?setExperienceSink@ExperienceTracker@@QAEXW4ObjectID@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

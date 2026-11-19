@@ -1,0 +1,430 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0048182C",
+  "rows": [
+    {
+      "rva": "0x00481832",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?rva00481832@PropagandaTowerBehavior@@QAEXXZ",
+      "name_evidence": "S:strong (vtable-slot)",
+      "confidence": "high",
+      "evidence": "X:vcall-thunk slot+0x34",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?rva00481832@PropagandaTowerBehavior@@QAEXXZ",
+        "?rva00481832@Rva000B3779SlotSelf@@QAEXXZ"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0048195F",
+      "size": 29,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F0048195F",
+      "name": "??_GRva0048195F@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GRva0048195F@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004819CF",
+      "size": 105,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0PropagandaTowerBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-PropagandaTowerBehaviorModuleData|BfmeThingBMD;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0PropagandaTowerBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00481A38",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GPropagandaTowerBehavior@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GPropagandaTowerBehavior@@UAEPAXI@Z",
+        "??_GRva0048180C@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00481B7F",
+      "size": 44,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0?$BitFlags@$0L@W4DisabledType@@@@QAE@W4BogusInitType@0@H@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0?$BitFlags@$0L@W4DisabledType@@@@QAE@W4BogusInitType@0@H@Z",
+        "??0?$BitFlags@$0L@@@QAE@W4BogusInitType@0@H@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00481BB2",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GPropagandaTowerBehaviorModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GPropagandaTowerBehaviorModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00481BCE",
+      "size": 48,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1PropagandaTowerBehaviorModuleData@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BfmeThingBMD|PropagandaTowerBehavior;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1PropagandaTowerBehaviorModuleData@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00481BFE",
+      "size": 14,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?Rva00481BFE@@YA_NPBXABV?$BitFlags@$0L@W4DisabledType@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?Rva00481BFE@@YA_NPBXABV?$BitFlags@$0L@W4DisabledType@@@@@Z",
+        "?Rva00481BFE@@YA_NPBXABV?$BitFlags@$0L@@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BAF1",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048191A",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BAFE",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x0048191A",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BAFE",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048191A",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@PropagandaTowerBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AD4C;X:parent-by-prologue",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@PropagandaTowerBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x0048191A",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB08",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004819CF",
+      "fold_group": "",
+      "name": "Unwind@00b8bb08",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB10",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb08"
+      ],
+      "parent": "0x004819CF",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB10",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004819CF",
+      "fold_group": "",
+      "name": "__ehhandler$??0PropagandaTowerBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AD70;X:parent-by-prologue",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0PropagandaTowerBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x004819CF",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB1A",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481BCE",
+      "fold_group": "",
+      "name": "Unwind@00b8bb1a",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB22",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb1a"
+      ],
+      "parent": "0x00481BCE",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB22",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00481BCE",
+      "fold_group": "",
+      "name": "__ehhandler$??1PropagandaTowerBehaviorModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AD94;X:parent-by-prologue",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1PropagandaTowerBehaviorModuleData@@UAE@XZ"
+      ],
+      "parent": "0x00481BCE",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB2C",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "Unwind@00b8bb2c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB57",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb2c"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB37",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "Unwind@00b8bb37",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB57",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb37"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB3F",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "Unwind@00b8bb3f",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB57",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb3f"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB47",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "Unwind@00b8bb47",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB57",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bb47"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB4F",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "uw_0078bb4f",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BB57",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_0078bb4f"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BB57",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00481DA4",
+      "fold_group": "",
+      "name": "__ehhandler$?doScan@PropagandaTowerBehavior@@MAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093ADF8;X:parent-by-prologue",
+      "object_id": "retained:O0048182C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?doScan@PropagandaTowerBehavior@@MAEXXZ"
+      ],
+      "parent": "0x00481DA4",
+      "object": "retained:O0048182C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

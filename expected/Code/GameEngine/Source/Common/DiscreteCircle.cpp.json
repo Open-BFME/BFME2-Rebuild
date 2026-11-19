@@ -1,0 +1,99 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O002DF82C",
+  "rows": [
+    {
+      "rva": "0x002DF89B",
+      "size": 52,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F002DF89B",
+      "name": "?push_back@?$vector@UPrereqUnitRec@@V?$allocator@UPrereqUnitRec@@@_STL@@@_STL@@QAEXABUPrereqUnitRec@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O002DF82C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O002DF82C",
+      "accepted_names": [
+        "?push_back@?$vector@UPrereqUnitRec@@V?$allocator@UPrereqUnitRec@@@_STL@@@_STL@@QAEXABUPrereqUnitRec@@@Z",
+        "?push_back@?$vector@UHorzLine@@V?$allocator@UHorzLine@@@_STL@@@_STL@@QAEXABUHorzLine@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K",
+      "alias_evidence": [
+        {
+          "rva": "0x002DF89B",
+          "size": "52",
+          "canonical_name": "?push_back@?$vector@UPrereqUnitRec@@V?$allocator@UPrereqUnitRec@@@_STL@@@_STL@@QAEXABUPrereqUnitRec@@@Z",
+          "alias_name": "?push_back@?$vector@UHorzLine@@V?$allocator@UHorzLine@@@_STL@@@_STL@@QAEXABUHorzLine@@@Z",
+          "fold_group": "F002DF89B",
+          "evidence_class": "X",
+          "proof_status": "local_body_and_reference_identity",
+          "evidence": "{\"same_template\":\"_STL::vector\",\"same_member\":\"push_back\",\"local_masked_bytes_equal\":true,\"direct_references\":[{\"operand_offset\":43,\"target_rva\":\"0x002A1C02\",\"compiled_target\":\"?_M_insert_overflow@?$vector@UHorzLine@@V?$allocator@UHorzLine@@@_STL@@@_STL@@IAEXPAUHorzLine@@ABU3@ABU__false_type@2@I_N@Z\",\"retail_target_names\":[\"?_M_insert_overflow@?$vector@UPrereqUnitRec@@V?$allocator@UPrereqUnitRec@@@_STL@@@_STL@@IAEXPAUPrereqUnitRec@@ABU3@ABU__false_type@2@I_N@Z\"]}],\"strict_result\":{\"status\":\"WRONG_RELOCATION\",\"why\":\"code extent 246 != retail 199 at 0x2A1C02\",\"proofs\":[]}}",
+          "snapshot": "3a961c89bb620f8aa35d246db3d63678884d99ec6b44f1f8a27ad1a3b46b8d37",
+          "retail_sha256": "f008b587570bad693981dc7218588c81d192a1e064b0f7f861539c51156a7640",
+          "retail_body_sha256": "7feacdb140b40e99b4d73594b5ef672757b984b059973b1569bd83fe7c6fabbe",
+          "source_sha256": "93fab6784aa4dc63373bf047c80de973d0ea6a6d15b725b885d3369897fbe826",
+          "object_sha256": "cf35685824cedf686a0e8ba4e490517f379f94f99ede5c5df0183a232bb31ad6"
+        }
+      ]
+    },
+    {
+      "rva": "0x0077848B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002DF93D",
+      "fold_group": "",
+      "name": "uw_0077848b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00778493",
+      "object_id": "O002DF82C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x002DF93D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x002DF93D",
+      "object": "O002DF82C",
+      "accepted_names": [
+        "uw_0077848b"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00778493",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x002DF93D",
+      "fold_group": "",
+      "name": "__ehhandler$??0DiscreteCircle@@QAE@HHH@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00920518;X:parent-by-prologue",
+      "object_id": "O002DF82C",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x002DF93D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x002DF93D",
+      "object": "O002DF82C",
+      "accepted_names": [
+        "__ehhandler$??0DiscreteCircle@@QAE@HHH@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

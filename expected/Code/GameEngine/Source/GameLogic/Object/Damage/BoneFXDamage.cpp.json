@@ -1,0 +1,175 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O004B96FE",
+  "rows": [
+    {
+      "rva": "0x004B973B",
+      "size": 28,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004B973B",
+      "name": "??_GDamageModule@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GDamageModule@@UAEPAXI@Z",
+        "??_GRva004B96CC@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004B97C6",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GBoneFXDamage@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GBoneFXDamage@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F2EB",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B9757",
+      "fold_group": "",
+      "name": "$L306",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F2F8",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L306"
+      ],
+      "parent": "0x004B9757",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F2F8",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B9757",
+      "fold_group": "",
+      "name": "__ehhandler$?rva004B9757@BoneFXDamage@@SA?AW4NameKeyType@@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00940240;X:parent-by-prologue",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?rva004B9757@BoneFXDamage@@SA?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x004B9757",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F302",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B97E2",
+      "fold_group": "",
+      "name": "$L46026",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F30F",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L46026"
+      ],
+      "parent": "0x004B97E2",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F30F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B97E2",
+      "fold_group": "",
+      "name": "__ehhandler$?onObjectCreated@BoneFXDamage@@MAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00940264;X:parent-by-prologue",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?onObjectCreated@BoneFXDamage@@MAEXXZ"
+      ],
+      "parent": "0x004B97E2",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F319",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B985E",
+      "fold_group": "",
+      "name": "$L46047",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F326",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L46047"
+      ],
+      "parent": "0x004B985E",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F326",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B985E",
+      "fold_group": "",
+      "name": "__ehhandler$?onBodyDamageStateChange@BoneFXDamage@@UAEXPBVDamageInfo@@W4BodyDamageType@@1@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00940288;X:parent-by-prologue",
+      "object_id": "retained:O004B96FE",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?onBodyDamageStateChange@BoneFXDamage@@UAEXPBVDamageInfo@@W4BodyDamageType@@1@Z"
+      ],
+      "parent": "0x004B985E",
+      "object": "retained:O004B96FE",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

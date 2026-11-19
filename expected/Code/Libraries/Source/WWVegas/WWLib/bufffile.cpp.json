@@ -1,0 +1,69 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0061ADE0",
+  "rows": [
+    {
+      "rva": "0x0061AF20",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x0061A510",
+      "fold_group": "",
+      "name": "?Write@BufferedFileClass@@UAEHPBXH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "retained:O0061ADE0",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?Write@BufferedFileClass@@UAEHPBXH@Z"
+      ],
+      "parent": "0x0061A510",
+      "object": "retained:O0061ADE0",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x007A7370",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0061AF60",
+      "fold_group": "",
+      "name": "uw_007a7370",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A7378",
+      "object_id": "retained:O0061ADE0",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_007a7370"
+      ],
+      "parent": "0x0061AF60",
+      "object": "retained:O0061ADE0",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x007A7378",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0061AF60",
+      "fold_group": "",
+      "name": "__ehhandler$??1BufferedFileClass@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00960CB4;X:parent-by-prologue",
+      "object_id": "retained:O0061ADE0",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1BufferedFileClass@@UAE@XZ"
+      ],
+      "parent": "0x0061AF60",
+      "object": "retained:O0061ADE0",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G004B37CA",
+  "rows": [
+    {
+      "rva": "0x0078EAED",
+      "size": 22,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B37CA",
+      "fold_group": "",
+      "name": "uw_0078eaed",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078EB03",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004B37CA",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004B37CA",
+      "object": "G004B37CA",
+      "accepted_names": [
+        "uw_0078eaed"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0078EB03",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B37CA",
+      "fold_group": "",
+      "name": "__ehhandler$?upgradeImplementation@BaseUpgrade@@MAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093F694;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x004B37CA",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x004B37CA",
+      "object": "G004B37CA",
+      "accepted_names": [
+        "__ehhandler$?upgradeImplementation@BaseUpgrade@@MAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

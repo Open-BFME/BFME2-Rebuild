@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O000A43BC",
+  "rows": [
+    {
+      "rva": "0x000A43C8",
+      "size": 5,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "0x00104E03",
+      "fold_group": "F000A43C8",
+      "name": "??1Rva0008FF3E@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof;X:jmp-thunk",
+      "object_id": "O000A43BC",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00104E03",
+      "object": "O000A43BC",
+      "accepted_names": [
+        "??1Rva0008FF3E@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

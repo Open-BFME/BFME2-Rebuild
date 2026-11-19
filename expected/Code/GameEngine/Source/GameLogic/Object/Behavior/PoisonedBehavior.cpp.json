@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00482ED9",
+  "rows": [
+    {
+      "rva": "0x00482FF5",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GPoisonedBehavior@@MAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00482ED9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00482ED9",
+      "accepted_names": [
+        "??_GPoisonedBehavior@@MAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078BC00",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00482F27",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC0D",
+      "object_id": "O00482ED9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00482F27",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00482F27",
+      "object": "O00482ED9",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078BC0D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00482F27",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@PoisonedBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AF3C;X:parent-by-prologue",
+      "object_id": "O00482ED9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00482F27",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00482F27",
+      "object": "O00482ED9",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@PoisonedBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078BC17",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00482F7D",
+      "fold_group": "",
+      "name": "Unwind@00b8bc17",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC1F",
+      "object_id": "O00482ED9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00482F7D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00482F7D",
+      "object": "O00482ED9",
+      "accepted_names": [
+        "Unwind@00b8bc17"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078BC1F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00482F7D",
+      "fold_group": "",
+      "name": "__ehhandler$??0PoisonedBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AF60;X:parent-by-prologue",
+      "object_id": "O00482ED9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00482F7D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x00482F7D",
+      "object": "O00482ED9",
+      "accepted_names": [
+        "__ehhandler$??0PoisonedBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

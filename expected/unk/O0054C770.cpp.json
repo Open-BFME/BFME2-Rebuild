@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0054C770",
+  "rows": [
+    {
+      "rva": "0x00798200",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0054C770",
+      "fold_group": "",
+      "name": "Unwind@00b98200",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00798210",
+      "object_id": "O0054C770",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0054C770",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0054C770",
+      "object": "O0054C770",
+      "accepted_names": [
+        "Unwind@00b98200"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00798208",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0054C770",
+      "fold_group": "",
+      "name": "Unwind@00b98208",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00798210",
+      "object_id": "O0054C770",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0054C770",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0054C770",
+      "object": "O0054C770",
+      "accepted_names": [
+        "Unwind@00b98208"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x00798210",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0054C770",
+      "fold_group": "",
+      "name": "__ehhandler$??0AptStrategicMessageBox@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C588;X:parent-by-prologue",
+      "object_id": "O0054C770",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0054C770",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0054C770",
+      "object": "O0054C770",
+      "accepted_names": [
+        "__ehhandler$??0AptStrategicMessageBox@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0079821A",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0054C7C7",
+      "fold_group": "",
+      "name": "uw_0079821a",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00798224",
+      "object_id": "O0054C770",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0054C7C7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x0054C7C7",
+      "object": "O0054C770",
+      "accepted_names": [
+        "uw_0079821a"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00798224",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0054C7C7",
+      "fold_group": "",
+      "name": "__ehhandler$?CreateSingleton@AptStrategicMessageBox@@SAXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C5AC;X:parent-by-prologue",
+      "object_id": "O0054C770",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0054C7C7",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x0054C7C7",
+      "object": "O0054C770",
+      "accepted_names": [
+        "__ehhandler$?CreateSingleton@AptStrategicMessageBox@@SAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

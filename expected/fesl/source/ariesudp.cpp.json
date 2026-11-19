@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00661430",
+  "rows": [
+    {
+      "rva": "0x00661640",
+      "size": 8,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x006617A0",
+      "fold_group": "",
+      "name": "??_EGen007F4D00@@W3AEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:this-adjustor sub ecx,imm8",
+      "object_id": "O00661430",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x006617A0",
+      "object": "O00661430",
+      "accepted_names": [
+        "??_EGen007F4D00@@W3AEPAXI@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00661760",
+      "size": 52,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva7F4CC0ConstructorThunk@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen007F4D00|BfmeD969;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O00661430",
+      "accepted_names": [
+        "??0Rva7F4CC0ConstructorThunk@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

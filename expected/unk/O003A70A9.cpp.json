@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O003A70A9",
+  "rows": [
+    {
+      "rva": "0x003A70D1",
+      "size": 75,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_EOrthoEmissionVelocityInfo@FXParticleSystem@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:special-deleting-dtor",
+      "object_id": "O003A70A9",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003A70A9",
+      "accepted_names": [
+        "??_EOrthoEmissionVelocityInfo@FXParticleSystem@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x00781D2B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00781D33",
+      "name": "$L407",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00781D33;X:shared by 9 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A6D5F;0x003A6FD0;0x003A721F;0x003A7489;0x003A9900;0x003A9D43;0x003A9D73;0x003A9F8A;0x003A9FBA",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O003A70A9",
+      "accepted_names": [
+        "$L407"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00781D33",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00781D33",
+      "name": "__ehhandler$??0LifeEventModuleInfo@FXParticleSystem@@QAE@ABV01@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0092CC98;X:parent-by-prologue;X:EH stub shared by 9 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003A6D5F;0x003A6FD0;0x003A721F;0x003A7489;0x003A9900;0x003A9D43;0x003A9D73;0x003A9F8A;0x003A9FBA",
+      "parent_evidence": "X:handler-operand(9 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O003A70A9",
+      "accepted_names": [
+        "__ehhandler$??0LifeEventModuleInfo@FXParticleSystem@@QAE@ABV01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

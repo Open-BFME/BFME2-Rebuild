@@ -1,0 +1,70 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0049FE94",
+  "rows": [
+    {
+      "rva": "0x0049FF34",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GProneUpdate@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0049FE94",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GProneUpdate@@UAEPAXI@Z",
+        "??_GRva0049FE7B@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0049FE94",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DAA8",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0049FE9A",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DAB5",
+      "object_id": "retained:O0049FE94",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x0049FE9A",
+      "object": "retained:O0049FE94",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DAB5",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0049FE9A",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@ProneUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093DD08;X:parent-by-prologue",
+      "object_id": "retained:O0049FE94",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@ProneUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x0049FE9A",
+      "object": "retained:O0049FE94",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

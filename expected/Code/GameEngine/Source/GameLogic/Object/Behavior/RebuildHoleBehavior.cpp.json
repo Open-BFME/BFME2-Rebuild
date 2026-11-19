@@ -1,0 +1,304 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O004831CB",
+  "rows": [
+    {
+      "rva": "0x0048332E",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRebuildHoleBehaviorModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GRebuildHoleBehaviorModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0048334A",
+      "size": 48,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1RebuildHoleBehaviorModuleData@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-RebuildHoleBehavior;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1RebuildHoleBehaviorModuleData@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00483629",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRebuildHoleBehavior@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004831CB",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "retained:O004831CB",
+      "accepted_names": [
+        "??_GRebuildHoleBehavior@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0078BC29",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004831CB",
+      "fold_group": "",
+      "name": "$L2330",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC36",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L2330"
+      ],
+      "parent": "0x004831CB",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC36",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004831CB",
+      "fold_group": "",
+      "name": "__ehhandler$?getRebuildHoleBehaviorInterfaceFromObject@RebuildHoleBehavior@@SAPAVRebuildHoleBehaviorInterface@@PAVObject@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AF84;X:parent-by-prologue",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getRebuildHoleBehaviorInterfaceFromObject@RebuildHoleBehavior@@SAPAVRebuildHoleBehaviorInterface@@PAVObject@@@Z"
+      ],
+      "parent": "0x004831CB",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC40",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004832D7",
+      "fold_group": "",
+      "name": "$L562",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC4D",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L562"
+      ],
+      "parent": "0x004832D7",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC4D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004832D7",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@RebuildHoleBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AFA8;X:parent-by-prologue",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@RebuildHoleBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x004832D7",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC57",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048334A",
+      "fold_group": "",
+      "name": "Unwind@00b8bc57",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC5F",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bc57"
+      ],
+      "parent": "0x0048334A",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC5F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048334A",
+      "fold_group": "",
+      "name": "__ehhandler$??1RebuildHoleBehaviorModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AFCC;X:parent-by-prologue",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1RebuildHoleBehaviorModuleData@@UAE@XZ"
+      ],
+      "parent": "0x0048334A",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC69",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004833EC",
+      "fold_group": "",
+      "name": "Unwind@00b8bc69",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC79",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bc69"
+      ],
+      "parent": "0x004833EC",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC71",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004833EC",
+      "fold_group": "",
+      "name": "Unwind@00b8bc71",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC79",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bc71"
+      ],
+      "parent": "0x004833EC",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC79",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004833EC",
+      "fold_group": "",
+      "name": "__ehhandler$?xfer@RebuildHoleBehavior@@MAEXPAVXfer@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093AFF8;X:parent-by-prologue",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?xfer@RebuildHoleBehavior@@MAEXPAVXfer@@@Z"
+      ],
+      "parent": "0x004833EC",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC83",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048353E",
+      "fold_group": "",
+      "name": "Unwind@00b8bc83",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078BC8B",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8bc83"
+      ],
+      "parent": "0x0048353E",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078BC8B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048353E",
+      "fold_group": "",
+      "name": "__ehhandler$??1RebuildHoleBehavior@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B01C;X:parent-by-prologue",
+      "object_id": "retained:O004831CB",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1RebuildHoleBehavior@@UAE@XZ"
+      ],
+      "parent": "0x0048353E",
+      "object": "retained:O004831CB",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0045ADDA",
+  "rows": [
+    {
+      "rva": "0x0045AEAD",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GDualWeaponBehavior@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0045ADDA",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GDualWeaponBehavior@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0045ADDA",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078A411",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0045ADE0",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078A41E",
+      "object_id": "retained:O0045ADDA",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x0045ADE0",
+      "object": "retained:O0045ADDA",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078A41E",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0045ADE0",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@DualWeaponBehavior@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00938BD0;X:parent-by-prologue",
+      "object_id": "retained:O0045ADDA",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@DualWeaponBehavior@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x0045ADE0",
+      "object": "retained:O0045ADDA",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078A428",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0045AE55",
+      "fold_group": "",
+      "name": "Unwind@00b8a428",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078A430",
+      "object_id": "retained:O0045ADDA",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8a428"
+      ],
+      "parent": "0x0045AE55",
+      "object": "retained:O0045ADDA",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078A430",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0045AE55",
+      "fold_group": "",
+      "name": "__ehhandler$??0DualWeaponBehavior@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00938BF4;X:parent-by-prologue",
+      "object_id": "retained:O0045ADDA",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0DualWeaponBehavior@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x0045AE55",
+      "object": "retained:O0045ADDA",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

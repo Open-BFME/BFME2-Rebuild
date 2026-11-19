@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004B606E",
+  "rows": [
+    {
+      "rva": "0x004B606E",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GSpellRechargeModifierUpgradeModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O004B606E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004B606E",
+      "accepted_names": [
+        "??_GSpellRechargeModifierUpgradeModuleData@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0078EE3B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B608A",
+      "fold_group": "",
+      "name": "Unwind@00b8ee3b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078EE51",
+      "object_id": "O004B606E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B608A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004B608A",
+      "object": "O004B606E",
+      "accepted_names": [
+        "Unwind@00b8ee3b"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078EE43",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B608A",
+      "fold_group": "",
+      "name": "$L394",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078EE51",
+      "object_id": "O004B606E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B608A",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004B608A",
+      "object": "O004B606E",
+      "accepted_names": [
+        "$L394"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078EE51",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B608A",
+      "fold_group": "",
+      "name": "__ehhandler$??1SpellRechargeModifierUpgradeModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093FB28;X:parent-by-prologue",
+      "object_id": "O004B606E",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004B608A",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004B608A",
+      "object": "O004B606E",
+      "accepted_names": [
+        "__ehhandler$??1SpellRechargeModifierUpgradeModuleData@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O002CED84",
+  "rows": [
+    {
+      "rva": "0x002CEE1B",
+      "size": 72,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F002CEE1B",
+      "name": "??1RayEffectSystem@@UAE@XZ",
+      "name_evidence": "X:proven (vptr-store)",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O002CED84",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O002CED84",
+      "accepted_names": [
+        "??1RayEffectSystem@@UAE@XZ",
+        "??1Rva002CEE1B@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007771F3",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H007771FB",
+      "name": "$L7260",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007771FB;X:shared by 2 functions",
+      "object_id": "O002CED84",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x002CEE1B;0x002CEE96",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O002CED84",
+      "accepted_names": [
+        "$L7260"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007771FB",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H007771FB",
+      "name": "__ehhandler$??1RayEffectSystem@@UAE@XZ",
+      "name_evidence": "S:token",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0091ED24;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O002CED84",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x002CEE1B;0x002CEE96",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O002CED84",
+      "accepted_names": [
+        "__ehhandler$??1RayEffectSystem@@UAE@XZ",
+        "__ehhandler$??1Rva002CEE1B@@UAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

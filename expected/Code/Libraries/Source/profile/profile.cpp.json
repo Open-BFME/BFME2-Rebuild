@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O006C5300",
+  "rows": [
+    {
+      "rva": "0x006C53F0",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x006C67F0",
+      "fold_group": "",
+      "name": "?AddResultFunction@Profile@@SAXP6APAVProfileResultInterface@@HPBQBD@ZPBD2@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O006C5300",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x006C67F0",
+      "object": "O006C5300",
+      "accepted_names": [
+        "?AddResultFunction@Profile@@SAXP6APAVProfileResultInterface@@HPBQBD@ZPBD2@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x006C5400",
+      "size": 16,
+      "section": ".text",
+      "role": "terminator",
+      "parent_rva": "0x00A0C1F8",
+      "fold_group": "",
+      "name": "?ProfileShutdown@@YAXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:atexit-registered-by 0x007B6700;X:global-by-ref",
+      "object_id": "O006C5300",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x00A0C1F8",
+      "object": "O006C5300",
+      "accepted_names": [
+        "?ProfileShutdown@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x006C5430",
+      "size": 17,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva006C5430@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Profile;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O006C5300",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O006C5300",
+      "accepted_names": [
+        "??0Rva006C5430@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x006C5930",
+      "size": 7,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F006C5930",
+      "name": "??1Rva006C5930Dtor@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O006C5300",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O006C5300",
+      "accepted_names": [
+        "??1Rva006C5930Dtor@@UAE@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x007B6700",
+      "size": 19,
+      "section": ".text",
+      "role": "initializer",
+      "parent_rva": "0x00A0C208",
+      "fold_group": "",
+      "name": "?rva007B6700@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:.CRT$XC slot 0x009A5DF0;X:global-by-store",
+      "object_id": "O006C5300",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": "0x00A0C208",
+      "object": "O006C5300",
+      "accepted_names": [
+        "?rva007B6700@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

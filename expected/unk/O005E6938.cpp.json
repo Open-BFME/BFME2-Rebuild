@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005E6938",
+  "rows": [
+    {
+      "rva": "0x007A3BB7",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E6A23",
+      "fold_group": "",
+      "name": "uw_007a3bb7",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A3BC1",
+      "object_id": "O005E6938",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E6A23",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E6A23",
+      "object": "O005E6938",
+      "accepted_names": [
+        "uw_007a3bb7"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A3BC1",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005E6A23",
+      "fold_group": "",
+      "name": "__ehhandler$?Rva005E6A23@StrategicInGameUI@@YA?AUTreeHintRef00217D4C@@PBURva005E4300Entry@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095C090;X:parent-by-prologue",
+      "object_id": "O005E6938",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E6A23",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005E6A23",
+      "object": "O005E6938",
+      "accepted_names": [
+        "__ehhandler$?Rva005E6A23@StrategicInGameUI@@YA?AUTreeHintRef00217D4C@@PBURva005E4300Entry@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A3BCB",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005E6AD8",
+      "fold_group": "",
+      "name": "uw_007a3bcb",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A3BD3",
+      "object_id": "O005E6938",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E6AD8",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x005E6AD8",
+      "object": "O005E6938",
+      "accepted_names": [
+        "uw_007a3bcb"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x007A3BD3",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005E6AD8",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005E6AD8@Rva005E6AD8@@QAEXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095C0B4;X:parent-by-prologue",
+      "object_id": "O005E6938",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005E6AD8",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x005E6AD8",
+      "object": "O005E6938",
+      "accepted_names": [
+        "__ehhandler$?rva005E6AD8@Rva005E6AD8@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

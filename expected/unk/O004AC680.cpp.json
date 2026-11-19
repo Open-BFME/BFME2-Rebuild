@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004AC680",
+  "rows": [
+    {
+      "rva": "0x0078E337",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004AC686",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078E344",
+      "object_id": "O004AC680",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004AC686",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004AC686",
+      "object": "O004AC680",
+      "accepted_names": [
+        "$L310"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078E344",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004AC686",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@DestroyEnvironmentUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093EAAC;X:parent-by-prologue",
+      "object_id": "O004AC680",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004AC686",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x004AC686",
+      "object": "O004AC680",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@DestroyEnvironmentUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

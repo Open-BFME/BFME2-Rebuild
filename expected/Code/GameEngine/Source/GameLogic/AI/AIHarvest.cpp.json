@@ -1,0 +1,222 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00544C24",
+  "rows": [
+    {
+      "rva": "0x00544C2A",
+      "size": 33,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0AIHarvestWorkSiteState@@QAE@PAVStateMachine@@@Z",
+      "name_evidence": "X:proven (snapshot-name|state-name-crc32)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIHarvestPrepareSiteState;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0AIHarvestWorkSiteState@@QAE@PAVStateMachine@@@Z",
+        "??0Rva00544C2A@@QAE@PAVStateMachine@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00544C51",
+      "size": 11,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1AIHarvestMachine@@UAE@XZ",
+      "name_evidence": "X:proven (snapshot-name|state-name-crc32|vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIHarvestPrepareSiteState;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1AIHarvestMachine@@UAE@XZ",
+        "??1Rva00544C51@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00544EB1",
+      "size": 29,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0AIHarvestApproachSiteState@@QAE@PAVStateMachine@@@Z",
+      "name_evidence": "X:proven (snapshot-name|state-name-crc32|vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIHarvestPrepareSiteState;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0AIHarvestApproachSiteState@@QAE@PAVStateMachine@@@Z",
+        "??0Rva00544EB1@@QAE@PAVStateMachine@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00544ED4",
+      "size": 214,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0AIHarvestMachine@@QAE@PAVObject@@@Z",
+      "name_evidence": "X:proven (snapshot-name|state-name-crc32|vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AIHarvestPrepareSiteState;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0AIHarvestMachine@@QAE@PAVObject@@@Z",
+        "??0Rva00544C51@@QAE@PAVObject@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00544FAA",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GAIHarvestMachine@@UAEPAXI@Z",
+      "name_evidence": "S:strong (vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GAIHarvestMachine@@UAEPAXI@Z",
+        "??_GRva00544C51@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00797F48",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00544ED4",
+      "fold_group": "",
+      "name": "$L461",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00797F6E",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L461"
+      ],
+      "parent": "0x00544ED4",
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00797F50",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00544ED4",
+      "fold_group": "",
+      "name": "$L462",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00797F6E",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L462"
+      ],
+      "parent": "0x00544ED4",
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00797F5A",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00544ED4",
+      "fold_group": "",
+      "name": "$L463",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00797F6E",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L463"
+      ],
+      "parent": "0x00544ED4",
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00797F64",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00544ED4",
+      "fold_group": "",
+      "name": "$L464",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00797F6E",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L464"
+      ],
+      "parent": "0x00544ED4",
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00797F6E",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00544ED4",
+      "fold_group": "",
+      "name": "__ehhandler$??0AIHarvestMachine@@QAE@PAVObject@@@Z",
+      "name_evidence": "X:proven (snapshot-name|state-name-crc32|vtable-slot)",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C14C;X:parent-by-prologue",
+      "object_id": "retained:O00544C24",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0AIHarvestMachine@@QAE@PAVObject@@@Z",
+        "__ehhandler$??0Rva00544C51@@QAE@PAVObject@@@Z"
+      ],
+      "parent": "0x00544ED4",
+      "object": "retained:O00544C24",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

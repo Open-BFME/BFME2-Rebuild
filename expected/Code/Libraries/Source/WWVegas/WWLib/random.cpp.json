@@ -1,0 +1,90 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00619440",
+  "rows": [
+    {
+      "rva": "0x006195B0",
+      "size": 117,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$Pick_Random_Number@VRandomClass@@@@YAHAAVRandomClass@@HH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O00619440",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??$Pick_Random_Number@VRandomClass@@@@YAHAAVRandomClass@@HH@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00619440",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00619630",
+      "size": 157,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$Pick_Random_Number@VRandom2Class@@@@YAHAAVRandom2Class@@HH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O00619440",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??$Pick_Random_Number@VRandom2Class@@@@YAHAAVRandom2Class@@HH@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00619440",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x006196D0",
+      "size": 100,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$Pick_Random_Number@VRandom3Class@@@@YAHAAVRandom3Class@@HH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O00619440",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??$Pick_Random_Number@VRandom3Class@@@@YAHAAVRandom3Class@@HH@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00619440",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00619740",
+      "size": 100,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$Pick_Random_Number@VRandom4Class@@@@YAHAAVRandom4Class@@HH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O00619440",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??$Pick_Random_Number@VRandom4Class@@@@YAHAAVRandom4Class@@HH@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00619440",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

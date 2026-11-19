@@ -1,0 +1,38 @@
+[
+  {
+    "file": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+    "function": "CPUDetectClass::CPUID",
+    "rva": "0x006118C0",
+    "instruction": "cpuid",
+    "mnemonics": ["pushad", "popad", "mov", "xor", "cpuid"],
+    "max_instructions": 12,
+    "blocks": 1,
+    "why": "VC7.1 has no cpuid intrinsic (__cpuid arrived with VC8); retail 0x006118D8-0x006118F5 is Westwood's eleven-instruction block",
+    "requested_by": "h10",
+    "approved": "coordinator 2026-11-18 08:55Z (to gen5): approved, cap raised to 12 for this entry"
+  },
+  {
+    "file": "src/Code/Libraries/Source/WWVegas/WWLib/cpudetect.cpp",
+    "function": "Calculate_Processor_Speed",
+    "rva": "0x00611050",
+    "instruction": "rdtsc",
+    "mnemonics": ["rdtsc", "mov"],
+    "max_instructions": 3,
+    "blocks": 2,
+    "why": "VC7.1 has no time-stamp-counter intrinsic (__rdtsc arrived with VC8); retail reads it at 0x00611053 and again at 0x006110DE",
+    "requested_by": "h10",
+    "approved": "coordinator 2026-11-18 08:55Z (to gen5): approved; rdtsc and the two stores, two blocks"
+  },
+  {
+    "file": "include/WW3D2/DX8Wrapper.h",
+    "function": "DX8Wrapper::Convert_Color(const Vector3 &, float)",
+    "rva": "0x0006E1C0",
+    "instruction": "fistp",
+    "mnemonics": ["sub", "fwait", "fstcw", "mov", "and", "or", "jz", "fldcw", "skip:", "fld", "fmul", "fmulp", "fistp", "shl", "fstp", "cmp", "je", "not_changed:", "add"],
+    "max_instructions": 48,
+    "blocks": 1,
+    "why": "Westwood's own __asm block (Zero Hour dx8wrapper.h 1005-1075): fstcw/fldcw rounding-mode switch around four fistp; retail 0x0006E1C0 is the block and its four-fistp tail occurs at 50 sites in retail .text",
+    "requested_by": "h10",
+    "approved": "coordinator 2026-11-18T16:51Z (PROGRESS line of the same minute): approved for the header inline in include/WW3D2/DX8Wrapper.h only; the Vector4 form forwards to it and carries no asm. The coordinator amended this entry 2026-11-18T21:05Z to the verbatim block as counted by the checker, 48 instructions in one block."
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O001DB71C",
+  "rows": [
+    {
+      "rva": "0x00769845",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x001DB71C",
+      "fold_group": "",
+      "name": "Unwind@00b69845",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00769850",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b69845"
+      ],
+      "parent": "0x001DB71C",
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00769850",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x001DB71C",
+      "fold_group": "",
+      "name": "__ehhandler$?init@ControlBarResizer@@QAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0090E904;X:parent-by-prologue",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?init@ControlBarResizer@@QAEXXZ"
+      ],
+      "parent": "0x001DB71C",
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076985A",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00769862",
+      "name": "$L37890",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00769862;X:shared by 2 functions",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L37890"
+      ],
+      "parent": null,
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00769862",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00769862",
+      "name": "__ehhandler$?findResizerWindow@ControlBarResizer@@QAEPAVResizerWindow@@VAsciiString@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0090E928;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?findResizerWindow@ControlBarResizer@@QAEPAVResizerWindow@@VAsciiString@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076986C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x001DB92A",
+      "fold_group": "",
+      "name": "$L39175",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00769874",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L39175"
+      ],
+      "parent": "0x001DB92A",
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00769874",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x001DB92A",
+      "fold_group": "",
+      "name": "__ehhandler$??1ControlBarResizer@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0090E94C;X:parent-by-prologue",
+      "object_id": "retained:O001DB71C",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1ControlBarResizer@@QAE@XZ"
+      ],
+      "parent": "0x001DB92A",
+      "object": "retained:O001DB71C",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

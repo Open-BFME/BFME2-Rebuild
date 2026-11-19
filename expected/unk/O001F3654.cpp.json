@@ -1,0 +1,89 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O001F3654",
+  "rows": [
+    {
+      "rva": "0x001F36C3",
+      "size": 75,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_EWindModuleInfo@FXParticleSystem@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:special-deleting-dtor",
+      "object_id": "O001F3654",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O001F3654",
+      "accepted_names": [
+        "??_EWindModuleInfo@FXParticleSystem@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x001F370E",
+      "size": 11,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F001F370E",
+      "name": "??0?$CategoryModuleInfo@$0A@@FXParticleSystem@@QAE@ABV01@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold 9 distinct names",
+      "object_id": "O001F3654",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O001F3654",
+      "accepted_names": [
+        "??0?$CategoryModuleInfo@$0A@@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$00@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$01@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$02@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$03@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$04@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$05@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$06@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0?$CategoryModuleInfo@$07@FXParticleSystem@@QAE@ABV01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x001F3719",
+      "size": 33,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??4?$CategoryModuleTemplate@$06@FXParticleSystem@@QAEAAV01@ABV01@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O001F3654",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O001F3654",
+      "accepted_names": [
+        "??4?$CategoryModuleTemplate@$06@FXParticleSystem@@QAEAAV01@ABV01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

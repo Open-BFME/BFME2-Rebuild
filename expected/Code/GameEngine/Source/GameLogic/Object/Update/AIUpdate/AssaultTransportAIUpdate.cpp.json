@@ -1,0 +1,107 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0048F365",
+  "rows": [
+    {
+      "rva": "0x0048F46D",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x002645FF",
+      "fold_group": "",
+      "name": "?rva0048F46D@AssaultTransportAIUpdate@@QAE_NXZ",
+      "name_evidence": "S:strong (vtable-slot)",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O0048F365",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x002645FF",
+      "object": "O0048F365",
+      "accepted_names": [
+        "?rva0048F46D@AssaultTransportAIUpdate@@QAE_NXZ",
+        "?rva0048F46D@Rva0048F46D@@QAE_NXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0048F5FE",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GAssaultTransportAIUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0048F365",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0048F365",
+      "accepted_names": [
+        "??_GAssaultTransportAIUpdate@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0078C897",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0048F411",
+      "fold_group": "",
+      "name": "$L306",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C8A4",
+      "object_id": "O0048F365",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048F411",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x0048F411",
+      "object": "O0048F365",
+      "accepted_names": [
+        "$L306"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078C8A4",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0048F411",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@AssaultTransportAIUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C1BC;X:parent-by-prologue",
+      "object_id": "O0048F365",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0048F411",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": "0x0048F411",
+      "object": "O0048F365",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@AssaultTransportAIUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

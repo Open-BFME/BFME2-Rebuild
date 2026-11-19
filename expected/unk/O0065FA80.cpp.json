@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0065FA80",
+  "rows": [
+    {
+      "rva": "0x007B5B80",
+      "size": 22,
+      "section": ".text",
+      "role": "initializer",
+      "parent_rva": "0x00A0A0E4",
+      "fold_group": "",
+      "name": "_$E87",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:.CRT$XC slot 0x009A5C78;X:global-by-this",
+      "object_id": "O0065FA80",
+      "object_evidence": "X:initializer-votes",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "init-votes",
+      "weakest_link": "init-votes",
+      "parent": "0x00A0A0E4",
+      "object": "O0065FA80",
+      "accepted_names": [
+        "_$E87"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:init-votes"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0029A4CA",
+  "rows": [
+    {
+      "rva": "0x0029A778",
+      "size": 39,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??4UIMessage@InGameUI@@QAEAAU01@ABU01@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-InGameUI;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0029A4CA",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O0029A4CA",
+      "accepted_names": [
+        "??4UIMessage@InGameUI@@QAEAAU01@ABU01@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0029AC98",
+      "size": 8,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?rva0029AC98@Rva0029AC98Forwarder@@QAEXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:vcall-thunk slot+0x10c",
+      "object_id": "O0029A4CA",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O0029A4CA",
+      "accepted_names": [
+        "?rva0029AC98@Rva0029AC98Forwarder@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0029AF82",
+      "size": 36,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0WorldAnimationData@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-InGameUI;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0029A4CA",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O0029A4CA",
+      "accepted_names": [
+        "??0WorldAnimationData@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0029AFA6",
+      "size": 86,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F0029AFA6",
+      "name": "?showIdleWorkerLayout@InGameUI@@EAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold 2 distinct names",
+      "object_id": "O0029A4CA",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O0029A4CA",
+      "accepted_names": [
+        "?showIdleWorkerLayout@InGameUI@@EAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0029AFFC",
+      "size": 81,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F0029AFFC",
+      "name": "?updateIdleWorker@InGameUI@@EAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold 2 distinct names",
+      "object_id": "O0029A4CA",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O0029A4CA",
+      "accepted_names": [
+        "?updateIdleWorker@InGameUI@@EAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

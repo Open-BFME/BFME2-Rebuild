@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005D91D2",
+  "rows": [
+    {
+      "rva": "0x007A28B9",
+      "size": 19,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D91D2",
+      "fold_group": "",
+      "name": "$L1404",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A28E4",
+      "object_id": "O005D91D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D91D2",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D91D2",
+      "object": "O005D91D2",
+      "accepted_names": [
+        "$L1404"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A28CC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D91D2",
+      "fold_group": "",
+      "name": "uw_007a28cc",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A28E4",
+      "object_id": "O005D91D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D91D2",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D91D2",
+      "object": "O005D91D2",
+      "accepted_names": [
+        "uw_007a28cc"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A28D4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D91D2",
+      "fold_group": "",
+      "name": "uw_007a28d4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A28E4",
+      "object_id": "O005D91D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D91D2",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D91D2",
+      "object": "O005D91D2",
+      "accepted_names": [
+        "uw_007a28d4"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A28DC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D91D2",
+      "fold_group": "",
+      "name": "$L1407",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A28E4",
+      "object_id": "O005D91D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D91D2",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D91D2",
+      "object": "O005D91D2",
+      "accepted_names": [
+        "$L1407"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A28E4",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005D91D2",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005D91D2@Rva005EE816@@QAEIPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095A550;X:parent-by-prologue",
+      "object_id": "O005D91D2",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D91D2",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D91D2",
+      "object": "O005D91D2",
+      "accepted_names": [
+        "__ehhandler$?rva005D91D2@Rva005EE816@@QAEIPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

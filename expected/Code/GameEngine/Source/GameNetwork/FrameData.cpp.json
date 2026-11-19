@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005DA4C8",
+  "rows": [
+    {
+      "rva": "0x005DA55E",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x005DA4F9",
+      "fold_group": "",
+      "name": "?reset@FrameData@@QAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O005DA4C8",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x005DA4F9",
+      "object": "O005DA4C8",
+      "accepted_names": [
+        "?reset@FrameData@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007A2A3F",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005DA4F9",
+      "fold_group": "",
+      "name": "uw_007a2a3f",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A2A49",
+      "object_id": "O005DA4C8",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005DA4F9",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x005DA4F9",
+      "object": "O005DA4C8",
+      "accepted_names": [
+        "uw_007a2a3f"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x007A2A49",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005DA4F9",
+      "fold_group": "",
+      "name": "__ehhandler$?init@FrameData@@QAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095A7CC;X:parent-by-prologue",
+      "object_id": "O005DA4C8",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005DA4F9",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x005DA4F9",
+      "object": "O005DA4C8",
+      "accepted_names": [
+        "__ehhandler$?init@FrameData@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0070A740",
+  "rows": [
+    {
+      "rva": "0x0070A840",
+      "size": 111,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1AptNativeHash@@QAE@XZ",
+      "name_evidence": "P:provisional (wb-file)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AptNativeHash;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O0070A740",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1AptNativeHash@@QAE@XZ",
+        "??1Rva0070A840@@QAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O0070A740",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x007AA950",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0070ABC0",
+      "fold_group": "",
+      "name": "Unwind@00baa950",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007AA958",
+      "object_id": "retained:O0070A740",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00baa950"
+      ],
+      "parent": "0x0070ABC0",
+      "object": "retained:O0070A740",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x007AA958",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0070ABC0",
+      "fold_group": "",
+      "name": "__ehhandler$?Expand@AptNativeHash@@AAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00964168;X:parent-by-prologue",
+      "object_id": "retained:O0070A740",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?Expand@AptNativeHash@@AAEXXZ"
+      ],
+      "parent": "0x0070ABC0",
+      "object": "retained:O0070A740",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

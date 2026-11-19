@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G00516D09",
+  "rows": [
+    {
+      "rva": "0x0079548C",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00795496",
+      "name": "$L1527",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00795496;X:shared by 6 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00516D09;0x00516D4D;0x00516D91;0x00516DD2;0x00516E10;0x00516E4E",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G00516D09",
+      "accepted_names": [
+        "$L1527"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x00795496",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00795496",
+      "name": "__ehhandler$?Rva00516D09@@YAPAUAptOnlineSubScreen@@PAVAptOnline@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00948AC0;X:parent-by-prologue;X:EH stub shared by 6 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00516D09;0x00516D4D;0x00516D91;0x00516DD2;0x00516E10;0x00516E4E",
+      "parent_evidence": "X:handler-operand(6 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G00516D09",
+      "accepted_names": [
+        "__ehhandler$?Rva00516D09@@YAPAUAptOnlineSubScreen@@PAVAptOnline@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

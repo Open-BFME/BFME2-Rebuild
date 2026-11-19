@@ -1,0 +1,132 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00495C68",
+  "rows": [
+    {
+      "rva": "0x00495CD0",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GBfmeStringRecord00426A5B@@QAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GBfmeStringRecord00426A5B@@QAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00495DAA",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GAutoPickUpUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GAutoPickUpUpdate@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CFF3",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00495CEC",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D000",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x00495CEC",
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D000",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00495CEC",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@AutoPickUpUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093CD74;X:parent-by-prologue",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@AutoPickUpUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x00495CEC",
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D00A",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00495D31",
+      "fold_group": "",
+      "name": "uw_0078d00a",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078D012",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_0078d00a"
+      ],
+      "parent": "0x00495D31",
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078D012",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00495D31",
+      "fold_group": "",
+      "name": "__ehhandler$??0AutoPickUpUpdate@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093CD98;X:parent-by-prologue",
+      "object_id": "retained:O00495C68",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0AutoPickUpUpdate@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x00495D31",
+      "object": "retained:O00495C68",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

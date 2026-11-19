@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005D9721",
+  "rows": [
+    {
+      "rva": "0x007A2932",
+      "size": 19,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D9721",
+      "fold_group": "",
+      "name": "?rva007a2932@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A295D",
+      "object_id": "O005D9721",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D9721",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D9721",
+      "object": "O005D9721",
+      "accepted_names": [
+        "?rva007a2932@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A2945",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D9721",
+      "fold_group": "",
+      "name": "uw_007a2945",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A295D",
+      "object_id": "O005D9721",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D9721",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D9721",
+      "object": "O005D9721",
+      "accepted_names": [
+        "uw_007a2945"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A294D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D9721",
+      "fold_group": "",
+      "name": "uw_007a294d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A295D",
+      "object_id": "O005D9721",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D9721",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D9721",
+      "object": "O005D9721",
+      "accepted_names": [
+        "uw_007a294d"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A2955",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x005D9721",
+      "fold_group": "",
+      "name": "?rva007a2955@@YAXXZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007A295D",
+      "object_id": "O005D9721",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D9721",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D9721",
+      "object": "O005D9721",
+      "accepted_names": [
+        "?rva007a2955@@YAXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007A295D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x005D9721",
+      "fold_group": "",
+      "name": "__ehhandler$?rva005D9721@Rva005EE816@@QAEIPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0095A624;X:parent-by-prologue",
+      "object_id": "O005D9721",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x005D9721",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x005D9721",
+      "object": "O005D9721",
+      "accepted_names": [
+        "__ehhandler$?rva005D9721@Rva005EE816@@QAEIPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

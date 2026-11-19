@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00614DB0",
+  "rows": [
+    {
+      "rva": "0x00614E90",
+      "size": 93,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva009E12B0Table@@QAE@H@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-ChunkSaveClass|ChunkLoadClass;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00614DB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00614DB0",
+      "accepted_names": [
+        "??0Rva009E12B0Table@@QAE@H@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    }
+  ]
+}

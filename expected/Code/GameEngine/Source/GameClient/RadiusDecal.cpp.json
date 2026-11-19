@@ -1,0 +1,258 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00330CDD",
+  "rows": [
+    {
+      "rva": "0x00330DD6",
+      "size": 5,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x00330DBA",
+      "fold_group": "",
+      "name": "??1RadiusDecal@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:jmp-thunk",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00330DBA",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "??1RadiusDecal@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BED7",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00330E5D",
+      "fold_group": "",
+      "name": "Unwind@00b7bed7",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077BEDF",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00330E5D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00330E5D",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "Unwind@00b7bed7"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BEDF",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00330E5D",
+      "fold_group": "",
+      "name": "__ehhandler$??0RadiusDecalTemplate@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009251FC;X:parent-by-prologue",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00330E5D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00330E5D",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "__ehhandler$??0RadiusDecalTemplate@@QAE@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BEE9",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0033121F",
+      "fold_group": "",
+      "name": "Unwind@00b7bee9",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077BEF1",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0033121F",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0033121F",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "Unwind@00b7bee9"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BEF1",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0033121F",
+      "fold_group": "",
+      "name": "__ehhandler$?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXVCoord3D@@IHPAVRadiusDecal@@M@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00925220;X:parent-by-prologue",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0033121F",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0033121F",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "__ehhandler$?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXVCoord3D@@IHPAVRadiusDecal@@M@Z",
+        "__ehhandler$?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXUCoord3D@@IHPAVRadiusDecal@@M@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXUCoord3D@@IHPAVRadiusDecal@@M@Z",
+          "name": "__ehhandler$?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXVCoord3D@@IHPAVRadiusDecal@@M@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x0077BEFB",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0033132D",
+      "fold_group": "",
+      "name": "Unwind@00b7befb",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077BF03",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0033132D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0033132D",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "Unwind@00b7befb"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BF03",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0033132D",
+      "fold_group": "",
+      "name": "__ehhandler$?createDeathDecal@RadiusDecalTemplate@@QAEXPBVCoord3D@@MPBIPAVRadiusDecal@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00925244;X:parent-by-prologue",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0033132D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x0033132D",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "__ehhandler$?createDeathDecal@RadiusDecalTemplate@@QAEXPBVCoord3D@@MPBIPAVRadiusDecal@@@Z",
+        "__ehhandler$?createDeathDecal@RadiusDecalTemplate@@QAEXPBUCoord3D@@MPBIPAVRadiusDecal@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?createDeathDecal@RadiusDecalTemplate@@QAEXPBUCoord3D@@MPBIPAVRadiusDecal@@@Z",
+          "name": "__ehhandler$?createDeathDecal@RadiusDecalTemplate@@QAEXPBVCoord3D@@MPBIPAVRadiusDecal@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x0077BF0D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00331459",
+      "fold_group": "",
+      "name": "Unwind@00b7bf0d",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077BF15",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00331459",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00331459",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "Unwind@00b7bf0d"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x0077BF15",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00331459",
+      "fold_group": "",
+      "name": "__ehhandler$?createRadiusDecal@RadiusDecalTemplate@@QBEXABVCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00925268;X:parent-by-prologue",
+      "object_id": "O00330CDD",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00331459",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": "0x00331459",
+      "object": "O00330CDD",
+      "accepted_names": [
+        "__ehhandler$?createRadiusDecal@RadiusDecalTemplate@@QBEXABVCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z",
+        "__ehhandler$?createRadiusDecal@RadiusDecalTemplate@@QBEXABUCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?createRadiusDecal@RadiusDecalTemplate@@QBEXABUCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z",
+          "name": "__ehhandler$?createRadiusDecal@RadiusDecalTemplate@@QBEXABVCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

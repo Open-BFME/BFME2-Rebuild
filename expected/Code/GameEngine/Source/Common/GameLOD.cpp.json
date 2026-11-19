@@ -1,0 +1,552 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0020202B",
+  "rows": [
+    {
+      "rva": "0x002027B1",
+      "size": 57,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0?$pair@$$CBVAsciiString@@V1@@_STL@@QAE@ABVAsciiString@@0@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0?$pair@$$CBVAsciiString@@V1@@_STL@@QAE@ABVAsciiString@@0@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00202B4A",
+      "size": 34,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?_M_create_node@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@IAEPAU?$_Rb_tree_node@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?_M_create_node@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@IAEPAU?$_Rb_tree_node@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00202CF8",
+      "size": 148,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?_M_insert@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@AAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@PAU_Rb_tree_node_base@2@0ABU?$pair@$$CBVAsciiString@@V1@@2@0@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?_M_insert@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@AAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@PAU_Rb_tree_node_base@2@0ABU?$pair@$$CBVAsciiString@@V1@@2@0@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00202D8C",
+      "size": 151,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?insert_unique@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@_STL@@_N@2@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?insert_unique@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@_STL@@_N@2@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x00203023",
+      "size": 443,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?insert_unique@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@U32@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?insert_unique@?$_Rb_tree@VAsciiString@@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Select1st@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@U?$less@VAsciiString@@@3@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@U32@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x002031DE",
+      "size": 29,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?insert@?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@U32@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?insert@?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVAsciiString@@V1@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVAsciiString@@V1@@_STL@@@2@@2@U32@ABU?$pair@$$CBVAsciiString@@V1@@2@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x002031FB",
+      "size": 141,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??A?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAEAAVAsciiString@@ABV2@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??A?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAEAAVAsciiString@@ABV2@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5CC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002022E9",
+      "fold_group": "",
+      "name": "$L719",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C5DC",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L719"
+      ],
+      "parent": "0x002022E9",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5D4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002022E9",
+      "fold_group": "",
+      "name": "$L720",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C5DC",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L720"
+      ],
+      "parent": "0x002022E9",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5DC",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x002022E9",
+      "fold_group": "",
+      "name": "__ehhandler$?rva002022E9@Rva00DFE144Globals@@QAEXH@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911DA8;X:parent-by-prologue",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?rva002022E9@Rva00DFE144Globals@@QAEXH@Z"
+      ],
+      "parent": "0x002022E9",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5E6",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002027B1",
+      "fold_group": "",
+      "name": "Unwind@00b6c5e6",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C5EE",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c5e6"
+      ],
+      "parent": "0x002027B1",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5EE",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x002027B1",
+      "fold_group": "",
+      "name": "__ehhandler$??0?$pair@$$CBVAsciiString@@V1@@_STL@@QAE@ABVAsciiString@@0@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911DCC;X:parent-by-prologue",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0?$pair@$$CBVAsciiString@@V1@@_STL@@QAE@ABVAsciiString@@0@Z"
+      ],
+      "parent": "0x002027B1",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C5F8",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002027EA",
+      "fold_group": "",
+      "name": "Unwind@00b6c5f8",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C60B",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c5f8"
+      ],
+      "parent": "0x002027EA",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C603",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002027EA",
+      "fold_group": "",
+      "name": "Unwind@00b6c603",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C60B",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c603"
+      ],
+      "parent": "0x002027EA",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C60B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x002027EA",
+      "fold_group": "",
+      "name": "__ehhandler$?init@GameLODManager@@QAEXH@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911DF8;X:parent-by-prologue",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?init@GameLODManager@@QAEXH@Z"
+      ],
+      "parent": "0x002027EA",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C615",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0076C61D",
+      "name": "$L1181",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C61D;X:shared by 2 functions",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L1181"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C61D",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0076C61D",
+      "name": "__ehhandler$?getStaticGameLODIndex@GameLODManager@@QAEHVAsciiString@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911E1C;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getStaticGameLODIndex@GameLODManager@@QAEHVAsciiString@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C627",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0076C62F",
+      "name": "$L47447",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C62F;X:shared by 4 functions",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L47447"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C62F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0076C62F",
+      "name": "__ehhandler$?parseStaticGameLODDefinition@INI@@SAXPAV1@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911E40;X:parent-by-prologue;X:EH stub shared by 4 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?parseStaticGameLODDefinition@INI@@SAXPAV1@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C639",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002031FB",
+      "fold_group": "",
+      "name": "Unwind@00b6c639",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C649",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c639"
+      ],
+      "parent": "0x002031FB",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C641",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x002031FB",
+      "fold_group": "",
+      "name": "Unwind@00b6c641",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C649",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c641"
+      ],
+      "parent": "0x002031FB",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C649",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x002031FB",
+      "fold_group": "",
+      "name": "__ehhandler$??A?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAEAAVAsciiString@@ABV2@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911E6C;X:parent-by-prologue",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??A?$map@VAsciiString@@V1@U?$less@VAsciiString@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@V1@@_STL@@@3@@_STL@@QAEAAVAsciiString@@ABV2@@Z"
+      ],
+      "parent": "0x002031FB",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C653",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00203288",
+      "fold_group": "",
+      "name": "Unwind@00b6c653",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C66B",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c653"
+      ],
+      "parent": "0x00203288",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C65B",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00203288",
+      "fold_group": "",
+      "name": "Unwind@00b6c65b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C66B",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c65b"
+      ],
+      "parent": "0x00203288",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C663",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00203288",
+      "fold_group": "",
+      "name": "Unwind@00b6c663",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0076C66B",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b6c663"
+      ],
+      "parent": "0x00203288",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0076C66B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00203288",
+      "fold_group": "",
+      "name": "__ehhandler$?findStaticLODLevel@GameLODManager@@QAE?AW4StaticGameLODLevel@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00911EA0;X:parent-by-prologue",
+      "object_id": "retained:O0020202B",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?findStaticLODLevel@GameLODManager@@QAE?AW4StaticGameLODLevel@@XZ"
+      ],
+      "parent": "0x00203288",
+      "object": "retained:O0020202B",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

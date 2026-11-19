@@ -1,0 +1,286 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00260E01",
+  "rows": [
+    {
+      "rva": "0x00260FF5",
+      "size": 81,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva00260FF5@@QAE@PAVObject@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-PartitionFilterPossibleToAttack|PartitionFilterRejectByKindOf;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "??0Rva00260FF5@@QAE@PAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00261058",
+      "size": 69,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva00261058@@QAE@PAVObject@@_N@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-PartitionFilterPossibleToAttack|PartitionFilterRejectByKindOf;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "??0Rva00261058@@QAE@PAVObject@@_N@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00261176",
+      "size": 21,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F00261176",
+      "name": "?isNotAnyKindOf@Rva001DCD30@@QBEHABVThing@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "?isNotAnyKindOf@Rva001DCD30@@QBEHABVThing@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x002611F2",
+      "size": 84,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0PartitionFilterRejectBuildings@@QAE@PAVObject@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-PartitionFilterSameMapStatus|PartitionFilterPlayer;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "??0PartitionFilterRejectBuildings@@QAE@PAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x002615C0",
+      "size": 35,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?test@?$BitFlags@$0NK@W4KindOfType@@@@QBE_NPBX@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "?test@?$BitFlags@$0NK@W4KindOfType@@@@QBE_NPBX@Z",
+        "?test@?$BitFlags@$0NK@@@QBE_NPBX@Z",
+        "?test@?$BitFlags@$0EF@@@QBE_NPBX@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "?test@?$BitFlags@$0EF@@@QBE_NPBX@Z",
+          "name": "?test@?$BitFlags@$0NK@@@QBE_NPBX@Z",
+          "evidence": "retail test loops over 7 words (bound 83fa07); 218 is the only BFME 2 bit-name table with 7 words",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x00261790",
+      "size": 88,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F00261790",
+      "name": "??0Rva00261790@@QAE@PAVArg00261790@@_N@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "??0Rva00261790@@QAE@PAVArg00261790@@_N@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x002619A0",
+      "size": 14,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0NK@W4KindOfType@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0NK@W4KindOfType@@@@@Z",
+        "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0NK@@@@Z",
+        "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0EF@@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0EF@@@@Z",
+          "name": "?Rva002619A0@@YA_NPBXPBV?$BitFlags@$0NK@@@@Z",
+          "evidence": "calls 0x2615c0, whose BitFlags argument is retail-measured as BitFlags<218>; only one donor N in this name",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x002619AE",
+      "size": 19,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0NK@W4KindOfType@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0NK@W4KindOfType@@@@@Z",
+        "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0NK@@@@Z",
+        "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0EF@@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z",
+      "identity_corrections": [
+        {
+          "previous_name": "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0EF@@@@Z",
+          "name": "?rva002619AE@Rva002619AE@@QAE_NPBV?$BitFlags@$0NK@@@@Z",
+          "evidence": "calls 0x2615c0, whose BitFlags argument is retail-measured as BitFlags<218>; only one donor N in this name",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x00772D57",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H00772D5F",
+      "name": "$L374",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00772D5F;X:shared by 3 functions",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00260FF5;0x00261058;0x002611F2",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "$L374"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x00772D5F",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H00772D5F",
+      "name": "__ehhandler$??0Rva00261058@@QAE@PAVObject@@_N@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x009198E8;X:parent-by-prologue;X:EH stub shared by 3 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O00260E01",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00260FF5;0x00261058;0x002611F2",
+      "parent_evidence": "X:handler-operand(3 parents, shared handler)",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O00260E01",
+      "accepted_names": [
+        "__ehhandler$??0Rva00261058@@QAE@PAVObject@@_N@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00546F2F",
+  "rows": [
+    {
+      "rva": "0x00546FAD",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GAttackObjectGroupOrder@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00546F2F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "O00546F2F",
+      "accepted_names": [
+        "??_GAttackObjectGroupOrder@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x007980C1",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00546F6C",
+      "fold_group": "",
+      "name": "uw_007980c1",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x007980CB",
+      "object_id": "O00546F2F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00546F6C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00546F6C",
+      "object": "O00546F2F",
+      "accepted_names": [
+        "uw_007980c1"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x007980CB",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00546F6C",
+      "fold_group": "",
+      "name": "__ehhandler$?rva00546F6C@AttackObjectGroupOrder@@UAEPAV1@XZ",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0094C350;X:parent-by-prologue",
+      "object_id": "O00546F2F",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00546F6C",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00546F6C",
+      "object": "O00546F2F",
+      "accepted_names": [
+        "__ehhandler$?rva00546F6C@AttackObjectGroupOrder@@UAEPAV1@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

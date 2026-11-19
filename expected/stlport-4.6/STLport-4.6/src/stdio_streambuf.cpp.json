@@ -1,0 +1,131 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0001CDB0",
+  "rows": [
+    {
+      "rva": "0x0001CDD0",
+      "size": 50,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?setbuf@stdio_streambuf_base@_SgI@@MAEPAV?$basic_streambuf@DV?$char_traits@D@_STL@@@_STL@@PADH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O0001CDB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0001CDB0",
+      "accepted_names": [
+        "?setbuf@stdio_streambuf_base@_SgI@@MAEPAV?$basic_streambuf@DV?$char_traits@D@_STL@@@_STL@@PADH@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    },
+    {
+      "rva": "0x0001CED0",
+      "size": 30,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_Gstdio_streambuf_base@_SgI@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O0001CDB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0001CDB0",
+      "accepted_names": [
+        "??_Gstdio_streambuf_base@_SgI@@UAEPAXI@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    },
+    {
+      "rva": "0x0001CEF0",
+      "size": 126,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?seekoff@stdio_streambuf_base@_SgI@@MAE?AV?$fpos@H@_STL@@JHH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O0001CDB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0001CDB0",
+      "accepted_names": [
+        "?seekoff@stdio_streambuf_base@_SgI@@MAE?AV?$fpos@H@_STL@@JHH@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    },
+    {
+      "rva": "0x0001CF70",
+      "size": 81,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?seekpos@stdio_streambuf_base@_SgI@@MAE?AV?$fpos@H@_STL@@V34@H@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O0001CDB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0001CDB0",
+      "accepted_names": [
+        "?seekpos@stdio_streambuf_base@_SgI@@MAE?AV?$fpos@H@_STL@@V34@H@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    },
+    {
+      "rva": "0x0001D030",
+      "size": 18,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?not_eof@?$__char_traits_base@DH@_STL@@SAHABH@Z",
+      "name_evidence": "L:vendored=stlport-4.5.3",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O0001CDB0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O0001CDB0",
+      "accepted_names": [
+        "?not_eof@?$__char_traits_base@DH@_STL@@SAHABH@Z"
+      ],
+      "seed_tier": "L",
+      "membership_hypothesis": "hypothesis:name:L"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O005096FF",
+  "rows": [
+    {
+      "rva": "0x00509CC3",
+      "size": 95,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0ProjectileNugget@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-ProjectileNugget|Player;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O005096FF",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O005096FF",
+      "accepted_names": [
+        "??0ProjectileNugget@@QAE@XZ",
+        "??0Made002CC841@@QAE@XZ"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0079431C",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00509814",
+      "fold_group": "",
+      "name": "$L2106",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00794329",
+      "object_id": "O005096FF",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00509814",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00509814",
+      "object": "O005096FF",
+      "accepted_names": [
+        "$L2106"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00794329",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00509814",
+      "fold_group": "",
+      "name": "__ehhandler$?doEffectObject@ProjectileNugget@@UAEXPBUProjectileNuggetFireInfo@@PAVObject@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00947314;X:parent-by-prologue",
+      "object_id": "O005096FF",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00509814",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00509814",
+      "object": "O005096FF",
+      "accepted_names": [
+        "__ehhandler$?doEffectObject@ProjectileNugget@@UAEXPBUProjectileNuggetFireInfo@@PAVObject@@@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    }
+  ]
+}

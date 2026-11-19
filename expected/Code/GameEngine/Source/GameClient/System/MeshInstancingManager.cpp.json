@@ -1,0 +1,81 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0041FD3D",
+  "rows": [
+    {
+      "rva": "0x00786E56",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0041FD3D",
+      "fold_group": "",
+      "name": "Unwind@00b86e56",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00786E66",
+      "object_id": "O0041FD3D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0041FD3D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0041FD3D",
+      "object": "O0041FD3D",
+      "accepted_names": [
+        "Unwind@00b86e56"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00786E5E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0041FD3D",
+      "fold_group": "",
+      "name": "Unwind@00b86e5e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x00786E66",
+      "object_id": "O0041FD3D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0041FD3D",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0041FD3D",
+      "object": "O0041FD3D",
+      "accepted_names": [
+        "Unwind@00b86e5e"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x00786E66",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0041FD3D",
+      "fold_group": "",
+      "name": "__ehhandler$?parseMeshNameMatchesDefinition@@YAXPAVINI@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093417C;X:parent-by-prologue",
+      "object_id": "O0041FD3D",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0041FD3D",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0041FD3D",
+      "object": "O0041FD3D",
+      "accepted_names": [
+        "__ehhandler$?parseMeshNameMatchesDefinition@@YAXPAVINI@@@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    }
+  ]
+}

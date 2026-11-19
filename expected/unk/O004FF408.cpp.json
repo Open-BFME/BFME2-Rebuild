@@ -1,0 +1,106 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004FF408",
+  "rows": [
+    {
+      "rva": "0x004FF435",
+      "size": 60,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0?$_Vector_base@UBfmePod88@@V?$allocator@UBfmePod88@@@_STL@@@_STL@@QAE@IABV?$allocator@UBfmePod88@@@1@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O004FF408",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004FF408",
+      "accepted_names": [
+        "??0?$_Vector_base@UBfmePod88@@V?$allocator@UBfmePod88@@@_STL@@@_STL@@QAE@IABV?$allocator@UBfmePod88@@@1@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x004FF471",
+      "size": 37,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004FF471",
+      "name": "?_M_upper_bound@?$_Rb_tree@HU?$pair@$$CBHH@_STL@@U?$_Select1st@U?$pair@$$CBHH@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@ABEPAU?$_Rb_tree_node@U?$pair@$$CBHH@_STL@@@2@ABH@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O004FF408",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004FF408",
+      "accepted_names": [
+        "?_M_upper_bound@?$_Rb_tree@HU?$pair@$$CBHH@_STL@@U?$_Select1st@U?$pair@$$CBHH@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@ABEPAU?$_Rb_tree_node@U?$pair@$$CBHH@_STL@@@2@ABH@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x004FF496",
+      "size": 9,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??$_Destroy@VRva004FF2F4@@@_STL@@YAXPAVRva004FF2F4@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O004FF408",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004FF408",
+      "accepted_names": [
+        "??$_Destroy@VRva004FF2F4@@@_STL@@YAXPAVRva004FF2F4@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x004FF49F",
+      "size": 41,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004FF49F",
+      "name": "?clear@?$_Rb_tree@HU?$pair@$$CBHURva00501875Count@@@_STL@@U?$_Select1st@U?$pair@$$CBHURva00501875Count@@@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHURva00501875Count@@@_STL@@@2@@_STL@@QAEXXZ",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "O004FF408",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O004FF408",
+      "accepted_names": [
+        "?clear@?$_Rb_tree@HU?$pair@$$CBHURva00501875Count@@@_STL@@U?$_Select1st@U?$pair@$$CBHURva00501875Count@@@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHURva00501875Count@@@_STL@@@2@@_STL@@QAEXXZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

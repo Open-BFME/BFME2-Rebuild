@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O0071F2D0",
+  "rows": [
+    {
+      "rva": "0x0071FDF0",
+      "size": 499,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0BTIntersectStruct@@QAE@ABVOBBoxClass@@ABVTriClass@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BTCollisionStruct;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0071F2D0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0071F2D0",
+      "accepted_names": [
+        "??0BTIntersectStruct@@QAE@ABVOBBoxClass@@ABVTriClass@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
+      "rva": "0x0071FFF0",
+      "size": 67,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0BTCollisionStruct@@QAE@ABVOBBoxClass@@ABVVector3@@ABVTriClass@@1@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-BTIntersectStruct|CollisionMath;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O0071F2D0",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O0071F2D0",
+      "accepted_names": [
+        "??0BTCollisionStruct@@QAE@ABVOBBoxClass@@ABVVector3@@ABVTriClass@@1@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}

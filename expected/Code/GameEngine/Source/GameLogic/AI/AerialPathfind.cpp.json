@@ -1,0 +1,224 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00375ED7",
+  "rows": [
+    {
+      "rva": "0x0077EAAF",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00375C28",
+      "fold_group": "",
+      "name": "$L688",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAB7",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00375C28",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00375C28",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "$L688"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077EAB7",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00375C28",
+      "fold_group": "",
+      "name": "__ehhandler$?rva00375C28@AerialPathfinder@@QAE_NPAVObject@@PBVCoord3D@@PAMPAU3@@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00928DDC;X:parent-by-prologue",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x00375C28",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": "0x00375C28",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "__ehhandler$?rva00375C28@AerialPathfinder@@QAE_NPAVObject@@PBVCoord3D@@PAMPAU3@@Z",
+        "__ehhandler$?rva00375C28@AerialPathfinder@@QAE_NPAVObject@@PBUCoord3D@@PAMPAU3@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership",
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?rva00375C28@AerialPathfinder@@QAE_NPAVObject@@PBUCoord3D@@PAMPAU3@@Z",
+          "name": "__ehhandler$?rva00375C28@AerialPathfinder@@QAE_NPAVObject@@PBVCoord3D@@PAMPAU3@@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    },
+    {
+      "rva": "0x0077EAC1",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "$L2196",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAF2",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "$L2196"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0077EACC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "Unwind@00b7eacc",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAF2",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "Unwind@00b7eacc"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0077EAD4",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "Unwind@00b7ead4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAF2",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "Unwind@00b7ead4"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0077EADF",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "Unwind@00b7eadf",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAF2",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "Unwind@00b7eadf"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0077EAEA",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "Unwind@00b7eaea",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077EAF2",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "Unwind@00b7eaea"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null
+    },
+    {
+      "rva": "0x0077EAF2",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x0037609C",
+      "fold_group": "",
+      "name": "__ehhandler$?computeAerialPath@AerialPathfinder@@QAE_NPAXPBVCoord3D@@PAVRva00312C95@@PBE3_N@Z",
+      "name_evidence": "X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00928E20;X:parent-by-prologue",
+      "object_id": "O00375ED7",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x0037609C",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x0037609C",
+      "object": "O00375ED7",
+      "accepted_names": [
+        "__ehhandler$?computeAerialPath@AerialPathfinder@@QAE_NPAXPBVCoord3D@@PAVRva00312C95@@PBE3_N@Z",
+        "__ehhandler$?computeAerialPath@AerialPathfinder@@QAE_NPAXPBUCoord3D@@PAVRva00312C95@@PBE3_N@Z"
+      ],
+      "seed_tier": "A",
+      "membership_hypothesis": null,
+      "identity_corrections": [
+        {
+          "previous_name": "__ehhandler$?computeAerialPath@AerialPathfinder@@QAE_NPAXPBUCoord3D@@PAVRva00312C95@@PBE3_N@Z",
+          "name": "__ehhandler$?computeAerialPath@AerialPathfinder@@QAE_NPAXPBVCoord3D@@PAVRva00312C95@@PBE3_N@Z",
+          "evidence": "retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z",
+          "legacy_policy": "previous accepted spelling retained for landed source; not primary identity"
+        }
+      ]
+    }
+  ]
+}

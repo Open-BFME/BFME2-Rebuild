@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O00538739",
+  "rows": [
+    {
+      "rva": "0x00538739",
+      "size": 47,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?erase@?$vector@UBfmePod16@@V?$allocator@UBfmePod16@@@_STL@@@_STL@@QAEPAUBfmePod16@@PAU3@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O00538739",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": null,
+      "object": "O00538739",
+      "accepted_names": [
+        "?erase@?$vector@UBfmePod16@@V?$allocator@UBfmePod16@@@_STL@@@_STL@@QAEPAUBfmePod16@@PAU3@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    }
+  ]
+}

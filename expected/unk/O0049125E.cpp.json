@@ -1,0 +1,279 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O0049125E",
+  "rows": [
+    {
+      "rva": "0x004912FA",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GDamageFieldUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GDamageFieldUpdate@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CA8B",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491264",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CA98",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x00491264",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CA98",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00491264",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@DamageFieldUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C4FC;X:parent-by-prologue",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@DamageFieldUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x00491264",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAA2",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004912A9",
+      "fold_group": "",
+      "name": "Unwind@00b8caa2",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAAA",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8caa2"
+      ],
+      "parent": "0x004912A9",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAAA",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004912A9",
+      "fold_group": "",
+      "name": "__ehhandler$??0DamageFieldUpdate@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C520;X:parent-by-prologue",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0DamageFieldUpdate@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x004912A9",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAB4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "Unwind@00b8cab4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8cab4"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CABC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "Unwind@00b8cabc",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8cabc"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAC4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "Unwind@00b8cac4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8cac4"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CACC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "Unwind@00b8cacc",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8cacc"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAD4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "Unwind@00b8cad4",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8cad4"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CADC",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "$L6696",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L6696"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAE4",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "$L6697",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CAEC",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L6697"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078CAEC",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00491316",
+      "fold_group": "",
+      "name": "__ehhandler$?update@DamageFieldUpdate@@UAE?AW4UpdateSleepTime@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C594;X:parent-by-prologue",
+      "object_id": "retained:O0049125E",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?update@DamageFieldUpdate@@UAE?AW4UpdateSleepTime@@XZ"
+      ],
+      "parent": "0x00491316",
+      "object": "retained:O0049125E",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

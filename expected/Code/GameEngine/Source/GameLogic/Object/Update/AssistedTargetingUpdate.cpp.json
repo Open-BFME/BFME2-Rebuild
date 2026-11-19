@@ -1,0 +1,153 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O00486E31",
+  "rows": [
+    {
+      "rva": "0x00486EE1",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GAssistedTargetingUpdate@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GAssistedTargetingUpdate@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C146",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00486E31",
+      "fold_group": "",
+      "name": "$L306",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C153",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L306"
+      ],
+      "parent": "0x00486E31",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C153",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00486E31",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@AssistedTargetingUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B730;X:parent-by-prologue",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@AssistedTargetingUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x00486E31",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C15D",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00486E8D",
+      "fold_group": "",
+      "name": "$L6272",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C165",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L6272"
+      ],
+      "parent": "0x00486E8D",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C165",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00486E8D",
+      "fold_group": "",
+      "name": "__ehhandler$??0AssistedTargetingUpdate@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B754;X:parent-by-prologue",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0AssistedTargetingUpdate@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": "0x00486E8D",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C16F",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00486F35",
+      "fold_group": "",
+      "name": "$L619",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078C17C",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L619"
+      ],
+      "parent": "0x00486F35",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078C17C",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00486F35",
+      "fold_group": "",
+      "name": "__ehhandler$?makeFeedbackLaser@AssistedTargetingUpdate@@AAEXPBVThingTemplate@@PBVObject@@1@Z",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093B778;X:parent-by-prologue",
+      "object_id": "retained:O00486E31",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?makeFeedbackLaser@AssistedTargetingUpdate@@AAEXPBVThingTemplate@@PBVObject@@1@Z"
+      ],
+      "parent": "0x00486F35",
+      "object": "retained:O00486E31",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

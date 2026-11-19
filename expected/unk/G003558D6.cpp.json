@@ -1,0 +1,56 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G003558D6",
+  "rows": [
+    {
+      "rva": "0x0077D49F",
+      "size": 10,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0077D4A9",
+      "name": "$L6565",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0077D4A9;X:shared by 6 functions",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003558D6;0x00355949;0x003559B5;0x00355A09;0x00355A5D;0x00355AB1",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G003558D6",
+      "accepted_names": [
+        "$L6565"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x0077D4A9",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0077D4A9",
+      "name": "__ehhandler$?rva003559B5@AiOrdersManager@@QAEXHPAVRva0036E346@@H@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x00926E58;X:parent-by-prologue;X:EH stub shared by 6 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "unknown",
+      "object_evidence": "?:eh-parents-unassigned",
+      "parent_rvas": "0x003558D6;0x00355949;0x003559B5;0x00355A09;0x00355A5D;0x00355AB1",
+      "parent_evidence": "X:handler-operand(6 parents, shared handler)",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G003558D6",
+      "accepted_names": [
+        "__ehhandler$?rva003559B5@AiOrdersManager@@QAEXHPAVRva0036E346@@H@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

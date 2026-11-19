@@ -1,0 +1,216 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O004B7F21",
+  "rows": [
+    {
+      "rva": "0x004B7FA4",
+      "size": 49,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0RemoveUpgradeUpgrade@@QAE@PAVThing@@PBVModuleData@@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-RemoveUpgradeUpgradeModuleData;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0RemoveUpgradeUpgrade@@QAE@PAVThing@@PBVModuleData@@@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004B7FD5",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRemoveUpgradeUpgrade@@MAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GRemoveUpgradeUpgrade@@MAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004B8034",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GRemoveUpgradeUpgradeModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GRemoveUpgradeUpgradeModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F11C",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B7F3D",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F129",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x004B7F3D",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F129",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B7F3D",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@RemoveUpgradeUpgrade@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093FF50;X:parent-by-prologue",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@RemoveUpgradeUpgrade@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x004B7F3D",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F133",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B8050",
+      "fold_group": "",
+      "name": "Unwind@00b8f133",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F149",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8f133"
+      ],
+      "parent": "0x004B8050",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F13B",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B8050",
+      "fold_group": "",
+      "name": "Unwind@00b8f13b",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F149",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8f13b"
+      ],
+      "parent": "0x004B8050",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F149",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B8050",
+      "fold_group": "",
+      "name": "__ehhandler$??1RemoveUpgradeUpgradeModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093FF7C;X:parent-by-prologue",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1RemoveUpgradeUpgradeModuleData@@UAE@XZ"
+      ],
+      "parent": "0x004B8050",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F153",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004B8095",
+      "fold_group": "",
+      "name": "$L7137",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078F15B",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L7137"
+      ],
+      "parent": "0x004B8095",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078F15B",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004B8095",
+      "fold_group": "",
+      "name": "__ehhandler$?upgradeImplementation@RemoveUpgradeUpgrade@@MAEXXZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093FFA0;X:parent-by-prologue",
+      "object_id": "retained:O004B7F21",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?upgradeImplementation@RemoveUpgradeUpgrade@@MAEXXZ"
+      ],
+      "parent": "0x004B8095",
+      "object": "retained:O004B7F21",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

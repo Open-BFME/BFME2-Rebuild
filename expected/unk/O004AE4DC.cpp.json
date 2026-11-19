@@ -1,0 +1,268 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O004AE4DC",
+  "rows": [
+    {
+      "rva": "0x004AE4E2",
+      "size": 32,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1ToggleDeploySpecialAbilityUpdate@@UAE@XZ",
+      "name_evidence": "S:strong (vtable-slot)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-ToggleDeploySpecialAbilityUpdate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1ToggleDeploySpecialAbilityUpdate@@UAE@XZ",
+        "??1Rva004AE4E2@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004AE547",
+      "size": 32,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0ToggleDeploySpecialAbilityUpdateModuleData@@QAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-ToggleDeploySpecialAbilityUpdate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??0ToggleDeploySpecialAbilityUpdateModuleData@@QAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004AE567",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GToggleDeploySpecialAbilityUpdate@@UAEPAXI@Z",
+      "name_evidence": "X:proven (vtable+vptr-store)",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GToggleDeploySpecialAbilityUpdate@@UAEPAXI@Z",
+        "??_GRva004AE4E2@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004AE669",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GToggleDeploySpecialAbilityUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GToggleDeploySpecialAbilityUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004AE685",
+      "size": 82,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??1ToggleDeploySpecialAbilityUpdateModuleData@@UAE@XZ",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-ToggleDeploySpecialAbilityUpdate|DetachableRiderUpdate;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??1ToggleDeploySpecialAbilityUpdateModuleData@@UAE@XZ"
+      ],
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E5D3",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004AE502",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078E5E0",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x004AE502",
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E5E0",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004AE502",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@ToggleDeploySpecialAbilityUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093EEEC;X:parent-by-prologue",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@ToggleDeploySpecialAbilityUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x004AE502",
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E5EA",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004AE685",
+      "fold_group": "",
+      "name": "Unwind@00b8e5ea",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078E600",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8e5ea"
+      ],
+      "parent": "0x004AE685",
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E5F2",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004AE685",
+      "fold_group": "",
+      "name": "$L345",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078E600",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L345"
+      ],
+      "parent": "0x004AE685",
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E600",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004AE685",
+      "fold_group": "",
+      "name": "__ehhandler$??1ToggleDeploySpecialAbilityUpdateModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093EF18;X:parent-by-prologue",
+      "object_id": "retained:O004AE4DC",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1ToggleDeploySpecialAbilityUpdateModuleData@@UAE@XZ"
+      ],
+      "parent": "0x004AE685",
+      "object": "retained:O004AE4DC",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078E60A",
+      "size": 11,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "",
+      "fold_group": "H0078E615",
+      "name": "$L2845",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078E615;X:shared by 2 functions",
+      "object_id": "O004AE4DC",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004AE5B8;0x004AE6D7",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "accepted_names": [
+        "$L2845"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    },
+    {
+      "rva": "0x0078E615",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "",
+      "fold_group": "H0078E615",
+      "name": "__ehhandler$?rva004AE6D7@ToggleDeploySpecialAbilityUpdate@@UAEXPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093EF3C;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
+      "object_id": "O004AE4DC",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x004AE5B8;0x004AE6D7",
+      "parent_evidence": "X:handler-operand(2 parents, shared handler)",
+      "depends_on": "L2:+cohesion/literals",
+      "weakest_link": "C/lit",
+      "parent": null,
+      "object": "retained:O004AE4DC",
+      "accepted_names": [
+        "__ehhandler$?rva004AE6D7@ToggleDeploySpecialAbilityUpdate@@UAEXPAVObject@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:cohesion"
+    }
+  ]
+}

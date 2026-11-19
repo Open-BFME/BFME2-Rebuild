@@ -1,0 +1,31 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "G0030E67C",
+  "rows": [
+    {
+      "rva": "0x0030E7FE",
+      "size": 225,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?_M_fill_insert@?$vector@MV?$allocator@M@_STL@@@_STL@@QAEXPAMIABM@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "G0030E67C",
+      "accepted_names": [
+        "?_M_fill_insert@?$vector@MV?$allocator@M@_STL@@@_STL@@QAEXPAMIABM@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    }
+  ]
+}

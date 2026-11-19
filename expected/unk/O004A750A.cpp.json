@@ -1,0 +1,280 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "retained:O004A750A",
+  "rows": [
+    {
+      "rva": "0x004A768A",
+      "size": 7,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004A768A",
+      "name": "?rva004A768A@MissileUpdate@@UBEEXZ",
+      "name_evidence": "X:proven (vtable+position)",
+      "confidence": "medium",
+      "evidence": "N:fold ledger-fold-proof",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?rva004A768A@MissileUpdate@@UBEEXZ",
+        "?get@Rva004A768AByteField@@QBEEXZ"
+      ],
+      "parent": null,
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004A7691",
+      "size": 8,
+      "section": ".text",
+      "role": "thunk",
+      "parent_rva": "0x005CB9FF",
+      "fold_group": "",
+      "name": "?rva0045BF06@MissileUpdate@@W3AE_NPAVObject@@@Z",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:this-adjustor sub ecx,imm8",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?rva0045BF06@MissileUpdate@@W3AE_NPAVObject@@@Z"
+      ],
+      "parent": "0x005CB9FF",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004A784D",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GMissileUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GMissileUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x004A789C",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GMissileUpdate@@MAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "??_GMissileUpdate@@MAEPAXI@Z"
+      ],
+      "parent": null,
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF45",
+      "size": 13,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004A7699",
+      "fold_group": "",
+      "name": "$L310",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DF52",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "$L310"
+      ],
+      "parent": "0x004A7699",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF52",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004A7699",
+      "fold_group": "",
+      "name": "__ehhandler$?getModuleNameKey@MissileUpdate@@UBE?AW4NameKeyType@@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093E468;X:parent-by-prologue",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$?getModuleNameKey@MissileUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "parent": "0x004A7699",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF5C",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004A76DE",
+      "fold_group": "",
+      "name": "Unwind@00b8df5c",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DF64",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8df5c"
+      ],
+      "parent": "0x004A76DE",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF64",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004A76DE",
+      "fold_group": "",
+      "name": "__ehhandler$??1MissileUpdate@@MAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093E48C;X:parent-by-prologue",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1MissileUpdate@@MAE@XZ"
+      ],
+      "parent": "0x004A76DE",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF6E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004A77B8",
+      "fold_group": "",
+      "name": "uw_0078df6e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DF84",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "uw_0078df6e"
+      ],
+      "parent": "0x004A77B8",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF76",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004A77B8",
+      "fold_group": "",
+      "name": "Unwind@00b8df76",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DF84",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8df76"
+      ],
+      "parent": "0x004A77B8",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF84",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004A77B8",
+      "fold_group": "",
+      "name": "__ehhandler$??0MissileUpdateModuleData@@QAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093E4B8;X:parent-by-prologue",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??0MissileUpdateModuleData@@QAE@XZ"
+      ],
+      "parent": "0x004A77B8",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF8E",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x004A7869",
+      "fold_group": "",
+      "name": "Unwind@00b8df8e",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078DF96",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "Unwind@00b8df8e"
+      ],
+      "parent": "0x004A7869",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
+      "rva": "0x0078DF96",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x004A7869",
+      "fold_group": "",
+      "name": "__ehhandler$??1MissileUpdateModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093E4DC;X:parent-by-prologue",
+      "object_id": "retained:O004A750A",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "__ehhandler$??1MissileUpdateModuleData@@UAE@XZ"
+      ],
+      "parent": "0x004A7869",
+      "object": "retained:O004A750A",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    }
+  ]
+}

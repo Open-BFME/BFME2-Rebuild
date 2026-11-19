@@ -1,0 +1,84 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O004CE270",
+  "rows": [
+    {
+      "rva": "0x004CE27C",
+      "size": 33,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?attemptUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O004CE270",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004CE270",
+      "accepted_names": [
+        "?attemptUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+        "?attemptUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0IA@@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x004CE2B0",
+      "size": 146,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?wouldUpgrade@UpgradeMux@@UBE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O004CE270",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004CE270",
+      "accepted_names": [
+        "?wouldUpgrade@UpgradeMux@@UBE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+        "?wouldUpgrade@UpgradeMux@@UBE_NABV?$BitFlags@$0IA@@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    },
+    {
+      "rva": "0x004CE342",
+      "size": 85,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "?resetUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+      "name_evidence": "X:map request",
+      "confidence": "high",
+      "evidence": "N:template-instantiation",
+      "object_id": "O004CE270",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L4:+Z-hints",
+      "weakest_link": "Z",
+      "parent": null,
+      "object": "O004CE270",
+      "accepted_names": [
+        "?resetUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0EAA@W4UpgradeID@@@@@Z",
+        "?resetUpgrade@UpgradeMux@@UAE_NABV?$BitFlags@$0IA@@@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:Z"
+    }
+  ]
+}

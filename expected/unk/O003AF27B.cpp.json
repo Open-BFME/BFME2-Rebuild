@@ -1,0 +1,57 @@
+{
+  "snapshot": "c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc",
+  "object": "O003AF27B",
+  "rows": [
+    {
+      "rva": "0x003AF22E",
+      "size": 77,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0SphericalEmissionVelocityModule@FXParticleSystem@@QAE@ABV01@@Z",
+      "name_evidence": "X:proven (vptr-store)",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen005ED0D0|Host005EDA90;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "unknown",
+      "object_evidence": "?",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "",
+      "weakest_link": "",
+      "parent": null,
+      "object": "O003AF27B",
+      "accepted_names": [
+        "??0SphericalEmissionVelocityModule@FXParticleSystem@@QAE@ABV01@@Z",
+        "??0Rva003AF22E@@QAE@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-membership"
+    },
+    {
+      "rva": "0x003AF2CC",
+      "size": 38,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??0Rva003AF2CC@@QAE@ABV0@@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "low",
+      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-Gen005ED0D0|Host005EDA90;N+O:special member placed in another class's object (implicit/inline)",
+      "object_id": "O003AF27B",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O003AF27B",
+      "accepted_names": [
+        "??0Rva003AF2CC@@QAE@ABV0@@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    }
+  ]
+}
