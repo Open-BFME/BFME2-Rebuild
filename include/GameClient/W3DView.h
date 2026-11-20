@@ -137,7 +137,7 @@ public:
 	Bool m_ready;						// +0x1C
 };
 // SIZE 0x20
-typedef char Rva0030E7D0Size[(sizeof(Rva0030E7D0) == 0x20) ? 1 : -1];
+typedef char TerrainHeightGridSize[(sizeof(Rva0030E7D0) == 0x20) ? 1 : -1];
 
 // The camera's settings object (the member at +0x24C8 of W3DView; retail builds a global of the same class at VA 0x00BCF670 with constructor 0x00101C92 and vftable
 // 0x007CF670, 22 slots). The map spells the class "Rva00BCF670CameraSettings"; the role names below are the map's own for the slots it names (the INI loaders
