@@ -85,7 +85,8 @@ public:
     virtual void drawImage(const Image *, float, float, float, float, unsigned int = 0xFFFFFFFF, int = 2) = 0;
     virtual void slot63() = 0;
     virtual void slot64() = 0;
-    virtual void slot65(Image *, float, float, float, float, int) = 0;
+    // Zero Hour's drawVideoBuffer: the push-button draws pass the window's video buffer (WinInstanceData +0x1A4) here.
+    virtual void drawVideoBuffer(VideoBuffer *, float, float, float, float, int) = 0;
     virtual bool rva0025C97E(AsciiString, int, int, int);
     virtual bool slot67(AsciiString, bool, int);
     virtual void stopMovie();
