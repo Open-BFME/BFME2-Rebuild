@@ -38,7 +38,13 @@ public:
 };
 
 class Coord3D;
-enum CustomScenePassModes;
+
+// Zero Hour keeps this in W3DCustomScene.h. The cross-fade's preRender stores 1 for the alpha-mask pass.
+enum CustomScenePassModes
+{
+	SCENE_PASS_DEFAULT,
+	SCENE_PASS_ALPHA_MASK
+};
 
 // Zero Hour's FilterModes (CommandXlat.h). BFME 2 renumbers the list: ScreenBWFilter::set 0x000FBC67 picks the
 // tint for modes 1, 2 and 3, and ScreenMotionBlurFilter::postRender 0x000FD5B7 treats 13 as the end of a pan and 16
@@ -72,16 +78,16 @@ struct _TRANS_LIT_TEX_VERTEX
 };
 
 // Zero Hour's screen filter interface. The motion blur table 0x007CF410 holds its seven slots in this order
-// (init, shutdown, preRender, postRender, setup, set, reset); BFME 2's postRender also takes the display size.
+// (init, shutdown, preRender, postRender, setup, set, reset). BFME 2's postRender takes a fourth argument, the display
+// size: ScreenCrossFadeFilter::postRender returns with `ret 0x10` and divides its texture coordinates by it.
 class W3DFilterInterface
 {
 public:
 	virtual int init(void) = 0;
-	virtual int shutdown(void);
-	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode);
-	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize);
-	virtual bool setup(FilterModes mode);
-
+	virtual int shutdown(void) { return true; }
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode) { skipRender = false; return false; }
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize) { return false; }
+	virtual bool setup(FilterModes mode) { return false; }
 protected:
 	virtual int set(FilterModes mode) = 0;
 	virtual void reset(void) = 0;
@@ -151,31 +157,6 @@ protected:
 	static IDirect3DTexture8 *m_renderTexture;			// 0x00DE1F68
 	static IDirect3DSurface8 *m_newRenderSurface;		// 0x00DE1F6C
 	static IDirect3DSurface8 *m_oldDepthSurface;		// 0x00DE1F70
-};
-
-class Coord2D;
-enum FilterModes;
-
-// Zero Hour keeps this in W3DCustomScene.h. The cross-fade's preRender stores 1 for the alpha-mask pass.
-enum CustomScenePassModes
-{
-	SCENE_PASS_DEFAULT,
-	SCENE_PASS_ALPHA_MASK
-};
-
-// Screen filter interface, Zero Hour's shape. BFME 2's postRender takes a fourth argument, the display size:
-// ScreenCrossFadeFilter::postRender returns with `ret 0x10` and divides its texture coordinates by it.
-class W3DFilterInterface
-{
-public:
-	virtual int init(void) = 0;
-	virtual int shutdown(void) { return true; }
-	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode) { skipRender = false; return false; }
-	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize) { return false; }
-	virtual bool setup(FilterModes mode) { return false; }
-protected:
-	virtual int set(FilterModes mode) = 0;
-	virtual void reset(void) = 0;
 };
 
 // The view cross-fade. Virtual order is the class's own table at 0x007CF204; its setup slot reaches a shared
