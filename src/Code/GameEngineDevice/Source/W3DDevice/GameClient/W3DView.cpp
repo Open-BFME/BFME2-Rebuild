@@ -23,7 +23,12 @@
 #include "Common/Region3D.h"
 #include "WWMath/wwmath.h"
 #include "WWMath/FloatToLong.h"
+#include "WWMath/LineSegClass.h"
+#include "WWMath/CastResultStruct.h"
+#include "WW3D2/RayCollisionTestClass.h"
+#include "Draft/BaseHeightMapRenderObjClass.h"
 
+extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;	// the map's terrain render object (VA 0x00DE1EAC); lookAt casts its ray against it
 Int TheW3DFrameLengthInMsec = 0;	// .bss 0x00DE204C in this object (W3DDisplay::draw and setFrameRate also use it): the length of a logic frame in milliseconds
 #define PI     3.14159265359f	// Zero Hour BaseType.h: a literal, so retail reads the shared __real constant
 static const Real DRAWABLE_OVERSCAN = 75.0f;	// 3D world coords of how much to overscan in the 3D screen region
@@ -1470,6 +1475,48 @@ void W3DView::setZoom(Real zoom)
 // FUNCTION: BFME2 0x0008D477 size=230 name=?setZoomToDefault@W3DView@@QAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0008D55D size=682 name=?lookAt@W3DView@@UAEXPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+void W3DView::lookAt(const Coord3D *o)
+{
+	Coord3D pos = *o;
+	constrainPosition(&pos);
+	// A target more than one pathfind cell (Zero Hour's PATHFIND_CELL_SIZE_F, 10) above the ground is looked at through the
+	// ground point that puts it on the centre of the screen.
+	if (o->z > 10.0f + TheTerrainLogic->getGroundHeight(pos.x, pos.y))
+	{
+		Vector3 rayStart, rayEnd;
+		LineSegClass lineseg;
+		CastResultStruct result;
+		rayStart = m_3DCamera->Get_Position();
+		m_3DCamera->Un_Project(rayEnd, Vector2(0.0f, 0.0f));
+		Vector3::Subtract(rayEnd, rayStart, &rayEnd);
+		rayEnd.Normalize();
+		rayEnd *= m_3DCamera->Get_Depth();
+		rayStart.Set(pos.x, pos.y, pos.z);
+		rayEnd += rayStart;
+		lineseg.Set(rayStart, rayEnd);
+		RayCollisionTestClass raytest(lineseg, &result);
+		if (TheTerrainRenderObject->Cast_Ray(raytest))
+		{
+			pos.x = result.ContactPoint.X;
+			pos.y = result.ContactPoint.Y;
+		}
+	}
+	pos.z = 0;
+	m_pos = pos;
+	m_doingRotateCamera = false;
+	cancelCameraMovements();
+	slot28(0);
+	// The ground level follows the camera's height grid once a map has filled it.
+	Real height = getHeightAroundPos(m_pos.x, m_pos.y);
+	if (m_terrainHeightGrid.m_ready)
+		height = m_terrainHeightGrid.rva0030E67C(m_pos.x, m_pos.y);
+	if (height != m_groundLevel)
+	{
+		m_groundLevel = height;
+		m_cameraConstraintValid = false;
+	}
+	setCameraTransform();
+}
 
 // FUNCTION: BFME2 0x0008D807 size=286 name=?initHeightForMap@W3DView@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 

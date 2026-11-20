@@ -121,6 +121,24 @@ struct TerrainPositionRequest
 
 typedef char TerrainPositionRequestSize[(sizeof(TerrainPositionRequest) == 0x18) ? 1 : -1];
 
+// The camera's terrain-height grid (the 0x20-byte member at +0x2458 of W3DView). The map spells the class "Rva0030E7D0" after its constructor 0x0030E7D0;
+// its height lookup 0x0030E67C reads the layout below: it returns 0 while +0x1C is clear, shifts the position by the border (+0x18, in cells of 10 world units),
+// divides it by the cell size (+0x14), clamps the cell to the grid's width and height (+0x0C / +0x10) and interpolates the floats the pointer at +0x00 holds.
+// That pointer is a vector of floats: the object's unit keeps vector<float>::_M_fill_insert (0x0030E7FE).
+class Rva0030E7D0
+{
+public:
+	Real rva0030E67C(Real x, Real y);	// 0x0030E67C: the interpolated height at a world position (W3DView::lookAt prefers it when the grid is ready)
+	std::vector<Real> m_heights;		// +0x00
+	Int m_width;						// +0x0C
+	Int m_height;						// +0x10
+	Real m_cellSize;					// +0x14
+	Int m_borderSize;					// +0x18
+	Bool m_ready;						// +0x1C
+};
+// SIZE 0x20
+typedef char Rva0030E7D0Size[(sizeof(Rva0030E7D0) == 0x20) ? 1 : -1];
+
 // The camera's settings object (the member at +0x24C8 of W3DView; retail builds a global of the same class at VA 0x00BCF670 with constructor 0x00101C92 and vftable
 // 0x007CF670, 22 slots). The map spells the class "Rva00BCF670CameraSettings"; the role names below are the map's own for the slots it names (the INI loaders
 // loadMinHeight .. loadScrollSpeedScalar, reload, getCameraOffset, setTriggerArea, constrainPosition); slots 0 and 1 are the clamp bounds W3DView::setHeightAboveGround
@@ -377,7 +395,7 @@ public:
 	Bool m_unk0x2448;						// +0x2448 (slots 164 / 165)
 	Bool m_unk0x2449;						// +0x2449 (slot 115 reads it)
 	Coord3D m_unk0x244C;					// +0x244C
-	UnsignedInt m_unk0x2458[8];				// +0x2458: a 0x20-byte object holding a vector and a string (its unwind cleanup is the StringBase destructor)
+	Rva0030E7D0 m_terrainHeightGrid;		// +0x2458
 	UnsignedInt m_unk0x2478[6];				// +0x2478: a second 0x44-byte data record (to +0x24BC), the same shape as the one at +0xC0
 	Bool m_unk0x2490;						// +0x2490 (slots 160 / 161)
 	Bool m_unk0x2491;						// +0x2491
