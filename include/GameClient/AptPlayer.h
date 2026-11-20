@@ -46,6 +46,7 @@ public:
 	bool ShowLevel(int level);
 	bool isLevelUnloaded(unsigned int level);
 	void PopFocus(int level);
+	void setMousePosition(int *point);
 	void enable();
 	int invoke(void *level, const char *name, int a, const char *text, void *b, void *c, void *d, void *e);
 	int invokeAndRefresh(void *level, const char *name, int a, const char *text, void *b, void *c, void *d, void *e);
