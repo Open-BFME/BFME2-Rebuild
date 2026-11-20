@@ -184,9 +184,9 @@ void W3DGadgetPushButtonDraw(GameWindow *window, WinInstanceData *instData)
 		if (data->m_drawClock)
 		{
 			if (data->m_drawClock == NORMAL_CLOCK)
-				static_cast<W3DDisplay *>(TheDisplay)->rva000A4826(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
+				TheDisplay->rva000A4826(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
 			else if (data->m_drawClock == INVERSE_CLOCK)
-				static_cast<W3DDisplay *>(TheDisplay)->rva000A4875(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
+				TheDisplay->rva000A4875(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
 			data->m_drawClock = NO_CLOCK;
 			window->winSetUserData(data);
 		}

@@ -30,10 +30,6 @@ public:
 	void rva0004D664(float, float, float, float, float, int);						// 0x0004D664: draws a line (start, end, width, colour); ShellMenuScheme::draw 0x00200506 calls it
 	void rva0004D6B3(Image *, float, float, float, float, int, int);								// 0x0004D6B3
 	void rva0008EEF0(float x, float y, float width, float height, float lineWidth, int color);	// 0x0008EEF0: the push buttons' border, one pixel outside the window
-	// The push-button clocks (W3DPushButton.cpp), called where Zero Hour's push-button draws call drawRectClock and
-	// drawRemainingRectClock; each runs one virtual (+0xEC, +0xF0) between the virtuals at +0xD4 and +0x100.
-	void rva000A4826(float x, float y, float width, float height, float percent, int color);	// 0x000A4826
-	void rva000A4875(float x, float y, float width, float height, float percent, int color);	// 0x000A4875
 	void takeScreenShot(const char *);																// 0x00049B3A
 	void updateAverageFPS();																		// 0x000437A1
 	void drawAnimStats();																			// 0x00043BF9

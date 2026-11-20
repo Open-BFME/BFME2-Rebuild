@@ -129,6 +129,10 @@ public:
     void rva0025C46E();
     void rva0025D9CB(bool);
     void rva0025D10F();
+    // The push-button clocks (W3DPushButton.cpp), called where Zero Hour's push-button draws call drawRectClock and
+    // drawRemainingRectClock; each runs one virtual (+0xEC, +0xF0) between the virtuals at +0xD4 and +0x100.
+    void rva000A4826(float x, float y, float width, float height, float percent, int color);	// 0x000A4826
+    void rva000A4875(float x, float y, float width, float height, float percent, int color);	// 0x000A4875
     void rva0025D19E();
     void rva0025D2F6();	// 0x0025D2F6: clears the three image slots, the text offsets and the cinematic text (the map spells it with class W3DDisplay; Display::reset 0x0025D9E3 calls it on its own this)
     void rva0025D358(UnicodeString, float, float, int, int, int);
