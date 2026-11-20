@@ -207,3 +207,5 @@ jobs:
         run: |
           echo "Source results were not published because protected main moved or its tools could not be loaded." \
             >> "$GITHUB_STEP_SUMMARY"
+
+# Workflow path refusal control.
