@@ -153,4 +153,50 @@ protected:
 	static IDirect3DSurface8 *m_oldDepthSurface;		// 0x00DE1F70
 };
 
+class Coord2D;
+enum FilterModes;
+
+// Zero Hour keeps this in W3DCustomScene.h. The cross-fade's preRender stores 1 for the alpha-mask pass.
+enum CustomScenePassModes
+{
+	SCENE_PASS_DEFAULT,
+	SCENE_PASS_ALPHA_MASK
+};
+
+// Screen filter interface, Zero Hour's shape. BFME 2's postRender takes a fourth argument, the display size:
+// ScreenCrossFadeFilter::postRender returns with `ret 0x10` and divides its texture coordinates by it.
+class W3DFilterInterface
+{
+public:
+	virtual int init(void) = 0;
+	virtual int shutdown(void) { return true; }
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode) { skipRender = false; return false; }
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize) { return false; }
+	virtual bool setup(FilterModes mode) { return false; }
+protected:
+	virtual int set(FilterModes mode) = 0;
+	virtual void reset(void) = 0;
+};
+
+// The view cross-fade. Virtual order is the class's own table at 0x007CF204; its setup slot reaches a shared
+// `mov al, 1; ret 4` body (0x005CB9FA), as Zero Hour's setup returns true.
+class ScreenCrossFadeFilter : public W3DFilterInterface
+{
+public:
+	virtual int init(void);
+	virtual int shutdown(void);
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode);
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize);
+	virtual bool setup(FilterModes mode) { return true; }
+protected:
+	virtual int set(FilterModes mode);
+	virtual void reset(void);
+	bool updateFadeLevel(void);		// advances the fade; false once it has finished
+	static int m_fadeFrames;			// 0x00DEBFFC
+	static int m_fadeDirection;			// 0x00DEBFF8
+	static int m_curFadeFrame;			// 0x00DEC000
+	static float m_curFadeValue;		// 0x00DEBFF4
+	static bool m_skipRender;			// 0x00DEC004
+};
+
 #endif
