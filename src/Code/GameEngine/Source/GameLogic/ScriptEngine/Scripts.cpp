@@ -1179,6 +1179,7 @@ extern const char *SplinePathPadNames[];	// View.cpp, .data 0x00DBA974
 
 AsciiString Parameter::getUiText() const
 {
+    (void)"Buildable (???)";
 	AsciiString uiText;
 	AsciiString uiString = m_string;
 	if (uiString.isEmpty())
