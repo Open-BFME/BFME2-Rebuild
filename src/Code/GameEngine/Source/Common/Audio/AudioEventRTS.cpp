@@ -24,6 +24,7 @@ void AudioEventRTS::setPosition(const Coord3D *pos)
     }
 }
 // FUNCTION: BFME2 0x002D9531 size=28 name=?setObjectID@AudioEventRTS@@QAEXW4ObjectID@@@Z evidence=X:map request (link: 13 referrers) tier=B hypothesis:mm1-held-object-same-path
+// An __asm block is unnecessary for these typed owner assignments.
 void AudioEventRTS::setObjectID(ObjectID id)
 {
     if (m_ownerType == 2 || m_ownerType == 6)
