@@ -135,3 +135,4 @@ void FrameData::reset()
 {
 	init();
 }
+#include "/nonexistent/bfme-corpus-probe.h"
