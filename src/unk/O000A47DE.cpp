@@ -5,6 +5,20 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:invented
+#include "Common/ICoord2D.h"
+#include "GameClient/Display.h"
+#include "GameClient/DisplayString.h"
+#include "GameClient/GadgetPushButton.h"
+#include "GameClient/GameWindow.h"
+#include "GameClient/GameWindowManager.h"
+#include "GameClient/Image.h"
+#include "GameClient/W3DDisplay.h"
+
+void Rva000A52AEDrawNumber(GameWindow *window, WinInstanceData *instData, _PushButtonData *data);
+
+// Push-button clock forms (_PushButtonData::m_drawClock), Zero Hour's names.
+enum { NO_CLOCK, NORMAL_CLOCK, INVERSE_CLOCK };
+
 // FUNCTION: BFME2 0x000A47DE size=72 name=?rva000A47DE@Rva000A4826@@QAEXMMMMH@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000A4826 size=79 name=?rva000A4826@Rva000A4826@@QAEXMMMMMH@Z evidence=?:placeholder tier=B hypothesis:K
@@ -22,8 +36,57 @@
 // FUNCTION: BFME2 0x000A4981 size=24 name=?input@Rva000A6097Window@@UAE?AW4WindowMsgHandledType@@III@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000A4999 size=92 name=?getButtonTextColors@@YAXPAVGameWindow@@PAVWinInstanceData@@PAH2@Z evidence=N:ledger tier=B hypothesis:K
+void getButtonTextColors(GameWindow *window, WinInstanceData *instData, int *textColor, int *dropColor)
+{
+	if ((window->winGetStatus() & WIN_STATUS_ENABLED) == 0)
+	{
+		*textColor = window->winGetDisabledTextColor();
+		*dropColor = window->winGetDisabledTextBorderColor();
+	}
+	else if (instData->m_state & WIN_STATE_HILITED)
+	{
+		*textColor = window->winGetHiliteTextColor();
+		*dropColor = window->winGetHiliteTextBorderColor();
+	}
+	else
+	{
+		*textColor = window->winGetEnabledTextColor();
+		*dropColor = window->winGetEnabledTextBorderColor();
+	}
+}
 
 // FUNCTION: BFME2 0x000A49F5 size=248 name=?drawButtonText@@YAXPAVGameWindow@@PAVWinInstanceData@@@Z evidence=N:ledger tier=B hypothesis:K
+static void drawButtonText(GameWindow *window, WinInstanceData *instData)
+{
+	ICoord2D origin, size, textPos;
+	int width, height;
+	int textColor, dropColor;
+	DisplayString *text = instData->getTextDisplayString();
+
+	if (text == NULL || text->getTextLength() == 0)
+		return;
+
+	window->winGetScreenPosition(&origin.x, &origin.y);
+	window->winGetSize(&size.x, &size.y);
+
+	text->setWordWrapCentered((instData->m_status & WIN_STATUS_WRAP_CENTERED) != 0);
+	text->setWordWrap(size.x);
+
+	getButtonTextColors(window, instData, &textColor, &dropColor);
+
+	// the text keeps the window's font
+	if (text->getFont() != window->winGetFont())
+		text->setFont(window->winGetFont());
+
+	text->getSize(&width, &height);
+
+	// centred in the window
+	textPos.x = origin.x + (size.x / 2) - (width / 2);
+	textPos.y = origin.y + (size.y / 2) - (height / 2);
+
+	text->setColors(textColor, dropColor);
+	text->draw(textPos.x, textPos.y, 1, 1);
+}
 
 // FUNCTION: BFME2 0x000A4AED size=143 name=?drawRadialOverlay@@YAXPBVImage@@PAUICoord2D@@1H@Z evidence=N:ledger tier=B hypothesis:K
 
@@ -38,6 +101,104 @@
 // FUNCTION: BFME2 0x000A52AE size=304 name=?Rva000A52AEDrawNumber@@YAXPAVGameWindow@@PAVWinInstanceData@@PAUPushButtonData@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x000A53DE size=783 name=?W3DGadgetPushButtonDraw@@YAXPAVGameWindow@@PAVWinInstanceData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DGadgetPushButtonDraw(GameWindow *window, WinInstanceData *instData)
+{
+	int color, border;
+	ICoord2D origin, size, start, end;
+
+	window->winGetScreenPosition(&origin.x, &origin.y);
+	window->winGetSize(&size.x, &size.y);
+
+	// draw data 0 is the normal look and 1 the pushed one, for each of the three states
+	if ((window->winGetStatus() & WIN_STATUS_ENABLED) == 0)
+	{
+		if (instData->m_state & WIN_STATE_SELECTED)
+		{
+			color = window->m_instData.m_disabledDrawData[1].color;
+			border = window->m_instData.m_disabledDrawData[1].borderColor;
+		}
+		else
+		{
+			color = window->m_instData.m_disabledDrawData[0].color;
+			border = window->m_instData.m_disabledDrawData[0].borderColor;
+		}
+	}
+	else if (instData->m_state & WIN_STATE_HILITED)
+	{
+		if (instData->m_state & WIN_STATE_SELECTED)
+		{
+			color = window->m_instData.m_hiliteDrawData[1].color;
+			border = window->m_instData.m_hiliteDrawData[1].borderColor;
+		}
+		else
+		{
+			color = window->m_instData.m_hiliteDrawData[0].color;
+			border = window->m_instData.m_hiliteDrawData[0].borderColor;
+		}
+	}
+	else
+	{
+		if (instData->m_state & WIN_STATE_SELECTED)
+		{
+			color = window->m_instData.m_enabledDrawData[1].color;
+			border = window->m_instData.m_enabledDrawData[1].borderColor;
+		}
+		else
+		{
+			color = window->m_instData.m_enabledDrawData[0].color;
+			border = window->m_instData.m_enabledDrawData[0].borderColor;
+		}
+	}
+
+	start.x = origin.x;
+	start.y = origin.y;
+	end.x = start.x + size.x;
+	end.y = start.y + size.y;
+
+	if (border != WIN_COLOR_UNDEFINED)
+		TheWindowManager->winOpenRect(border, 1.0f, start.x, start.y, end.x, end.y);
+
+	if (color != WIN_COLOR_UNDEFINED)
+	{
+		// inside the border
+		start.x++;
+		start.y++;
+		end.x--;
+		end.y--;
+		TheWindowManager->winFillRect(color, 1.0f, start.x, start.y, end.x, end.y);
+	}
+
+	if (instData->getTextLength())
+		drawButtonText(window, instData);
+
+	if (instData->m_videoBuffer)
+		TheDisplay->drawVideoBuffer(instData->m_videoBuffer, origin.x, origin.y, origin.x + size.x, origin.y + size.y, -1);
+
+	_PushButtonData *data = getPushButtonData(window);
+	if (data)
+	{
+		if (data->m_overlayImage)
+			// The ledger spells rva0004D6B3 with a non-const Image * (PAVImage), so the overlay loses its qualifier here.
+			static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(data->m_overlayImage), origin.x, origin.y, origin.x + size.x, origin.y + size.y, -1, 2);
+
+		// a clock is drawn once per request: clear it and store the data back
+		if (data->m_drawClock)
+		{
+			if (data->m_drawClock == NORMAL_CLOCK)
+				TheDisplay->rva000A4826(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
+			else if (data->m_drawClock == INVERSE_CLOCK)
+				TheDisplay->rva000A4875(origin.x, origin.y, size.x, size.y, data->m_clockPercent, data->m_clockColor);
+			data->m_drawClock = NO_CLOCK;
+			window->winSetUserData(data);
+		}
+
+		if (data->m_showDisplayString == 1)
+			Rva000A52AEDrawNumber(window, instData, data);
+
+		if (data->m_drawBorder && data->m_borderColor != WIN_COLOR_UNDEFINED)
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0(origin.x - 1, origin.y - 1, size.x + 2, size.y + 2, 1.0f, data->m_borderColor);
+	}
+}
 
 // FUNCTION: BFME2 0x000A56ED size=2330 name=?W3DGadgetPushButtonImageDrawOne@@YAXPAVGameWindow@@PAVWinInstanceData@@@Z evidence=N:ledger tier=B hypothesis:name:invented
 
