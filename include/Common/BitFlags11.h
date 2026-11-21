@@ -1,4 +1,5 @@
 #pragma once
+// Managed wide-header rehearsal.
 #ifndef BFME2_BITFLAGS11_H
 #define BFME2_BITFLAGS11_H
 

@@ -16,6 +16,7 @@
 //   Names are looked up through 0x0002BCAB with the instantiation's s_bitNameList
 //   (<101>: VA 0x00DA5F30), throwing when a name is missing.
 #pragma once
+// Managed wide-header rehearsal.
 #ifndef BFME2_BITFLAGSIO_H
 #define BFME2_BITFLAGSIO_H
 
