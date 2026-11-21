@@ -8,6 +8,35 @@
 #include "Common/AsciiString.h"
 #include "GameClient/AptDisplayString.h"
 #include "GameClient/DisplayString.h"
+#include <math.h>
+#include "Apt/AptRenderingContext.h"
+#include "Common/ICoord2D.h"
+#include "WW3D2/WW3D.h"
+#include "WWMath/Vector2.h"
+
+// Apt hands its matrices in movie units. The host keeps the movie-to-device scale, recomputed whenever the movie
+// size or the device resolution changes, and the current matrix converted to device pixels.
+AptMatrix g_aptDeviceMatrix;
+// The current matrix with only its translation converted, taken before the linear part is scaled.
+AptMatrix g_aptDeviceTranslationMatrix;
+ICoord2D g_aptLastMovieSize;
+ICoord2D g_aptLastDeviceSize;
+// 1: the device matrix has a general linear part; 3: its linear part is the identity, so only the translation applies.
+int g_aptDeviceMatrixKind = 3;
+Vector2 g_aptScale(1.0f, 1.0f);
+Vector2 g_aptInvScale(1.0f, 1.0f);
+
+// Apt matrices carry float noise; within this tolerance an element counts as its exact value.
+static __forceinline bool isFarFromZero(float value)
+{
+	float magnitude = (float)fabs((double)value);
+	return magnitude > 0.0001f;
+}
+
+static __forceinline bool sameSize(const ICoord2D &a, const ICoord2D &b)
+{
+	return a.x == b.x && a.y == b.y;
+}
 
 // FUNCTION: BFME2 0x000A91DD size=20 name=?Rva000A91DDOnCommand@@YAXPBDH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000A91F1 size=12 name=?Rva000A91F1EmptyValue@@YAPAXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
@@ -18,6 +47,42 @@
 // FUNCTION: BFME2 0x000A92A2 size=7 name=?Rva000A92A2Get@@YAMXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-encloses-unk-file
 // FUNCTION: BFME2 0x000A92A9 size=7 name=?Rva000A92A9Get@@YAMXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-encloses-unk-file
 // FUNCTION: BFME2 0x000A92B0 size=585 name=?Rva000A92B0SetMatrix@@YAXPBUAptRenderTransform@@@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-encloses-unk-file
+void Rva000A92B0SetMatrix(const AptMatrix *matrix)
+{
+	g_aptDeviceMatrix = *matrix;
+
+	ICoord2D movieSize;
+	aptGetRootAnimationInfo(&movieSize.x, &movieSize.y);
+	ICoord2D deviceSize;
+	int bits;
+	bool windowed;
+	WW3D::Get_Device_Resolution(deviceSize.x, deviceSize.y, bits, windowed);
+
+	if (!sameSize(movieSize, g_aptLastMovieSize) || !sameSize(deviceSize, g_aptLastDeviceSize))
+	{
+		g_aptScale.X = movieSize.x ? (float)deviceSize.x / (float)movieSize.x : 1.0f;
+		g_aptScale.Y = movieSize.y ? (float)deviceSize.y / (float)movieSize.y : 1.0f;
+		g_aptInvScale.X = g_aptScale.X != 0.0f ? 1.0f / g_aptScale.X : 1.0f;
+		g_aptInvScale.Y = g_aptScale.Y != 0.0f ? 1.0f / g_aptScale.Y : 1.0f;
+		g_aptLastMovieSize = movieSize;
+		g_aptLastDeviceSize = deviceSize;
+	}
+
+	float *element = g_aptDeviceMatrix.element;
+	element[4] *= g_aptScale.X;
+	element[5] *= g_aptScale.Y;
+	g_aptDeviceTranslationMatrix = g_aptDeviceMatrix;
+	element[0] *= g_aptScale.X;
+	element[2] *= g_aptScale.X;
+	element[1] *= g_aptScale.Y;
+	element[3] *= g_aptScale.Y;
+
+	if (isFarFromZero(element[0] - 1.0f) || isFarFromZero(element[1])
+		|| isFarFromZero(element[2]) || isFarFromZero(element[3] - 1.0f))
+		g_aptDeviceMatrixKind = 1;
+	else
+		g_aptDeviceMatrixKind = 3;
+}
 // FUNCTION: BFME2 0x000A94F9 size=66 name=?rva000A94F9@@YAXAAVCoord2D@@0ABV1@@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-encloses-unk-file
 // FUNCTION: BFME2 0x000A9570 size=569 name=?bfmeTouch982C@BfmeT982@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-held-object-encloses-unk-file
 // FUNCTION: BFME2 0x000A97A9 size=32 name=?rva000A97A9@W3DAptDisplayString@@QAEXPAX@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-held-object-encloses-unk-file
