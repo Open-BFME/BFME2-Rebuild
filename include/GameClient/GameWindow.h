@@ -17,6 +17,7 @@ class WindowLayout;
 class GameWindowRenderer;
 struct GameWindowCreationData;
 struct GameWindowEditData;
+struct IRegion2D;
 typedef GameWindow *(__stdcall *GameWindowFactory)(GameWindowCreationData *);
 class UnicodeString;
 typedef WindowMsgHandledType (*GameWindowInputFunc)(GameWindow *,unsigned int,unsigned int,unsigned int);
@@ -154,6 +155,7 @@ public:
     int winSetText(UnicodeString);
     void winSetTooltip(UnicodeString);
     unsigned char winPointInWindow(int,int);
+    int winGetRegion(IRegion2D *region); // Zero Hour's winGetRegion: copies the region at +0x14 into the buffer when one is given
     GameWindowEditData *winGetEditData();
 protected:
     GameWindow *findFirstLeaf();
