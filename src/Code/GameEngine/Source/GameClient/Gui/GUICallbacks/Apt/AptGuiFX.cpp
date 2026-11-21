@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "Common/Coord2D.h"
 #include "GameClient/AptGuiFX.h"
-#include "GameClient/AptPlayer.h"
 #include "GameClient/AptMessageBox.h"
 #include "GameClient/AptMessenger.h"
 #include "GameClient/AptPlayer.h"
@@ -63,12 +62,12 @@ void HideToolTip()
 void AptGuiFX::MoveToolTip(float x, float y)
 {
 	// The window manager's slot 16 gives the screen-to-movie scale; Apt takes the position as text.
-	const Coord2D *scale = ((AptPlayer *)g_bfmeAptWindowManager)->vslot16();
+	const Coord2D *scale = g_bfmeAptWindowManager->vslot16();
 	char textX[16];
 	char textY[16];
 	_snprintf(textX, 16, "%g", x * scale->x);
 	_snprintf(textY, 16, "%g", y * scale->y);
-	((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(TheRva00222A8BOwner, "MoveToolTip", 2, textX, textY, 0, 0, 0);
+	g_bfmeAptWindowManager->invoke(TheRva00222A8BOwner, "MoveToolTip", 2, textX, textY, 0, 0, 0);
 }
 
 // FUNCTION: BFME2 0x00380869 size=127 name=?rva00380869@@YAXPAVCoord2D@@0@Z evidence=?:placeholder tier=A
