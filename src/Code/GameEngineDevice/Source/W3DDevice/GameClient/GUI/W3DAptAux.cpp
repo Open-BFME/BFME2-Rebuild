@@ -14,9 +14,6 @@
 #include "WW3D2/WW3D.h"
 #include "WWMath/Vector2.h"
 
-// Fills its two out-parameters with the root movie's width and height (Apt.cpp); it is still typed as pointers there.
-void aptGetRootAnimationInfo(void **pOut1, void **pOut2);
-
 // Apt hands its matrices in movie units. The host keeps the movie-to-device scale, recomputed whenever the movie
 // size or the device resolution changes, and the current matrix converted to device pixels.
 AptMatrix g_aptDeviceMatrix;
@@ -55,7 +52,7 @@ void Rva000A92B0SetMatrix(const AptMatrix *matrix)
 	g_aptDeviceMatrix = *matrix;
 
 	ICoord2D movieSize;
-	aptGetRootAnimationInfo(reinterpret_cast<void **>(&movieSize.x), reinterpret_cast<void **>(&movieSize.y));
+	aptGetRootAnimationInfo(&movieSize.x, &movieSize.y);
 	ICoord2D deviceSize;
 	int bits;
 	bool windowed;
