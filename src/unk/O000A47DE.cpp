@@ -174,11 +174,12 @@ void W3DGadgetPushButtonDraw(GameWindow *window, WinInstanceData *instData)
 	if (instData->m_videoBuffer)
 		TheDisplay->drawVideoBuffer(instData->m_videoBuffer, origin.x, origin.y, origin.x + size.x, origin.y + size.y, -1);
 
-	_PushButtonData *data = (_PushButtonData *)window->winGetUserData();
+	_PushButtonData *data = getPushButtonData(window);
 	if (data)
 	{
-		if (data->m_field18)
-			static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(reinterpret_cast<Image *>(data->m_field18), origin.x, origin.y, origin.x + size.x, origin.y + size.y, -1, 2);
+		if (data->m_overlayImage)
+			// The ledger spells rva0004D6B3 with a non-const Image * (PAVImage), so the overlay loses its qualifier here.
+			static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(data->m_overlayImage), origin.x, origin.y, origin.x + size.x, origin.y + size.y, -1, 2);
 
 		// a clock is drawn once per request: clear it and store the data back
 		if (data->m_drawClock)
