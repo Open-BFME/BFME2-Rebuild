@@ -11,12 +11,7 @@
 #include "GameClient/W3DShaderManager.h"
 #include "GameLogic/GameLogic.h"
 #include "WW3D2/DX8Wrapper.h"
-
-// The device is Direct3D 9 behind DX8Wrapper's Direct3D 8 name (see DX8Wrapper.h): SetFVF is slot 89 (+0x164) and
-// DrawPrimitiveUP slot 83 (+0x14C).
-typedef HRESULT(__stdcall *ScreenFilterSetFVFFn)(IDirect3DDevice8 *, DWORD);
-typedef HRESULT(__stdcall *ScreenFilterDrawPrimitiveUPFn)(IDirect3DDevice8 *, D3DPRIMITIVETYPE, UINT, const _TRANS_LIT_TEX_VERTEX *, UINT);
-
+#include "WW3D2/IDirect3DDevice9.h"
 // FUNCTION: BFME2 0x000FB9D4 size=59 name=?init@ScreenBWFilter@@UAEHXZ evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x000FBA0F size=17 name=?rva000FBA0F@Rva000FBA0F@@QAE_NPA_NH@Z evidence=?:placeholder tier=B hypothesis:Z
@@ -64,7 +59,7 @@ bool ScreenMotionBlurFilter::postRender(FilterModes mode, Coord2D &scrollDelta, 
 	if (!set(mode))
 		return false;
 
-	IDirect3DDevice8 *pDev = DX8Wrapper::_Get_D3D_Device8();
+	IDirect3DDevice9 *pDev = DX8Wrapper::_Get_D3D_Device9();
 	bool continueEffect = true;
 	_TRANS_LIT_TEX_VERTEX v[4];
 
@@ -105,8 +100,8 @@ bool ScreenMotionBlurFilter::postRender(FilterModes mode, Coord2D &scrollDelta, 
 	}
 	DX8Wrapper::Set_DX8_Render_State(D3DRS_ALPHABLENDENABLE, FALSE);
 	DX8Wrapper::Apply_Render_State_Changes();
-	IDirect3DDevice8 *fvfDevice = DX8Wrapper::_Get_D3D_Device8();
-	((*(ScreenFilterSetFVFFn **)fvfDevice)[89])(fvfDevice, D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+	IDirect3DDevice9 *fvfDevice = DX8Wrapper::_Get_D3D_Device9();
+	fvfDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	number_of_DX8_calls++;
 
 	Coord2D center;
@@ -173,7 +168,7 @@ bool ScreenMotionBlurFilter::postRender(FilterModes mode, Coord2D &scrollDelta, 
 	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ALPHAARG1, D3DTA_CURRENT);
 	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ALPHAARG2, D3DTA_TEXTURE);
 	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-	((*(ScreenFilterDrawPrimitiveUPFn **)pDev)[83])(pDev, D3DPT_TRIANGLESTRIP, 2, v, sizeof(_TRANS_LIT_TEX_VERTEX));
+	pDev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(_TRANS_LIT_TEX_VERTEX));
 	DX8Wrapper::Set_DX8_Render_State(D3DRS_ALPHABLENDENABLE, TRUE);
 	DX8Wrapper::Apply_Render_State_Changes();
 
@@ -202,7 +197,7 @@ bool ScreenMotionBlurFilter::postRender(FilterModes mode, Coord2D &scrollDelta, 
 				v[i].v = ((v[i].v - center.y) * factor) + center.y;
 			}
 		}
-		((*(ScreenFilterDrawPrimitiveUPFn **)pDev)[83])(pDev, D3DPT_TRIANGLESTRIP, 2, v, sizeof(_TRANS_LIT_TEX_VERTEX));
+		pDev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(_TRANS_LIT_TEX_VERTEX));
 	}
 	m_lastFrame = TheGameLogic->getFrame();
 	if (pan)
