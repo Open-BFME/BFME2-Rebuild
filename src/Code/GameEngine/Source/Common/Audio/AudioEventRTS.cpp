@@ -36,7 +36,7 @@ void AudioEventRTS::setObjectID(ObjectID id)
 // FUNCTION: BFME2 0x002D954D size=13 name=?getObjectID@AudioEventRTS@@QAE?AW4ObjectID@@XZ evidence=N:ledger
 ObjectID AudioEventRTS::getObjectID()
 {
-    if (m_ownerType == 2)
+    if (m_ownerType == 3)
         return (ObjectID)m_ownerID;
     return INVALID_ID;
 }
