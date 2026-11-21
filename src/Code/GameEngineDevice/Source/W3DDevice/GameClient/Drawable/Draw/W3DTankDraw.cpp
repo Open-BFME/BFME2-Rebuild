@@ -7,6 +7,7 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:Z
 #include "Common/NameKeyGenerator.h"
+#include "Common/Xfer.h"
 #include "GameClient/W3DTankDraw.h"
 #include <stddef.h>
 #include "Common/INI.h"
@@ -34,6 +35,14 @@ void W3DTankDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
 // FUNCTION: BFME2 0x000CDFC8 size=116 name=?updateTreadPositions@W3DTankDraw@@IAEXM@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000CE03C size=44 name=?xfer@W3DTankDraw@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DTankDraw::xfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 1);
+	*xfer == version;
+
+	// The tank keeps no save state of its own; everything lives in the base draw.
+	W3DScriptedModelDraw::xfer(xfer);
+}
 
 // FUNCTION: BFME2 0x000CE068 size=54 name=?Set_UV_Offset_Delta@LinearOffsetTextureMapperClass@@QAEXABVVector2@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
