@@ -12,6 +12,7 @@
 #ifndef BFME2_W3DSHADERMANAGER_H
 #define BFME2_W3DSHADERMANAGER_H
 
+#include "Common/Coord2D.h"
 #include "WW3D2/TextureAsset.h"
 
 struct IDirect3DTexture8;
@@ -34,6 +35,96 @@ public:
 	virtual void reset(void);
 	virtual int init(void) = 0;
 	virtual int shutdown(void);
+};
+
+class Coord3D;
+
+// Zero Hour keeps this in W3DCustomScene.h. The cross-fade's preRender stores 1 for the alpha-mask pass.
+enum CustomScenePassModes
+{
+	SCENE_PASS_DEFAULT,
+	SCENE_PASS_ALPHA_MASK
+};
+
+// Zero Hour's FilterModes (CommandXlat.h). BFME 2 renumbers the list: ScreenBWFilter::set 0x000FBC67 picks the
+// tint for modes 1, 2 and 3, and ScreenMotionBlurFilter::postRender 0x000FD5B7 treats 13 as the end of a pan and 16
+// and above as a pan (Zero Hour: 12 and 14). The modes in between have no evidence yet and are left out.
+enum FilterModes
+{
+	FM_NULL_MODE = 0,
+	FM_VIEW_BW_BLACK_AND_WHITE,
+	FM_VIEW_BW_RED_AND_WHITE,
+	FM_VIEW_BW_GREEN_AND_WHITE,
+	FM_VIEW_MB_END_PAN_ALPHA = 13,
+	FM_VIEW_MB_PAN_ALPHA = 16
+};
+
+// D3DX's four-float vector (d3dx8math.h) with its implicit copy: the screen filters build each value as a temporary
+// and copy it whole (ScreenMotionBlurFilter::postRender 0x000FD5B7 moves the four words with movsd).
+struct D3DXVECTOR4
+{
+	D3DXVECTOR4() {}
+	D3DXVECTOR4(float fx, float fy, float fz, float fw) : x(fx), y(fy), z(fz), w(fw) {}
+	float x, y, z, w;
+};
+
+// Zero Hour's pre-transformed, lit, textured quad vertex for the screen filters (FVF XYZRHW | DIFFUSE | TEX1).
+struct _TRANS_LIT_TEX_VERTEX
+{
+	D3DXVECTOR4 p;
+	unsigned int color;
+	float u;
+	float v;
+};
+
+// Zero Hour's screen filter interface. The motion blur table 0x007CF410 holds its seven slots in this order
+// (init, shutdown, preRender, postRender, setup, set, reset). BFME 2's postRender takes a fourth argument, the display
+// size: ScreenCrossFadeFilter::postRender returns with `ret 0x10` and divides its texture coordinates by it.
+class W3DFilterInterface
+{
+public:
+	virtual int init(void) = 0;
+	virtual int shutdown(void) { return true; }
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode) { skipRender = false; return false; }
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize) { return false; }
+	virtual bool setup(FilterModes mode) { return false; }
+protected:
+	virtual int set(FilterModes mode) = 0;
+	virtual void reset(void) = 0;
+};
+
+// Zero Hour's ScreenMotionBlurFilter, members in Zero Hour's order at the offsets postRender 0x000FD5B7 reads.
+// The statics are 0x00DEC20C (the zoom target postRender passes to lookAt) and 0x00DEC1EC (its valid flag).
+class ScreenMotionBlurFilter : public W3DFilterInterface
+{
+public:
+	virtual int init(void);
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode);	// 0x000FD4CE
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize);	// 0x000FD5B7
+	virtual bool setup(FilterModes mode);	// 0x000FD4E1
+	virtual int set(FilterModes mode);	// 0x000FDB21
+	virtual void reset(void);
+
+protected:
+	enum
+	{
+		MAX_COUNT = 60,
+		MAX_LIMIT = 30,
+		COUNT_STEP = 5,
+		DEFAULT_PAN_FACTOR = 30
+	};
+
+	int m_maxCount;			// +0x04
+	int m_lastFrame;		// +0x08
+	bool m_decrement;		// +0x0C
+	bool m_skipRender;		// +0x0D
+	bool m_additive;		// +0x0E
+	bool m_doZoomTo;		// +0x0F
+	Coord2D m_priorDelta;	// +0x10
+	int m_panFactor;		// +0x18
+
+	static Coord3D m_zoomToPos;
+	static bool m_zoomToValid;
 };
 
 class W3DShaderManager
@@ -66,6 +157,27 @@ protected:
 	static IDirect3DTexture8 *m_renderTexture;			// 0x00DE1F68
 	static IDirect3DSurface8 *m_newRenderSurface;		// 0x00DE1F6C
 	static IDirect3DSurface8 *m_oldDepthSurface;		// 0x00DE1F70
+};
+
+// The view cross-fade. Virtual order is the class's own table at 0x007CF204; its setup slot reaches a shared
+// `mov al, 1; ret 4` body (0x005CB9FA), as Zero Hour's setup returns true.
+class ScreenCrossFadeFilter : public W3DFilterInterface
+{
+public:
+	virtual int init(void);
+	virtual int shutdown(void);
+	virtual bool preRender(bool &skipRender, CustomScenePassModes &scenePassMode);
+	virtual bool postRender(FilterModes mode, Coord2D &scrollDelta, bool &doExtraRender, Coord2D *displaySize);
+	virtual bool setup(FilterModes mode) { return true; }
+protected:
+	virtual int set(FilterModes mode);
+	virtual void reset(void);
+	bool updateFadeLevel(void);		// advances the fade; false once it has finished
+	static int m_fadeFrames;			// 0x00DEBFFC
+	static int m_fadeDirection;			// 0x00DEBFF8
+	static int m_curFadeFrame;			// 0x00DEC000
+	static float m_curFadeValue;		// 0x00DEBFF4
+	static bool m_skipRender;			// 0x00DEC004
 };
 
 #endif

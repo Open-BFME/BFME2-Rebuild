@@ -5,6 +5,10 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:init-votes, hypothesis:name:invented
+#include "GameClient/W3DShaderManager.h"
+
+bool ScreenCrossFadeFilter::m_skipRender = false;
+
 // FUNCTION: BFME2 0x000F5AD4 size=111 name=?rva000F5AD4@ShroudTextureShader@@EAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x000F5B43 size=19 name=?Rva000F5B43Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:Z
@@ -24,6 +28,19 @@
 // FUNCTION: BFME2 0x000F633A size=193 name=?updateFadeLevel@ScreenCrossFadeFilter@@IAE_NXZ evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000F63FB size=42 name=?preRender@ScreenCrossFadeFilter@@UAE_NAA_NAAW4CustomScenePassModes@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+bool ScreenCrossFadeFilter::preRender(bool &skipRender, CustomScenePassModes &scenePassMode)
+{
+	// While the fade runs, the scene is drawn into the render texture that postRender blends over the screen.
+	if (updateFadeLevel())
+	{
+		W3DShaderManager::startRenderToTexture();
+		scenePassMode = SCENE_PASS_ALPHA_MASK;
+		skipRender = false;
+		m_skipRender = true;
+		return true;
+	}
+	return true;
+}
 
 // FUNCTION: BFME2 0x000F6425 size=81 name=?reset@ScreenCrossFadeFilter@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 
