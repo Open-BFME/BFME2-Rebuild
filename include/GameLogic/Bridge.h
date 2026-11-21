@@ -63,6 +63,7 @@ public:
 	void setBridgeObjectID(ObjectID id) { m_bridgeInfo.bridgeObjectID = id; }
 	void setTowerObjectID(ObjectID id, Int which) { m_bridgeInfo.towerObjectID[which] = id; }
 
+public:
 	Bridge *m_next;								// +0x04
 	unsigned char m_unk0x08[4];					// +0x08
 	BridgeInfo m_bridgeInfo;					// +0x0C
