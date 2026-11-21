@@ -11,6 +11,13 @@
 // FUNCTION: BFME2 0x0003B850 size=329 name=?InitDbghelp@@YAXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers+libfile
 // FUNCTION: BFME2 0x0003B9A0 size=32 name=??4Signature@DebugStackwalk@@QAEAAV01@ABV01@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x0003B9C0 size=31 name=?GetAddress@Signature@DebugStackwalk@@QBEIH@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+unsigned DebugStackwalk::Signature::GetAddress(int n) const
+{
+	if (n < 0 || n >= MAX_ADDR)
+		return 0;
+	return m_addr[n];
+}
+
 // FUNCTION: BFME2 0x0003B9E0 size=635 name=?GetSymbol@Signature@DebugStackwalk@@SAXIPADI@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0003BC60 size=14 name=?rva0003BC60@@YAPAXXZ evidence=?:placeholder
