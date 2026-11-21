@@ -26,7 +26,7 @@
 #include "WWMath/LineSegClass.h"
 #include "WWMath/CastResultStruct.h"
 #include "WW3D2/RayCollisionTestClass.h"
-#include "Draft/BaseHeightMapRenderObjClass.h"
+#include "GameClient/BaseHeightMapRenderObjClass.h"
 
 extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;	// the map's terrain render object (VA 0x00DE1EAC); lookAt casts its ray against it
 Int TheW3DFrameLengthInMsec = 0;	// .bss 0x00DE204C in this object (W3DDisplay::draw and setFrameRate also use it): the length of a logic frame in milliseconds
