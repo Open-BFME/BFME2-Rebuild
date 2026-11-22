@@ -14,6 +14,9 @@
 #include "GameLogic/ObjectIterator.h"
 #include "GameClient/DisplayString.h"
 #include "Common/BitFlagsIO.h"
+#include "WW3D2/WW3D.h"
+#include "WW3D2/RenderDeviceDescClass.h"
+#include <math.h>
 
 extern void *ApplicationHWnd;	// retail VA 0x00DDE024
 
@@ -304,8 +307,50 @@ Object *ObjectIterator::next() throw()
 // FUNCTION: BFME2 0x00045837 size=22 name=?rva00045837@SubTitleWindow@@QBE_NXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00045878 size=106 name=?Rva0045878Count@@YAHXZ evidence=?:placeholder tier=A
+// Zero Hour's W3DDisplay::getDisplayModeCount: the options menu offers only 4:3 modes of at least
+// 24 bits and 800 pixels wide.
+int Rva0045878Count()
+{
+	const RenderDeviceDescClass &devDesc = WW3D::Get_Render_Device_Desc(0);
+	const DynamicVectorClass<ResolutionDescClass> &resolutions = devDesc.ResArray;
+
+	int numResolutions = 0;
+	for (int res = 0; res < resolutions.Count(); res++)
+	{
+		if (resolutions[res].BitDepth >= 24 && resolutions[res].Width >= 800
+			&& fabs((float)resolutions[res].Width / resolutions[res].Height - 1.3333f) < 0.01f)
+		{
+			numResolutions++;
+		}
+	}
+	return numResolutions;
+}
 
 // FUNCTION: BFME2 0x000458E2 size=162 name=?Rva00458E2Get@@YGXHPAH00@Z evidence=?:placeholder tier=A
+// Zero Hour's W3DDisplay::getDisplayModeDescription: the modeIndex-th mode the count above accepts.
+void __stdcall Rva00458E2Get(int modeIndex, int *xres, int *yres, int *bitDepth)
+{
+	int numResolutions = 0;
+	const RenderDeviceDescClass &devDesc = WW3D::Get_Render_Device_Desc(0);
+	const DynamicVectorClass<ResolutionDescClass> &resolutions = devDesc.ResArray;
+
+	for (int res = 0; res < resolutions.Count(); res++)
+	{
+		if (resolutions[res].BitDepth >= 24 && resolutions[res].Width >= 800
+			&& fabs((float)resolutions[res].Width / resolutions[res].Height - 1.3333f) < 0.01f)
+		{
+			if (numResolutions == modeIndex)
+			{
+				*xres = resolutions[res].Width;
+				*yres = resolutions[res].Height;
+				*bitDepth = resolutions[res].BitDepth;
+				return;
+			}
+			numResolutions++;
+		}
+	}
+}
+
 
 // FUNCTION: BFME2 0x00045984 size=12 name=?rva00045984@Rva00043511@@QAEPAV1@XZ evidence=?:placeholder tier=A
 

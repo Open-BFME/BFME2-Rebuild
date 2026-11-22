@@ -15,6 +15,7 @@ class FrameGrabClass;
 class StaticSortListClass;
 class RenderObjClass;
 class RenderInfoClass;
+class RenderDeviceDescClass;
 
 class WW3D
 {
@@ -33,6 +34,7 @@ public:
 	static bool Set_Render_Device(int dev = -1, int resx = -1, int resy = -1, int bits = -1, int windowed = -1, bool resize_window = false, bool reset_device = false, bool restore_assets = true);	// 0x00116F10
 	static bool Set_Next_Render_Device(void);					// 0x00116F50
 	static bool Set_Any_Render_Device(void);					// 0x00116F00
+	static const RenderDeviceDescClass &Get_Render_Device_Desc(int deviceidx = -1);	// 0x00116F90 (forwards to DX8Wrapper's)
 	static void Get_Render_Target_Resolution(int &set_w, int &set_h, int &set_bits, bool &set_windowed);	// 0x00116FF0
 	static bool Set_Device_Resolution(int w = -1, int h = -1, int bits = -1, int windowed = -1, bool resize_window = false);	// 0x00116FC0
 
