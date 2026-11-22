@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for suite in ci/landing/tests ci/admission/tests ci/managed-check/tests ci/state/tests ci/nightly/tests ci/header/tests ci/header-witness/tests ci/progress/tests; do
+          for suite in tools/gates ci/landing/tests ci/admission/tests ci/managed-check/tests ci/state/tests ci/nightly/tests ci/header/tests ci/header-witness/tests ci/progress/tests; do
             if [ -d "$suite" ]; then
               echo "=== $suite ==="
               python3 -m unittest discover -s "$suite"

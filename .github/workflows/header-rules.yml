@@ -97,6 +97,16 @@ jobs:
         run: |
           env -i PATH=/usr/bin:/bin HOME="$RUNNER_TEMP" RUNNER_TEMP="$RUNNER_TEMP" LANG=C \
             python3 -I -B ci/header/collect.py preview "$PR_NUMBER" "$PR_HEAD" "$PR_BASE" "$RUNNER_TEMP/header-preview.json"
+      - name: Read authenticated H4/H6 header observations from Boat
+        shell: bash
+        env:
+          BFME_RECOVERY_READ_TOKEN: '${{ github.token }}'
+        run: python3 -I -B ci/header/collect.py trusted "$RUNNER_TEMP/header-preview.json" "$RUNNER_TEMP/header-trusted.json"
+      - name: Re-evaluate H3-H8 with authenticated header observations (no token in this step)
+        shell: bash
+        run: |
+          env -i PATH=/usr/bin:/bin HOME="$RUNNER_TEMP" RUNNER_TEMP="$RUNNER_TEMP" LANG=C \
+            python3 -I -B ci/header/collect.py rescore "$RUNNER_TEMP/header-preview.json" "$RUNNER_TEMP/header-trusted.json"
       - name: Compose H1-H8 and write BFME II / Header rules
         id: publish
         shell: bash

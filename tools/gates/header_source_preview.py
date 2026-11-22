@@ -27,10 +27,11 @@ def declaration_review(repo, binding, files):
     }
 
 
-def source_preview(repo, policy, binding):
+def source_preview(repo, policy, binding, trusted=None):
     """Return deterministic source results with declaration leads kept outside them."""
-    components = check_header_source(repo, policy, binding)
+    components = check_header_source(repo, policy, binding, trusted=trusted)
     return {
         "preview": [asdict(item) for item in components],
         "declaration_review": declaration_review(repo, binding, changed_headers(repo, binding, policy)),
+        "trusted": trusted is not None,
     }

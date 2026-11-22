@@ -51,10 +51,11 @@ def fetch(repo, number):
         f"+refs/pull/{number}/head:refs/pull/head")
 
 
-def source_checks(repo, base, head, tree):
+def source_checks(repo, base, head, tree, trusted_payload=None):
     """H3 H4 H6 H7 H8 from this main's tools/gates; None when those checks are not installed yet."""
     tools = HERE.parents[1] / "tools" / "gates"
-    sys.path.insert(0, str(tools))
+    if str(tools) not in sys.path:
+        sys.path.insert(0, str(tools))
     try:
         from gate import policy_at, policy_digest
         from git_objects import Git
@@ -63,9 +64,29 @@ def source_checks(repo, base, head, tree):
     except ImportError:
         return None
     config = tools / "config.json"
+    checker_sha = "0" * 64
+    run_id_int, attempt_int = 1, 1
+    trusted = None
+    if trusted_payload and trusted_payload.get("available") is True:
+        try:
+            mc = HERE.parents[1] / "ci" / "managed-check"
+            if str(mc) not in sys.path:
+                sys.path.insert(0, str(mc))
+            from common import PIN
+            import header_trusted
+            issuer = trusted_payload["issuer"]
+            checker_sha = PIN["checker"]
+            run_id_int = int(issuer["id"])
+            attempt_int = int(issuer["attempt"])
+            binding = Binding(REPO, base, head, tree, policy_digest(config), checker_sha, run_id_int, attempt_int)
+            trusted = header_trusted.load(trusted_payload["observations"], binding)
+        except Exception as exc:
+            print(f"Trusted header observations ignored: {type(exc).__name__}: {exc}", file=sys.stderr)
+            trusted = None
+            checker_sha, run_id_int, attempt_int = "0" * 64, 1, 1
     with Git(repo) as objects:
-        binding = Binding(REPO, base, head, tree, policy_digest(config), "0" * 64, 1, 1)
-        return source_preview(objects, policy_at(config), binding)
+        binding = Binding(REPO, base, head, tree, policy_digest(config), checker_sha, run_id_int, attempt_int)
+        return source_preview(objects, policy_at(config), binding, trusted=trusted)
 
 
 def tools_commit(root=HERE.parents[1]):
@@ -124,6 +145,50 @@ def read_h2(record):
     except Exception as exc:   # the reader refuses by exception; every refusal holds
         print(f"H2 evidence read refused: {type(exc).__name__}: {exc}", file=sys.stderr)
         return {"error": f"no published declaration evidence for this commit ({type(exc).__name__})"}
+
+
+HT_READER = HERE.parents[1] / "ci" / "managed-check" / "header_trusted_action.py"
+
+
+def read_trusted_file(preview_path, out_path):
+    """Token step: read authenticated H4/H6 observations published by the Boat run. Fail-closed on miss."""
+    record = json.loads(Path(preview_path).read_text())
+    payload = {"available": False}
+    if record.get("header_paths") and HT_READER.exists():
+        if str(HT_READER.parent) not in sys.path:
+            sys.path.insert(0, str(HT_READER.parent))
+        try:
+            import header_trusted_action
+            data = header_trusted_action.read_published({key: record[key] for key in ("number", "base", "head", "tree")})
+            payload = {"available": True, "issuer": data["issuer"], "observations": data["observations"]}
+        except Exception as exc:
+            print(f"Trusted header observations unavailable: {type(exc).__name__}: {exc}", file=sys.stderr)
+    Path(out_path).write_text(json.dumps(payload, sort_keys=True) + "\n")
+    return 0
+
+
+def rescore(preview_path, trusted_path):
+    """Token-free step: re-evaluate H3/H4/H6/H7/H8 on the already-fetched Git store with trusted observations."""
+    record = json.loads(Path(preview_path).read_text())
+    trusted_payload = json.loads(Path(trusted_path).read_text())
+    if not record.get("header_paths") or trusted_payload.get("available") is not True:
+        return 0
+    repo = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "bfme-header.git"
+    if not repo.exists():
+        return 0
+    if (git(repo, "rev-parse", "refs/protected/main") != record["base"]
+            or git(repo, "rev-parse", "refs/pull/head") != record["head"]):
+        raise Stop("Expected cached header Git objects to match preview binding.")
+    tree = git(repo, "merge-tree", "--write-tree", record["base"], record["head"]).splitlines()[0]
+    if tree != record["tree"]:
+        raise Stop("Expected cached header merge tree to match preview binding.")
+    checks = source_checks(repo, record["base"], record["head"], record["tree"], trusted_payload=trusted_payload)
+    if checks is not None and checks.get("trusted") is True:
+        record.setdefault("untrusted_checks", record.get("checks"))
+        record["checks"] = checks
+        record["trusted_issuer"] = trusted_payload["issuer"]
+        Path(preview_path).write_text(json.dumps(record, sort_keys=True) + "\n")
+    return 0
 
 
 H5_READER = HERE.parents[1] / "ci" / "header-witness" / "h5_reader.py"
@@ -241,6 +306,12 @@ def publish(path, api=None, out=print):
         os.environ["BFME_RECOVERY_READ_TOKEN"] = token
     h5 = read_h5(record)
     os.environ.pop("BFME_RECOVERY_READ_TOKEN", None)
+    trusted_issuer = record.get("trusted_issuer")
+    if trusted_issuer is not None:
+        expected_issuer = {"run": str(trusted_issuer.get("id", "")), "attempt": str(trusted_issuer.get("attempt", ""))}
+        h2_issuer = h2.get("issuer") if isinstance(h2, dict) and "error" not in h2 else None
+        if h2_issuer != expected_issuer:
+            record = dict(record, checks=record.get("untrusted_checks"))
     rows = components_for(record, latest_bot_status(statuses, "BFME II / Boat"), h2,
                           latest_bot_status(statuses, "BFME II / Admission"), h5)
     request = rows.pop("H9", None)
@@ -350,9 +421,13 @@ def main():
         if mode == "preview":
             preview(*args)
             return 0
+        if mode == "trusted":
+            return read_trusted_file(*args)
+        if mode == "rescore":
+            return rescore(*args)
         if mode == "publish":
             return publish(*args)
-        raise Stop("Expected preview or publish.")
+        raise Stop("Expected plan, preview, trusted, rescore or publish.")
     except (Stop, ValueError, KeyError, OSError, subprocess.SubprocessError) as exc:
         print(f"Header rules stopped. {str(exc)[:300]}", file=sys.stderr)
         return 1

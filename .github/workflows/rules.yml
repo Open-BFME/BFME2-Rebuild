@@ -216,7 +216,7 @@ jobs:
           echo "Source results were not published because protected main moved or its tools could not be loaded." \
             >> "$GITHUB_STEP_SUMMARY"
 
-  # After a source refresh that admission asked for, ask admission to decide again for that pull request now
+  # After a source-rules pass on a fork pull request or an admission-requested refresh, ask admission to decide now
   # instead of at the next hourly run. Admission requests at most one refresh per commit per main per hour, so this
   # cannot loop. No checkout and no pull request content here: only the validated number goes out.
   notify-admission:
@@ -224,8 +224,13 @@ jobs:
     if: >-
       needs.source-rules.result == 'success' && needs.publish-source-rules.result == 'success' &&
       github.repository_id == '1464323350' && github.ref == 'refs/heads/main' &&
-      vars.BFME_AUTO_ADMISSION == 'yes' && github.event_name == 'repository_dispatch' &&
-      github.event.action == 'bfme-source-refresh' && github.actor_id == '41898282'
+      vars.BFME_AUTO_ADMISSION == 'yes' &&
+      ((github.event_name == 'repository_dispatch' && github.event.action == 'bfme-source-refresh' &&
+        github.actor_id == '41898282') ||
+       (github.event_name == 'pull_request_target' && github.event.pull_request.draft != true &&
+        github.event.pull_request.base.ref == 'main' &&
+        github.event.pull_request.head.repo != null &&
+        github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id))
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -235,7 +240,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          NUMBER: ${{ github.event.client_payload.number }}
+          NUMBER: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.number || github.event.client_payload.number }}
         run: |
           set -euo pipefail
           if [[ ! "$NUMBER" =~ ^[1-9][0-9]{0,8}$ ]]; then

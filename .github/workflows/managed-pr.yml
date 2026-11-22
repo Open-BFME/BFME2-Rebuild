@@ -460,6 +460,32 @@ jobs:
           path: '${{ runner.temp }}/bfme-h2/header-h2.json'
           if-no-files-found: error
           retention-days: 1
+      - name: Produce bounded trusted header observations
+        id: ht_produce
+        if: steps.h2_probe.outputs.attempted == 'yes'
+        continue-on-error: true
+        shell: bash
+        env:
+          BFME_H2_SOURCE: ${{ needs.intake.outputs.source_decision }}
+        run: |
+          set -euo pipefail
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
+            GITHUB_SHA="$GITHUB_SHA" GITHUB_RUN_ID="$GITHUB_RUN_ID" GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
+            BFME_H2_SOURCE="$BFME_H2_SOURCE" /usr/bin/timeout --kill-after=5s 60s \
+            python3 -B ci/managed-check/header_trusted_action.py produce "$RUNNER_TEMP/bfme-plan" "$RUNNER_TEMP/bfme-ht"
+          test -s "$RUNNER_TEMP/bfme-ht/header-trusted.json"
+          test "$(wc -c < "$RUNNER_TEMP/bfme-ht/header-trusted.json")" -le 524288
+          printf 'available=yes\n' >> "$GITHUB_OUTPUT"
+      - name: Save bounded trusted header observations
+        id: ht_upload
+        if: steps.ht_produce.outputs.available == 'yes'
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bfme-header-trusted-${{ github.run_attempt }}
+          path: '${{ runner.temp }}/bfme-ht/header-trusted.json'
+          if-no-files-found: error
+          retention-days: 1
 
   wide-plan:
     needs: [pending, intake, claim]
@@ -1379,6 +1405,32 @@ jobs:
           path: '${{ runner.temp }}/bfme-h2/header-h2.json'
           if-no-files-found: error
           retention-days: 1
+      - name: Produce bounded trusted header observations
+        id: ht_produce
+        if: steps.h2_probe.outputs.attempted == 'yes'
+        continue-on-error: true
+        shell: bash
+        env:
+          BFME_H2_SOURCE: ${{ needs.intake.outputs.source_decision }}
+        run: |
+          set -euo pipefail
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
+            GITHUB_SHA="$GITHUB_SHA" GITHUB_RUN_ID="$GITHUB_RUN_ID" GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
+            BFME_H2_SOURCE="$BFME_H2_SOURCE" /usr/bin/timeout --kill-after=5s 60s \
+            python3 -B ci/managed-check/header_trusted_action.py produce "$RUNNER_TEMP/bfme-plan" "$RUNNER_TEMP/bfme-ht"
+          test -s "$RUNNER_TEMP/bfme-ht/header-trusted.json"
+          test "$(wc -c < "$RUNNER_TEMP/bfme-ht/header-trusted.json")" -le 524288
+          printf 'available=yes\n' >> "$GITHUB_OUTPUT"
+      - name: Save bounded trusted header observations
+        id: ht_upload
+        if: steps.ht_produce.outputs.available == 'yes'
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bfme-header-trusted-${{ github.run_attempt }}
+          path: '${{ runner.temp }}/bfme-ht/header-trusted.json'
+          if-no-files-found: error
+          retention-days: 1
       - name: Measure header layout on the admitted header trees
         id: h5_wide
         if: >-
@@ -1898,6 +1950,32 @@ jobs:
         with:
           name: bfme-header-h2-${{ github.run_attempt }}
           path: '${{ runner.temp }}/bfme-h2/header-h2.json'
+          if-no-files-found: error
+          retention-days: 1
+      - name: Produce bounded trusted header observations
+        id: ht_produce
+        if: steps.h2_probe.outputs.attempted == 'yes'
+        continue-on-error: true
+        shell: bash
+        env:
+          BFME_H2_SOURCE: ${{ needs.intake.outputs.source_decision }}
+        run: |
+          set -euo pipefail
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
+            GITHUB_SHA="$GITHUB_SHA" GITHUB_RUN_ID="$GITHUB_RUN_ID" GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
+            BFME_H2_SOURCE="$BFME_H2_SOURCE" /usr/bin/timeout --kill-after=5s 60s \
+            python3 -B ci/managed-check/header_trusted_action.py produce "$RUNNER_TEMP/bfme-plan" "$RUNNER_TEMP/bfme-ht"
+          test -s "$RUNNER_TEMP/bfme-ht/header-trusted.json"
+          test "$(wc -c < "$RUNNER_TEMP/bfme-ht/header-trusted.json")" -le 524288
+          printf 'available=yes\n' >> "$GITHUB_OUTPUT"
+      - name: Save bounded trusted header observations
+        id: ht_upload
+        if: steps.ht_produce.outputs.available == 'yes'
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bfme-header-trusted-${{ github.run_attempt }}
+          path: '${{ runner.temp }}/bfme-ht/header-trusted.json'
           if-no-files-found: error
           retention-days: 1
       - name: Measure header layout on the admitted header trees

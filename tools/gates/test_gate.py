@@ -109,14 +109,45 @@ class Fixture(unittest.TestCase):
                 self.assertIn("line separator", finding["message"])
 
     def test_g2_preserves_every_recognized_compiler_directive(self):
-        controls = ("// cl: /W3", "// cl-arch: x87", "// cl-profile: upstream",
-                    "// stlport", "// stlport46", "// msvcstl", "// dxsdk",
-                    "// psdk", "// platformsdk", "// bfmealloc_alloconly")
-        for marker in controls:
+        locked = ("// cl: /W3", "// cl-arch: x87", "// cl-profile: upstream",
+                  "// stlport", "// stlport46", "// msvcstl",
+                  "// psdk", "// bfmealloc_alloconly")
+        for marker in locked:
             with self.subTest(marker=marker):
                 result = self.compare({SEED: "int value;\n"}, {SEED: marker + "\nint value;\n"})
                 finding, = self.assert_gate("G2", "fail", result)
                 self.assertEqual((finding["path"], finding["line"]), (SEED, 1))
+
+    def test_g2_allows_clean_sdk_opt_in_additions_with_strict_guards(self):
+        for marker in ("// dxsdk", "// platformsdk"):
+            with self.subTest(add=marker):
+                self.assert_gate("G2", "pass", self.compare({SEED: "// cl: /O1\nint value;\n"},
+                                                            {SEED: "// cl: /O1\n" + marker + "\nint value;\n"}))
+            with self.subTest(remove=marker):
+                finding, = self.assert_gate("G2", "fail", self.compare({SEED: marker + "\nint value;\n"},
+                                                                       {SEED: "int value;\n"}))
+                self.assertIn("removed", finding["message"])
+            with self.subTest(duplicate_existing=marker):
+                finding, = self.assert_gate("G2", "fail", self.compare({SEED: marker + "\nint value;\n"},
+                                                                       {SEED: marker + "\n" + marker + "\nint value;\n"}))
+                self.assertIn("Duplicate", finding["message"])
+            with self.subTest(duplicate_added=marker):
+                finding, = self.assert_gate("G2", "fail", self.compare({SEED: "int value;\n"},
+                                                                       {SEED: marker + "\n" + marker + "\nint value;\n"}))
+                self.assertIn("Duplicate", finding["message"])
+            with self.subTest(header=marker):
+                finding, = self.assert_gate("G2", "fail", self.compare({"include/A.h": "struct A {};\n"},
+                                                                       {"include/A.h": marker + "\nstruct A {};\n"}))
+                self.assertIn("non-vendored C/C++ source", finding["message"])
+            with self.subTest(crlf=marker):
+                finding, = self.assert_gate("G2", "fail", self.compare({SEED: "int value;\n"},
+                                                                       {SEED: (marker + "\r\nint value;\n").encode("ascii")}))
+                self.assertIn("LF", finding["message"])
+        # Reordering existing // cl: lines while adding // dxsdk must still fail.
+        old = "// cl: /W3\n// cl: /W4\nint value;\n"
+        reordered = "// cl: /W4\n// dxsdk\n// cl: /W3\nint value;\n"
+        finding, = self.assert_gate("G2", "fail", self.compare({SEED: old}, {SEED: reordered}))
+        self.assertIn("changed order", finding["message"])
 
     def test_g2_compiler_reads_raw_lines_and_preserves_order(self):
         old = "// cl: /W3\n// cl: /W4\nint value;\n"

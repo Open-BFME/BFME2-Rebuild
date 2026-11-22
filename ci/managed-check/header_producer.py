@@ -36,9 +36,13 @@ def inventory(git, base, candidate, parser):
         changes = plan_existing_header(path, before.stdout.decode("utf-8"),
                                        after.stdout.decode("utf-8"), parser)
         if changes["status"] != "planned":
+            issues = changes.get("issues", [])
+            issue_reason = (issues[0].get("reason")
+                            if issues and isinstance(issues[0], dict) and issues[0].get("reason")
+                            else None)
             findings.append({"header": path, "status": "held",
-                             "reason": changes.get("reason", "An unsupported declaration requires evidence."),
-                             "issues": changes.get("issues", [])})
+                             "reason": changes.get("reason") or issue_reason or "An unsupported declaration requires evidence.",
+                             "issues": issues})
             continue
         for decl in changes["after"]:
             if decl["kind"] == "instance_data":

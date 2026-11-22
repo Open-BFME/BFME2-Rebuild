@@ -24,6 +24,8 @@ ARRAY = r"\s*\[\s*(?:0[xX][0-9a-fA-F]+|[0-9]+|[()+-]|\s)*\s*\]"
 FIELD = re.compile(rf"(?P<static>static\s+)?(?P<type>{TYPE}){DECL_SEPARATOR}(?P<name>{IDENT})(?P<array>{ARRAY})?;", re.ASCII)
 FORWARD_TYPE = re.compile(rf"(?:class|struct|union)\s+{IDENT}\s*;",re.ASCII)
 FRIEND_TYPE = re.compile(rf"friend\s+(?:class|struct|union)\s+{QIDENT}\s*;",re.ASCII)
+ACCESS_SPEC = re.compile(r"(?P<access>public|protected|private)\s*:", re.ASCII)
+INLINE_ACCESS_SPEC = re.compile(r"(?:public|protected|private)\s*:\s*\S", re.ASCII)
 NON_TYPES = {"typedef", "using", "enum", "class", "struct", "union", "friend", "template",
              "extern", "return", "delete", "mutable", "namespace", "public", "private", "protected"}
 
@@ -97,6 +99,8 @@ def _select(line, index, view):
     owner = _direct_class(offsets[index], records, masked)
     if FRIEND_TYPE.fullmatch(line):
         return None  # friendship has no external COFF key
+    if ACCESS_SPEC.fullmatch(line):
+        return None  # access specifier itself has no COFF key; affected members are re-probed below
     function = MEMBER.fullmatch(line)
     if function:
         parts = function.groupdict()
@@ -135,21 +139,88 @@ def plan_existing_header(header, before, after, parser):
     except Unobserved as exc:
         return dict(proof, status="held", reason=str(exc))
 
+    def _class_at_depth_one(pos, records, masked):
+        for qualified, _name, args, template, start, end, key in reversed(records):
+            if not start < pos < end:
+                continue
+            if args is not None or template or not PLAIN_NAME.fullmatch(qualified):
+                return None, None
+            opening = masked.find("{", start, pos)
+            segment = masked[opening:pos] if opening >= 0 else ""
+            if segment.count("{") - segment.count("}") == 1:
+                return (qualified, start), ("public" if key == "struct" else "private")
+            return None, None
+        return None, None
+
+    def _effective_access(view, watched_classes):
+        lines, offsets, records, masked = view
+        current = {}
+        mapping = {}
+        acc_issues = []
+        for idx, text in enumerate(lines):
+            if not text or text.startswith("}"):
+                continue
+            owner_key, default_acc = _class_at_depth_one(offsets[idx], records, masked)
+            if owner_key is None or owner_key[0] not in watched_classes:
+                continue
+            if text.startswith("#"):
+                acc_issues.append({"line": idx + 1,
+                                   "reason": f"{owner_key[0]}: preprocessor directive inside class with changed access section needs complete inventory"})
+                continue
+            if INLINE_ACCESS_SPEC.match(text):
+                acc_issues.append({"line": idx + 1,
+                                   "reason": f"{owner_key[0]}: inline access label inside class with changed access section needs complete inventory"})
+                continue
+            acc_match = ACCESS_SPEC.fullmatch(text)
+            if acc_match:
+                current[owner_key] = acc_match.group("access")
+                continue
+            if FORWARD_TYPE.fullmatch(text):
+                continue
+            mapping[idx] = (owner_key[0], current.get(owner_key, default_acc))
+        return mapping, acc_issues
+
     found = {"before": [], "after": []}
     issues = []
     old_lines, new_lines = old_view[0], new_view[0]
-    for op, a, b, c, d in SequenceMatcher(None, old_lines, new_lines, autojunk=False).get_opcodes():
+    opcodes = SequenceMatcher(None, old_lines, new_lines, autojunk=False).get_opcodes()
+    watched_classes = set()
+    for op, a, b, c, d in opcodes:
         if op == "equal":
             continue
         for side, lines, indexes, view in (("before", old_lines, range(a, b), old_view),
                                           ("after", new_lines, range(c, d), new_view)):
             for i in indexes:
                 try:
+                    if ACCESS_SPEC.fullmatch(lines[i]):
+                        owner = _direct_class(view[1][i], view[2], view[3])
+                        watched_classes.add(owner)
                     statement = _select(lines[i], i, view)
                     if statement:
                         found[side].append(statement)
                 except Unobserved as exc:
                     issues.append({"side": side, "line": i + 1, "reason": str(exc)})
+    if watched_classes and not issues:
+        old_access, old_acc_issues = _effective_access(old_view, watched_classes)
+        new_access, new_acc_issues = _effective_access(new_view, watched_classes)
+        for item in old_acc_issues:
+            issues.append({"side": "before", **item})
+        for item in new_acc_issues:
+            issues.append({"side": "after", **item})
+        if not issues:
+            for op, a, b, c, d in opcodes:
+                if op != "equal":
+                    continue
+                for oi, ni in zip(range(a, b), range(c, d)):
+                    if old_access.get(oi) != new_access.get(ni):
+                        for side, lines, idx, view in (("before", old_lines, oi, old_view),
+                                                       ("after", new_lines, ni, new_view)):
+                            try:
+                                statement = _select(lines[idx], idx, view)
+                                if statement:
+                                    found[side].append(statement)
+                            except Unobserved as exc:
+                                issues.append({"side": side, "line": idx + 1, "reason": str(exc)})
     if issues:
         return dict(proof, status="held", issues=issues)
     prior = defaultdict(list)

@@ -133,5 +133,9 @@
     "header": [
       "pack"
     ]
-  }
+  },
+  "compiler_directive_additions": [
+    "// dxsdk",
+    "// platformsdk"
+  ]
 }

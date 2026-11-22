@@ -401,5 +401,130 @@ class Workflow(unittest.TestCase):
         self.assertIn("actions: read", workflow.split("    steps:")[-2])
 
 
+
+class TrustedRescoreTests(unittest.TestCase):
+    def test_rescore_updates_h4_h6_with_authenticated_observations(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_dir = Path(tmp) / "bfme-header.git"
+            subprocess.run(["git", "init", "--bare", "-q", str(repo_dir)], check=True)
+            work = Path(tmp) / "work"
+            subprocess.run(["git", "clone", "-q", str(repo_dir), str(work)], check=True)
+            (work / "include" / "Game").mkdir(parents=True)
+            (work / "include" / "Game" / "A.h").write_text("class A {\npublic:\n    void init();\n};\n")
+            env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+            subprocess.run(["git", "-C", str(work), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(work), "commit", "-q", "-m", "base"], env=env, check=True)
+            base = subprocess.check_output(["git", "-C", str(work), "rev-parse", "HEAD"], text=True).strip()
+            (work / "include" / "Game" / "A.h").write_text("class A {\npublic:\n    void init();\n    void extra();\n};\n")
+            subprocess.run(["git", "-C", str(work), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(work), "commit", "-q", "-m", "head"], env=env, check=True)
+            head = subprocess.check_output(["git", "-C", str(work), "rev-parse", "HEAD"], text=True).strip()
+            subprocess.run(["git", "-C", str(work), "push", "-q", "origin", f"{base}:refs/protected/main", f"{head}:refs/pull/head"], check=True)
+            tree = subprocess.check_output(["git", "--git-dir", str(repo_dir), "merge-tree", "--write-tree", base, head], text=True).splitlines()[0]
+
+            # Build real trusted observations using header_trusted.produce
+            root = Path(__file__).resolve().parents[3]
+            sys.path.insert(0, str(root / "tools/gates"))
+            sys.path.insert(0, str(root / "ci/managed-check"))
+            from common import PIN
+            from gate import policy_at, policy_digest
+            from git_objects import Git
+            from header_inventory import Binding
+            import header_trusted
+            cfg = root / "tools/gates/config.json"
+            binding = Binding(collect.REPO, base, head, tree, policy_digest(cfg), PIN["checker"], 777, 1)
+            with Git(repo_dir) as repo:
+                obs = header_trusted.produce(repo, policy_at(cfg), binding)
+
+            preview_file = Path(tmp) / "header-preview.json"
+            trusted_file = Path(tmp) / "header-trusted.json"
+            preview_file.write_text(json.dumps({
+                "number": 43, "head": head, "base": base, "tree": tree, "tools": base,
+                "header_paths": ["include/Game/A.h"],
+                "checks": collect.source_checks(repo_dir, base, head, tree),
+            }))
+            trusted_file.write_text(json.dumps({"available": True, "issuer": {"id": "777", "attempt": "1"}, "observations": obs}))
+
+            old_tmp = os.environ.get("RUNNER_TEMP")
+            os.environ["RUNNER_TEMP"] = tmp
+            try:
+                self.assertEqual(collect.rescore(str(preview_file), str(trusted_file)), 0)
+            finally:
+                if old_tmp is None:
+                    os.environ.pop("RUNNER_TEMP", None)
+                else:
+                    os.environ["RUNNER_TEMP"] = old_tmp
+            updated = json.loads(preview_file.read_text())
+            self.assertTrue(updated["checks"]["trusted"])
+            states = {r["rule"]: r["state"] for r in updated["checks"]["preview"]}
+            self.assertEqual(states["H4"], "pass")
+            self.assertEqual(states["H6"], "pass")
+
+
+
+    def test_publish_drops_trusted_checks_when_boat_issuer_superseded(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            preview_file = Path(tmp) / "preview.json"
+            base, head, tree = "a" * 40, "b" * 40, "c" * 40
+            preview_file.write_text(json.dumps({
+                "number": 43, "head": head, "base": base, "tree": tree, "tools": base,
+                "header_paths": ["include/Game/A.h"],
+                "trusted_issuer": {"id": "100", "attempt": "1"},
+                "checks": {"preview": [
+                    {"rule": "H3", "state": "pass", "findings": []},
+                    {"rule": "H4", "state": "pass", "findings": []},
+                    {"rule": "H6", "state": "pass", "findings": []},
+                    {"rule": "H7", "state": "pass", "findings": []},
+                    {"rule": "H8", "state": "pass", "findings": []},
+                ], "trusted": True},
+                "untrusted_checks": {"preview": [
+                    {"rule": "H3", "state": "pass", "findings": []},
+                    {"rule": "H4", "state": "held", "findings": [{"message": "needs complete inventory"}]},
+                    {"rule": "H6", "state": "held", "findings": [{"message": "needs complete inventory"}]},
+                    {"rule": "H7", "state": "pass", "findings": []},
+                    {"rule": "H8", "state": "pass", "findings": []},
+                ], "trusted": False},
+            }))
+
+            class FakeApi:
+                def __init__(self):
+                    self.posted = []
+                def send(self, method, path, body=None):
+                    if method == "GET" and path == "pulls/43":
+                        return 200, {"state": "open", "draft": False, "base": {"ref": "main", "repo": {"id": collect.REPO_ID}}, "head": {"sha": head}}
+                    if method == "GET" and path == "git/ref/heads/main":
+                        return 200, {"object": {"sha": base}}
+                    if method == "GET" and path.startswith(f"commits/{head}/statuses"):
+                        return 200, [{"id": 1, "context": "BFME II / Boat", "state": "success",
+                                      "description": f"BFME II comparison passed (main {base[:12]})",
+                                      "creator": {"id": collect.BOT_ID}}]
+                    if method == "POST":
+                        self.posted.append(body)
+                        return 201, {}
+                    return 404, None
+
+            api = FakeApi()
+            old_read_h2, old_read_h5 = collect.read_h2, collect.read_h5
+            old_sha = os.environ.get("GITHUB_SHA")
+            os.environ["GITHUB_SHA"] = base
+            # Newer Boat run 101 superseded run 100!
+            collect.read_h2 = lambda _rec: {"status": "pass", "findings": [], "issuer": {"run": "101", "attempt": "1"}}
+            collect.read_h5 = lambda _rec: {"headers": {"include/Game/A.h": {"atoms": []}}, "held": []}
+            try:
+                out = []
+                self.assertEqual(collect.publish(str(preview_file), api=api, out=out.append), 0)
+            finally:
+                collect.read_h2, collect.read_h5 = old_read_h2, old_read_h5
+                if old_sha is None:
+                    os.environ.pop("GITHUB_SHA", None)
+                else:
+                    os.environ["GITHUB_SHA"] = old_sha
+            self.assertEqual(len(api.posted), 1)
+            self.assertEqual(api.posted[0]["state"], "pending")
+            self.assertIn("Held: H4", api.posted[0]["description"])
+
+
 if __name__ == "__main__":
     unittest.main()

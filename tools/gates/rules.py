@@ -43,6 +43,7 @@ class Edit:
     new: Source
     old_exists: bool
     new_exists: bool
+    new_raw: bytes = b''
 
     def added_lines(self):
         differ = SequenceMatcher(None, self.old.lines, self.new.lines)
@@ -63,6 +64,7 @@ class Policy:
         self.vendored = tuple(values['vendored_prefixes'])
         self.annotations = re.compile(values['annotation_pattern'])
         self.compiler_controls = re.compile(values['compiler_directive_pattern'])
+        self.addable_controls = frozenset(values.get('compiler_directive_additions', ()))
         self.allowed_pragmas = {scope: frozenset(names) for scope, names in values['allowed_pragmas'].items()}
         self.approved = {path: Counter(allowances)
                          for path, allowances in values['approved_forbidden'].items()}
@@ -165,7 +167,7 @@ def g1(ctx):
                 break
             sources.append(Source(content))
         if len(sources) == 2:
-            ctx.edits[path] = Edit(path, *sources, old is not None, new is not None)
+            ctx.edits[path] = Edit(path, *sources, old is not None, new is not None, new_raw)
         else:
             ctx.uninspectable = True
     out.extend(moved_bodies(ctx))
@@ -221,6 +223,15 @@ def compiler_controls(source, policy):
             if policy.compiler_controls.fullmatch(text)]
 
 
+def _raw_line_has_cr(raw, line_number):
+    if not raw:
+        return False
+    raw_lines = raw.splitlines(keepends=True)
+    if not 1 <= line_number <= len(raw_lines):
+        return False
+    return b"\r" in raw_lines[line_number - 1]
+
+
 def changed_compiler_controls(edit, policy):
     old, new = (compiler_controls(source, policy) for source in (edit.old, edit.new))
     before, after = [text for _, text in old], [text for _, text in new]
@@ -228,13 +239,54 @@ def changed_compiler_controls(edit, policy):
     if before != after:
         added = list(paired_surplus(old, new))
         removed = list(paired_surplus(new, old))
-        if not added and not removed:
-            first = next(i for i, (a, b) in enumerate(zip(before, after)) if a != b)
-            yield Finding(edit.path, new[first][0], "G2", "Compiler directives changed order.", restore)
-        for direction, changes in (("added or changed", added), ("removed (base line)", removed)):
+        is_non_vendored_source = (
+            policy.kind(edit.path) == 'source'
+            and edit.old_exists and edit.new_exists
+            and not any(edit.path.startswith(prefix) for prefix in policy.vendored)
+        )
+        before_set = {t.rstrip(" \t") for t in before}
+        accepted_added_lines = set()
+        seen_added = set()
+        rejected_added = []
+        guard_failed = False
+        for line, text in added:
+            canon = text.rstrip(" \t")
+            if canon in policy.addable_controls:
+                if text != canon:
+                    guard_failed = True
+                    yield Finding(edit.path, line, "G2",
+                                  f"SDK directive {canon} must not have trailing whitespace.",
+                                  f"Write {canon} with no trailing spaces or tabs.")
+                elif not is_non_vendored_source:
+                    guard_failed = True
+                    yield Finding(edit.path, line, "G2",
+                                  f"SDK directive {canon} may only be added to an existing non-vendored C/C++ source file.",
+                                  "Move the SDK directive to the .cpp/.c source file that needs it.")
+                elif canon in before_set or canon in seen_added:
+                    guard_failed = True
+                    yield Finding(edit.path, line, "G2",
+                                  f"Duplicate SDK directive {text}.",
+                                  "Keep at most one copy of each SDK directive per source file.")
+                elif _raw_line_has_cr(edit.new_raw, line):
+                    guard_failed = True
+                    yield Finding(edit.path, line, "G2",
+                                  f"SDK directive {text} must use LF line endings (not CRLF).",
+                                  "Convert the directive line to LF line endings.")
+                else:
+                    seen_added.add(canon)
+                    accepted_added_lines.add(line)
+            else:
+                rejected_added.append((line, text))
+        after_existing = [text for line, text in new if line not in accepted_added_lines]
+        if not rejected_added and not guard_failed and not removed and before != after_existing:
+            first = next(i for i, (a, b) in enumerate(zip(before, after_existing)) if a != b)
+            existing_new = [(line, text) for line, text in new if line not in accepted_added_lines]
+            yield Finding(edit.path, existing_new[first][0], "G2", "Compiler directives changed order.", restore)
+        for direction, changes in (("added or changed", rejected_added), ("removed (base line)", removed)):
             for line, _ in changes:
                 yield Finding(edit.path, line, "G2", f"A protected compiler directive was {direction}.", restore)
-        return
+        if rejected_added or removed or before != after_existing or len(accepted_added_lines) != len(added):
+            return
     # The build driver also treats this raw substring anywhere in a file
     # as enabling STLport. Match its actual boolean without reserving
     # unrelated prose occurrences when the setting is already enabled.

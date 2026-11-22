@@ -263,6 +263,72 @@ GRAPH_CHANGES += (EMITTED_ROWS_FIX_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(EMITTED_ROWS_FIX_GRAPH)
 
+CUT12_GATES_AND_H2_GRAPH = {
+    "tools/gates/config.json": (
+        "2d0361d9efc1717ca387fb65359c60dc324b91be88d1ccafa347a172a9758b6d",
+        "286aead9e860221789552e00f620dd45e7a70b2e033c95b6799b171edac6cd44",
+    ),
+    "tools/gates/rules.py": (
+        "5eaf63471cbf7b08c03fdd72cc2fdb3f9e207a0a3b7790ccb966b61987994fc6",
+        "abf702cf9409e67a51073cdb7bbf1851df6341b09868a9f4cc6ca7e1ed09022e",
+    ),
+    "tools/gates/test_gate.py": (
+        "623e6723788683a7c37542b400ce5c70eae81effaca10fd9034d3a883fc49b47",
+        "3bd32d9e59a6d51fbc43648bd93d360f9f47b407e2852ecdda25e407f4aee0f5",
+    ),
+    "tools/gates/test_public_delivery.py": (
+        "5720e8ac40387613c01965da32ef4dbbb8dae731a2cf3fdbbe0e694ae41c1ded",
+        "073710b7ff29eae5edeee8a3e7d67169387e44eadf06e1022443794c887e6e09",
+    ),
+    "ci/managed-check/header_producer.py": (
+        "19106de010f61020ea4fcccf5db57a36969db037990deffd03881bc893e5b0c8",
+        "11c41c57fb92ea42582545480e7da84f6de1b41f8642f0069c5abc97c1c5a9bc",
+    ),
+    "ci/managed-check/header_probe_plan.py": (
+        "11e751e1a3b80aae3cd7909867357adc297628988b2b1e60065a3424ca928fe9",
+        "53441502723614db269838f0bb5e203ea7f1d5409cf2553d5d48b67493eb0aa1",
+    ),
+    "ci/managed-check/bundle.sha256": (
+        "35c124efeef151a48c0cacc3a55125eedd52379ce0a1de23a76b76afd2ba59ee",
+        "80a8de235d4824307e47fd693296ff4097947e2133c48f72ec2730ab7acaf8b0",
+    ),
+}
+GRAPH_CHANGES += (CUT12_GATES_AND_H2_GRAPH,) + tuple(
+    advance_graph(previous, CUT12_GATES_AND_H2_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == CUT12_GATES_AND_H2_GRAPH[BUNDLE][0]
+)
+GRAPH_PATHS |= set(CUT12_GATES_AND_H2_GRAPH)
+
+CUT13_HEADER_TRUSTED_GRAPH = {
+    "tools/gates/header_trusted.py": (
+        None,
+        "0320445ce074e7919add15245e5d45fcd4996137ed6af2bd930814bf0efe0b00",
+    ),
+    "tools/gates/header_source_preview.py": (
+        "a09a7298441359f4f10303a2e8f012d0eed5f4bbde7f4a1623893f54c8d33ee3",
+        "8100ed15bbb2594d884e89a905f47387d07ced2520616f15449ae440bff17ab1",
+    ),
+    "tools/gates/test_header_trusted.py": (
+        None,
+        "b014ebf68d8f463ad8cd134c178021dbebf59b8834a8e86f22bf126b2a2b5b44",
+    ),
+    "ci/managed-check/header_trusted_action.py": (
+        None,
+        "f5a167c0cce414c80e10e6cf3188d30028298b15ff805c2592ad42117d926565",
+    ),
+    "ci/managed-check/bundle.sha256": (
+        "80a8de235d4824307e47fd693296ff4097947e2133c48f72ec2730ab7acaf8b0",
+        "af8387224c9d53242728b6e4b70aa1ca97567670c00b6a8a3a2527cd1a28f49a",
+    ),
+}
+GRAPH_CHANGES += (CUT13_HEADER_TRUSTED_GRAPH,) + tuple(
+    advance_graph(previous, CUT13_HEADER_TRUSTED_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == CUT13_HEADER_TRUSTED_GRAPH[BUNDLE][0]
+)
+GRAPH_PATHS |= set(CUT13_HEADER_TRUSTED_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2
@@ -370,8 +436,9 @@ def inherited(root, main, snapshot, *, warn=print):
             return {}
         identity = header(parent, tree)
         transition = graph_change(root, parent, main)
-        if transition and identity["policy"] == transition[BUNDLE][1]:
-            identity["policy"] = transition[BUNDLE][0]
+        bundle_pair = transition.get(BUNDLE) if transition else None
+        if bundle_pair and identity["policy"] == bundle_pair[1]:
+            identity["policy"] = bundle_pair[0]
         return unaffected(cached_pairs(old, identity, requests), changed)
     except (OSError, ValueError, TypeError, KeyError, AttributeError, CalledProcessError):
         warn("Previous exact state cannot be reused. A full initial refresh is required.")

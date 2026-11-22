@@ -275,5 +275,54 @@ class EmittedRowMessageTests(unittest.TestCase):
                         f"Expected fallback emitted-row hint, got {hints!r}")
 
 
+
+class Cut12HeaderProbeTests(unittest.TestCase):
+    def test_access_specifier_addition_before_new_member_is_planned(self):
+        import header_class_source, header_probe_plan
+        before = "class W3DRadar {\n    int m_x;\n};\n"
+        after = "class W3DRadar {\n    int m_x;\npublic:\n    virtual void refreshTerrain();\n};\n"
+        plan = header_probe_plan.plan_existing_header("include/GameClient/W3DRadar.h", before, after, header_class_source)
+        self.assertEqual(plan["status"], "planned", plan)
+        self.assertEqual(plan["before"], [])
+        self.assertEqual([d["qualified"] for d in plan["after"]], ["W3DRadar::refreshTerrain"])
+
+    def test_access_specifier_changing_existing_member_reprobes_both_sides(self):
+        import header_class_source, header_probe_plan
+        before = "class Foo {\nprotected:\n    void bar();\n};\n"
+        after = "class Foo {\npublic:\n    void bar();\n};\n"
+        plan = header_probe_plan.plan_existing_header("include/GameClient/Foo.h", before, after, header_class_source)
+        self.assertEqual(plan["status"], "planned", plan)
+        self.assertEqual([d["qualified"] for d in plan["before"]], ["Foo::bar"])
+        self.assertEqual([d["qualified"] for d in plan["after"]], ["Foo::bar"])
+        self.assertEqual(plan["after"][0]["before"]["qualified"], "Foo::bar")
+
+
+
+    def test_struct_private_access_change_reprobes_both_sides(self):
+        import header_class_source, header_probe_plan
+        before = "struct S {\n    void f();\n};\n"
+        after = "struct S {\nprivate:\n    void f();\n};\n"
+        plan = header_probe_plan.plan_existing_header("include/GameClient/S.h", before, after, header_class_source)
+        self.assertEqual(plan["status"], "planned", plan)
+        self.assertEqual([d["qualified"] for d in plan["before"]], ["S::f"])
+        self.assertEqual([d["qualified"] for d in plan["after"]], ["S::f"])
+
+    def test_inline_access_label_with_changed_access_fails_closed(self):
+        import header_class_source, header_probe_plan
+        before = "class Foo {\npublic: void first();\n    void bar();\n};\n"
+        after = "class Foo {\npublic: void first();\nprivate:\n    void bar();\n};\n"
+        plan = header_probe_plan.plan_existing_header("include/GameClient/Foo.h", before, after, header_class_source)
+        self.assertEqual(plan["status"], "held", plan)
+        self.assertTrue(any("inline access label" in i["reason"] for i in plan.get("issues", [])), plan)
+
+    def test_pragma_inside_class_with_changed_access_fails_closed(self):
+        import header_class_source, header_probe_plan
+        before = "class Foo {\nprotected:\n#pragma pack(push, 1)\n    void bar();\n#pragma pack(pop)\n};\n"
+        after = "class Foo {\npublic:\n#pragma pack(push, 1)\n    void bar();\n#pragma pack(pop)\n};\n"
+        plan = header_probe_plan.plan_existing_header("include/GameClient/Foo.h", before, after, header_class_source)
+        self.assertEqual(plan["status"], "held", plan)
+        self.assertTrue(any("preprocessor directive" in i["reason"] for i in plan.get("issues", [])), plan)
+
+
 if __name__ == "__main__":
     unittest.main()
