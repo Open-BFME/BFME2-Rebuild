@@ -1,3 +1,4 @@
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // cl: /O1 /D_BFME_RETAIL_TREE_INSERT_LAYOUT -Ireference/shims/bfmealloc_alloconly /D_STLP_USE_STATIC_LIB /D_STLP_BFME_COPY_TRIVIAL_EXTERN /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /EHs /EHc-
 // stlport46
 // _CRTIMP= because retail calls the static CRT _free directly (canUseSpecialPower 0x003B1244, parseSpecialPowerDefinition, ~SpecialPowerStore)
@@ -39,6 +40,15 @@ Int SpecialPowerStore::getNumSpecialPowers() const
 }
 
 // FUNCTION: BFME2 0x003B0FD0 size=71 name=?findSpecialPowerTemplateByID@SpecialPowerStore@@QAEPBVSpecialPowerTemplate@@I@Z evidence=N:ledger tier=B hypothesis:name:Z
+const SpecialPowerTemplate *SpecialPowerStore::findSpecialPowerTemplateByID(UnsignedInt id)
+{
+	for (UnsignedInt i = 0; i < m_templates.size(); ++i)
+	{
+		if (m_templates[i]->getFO()->m_id == id)
+			return m_templates[i];
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x003B1017 size=234 name=?parse@?$BitFlags@$0GF@@@QAEXPAVINI@@PAVAsciiString@@@Z evidence=X:measured bit-name table; retail mask parse and wrapper call tier=B hypothesis:K
 
