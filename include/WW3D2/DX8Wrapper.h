@@ -449,6 +449,8 @@ protected:
 	friend class TextureAsset::Impl;
 	friend class DX8IndexBufferClass;
 	friend class DX8VertexBufferClass;
+	// ScreenMotionBlurFilter::postRender 0x000FD5B7 expands Set_Texture in place instead of calling Set_DX8_Texture.
+	friend class ScreenMotionBlurFilter;
 };
 
 // SetTexture is slot 65 (+0x104).
