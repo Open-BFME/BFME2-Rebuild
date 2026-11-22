@@ -10,6 +10,9 @@
 #include <stddef.h>
 #include "Common/INI.h"
 #include "GameLogic/Module/W3DProjectileStreamDrawModuleData.h"
+#include "GameClient/W3DDisplay.h"
+#include "GameClient/W3DScene.h"
+#include "WW3D2/RenderObjClass.h"
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00BCDFB0), read back
 // entry by entry from the image.
@@ -24,6 +27,27 @@ static const FieldParse s_w3DProjectileStreamDrawModuleDataFieldParse[] =
 };
 
 // FUNCTION: BFME2 0x000D1124 size=130 name=?setFullyObscuredByShroud@W3DProjectileStreamDraw@@UAEX_N@Z evidence=N:ledger tier=B hypothesis:name:Z
+void W3DProjectileStreamDraw::setFullyObscuredByShroud(Bool fullyObscured)
+{
+	if (fullyObscured)
+	{
+		for (Int lineIndex = 0; lineIndex < m_lineCount; lineIndex++)
+		{
+			RenderObjClass *line = m_lines[lineIndex];
+			if (line && line->Peek_Scene())
+				line->Remove();
+		}
+	}
+	else
+	{
+		for (Int lineIndex = 0; lineIndex < m_lineCount; lineIndex++)
+		{
+			RenderObjClass *line = m_lines[lineIndex];
+			if (line && !line->Peek_Scene())
+				W3DDisplay::m_3DScene->Add_Render_Object(line);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x000D11A6 size=44 name=?xfer@W3DProjectileStreamDraw@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
