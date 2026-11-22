@@ -5,9 +5,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <math.h>
 #include <string.h>
-#include "WWMath/VectorProcessorClass.h"
 #include "WWMath/Vector2.h"
-#include "WWMath/Vector3.h"
 #include "WWMath/Vector4.h"
 #include "WWMath/Matrix3D.h"
 #include "WWMath/Matrix4.h"
