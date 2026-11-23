@@ -51,3 +51,7 @@ void SectionChecker::addVar(const Bool *var)
 // FUNCTION: BFME2 0x0054E8DC size=2795 name=??0GameSpyConfig@@QAE@VAsciiString@@@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0054F4AF size=89 name=?create@GameSpyConfigInterface@@SAPAV1@VAsciiString@@@Z evidence=N:ledger tier=B hypothesis:K
+GameSpyConfigInterface *GameSpyConfigInterface::create(AsciiString config)
+{
+	return new GameSpyConfig(config);
+}
