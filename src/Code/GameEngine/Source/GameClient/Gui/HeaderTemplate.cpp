@@ -27,6 +27,12 @@
 HeaderTemplateManager *TheHeaderTemplateManager = NULL;
 
 // FUNCTION: BFME2 0x00201992 size=6 name=?Rva00201992Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
+// Returns the address of the header INI field table (the ledger types the row as int).
+int Rva00201992Get()
+{
+	return (int)HeaderTemplate::m_headerFieldParseTable;
+}
+
 // FUNCTION: BFME2 0x00201A33 size=81 name=?findHeaderTemplate@HeaderTemplateManager@@QAEPAVHeaderTemplate@@VAsciiString@@@Z evidence=N:ledger
 
 HeaderTemplate *HeaderTemplateManager::findHeaderTemplate(AsciiString name)
