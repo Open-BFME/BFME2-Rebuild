@@ -1168,6 +1168,132 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
         self.assertEqual(dec["reasons"][0].code, "merge-forbidden")
         self.assertTrue(dec["reasons"][0].final)
 
+    def test_prefetched_header_reviews_make_zero_rest_calls_and_enforce_exact_head_approval(self):
+        api = FakeApi(live=False, main=MEASURED)
+        rest_review_calls = []
+        orig_send = api._send
+
+        def spy_send(method, path, body):
+            if "/reviews" in path:
+                rest_review_calls.append(path)
+            return orig_send(method, path, body)
+
+        api._send = spy_send
+        head = PR2
+        cfg = CONFIG | {"exceptions": set(), "auto_headers": True, "approvers": {1760627}}
+
+        def gql_node(number, review_nodes, *, head_ref="contrib/h", is_draft=False, boat_state="SUCCESS"):
+            contexts = [
+                {"context": lander.RULES, "state": "SUCCESS",
+                 "description": f"Source rules passed (main {MEASURED[:12]})",
+                 "targetUrl": "", "createdAt": "", "creator": {"databaseId": lander.lr.BOT_ID}},
+                {"context": lander.HEADER_RULES_CONTEXT, "state": "PENDING",
+                 "description": f"Held: H5 layout needs witness (main {MEASURED[:12]})",
+                 "targetUrl": "", "createdAt": "", "creator": {"databaseId": lander.lr.BOT_ID}},
+            ]
+            if boat_state:
+                contexts.append(
+                    {"context": lander.BOAT, "state": boat_state,
+                     "description": f"BFME II comparison passed (main {MEASURED[:12]})",
+                     "targetUrl": "", "createdAt": "", "creator": {"databaseId": lander.lr.BOT_ID}}
+                )
+            return {
+                "number": number, "id": f"PR_{number}", "title": f"Header #{number}", "state": "OPEN",
+                "isDraft": is_draft, "authorAssociation": "OWNER", "mergeable": "MERGEABLE",
+                "baseRefName": "main", "headRefName": head_ref, "headRefOid": head,
+                "author": {"login": "alice", "databaseId": 55555},
+                "headRepository": {"databaseId": lander.REPO_ID}, "baseRepository": {"databaseId": lander.REPO_ID},
+                "labels": {"nodes": []},
+                "files": {"totalCount": 1, "nodes": [{"path": "include/Game/A.h", "changeType": "MODIFIED"}]},
+                "reviews": {"totalCount": len(review_nodes), "nodes": review_nodes},
+                "commits": {"nodes": [{"commit": {"oid": head, "status": {"contexts": contexts}}}]},
+            }
+
+        # 1. Exact-head approval by listed approver clears hold with 0 REST review calls.
+        pf_ok = lander._gql_to_prefetched(gql_node(
+            10, [{"state": "APPROVED", "commit": {"oid": head}, "author": {"databaseId": 1760627}}],
+        ))
+        dec_ok = lander.evaluate(api, 10, MEASURED, cfg, prefetched=pf_ok)
+        self.assertEqual((dec_ok["stage"], dec_ok["reasons"]), ("land", []))
+
+        # 2. Stale approval on an older head does NOT clear hold.
+        pf_stale = lander._gql_to_prefetched(gql_node(
+            11, [{"state": "APPROVED", "commit": {"oid": "0" * 40}, "author": {"databaseId": 1760627}}],
+        ))
+        dec_stale = lander.evaluate(api, 11, MEASURED, cfg, prefetched=pf_stale)
+        self.assertEqual((dec_stale["stage"], dec_stale["reasons"][0].code), ("hold", "header-rules"))
+
+        # 3. Non-approver review does NOT clear hold.
+        pf_other = lander._gql_to_prefetched(gql_node(
+            12, [{"state": "APPROVED", "commit": {"oid": head}, "author": {"databaseId": 999999}}],
+        ))
+        dec_other = lander.evaluate(api, 12, MEASURED, cfg, prefetched=pf_other)
+        self.assertEqual((dec_other["stage"], dec_other["reasons"][0].code), ("hold", "header-rules"))
+
+        # 4. Self-approval by PR author does NOT clear hold even if author is in approvers.
+        pf_self = lander._gql_to_prefetched(gql_node(
+            13, [{"state": "APPROVED", "commit": {"oid": head}, "author": {"databaseId": 55555}}],
+        ))
+        dec_self = lander.evaluate(api, 13, MEASURED, cfg | {"approvers": {55555}}, prefetched=pf_self)
+        self.assertEqual((dec_self["stage"], dec_self["reasons"][0].code), ("hold", "header-rules"))
+
+        # 5. Later DISMISSED / CHANGES_REQUESTED overrides earlier APPROVED.
+        pf_dismissed = lander._gql_to_prefetched(gql_node(
+            14, [
+                {"state": "APPROVED", "commit": {"oid": head}, "author": {"databaseId": 1760627}},
+                {"state": "DISMISSED", "commit": {"oid": head}, "author": {"databaseId": 1760627}},
+            ],
+        ))
+        dec_dis = lander.evaluate(api, 14, MEASURED, cfg, prefetched=pf_dismissed)
+        self.assertEqual((dec_dis["stage"], dec_dis["reasons"][0].code), ("hold", "header-rules"))
+
+        self.assertEqual(rest_review_calls, [])
+
+    def test_refused_draft_and_unmeasured_header_prs_never_call_rest_reviews(self):
+        rest_review_calls = []
+
+        def check_zero_reviews(edit_fn, *, auto_headers=True):
+            api = FakeApi(live=False, main=MEASURED, edit=edit_fn)
+            orig_send = api._send
+
+            def spy_send(method, path, body):
+                if "/reviews" in path:
+                    rest_review_calls.append(path)
+                return orig_send(method, path, body)
+
+            api._send = spy_send
+            cfg = CONFIG | {"exceptions": set(), "auto_headers": auto_headers, "approvers": {1760627}}
+            return lander.evaluate(api, 2, MEASURED, cfg)
+
+        # Canary/refused-branch header PR (like #4) -> 0 REST review calls.
+        def edit_refused(fx):
+            fx["pulls/2"]["head"]["ref"] = "canary/header-test"
+            fx["pulls/2/files?per_page=100&page=1"] = [{"filename": "include/Game/A.h", "status": "modified"}]
+        dec = check_zero_reviews(edit_refused, auto_headers=True)
+        self.assertEqual(dec["reasons"][0].code, "refused-branch")
+        dec_off = check_zero_reviews(edit_refused, auto_headers=False)
+        self.assertEqual(dec_off["reasons"][0].code, "refused-branch")
+
+        # Draft header PR -> 0 REST review calls.
+        def edit_draft(fx):
+            fx["pulls/2"]["head"]["ref"] = "contrib/header-draft"
+            fx["pulls/2"]["draft"] = True
+            fx["pulls/2/files?per_page=100&page=1"] = [{"filename": "include/Game/A.h", "status": "modified"}]
+        dec_draft = check_zero_reviews(edit_draft, auto_headers=True)
+        self.assertEqual(dec_draft["reasons"][0].code, "draft")
+
+        # Unmeasured (Boat pending) header PR -> 0 REST review calls.
+        def edit_pending_boat(fx):
+            fx["pulls/2"]["head"]["ref"] = "contrib/header-pending"
+            fx["pulls/2/files?per_page=100&page=1"] = [{"filename": "include/Game/A.h", "status": "modified"}]
+            for st in fx[f"commits/{PR2}/statuses?per_page=100&page=1"]:
+                if st["context"] == lander.BOAT:
+                    st["state"] = "pending"
+                    st["description"] = "Waiting for protected intake and Boat comparison"
+        dec_pend = check_zero_reviews(edit_pending_boat, auto_headers=True)
+        self.assertEqual(dec_pend["reasons"][0].code, "measuring")
+        self.assertEqual(rest_review_calls, [])
+
 
 if __name__ == "__main__":
     unittest.main()

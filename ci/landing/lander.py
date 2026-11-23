@@ -331,6 +331,14 @@ OPEN_PULLS_QUERY = """query($owner: String!, $name: String!, $cursor: String) {
         baseRepository { databaseId }
         labels(first: 50) { nodes { name } }
         files(first: 100) { totalCount nodes { path changeType } }
+        reviews(first: 30) {
+          totalCount
+          nodes {
+            state
+            commit { oid }
+            author { ... on User { databaseId } ... on Bot { databaseId } }
+          }
+        }
         commits(last: 1) {
           nodes {
             commit {
@@ -413,6 +421,21 @@ def _gql_to_prefetched(node):
                     and _is_disjoint_tu_path(f.get("path", ""))
                     for f in fnodes
                 )
+    reviews_node = node.get("reviews")
+    reviews = None
+    if isinstance(reviews_node, dict):
+        rtotal = reviews_node.get("totalCount")
+        rnodes = reviews_node.get("nodes") or ()
+        if isinstance(rtotal, int) and 0 <= rtotal <= 30 and len(rnodes) == rtotal and all(isinstance(r, dict) for r in rnodes):
+            reviews = [
+                {
+                    "id": idx + 1,
+                    "state": (r.get("state") or "").upper(),
+                    "commit_id": (r.get("commit") or {}).get("oid") or "",
+                    "user": {"id": (r.get("author") or {}).get("databaseId")},
+                }
+                for idx, r in enumerate(rnodes)
+            ]
     return {
         "number": node["number"],
         "pr": pr,
@@ -420,7 +443,25 @@ def _gql_to_prefetched(node):
         "bot_statuses": bot_statuses,
         "files": files,
         "all_simple_tu": all_simple_tu,
+        "reviews": reviews,
     }
+
+
+def _maintainer_review_from_records(records, pr, head, allow):
+    """Evaluate listed-maintainer approval on exact head from prefetched review records (0 REST calls)."""
+    if not allow:
+        return False
+    author_id = (pr.get("user") or {}).get("id")
+    latest = {}
+    for idx, item in enumerate(records):
+        actor = (item.get("user") or {}).get("id")
+        if type(actor) is not int or actor not in allow or actor == author_id:
+            continue
+        if item.get("state") in {"APPROVED", "CHANGES_REQUESTED", "DISMISSED"}:
+            rid = item.get("id", idx)
+            if actor not in latest or rid > latest[actor][0]:
+                latest[actor] = (rid, item["state"] == "APPROVED" and item.get("commit_id") == head)
+    return any(approved for _, approved in latest.values())
 
 
 def fetch_open_pulls_batch(api):
@@ -515,6 +556,8 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
              "changes wait for a maintainer (label boat-ok); you do not need to do anything")
     if prefetched is not None and prefetched.get("files") is not None:
         files, all_simple_tu = prefetched["files"], prefetched["all_simple_tu"]
+    elif prefetched is not None and any(r.code in {"refused-branch", "draft", "hold-label"} for r in reasons):
+        files, all_simple_tu = [], False
     else:
         files, all_simple_tu = changed_files_detail(api, number)
     decision["pr_files"] = list(files)
@@ -528,6 +571,9 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     header_change = any(name.startswith("include/") for name in files)
     decision["header_change"] = header_change
     decision["boat_status"] = bot_statuses.get(BOAT)
+    boat_kind = classify(decision["boat_status"], main)
+    pf_reviews = prefetched.get("reviews") if prefetched is not None else None
+    can_check_reviews_rest = not reasons and boat_kind in {"fresh-success", "stale-success"}
     if header_change and config.get("auto_headers"):
         rules = bot_statuses.get(HEADER_RULES_CONTEXT) or {}
         text = rules.get("description") or ""
@@ -538,12 +584,15 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
         else:
             approved_by_maintainer = False
             if config["approvers"]:
-                try:
-                    approved_by_maintainer = lr.maintainer_review(
-                        api, pr, {"number": number, "head": head}, config["approvers"]
-                    )
-                except lr.Waiting:
-                    approved_by_maintainer = False
+                if pf_reviews is not None:
+                    approved_by_maintainer = _maintainer_review_from_records(pf_reviews, pr, head, config["approvers"])
+                elif can_check_reviews_rest:
+                    try:
+                        approved_by_maintainer = lr.maintainer_review(
+                            api, pr, {"number": number, "head": head}, config["approvers"]
+                        )
+                    except lr.Waiting:
+                        approved_by_maintainer = False
             if approved_by_maintainer:
                 pass                                # listed maintainer approved this exact head
             elif rules.get("state") == "success":
@@ -557,13 +606,18 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
             elif rules.get("state") == "pending" and text.startswith("Held:"):
                 hold("header-rules", f"{HEADER_RULES_CONTEXT} success or listed header approval",
                      f"{printable(text, 90)}; a listed maintainer approval can clear this hold")
-            else:
+            elif boat_kind in {"fresh-success", "stale-success"}:
                 hold("header-rules", f"{HEADER_RULES_CONTEXT} on head {head[:12]}", "no result yet")
     elif header_change:
         if not config["approvers"]:
             hold("header-approvers-empty", "a listed header approver in ci/landing/landing.json",
                  "an empty list, so no header change can land automatically", True)
-        else:
+        elif pf_reviews is not None:
+            if not _maintainer_review_from_records(pf_reviews, pr, head, config["approvers"]):
+                hold("header-approval", f"an approval of head {head[:12]} by a listed header approver",
+                     "none yet. A maintainer listed in ci/landing/landing.json reviews every change under "
+                     "include/; a new push needs a new approval")
+        elif can_check_reviews_rest:
             try:
                 approved = lr.maintainer_review(api, pr, {"number": number, "head": head}, config["approvers"])
             except lr.Waiting as exc:

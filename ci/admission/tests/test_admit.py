@@ -986,6 +986,32 @@ class Cut11SwarmTests(unittest.TestCase):
             admit.prior_boat_pass(api, HEAD, MAIN, ["src/Code/Tools/WW3D/pluglib/matrix4.cpp"], boat_status=boat_st, clock=CLOCK),
         )
 
+    def test_prefetched_absent_boat_status_avoids_rest_status_lookups(self):
+        pr = fork_pr(number=47)
+        api = LedgerApi(False, [pr], {47: ["src/unk/O00123456.cpp"]})
+        status_calls = []
+        orig = api.call
+
+        def spy_call(path):
+            if "/statuses" in path:
+                status_calls.append(path)
+            return orig(path)
+
+        api.call = spy_call
+        pf = {
+            "number": 47,
+            "pr": pr,
+            "statuses": {admit.CONTEXT: {"id": 1, "context": admit.CONTEXT, "state": "success",
+                                         "description": admit.ADMITTED, "creator": {"id": admit.BOT_ID}}},
+            "bot_statuses": {admit.CONTEXT: {"id": 1, "context": admit.CONTEXT, "state": "success",
+                                             "description": admit.ADMITTED, "creator": {"id": admit.BOT_ID}}},
+            "files": ["src/unk/O00123456.cpp"],
+        }
+        with redirect_stdout(io.StringIO()):
+            admit.handle(api, 47, CONFIG, MAIN, BUDGET, CLOCK, refresh=True,
+                         prefetched=pf, allow_ancestor_skip=True, source_proof=lambda *_: None)
+        self.assertEqual(status_calls, [])
+
 
 if __name__ == "__main__":
     unittest.main()

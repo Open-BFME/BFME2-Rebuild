@@ -672,9 +672,8 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
         prior = pf_bot.get(CONTEXT)
     else:
         prior = latest_status(api, head)
-    pf_boat = (pf_bot.get(BOAT_CONTEXT)
-               if pf_bot is not None and not (BOAT_CONTEXT in pf_any and BOAT_CONTEXT not in pf_bot)
-               else None)
+    pf_boat_known = pf_bot is not None and not (BOAT_CONTEXT in pf_any and BOAT_CONTEXT not in pf_bot)
+    pf_boat = (pf_bot.get(BOAT_CONTEXT) or {}) if pf_boat_known else None
     kind = {"admit-wide": "wide", "admit-trusted": "trusted-narrow"}.get(verdict, "narrow")
     if kind == "wide":
         budget = wide_budget
