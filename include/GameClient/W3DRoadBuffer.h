@@ -130,6 +130,7 @@ class W3DRoadBuffer
 public:
 	void loadRoads();										// Loads the roads from the map objects list.
 	void updateLighting();									// Updates the diffuse lighting in the buffers.
+	void setMap(WorldHeightMap *pMap);					// Sets the height map.
 
 protected:
 	RoadType *m_roadTypes;			// +0x00
