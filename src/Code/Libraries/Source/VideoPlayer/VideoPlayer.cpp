@@ -52,10 +52,6 @@ void VideoPlayer::closeAllStreams()
 // FUNCTION: BFME2 0x00689450 size=125 name=?bfmeCopyVIA@@YAPAUBfmeElemVIA@@PAU1@00@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x006894D0 size=14 name=?open@VideoPlayer@@UAEPAVVideoStreamInterface@@VAsciiString@@I@Z evidence=N:ledger
-VideoStreamInterface *VideoPlayer::open(AsciiString, unsigned int)
-{
-	return 0;
-}
 
 // FUNCTION: BFME2 0x00689580 size=114 name=?rva00689580@VideoPlayer@@QAEXAAVAsciiString@@@Z evidence=?:placeholder
 
@@ -76,3 +72,7 @@ VideoStreamInterface *VideoPlayer::open(AsciiString, unsigned int)
 
 // The video player singleton (retail VA 0x00E0ABA8).
 VideoPlayer *TheVideoPlayer = 0;
+VideoStreamInterface *VideoPlayer::open(AsciiString,unsigned int)
+{
+    return 0;
+}
