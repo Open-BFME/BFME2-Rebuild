@@ -168,4 +168,18 @@ void W3dUtilityClass::Convert_Shader(const W3dShaderStruct &shader, ShaderClass 
 }
 
 // FUNCTION: BFME2 0x001A45E3 size=120 name=?Convert_Shader@W3dUtilityClass@@SAXABVShaderClass@@PAUW3dShaderStruct@@@Z evidence=N:ledger tier=B hypothesis:K
+void W3dUtilityClass::Convert_Shader(const ShaderClass &shader, W3dShaderStruct *set)
+{
+	W3d_Shader_Reset(set);
+	W3d_Shader_Set_Depth_Compare(set, shader.Get_Depth_Compare());
+	W3d_Shader_Set_Depth_Mask(set, shader.Get_Depth_Mask());
+	W3d_Shader_Set_Dest_Blend_Func(set, shader.Get_Dst_Blend_Func());
+	W3d_Shader_Set_Pri_Gradient(set, shader.Get_Primary_Gradient());
+	W3d_Shader_Set_Sec_Gradient(set, shader.Get_Secondary_Gradient());
+	W3d_Shader_Set_Src_Blend_Func(set, shader.Get_Src_Blend_Func());
+	W3d_Shader_Set_Texturing(set, shader.Get_Texturing());
+	W3d_Shader_Set_Alpha_Test(set, shader.Get_Alpha_Test());
+	W3d_Shader_Set_Post_Detail_Color_Func(set, shader.Get_Post_Detail_Color_Func());
+	W3d_Shader_Set_Post_Detail_Alpha_Func(set, shader.Get_Post_Detail_Alpha_Func());
+}
 
