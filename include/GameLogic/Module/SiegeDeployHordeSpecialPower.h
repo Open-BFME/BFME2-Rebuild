@@ -25,6 +25,7 @@ public:
 	virtual void setTargetPosition(const Coord3D &position);					// slot 14, 0x004C63DE: stores +0x3C
 
 protected:
+	virtual const char *GetSnapshotName() const;
 	virtual void xfer(Xfer *xfer);
 
 	ObjectID m_unk0x38;		// +0x38 xfer ObjectID

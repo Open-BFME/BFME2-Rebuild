@@ -1069346,14 +1069346,14 @@
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-with-own-class",
-      "object_id": "unknown",
+      "object_id": "O00492C8A",
       "object_evidence": "gap-unit",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "",
       "weakest_link": "",
       "parent": null,
-      "object": "G00492E43",
+      "object": "O00492C8A",
       "accepted_names": [
         "??0TeleportSpecialAbilityUpdateModuleData@@QAE@XZ"
       ],
@@ -1069372,14 +1069372,14 @@
       "name_evidence": "X:proven (snapshot-name|module-name-key|module-factory|vtable-slot)",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
-      "object_id": "unknown",
+      "object_id": "O00492C8A",
       "object_evidence": "gap-unit",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "",
       "weakest_link": "",
       "parent": null,
-      "object": "G00492E43",
+      "object": "O00492C8A",
       "accepted_names": [
         "?vslot08@TeleportSpecialAbilityUpdate@@UAE_NH@Z",
         "?vslot08@Rva00492C59@@UAE_NH@Z"
@@ -1069399,14 +1069399,14 @@
       "name_evidence": "N:ledger",
       "confidence": "high",
       "evidence": "X:scalar-deleting-dtor shape",
-      "object_id": "O00492EFD",
+      "object_id": "O00492C8A",
       "object_evidence": "X:closure",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "L3:+K-callers",
       "weakest_link": "K",
       "parent": null,
-      "object": "O00492EFD",
+      "object": "O00492C8A",
       "accepted_names": [
         "??_GTeleportSpecialAbilityUpdateModuleData@@UAEPAXI@Z"
       ],
@@ -1069424,14 +1069424,14 @@
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-with-own-class",
-      "object_id": "O00492EFD",
+      "object_id": "O00492C8A",
       "object_evidence": "X:closure",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "L1:structure+F/W/L",
       "weakest_link": "X/F/W/L",
       "parent": null,
-      "object": "O00492EFD",
+      "object": "O00492C8A",
       "accepted_names": [
         "??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ"
       ],
@@ -1127547,14 +1127547,14 @@
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-among-SiegeDeploySpecialPower|SiegeDeployHordeSpecialPower",
-      "object_id": "unknown",
+      "object_id": "O004C63D8",
       "object_evidence": "gap-unit",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "",
       "weakest_link": "",
       "parent": null,
-      "object": "G004C636B",
+      "object": "O004C63D8",
       "accepted_names": [
         "?buildFieldParse@SiegeDeployHordeSpecialPowerModuleData@@SAXAAVMultiIniFieldParse@@@Z"
       ],
@@ -1127573,14 +1127573,14 @@
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-with-own-class",
-      "object_id": "unknown",
+      "object_id": "O004C63D8",
       "object_evidence": "gap-unit",
       "parent_rvas": "",
       "parent_evidence": "",
       "depends_on": "",
       "weakest_link": "",
       "parent": null,
-      "object": "G004C636B",
+      "object": "O004C63D8",
       "accepted_names": [
         "??0SiegeDeployHordeSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z"
       ],
@@ -1654637,7 +1654637,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?randnum@@YAJJ@Z"
+        "?randnum@@YAJJ@Z",
+        "_randnum"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-neighbour-shared-data",
@@ -1654686,7 +1654687,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?bfmeRandom@@YAHH@Z"
+        "?bfmeRandom@@YAHH@Z",
+        "_bfmeRandom"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1654735,7 +1654737,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?abs_randwc@@YAKK@Z"
+        "?abs_randwc@@YAKK@Z",
+        "_abs_randwc"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1654832,7 +1654835,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?InitMemArray@@YAXXZ"
+        "?InitMemArray@@YAXXZ",
+        "_InitMemArray"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1654956,7 +1654960,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?probeFile@@YAXPBDPAH@Z"
+        "?probeFile@@YAXPBDPAH@Z",
+        "_probeFile"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655103,7 +1655108,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?readfile@@YAXPAUFILE@@KKPAXPAH@Z"
+        "?readfile@@YAXPAUFILE@@KKPAXPAH@Z",
+        "_readfile"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655152,7 +1655158,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?writefile@@YAXPAUFILE@@KKPAXPAH@Z"
+        "?writefile@@YAXPAUFILE@@KKPAXPAH@Z",
+        "_writefile"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655201,7 +1655208,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?ErrorExit@@YAXXZ"
+        "?ErrorExit@@YAXXZ",
+        "_ErrorExit"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655396,7 +1655404,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?bfmeScale@@YANI@Z"
+        "?bfmeScale@@YANI@Z",
+        "_bfmeScale"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655445,7 +1655454,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?AllocateMemory@@YAPAXKPAH@Z"
+        "?AllocateMemory@@YAPAXKPAH@Z",
+        "_AllocateMemory"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655494,7 +1655504,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?FreeMemory@@YAXPAXPAH@Z"
+        "?FreeMemory@@YAXPAXPAH@Z",
+        "_FreeMemory"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655543,7 +1655554,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?SetInternalFPFZero@@YAXPAUInternalFPF@@E@Z"
+        "?SetInternalFPFZero@@YAXPAUInternalFPF@@E@Z",
+        "_SetInternalFPFZero"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655592,7 +1655604,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?SetInternalFPFInfinity@@YAXPAUInternalFPF@@E@Z"
+        "?SetInternalFPFInfinity@@YAXPAUInternalFPF@@E@Z",
+        "_SetInternalFPFInfinity"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655641,7 +1655654,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?SetInternalFPFNaN@@YAXPAUInternalFPF@@@Z"
+        "?SetInternalFPFNaN@@YAXPAUInternalFPF@@@Z",
+        "_SetInternalFPFNaN"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655690,7 +1655704,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?IsMantissaZero@@YAHPAG@Z"
+        "?IsMantissaZero@@YAHPAG@Z",
+        "_IsMantissaZero"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655739,7 +1655754,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?Add16Bits@@YAXPAG0GG@Z"
+        "?Add16Bits@@YAXPAG0GG@Z",
+        "_Add16Bits"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655788,7 +1655804,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?Sub16Bits@@YAXPAG0GG@Z"
+        "?Sub16Bits@@YAXPAG0GG@Z",
+        "_Sub16Bits"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655837,7 +1655854,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?ShiftMantLeft1@@YAXPAG0@Z"
+        "?ShiftMantLeft1@@YAXPAG0@Z",
+        "_ShiftMantLeft1"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655886,7 +1655904,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?ShiftMantRight1@@YAXPAG0@Z"
+        "?ShiftMantRight1@@YAXPAG0@Z",
+        "_ShiftMantRight1"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655935,7 +1655954,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?StickyShiftRightMant@@YAXPAUInternalFPF@@H@Z"
+        "?StickyShiftRightMant@@YAXPAUInternalFPF@@H@Z",
+        "_StickyShiftRightMant"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1655984,7 +1656004,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?normalize@@YAXPAUInternalFPF@@@Z"
+        "?normalize@@YAXPAUInternalFPF@@@Z",
+        "_normalize"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656033,7 +1656054,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?denormalize@@YAXPAUInternalFPF@@H@Z"
+        "?denormalize@@YAXPAUInternalFPF@@H@Z",
+        "_denormalize"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656082,7 +1656104,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?RoundInternalFPF@@YAXPAUInternalFPF@@@Z"
+        "?RoundInternalFPF@@YAXPAUInternalFPF@@@Z",
+        "_RoundInternalFPF"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656131,7 +1656154,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?choose_nan@@YAXPAUInternalFPF@@00H@Z"
+        "?choose_nan@@YAXPAUInternalFPF@@00H@Z",
+        "_choose_nan"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656180,7 +1656204,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?AddSubInternalFPF@@YAXEPAUInternalFPF@@00@Z"
+        "?AddSubInternalFPF@@YAXEPAUInternalFPF@@00@Z",
+        "_AddSubInternalFPF"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656275,7 +1656300,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?MultiplyInternalFPF@@YAXPAUInternalFPF@@00@Z"
+        "?MultiplyInternalFPF@@YAXPAUInternalFPF@@00@Z",
+        "_MultiplyInternalFPF"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656370,7 +1656396,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?DivideInternalFPF@@YAXPAUInternalFPF@@00@Z"
+        "?DivideInternalFPF@@YAXPAUInternalFPF@@00@Z",
+        "_DivideInternalFPF"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656465,7 +1656492,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?Int32ToInternalFPF@@YAXJPAUInternalFPF@@@Z"
+        "?Int32ToInternalFPF@@YAXJPAUInternalFPF@@@Z",
+        "_Int32ToInternalFPF"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656514,7 +1656542,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?SetupCPUEmFloatArrays@@YAXPAUInternalFPF@@00K@Z"
+        "?SetupCPUEmFloatArrays@@YAXPAUInternalFPF@@00K@Z",
+        "_SetupCPUEmFloatArrays"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -1656563,7 +1656592,8 @@
       "parent": null,
       "object": "O006B89A0",
       "accepted_names": [
-        "?DoEmFloatIteration@@YAKPAUInternalFPF@@00KK@Z"
+        "?DoEmFloatIteration@@YAKPAUInternalFPF@@00KK@Z",
+        "_DoEmFloatIteration"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-libs-upstream-path",
@@ -2296809,14 +2296839,14 @@
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:unwind-map-action of 0x0078CCF5",
-      "object_id": "O00492EFD",
+      "object_id": "O00492C8A",
       "object_evidence": "X:closure",
       "parent_rvas": "0x00492F19",
       "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
       "depends_on": "L1:structure+F/W/L",
       "weakest_link": "X/F/W/L",
       "parent": "0x00492F19",
-      "object": "O00492EFD",
+      "object": "O00492C8A",
       "accepted_names": [
         "Unwind@00b8ccdf"
       ],
@@ -2296834,14 +2296864,14 @@
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:unwind-map-action of 0x0078CCF5",
-      "object_id": "O00492EFD",
+      "object_id": "O00492C8A",
       "object_evidence": "X:closure",
       "parent_rvas": "0x00492F19",
       "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
       "depends_on": "L1:structure+F/W/L",
       "weakest_link": "X/F/W/L",
       "parent": "0x00492F19",
-      "object": "O00492EFD",
+      "object": "O00492C8A",
       "accepted_names": [
         "Unwind@00b8cce7"
       ],
@@ -2296859,14 +2296889,14 @@
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0093C8F4;X:parent-by-prologue",
-      "object_id": "O00492EFD",
+      "object_id": "O00492C8A",
       "object_evidence": "X:closure",
       "parent_rvas": "0x00492F19",
       "parent_evidence": "X:handler-operand",
       "depends_on": "L1:structure+F/W/L",
       "weakest_link": "X/F/W/L",
       "parent": "0x00492F19",
-      "object": "O00492EFD",
+      "object": "O00492C8A",
       "accepted_names": [
         "__ehhandler$??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ"
       ],
@@ -2726269,10 +2726299,10 @@
       "path_evidence": "invented",
       "library": "",
       "flag_profile": "align=U;ehform=EH_prolog",
-      "text_ranges": "0x00492C8A-0x00492E43",
-      "textx_ranges": "x:0x0078CCC8-0x0078CCDF",
+      "text_ranges": "0x00492C8A-0x00492F63",
+      "textx_ranges": "x:0x0078CCC8-0x0078CCFF",
       "xcu_slots": "",
-      "rdata_ranges": "0x0093C8C0-0x0093C8E4",
+      "rdata_ranges": "0x0093C8C0-0x0093C910",
       "data_ranges": "",
       "bss_ranges": "0x00A039F0-0x00A039F8",
       "confidence": "low",
@@ -2726280,7 +2726310,7 @@
       "left_edge": "unknown-rows",
       "right_edge": "unknown-rows",
       "alt_names": "",
-      "text_rows": "7",
+      "text_rows": "11",
       "vetoes": "",
       "depends_on": "L1:3;L2:6",
       "weakest_link": "C/lit",
@@ -2726294,43 +2726324,8 @@
       "proof_first": false,
       "extent_is_hypothesis": true,
       "refusals": [],
-      "owned_functions": 5,
-      "owned_bytes": 381
-    },
-    {
-      "object_id": "O00492EFD",
-      "link_index": "1190",
-      "path": "invented/O00492EFD",
-      "path_evidence": "invented",
-      "library": "",
-      "flag_profile": "align=U;ehform=EH_prolog",
-      "text_ranges": "0x00492EFD-0x00492F63",
-      "textx_ranges": "x:0x0078CCDF-0x0078CCFF",
-      "xcu_slots": "",
-      "rdata_ranges": "0x0093C8E4-0x0093C910",
-      "data_ranges": "",
-      "bss_ranges": "",
-      "confidence": "low",
-      "contradictions": "",
-      "left_edge": "unknown-rows",
-      "right_edge": "unknown-rows",
-      "alt_names": "",
-      "text_rows": "2",
-      "vetoes": "",
-      "depends_on": "L1:4;L3:1",
-      "weakest_link": "K",
-      "core_level": "X/F/W/L",
-      "seed_tier": "hypothesis:K",
-      "hard_text_share": "0.725",
-      "tu": "src/unk/O00492EFD.cpp",
-      "tier": "B",
-      "name_tier": "invented",
-      "seedable": true,
-      "proof_first": false,
-      "extent_is_hypothesis": true,
-      "refusals": [],
-      "owned_functions": 1,
-      "owned_bytes": 74
+      "owned_functions": 8,
+      "owned_bytes": 641
     },
     {
       "object_id": "O00492FC2",
@@ -2732229,7 +2732224,7 @@
       "path_evidence": "invented",
       "library": "",
       "flag_profile": "align=U;ehform=EH_prolog",
-      "text_ranges": "0x004C63D8-0x004C64D3",
+      "text_ranges": "0x004C636B-0x004C64D3",
       "textx_ranges": "x:0x0079019D-0x007901B4",
       "xcu_slots": "",
       "rdata_ranges": "0x009417D4-0x009417F8",
@@ -2732240,7 +2732235,7 @@
       "left_edge": "unknown-rows",
       "right_edge": "unknown-rows",
       "alt_names": "",
-      "text_rows": "6",
+      "text_rows": "8",
       "vetoes": "",
       "depends_on": "L1:3;L2:4;L3:1",
       "weakest_link": "K",
@@ -2732254,8 +2732249,8 @@
       "proof_first": false,
       "extent_is_hypothesis": true,
       "refusals": [],
-      "owned_functions": 5,
-      "owned_bytes": 223
+      "owned_functions": 7,
+      "owned_bytes": 332
     },
     {
       "object_id": "O004C679A",
@@ -2828682,42 +2828677,6 @@
       "added_by": "placements"
     },
     {
-      "object_id": "G00492E43",
-      "link_index": "",
-      "path": "invented/G00492E43",
-      "path_evidence": "invented",
-      "library": "",
-      "flag_profile": "align=U",
-      "text_ranges": "0x00492E43-0x00492EFD",
-      "textx_ranges": "",
-      "xcu_slots": "",
-      "rdata_ranges": "",
-      "data_ranges": "",
-      "bss_ranges": "",
-      "confidence": "low",
-      "contradictions": "",
-      "left_edge": "unknown-rows",
-      "right_edge": "unknown-rows",
-      "alt_names": "",
-      "text_rows": "2",
-      "vetoes": "",
-      "depends_on": "",
-      "weakest_link": "",
-      "core_level": "",
-      "seed_tier": "hypothesis:mm1",
-      "hard_text_share": "",
-      "tu": "src/unk/G00492E43.cpp",
-      "tier": "B",
-      "name_tier": "invented",
-      "seedable": true,
-      "proof_first": false,
-      "extent_is_hypothesis": true,
-      "refusals": [],
-      "owned_functions": 2,
-      "owned_bytes": 186,
-      "added_by": "placements"
-    },
-    {
       "object_id": "G00492F63",
       "link_index": "",
       "path": "invented/G00492F63",
@@ -2831595,42 +2831554,6 @@
       "refusals": [],
       "owned_functions": 4,
       "owned_bytes": 342,
-      "added_by": "placements"
-    },
-    {
-      "object_id": "G004C636B",
-      "link_index": "",
-      "path": "invented/G004C636B",
-      "path_evidence": "invented",
-      "library": "",
-      "flag_profile": "align=U",
-      "text_ranges": "0x004C636B-0x004C63D8",
-      "textx_ranges": "",
-      "xcu_slots": "",
-      "rdata_ranges": "",
-      "data_ranges": "",
-      "bss_ranges": "",
-      "confidence": "low",
-      "contradictions": "",
-      "left_edge": "unknown-rows",
-      "right_edge": "unknown-rows",
-      "alt_names": "",
-      "text_rows": "2",
-      "vetoes": "",
-      "depends_on": "",
-      "weakest_link": "",
-      "core_level": "",
-      "seed_tier": "hypothesis:mm1",
-      "hard_text_share": "",
-      "tu": "src/unk/G004C636B.cpp",
-      "tier": "B",
-      "name_tier": "invented",
-      "seedable": true,
-      "proof_first": false,
-      "extent_is_hypothesis": true,
-      "refusals": [],
-      "owned_functions": 2,
-      "owned_bytes": 109,
       "added_by": "placements"
     },
     {

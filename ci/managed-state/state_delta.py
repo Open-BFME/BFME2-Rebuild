@@ -506,7 +506,35 @@ CUT16_WB_RENAMES = {
         'include/WW3D2/dxwrapper.h': (None, '30e51d9c3a92a2570a67af873da9a754c78c3e6dd88ecb75e9b57ab03a844053'),
     },
 }
-TU_MOVE_MIGRATIONS = (CUT14_TOOLS_TU_MOVE, CUT16_WB_RENAMES)
+ISSUE541_PROFILES_AND_GAP_UNITS = {
+    "old_tus": frozenset({
+        "src/unk/G00492E43.cpp",
+        "src/unk/O00492EFD.cpp",
+        "src/unk/G004C636B.cpp",
+    }),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/gamelogic/module/siegedeployhordespecialpower.h",
+        "include/nbench/emfloat.h",
+        "src/nbench/benchmark/emfloat.c",
+        "src/unk/g006dfdf0.cpp",
+        "src/unk/o00492c8a.cpp",
+        "src/unk/o004c63d8.cpp",
+    }),
+    "files": {
+        'config/map.json': ('e4a674cf0243309b957b1b75d738b35c4c68f603d1fd50d6755fdfa8642aa3bb', '7adb5658117df6d75656f6138db4fa08cf68784707f25cc2c4b4f823c792f34e'),
+        'expected/unk/G00492E43.cpp.json': ('76fcce5616f03b2d9c5349794cdf6bad0a43f1d6a18c55a61f2cbeaca385b4e3', None),
+        'expected/unk/G004C636B.cpp.json': ('7a96aa4942f44018ddc3b466ef29bcc88bbee2cf12d1761a78e96022f85dee14', None),
+        'expected/unk/O00492C8A.cpp.json': ('52d2bd49505847066c2275c0f4d177ad83e0a42b0d8e96ecb9cc12fe03043bff', 'e5132ffcd97cef0a0dd8fa1868d9ad82b0610df927168e62a71e3f0e48e4d4d4'),
+        'expected/unk/O00492EFD.cpp.json': ('7181e4c8342b804d4dc9abaa83ab5d2a01a11735ecaa3545adb22aaadb338578', None),
+        'expected/unk/O00492EFD.cpp.neighbours.json': ('a6393fdac86b3ab6d8bd64d6a05dc15c6b820623899bfe8bc9351ed5a2cf8855', None),
+        'include/nbench/emfloat.h': (None, 'da856cf83adb73aa0f487ea523469fede1a41be0adb88b2dfe4897b1c18a9921'),
+        'src/unk/G00492E43.cpp': ('ba9c9ae6524135e7f80e23e1ad64996cecc9c1f8fbd606723dd27b8776a463f9', None),
+        'src/unk/G004C636B.cpp': ('27fea822c92fff0a73e6bf73fb100e410698842c8b12e59075d6284123cac595', None),
+        'src/unk/O00492EFD.cpp': ('2d2fbd752d9f27d052709f1b492547861210d43bbd906f5eb4d825410fe8e607', None),
+    },
+}
+TU_MOVE_MIGRATIONS = (CUT14_TOOLS_TU_MOVE, CUT16_WB_RENAMES, ISSUE541_PROFILES_AND_GAP_UNITS)
 
 
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",

@@ -1,3 +1,4 @@
+// cl: /O2 /G6 /MD /D_CRTIMP=
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G006DFDF0 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.

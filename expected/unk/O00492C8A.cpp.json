@@ -55,6 +55,31 @@
       "membership_hypothesis": "hypothesis:cohesion"
     },
     {
+      "rva": "0x00492EFD",
+      "size": 28,
+      "section": ".text",
+      "role": "comdat",
+      "parent_rva": "",
+      "fold_group": "",
+      "name": "??_GTeleportSpecialAbilityUpdateModuleData@@UAEPAXI@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "high",
+      "evidence": "X:scalar-deleting-dtor shape",
+      "object_id": "O00492C8A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "",
+      "parent_evidence": "",
+      "depends_on": "L3:+K-callers",
+      "weakest_link": "K",
+      "parent": null,
+      "object": "O00492C8A",
+      "accepted_names": [
+        "??_GTeleportSpecialAbilityUpdateModuleData@@UAEPAXI@Z"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:K"
+    },
+    {
       "rva": "0x0078CCC8",
       "size": 13,
       "section": ".text",
@@ -100,6 +125,81 @@
       "object": "O00492C8A",
       "accepted_names": [
         "__ehhandler$?getModuleNameKey@TeleportSpecialAbilityUpdate@@UBE?AW4NameKeyType@@XZ"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078CCDF",
+      "size": 8,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00492F19",
+      "fold_group": "",
+      "name": "Unwind@00b8ccdf",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CCF5",
+      "object_id": "O00492C8A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00492F19",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00492F19",
+      "object": "O00492C8A",
+      "accepted_names": [
+        "Unwind@00b8ccdf"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078CCE7",
+      "size": 14,
+      "section": ".text",
+      "role": "unwind",
+      "parent_rva": "0x00492F19",
+      "fold_group": "",
+      "name": "Unwind@00b8cce7",
+      "name_evidence": "?:placeholder",
+      "confidence": "high",
+      "evidence": "X:unwind-map-action of 0x0078CCF5",
+      "object_id": "O00492C8A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00492F19",
+      "parent_evidence": "X:funcinfo-action-of-1-handler(s)",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00492F19",
+      "object": "O00492C8A",
+      "accepted_names": [
+        "Unwind@00b8cce7"
+      ],
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:name:invented"
+    },
+    {
+      "rva": "0x0078CCF5",
+      "size": 10,
+      "section": ".text",
+      "role": "ehhandler",
+      "parent_rva": "0x00492F19",
+      "fold_group": "",
+      "name": "__ehhandler$??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ",
+      "name_evidence": "X:parent-name",
+      "confidence": "high",
+      "evidence": "X:eh-stub FuncInfo=0x0093C8F4;X:parent-by-prologue",
+      "object_id": "O00492C8A",
+      "object_evidence": "X:closure",
+      "parent_rvas": "0x00492F19",
+      "parent_evidence": "X:handler-operand",
+      "depends_on": "L1:structure+F/W/L",
+      "weakest_link": "X/F/W/L",
+      "parent": "0x00492F19",
+      "object": "O00492C8A",
+      "accepted_names": [
+        "__ehhandler$??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:name:invented"

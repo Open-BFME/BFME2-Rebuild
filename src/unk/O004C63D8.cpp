@@ -5,13 +5,28 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:invented
+#include "Common/INI.h"
+#include "GameLogic/Module/SiegeDeployHordeSpecialPowerModuleData.h"
 #include "GameLogic/Module/SiegeDeployHordeSpecialPower.h"
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
-// FUNCTION: BFME2 0x004C63D8 size=6 name=?Rva004C63D8Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
-int Rva004C63D8Get(void)
+// FUNCTION: BFME2 0x004C636B size=27 name=?buildFieldParse@SiegeDeployHordeSpecialPowerModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+void SiegeDeployHordeSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &p)
 {
-	return (int)"SiegeDeployHordeSpecialPower";
+	SpecialPowerUpdateModuleData::buildFieldParse(p);
+	static const FieldParse dataFieldParse[] = {
+		{ "HordeDeploy", INI::parseBool, 0, 0x18 },
+		{ 0, 0, 0, 0 }
+	};
+	p.add(dataFieldParse);
+}
+
+// FUNCTION: BFME2 0x004C6386 size=82 name=??0SiegeDeployHordeSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+
+// FUNCTION: BFME2 0x004C63D8 size=6 name=?Rva004C63D8Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
+const char *SiegeDeployHordeSpecialPower::GetSnapshotName() const
+{
+	return "SiegeDeployHordeSpecialPower";
 }
 
 // FUNCTION: BFME2 0x004C63DE size=17 name=?Rva004C63DE@SiegeDeployHordeSpecialPower@@UAEXABUVector3@@@Z evidence=?:placeholder tier=B hypothesis:cohesion

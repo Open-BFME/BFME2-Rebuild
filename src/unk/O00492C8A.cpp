@@ -68,3 +68,7 @@ void TeleportSpecialAbilityUpdate::xfer(Xfer *xfer)
 	xfer->IsCRC();
 }
 
+// FUNCTION: BFME2 0x00492E43 size=54 name=??0TeleportSpecialAbilityUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x00492E79 size=132 name=?vslot08@TeleportSpecialAbilityUpdate@@UAE_NH@Z evidence=X:proven (snapshot-name|module-name-key|module-factory|vtable-slot) tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x00492F19 size=74 name=??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+

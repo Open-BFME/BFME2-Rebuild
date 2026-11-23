@@ -1,3 +1,5 @@
+// cl: /O2 /GS
+// cl-arch: x87
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=O006B89A0 name-evidence=L
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
