@@ -28,9 +28,8 @@ extern "C" __declspec(dllimport) int __stdcall DeleteFileA(const char *name);
 void *DebugReAllocMemory(void *oldPtr, unsigned int newSize);
 void DebugFreeMemory(void *ptr);
 void *DebugAllocMemory(unsigned int numBytes);
-// Typed views of the untyped allocator.
-template <class T> inline T *DebugAllocArray(unsigned int numBytes) { return (T *)DebugAllocMemory(numBytes); }
-template <class T> inline T *DebugReAllocArray(T *oldPtr, unsigned int newSize) { return (T *)DebugReAllocMemory(oldPtr, newSize); }
+// Typed view of the untyped allocator.
+template <class T> __forceinline T *DebugAllocArray(unsigned int numBytes) { return (T *)DebugAllocMemory(numBytes); }
 
 // The debug singleton (retail VA 0x00DE0880).
 Debug *theDebug = 0;
@@ -433,7 +432,7 @@ int Debug::GetInput(char *buf, int size, bool *structured)
 			if (cur->inputAlloc - cur->inputUsed < 0x40)
 			{
 				cur->inputAlloc += 0x40;
-				cur->input = DebugReAllocArray(cur->input, cur->inputAlloc + 1);
+				cur->input = (char *)DebugReAllocMemory(cur->input, cur->inputAlloc + 1);
 			}
 
 			int read = cur->io->Read(cur->input + cur->inputUsed, cur->inputAlloc - cur->inputUsed);
