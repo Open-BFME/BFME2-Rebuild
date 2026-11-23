@@ -89,15 +89,6 @@ Bool TunnelTracker::isValidContainerFor(Object *obj, Bool checkCapacity)
 }
 
 // FUNCTION: BFME2 0x004F54BF size=75 name=?removeFromContain@TunnelTracker@@QAEXW4ObjectID@@H@Z evidence=N:ledger
-void TunnelTracker::removeFromContain(Object *obj, Bool exposeStealthUnits)
-{
-	std::list<Object *>::iterator it = std::find(m_containList.begin(), m_containList.end(), obj);
-	if (it != m_containList.end())
-	{
-		m_containList.erase(it);
-		--m_containListSize;
-	}
-}
 
 // FUNCTION: BFME2 0x004F550A size=53 name=?isInContainer@TunnelTracker@@QAE_NW4ObjectID@@@Z evidence=N:ledger
 Bool TunnelTracker::isInContainer(Object *obj)
