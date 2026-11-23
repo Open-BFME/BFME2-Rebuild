@@ -1,3 +1,4 @@
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // cl: /O1
 #include "GameLogic/W3DTerrainLogic.h"
 #include "Common/Xfer.h"
@@ -54,6 +55,19 @@ Bool W3DTerrainLogic::isClearLineOfSight(const Coord3D &start, const Coord3D &en
 // FUNCTION: BFME2 0x00062C23 size=34 name=?rva00062C23@Rva00062FFFTerrainPrefix@@QBEMABVCoord3D@@0@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00062C45 size=80 name=?getGroundHeight@W3DTerrainLogic@@UBEMMMPAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+Real W3DTerrainLogic::getGroundHeight(Real x, Real y, Coord3D *normal) const
+{
+	// Default to an upward normal; the terrain object overwrites it when present.
+	if (normal)
+	{
+		normal->x = 0.0f;
+		normal->y = 0.0f;
+		normal->z = 1.0f;
+	}
+	if (TheTerrainRenderObject)
+		return TheTerrainRenderObject->getHeightMapHeight(x, y, normal);
+	return 0.0f;
+}
 
 // FUNCTION: BFME2 0x00062C95 size=255 name=?getLayerHeight@W3DTerrainLogic@@UBEMMMW4PathfindLayerEnum@@PAVCoord3D@@_N@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 
