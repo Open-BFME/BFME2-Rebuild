@@ -25,7 +25,6 @@ public:
 	virtual NameKeyType getModuleNameKey() const;
 	virtual void triggerAbilityEffect();	// 0x00492D11
 	virtual void startUnpacking();	// 0x00492DAB
-	virtual bool vslot08(const Coord3D *location);	// SpecialPowerUpdateInterface slot 8, 0x00492E79
 
 protected:
 	virtual const char *GetSnapshotName() const;

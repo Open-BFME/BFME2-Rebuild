@@ -1,6 +1,4 @@
 #include "GameLogic/Module/TeleportSpecialAbilityUpdateModuleData.h"
-#include "GameLogic/Module/TeleportSpecialAbilityUpdate.h"
-#include "GameLogic/Object.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G00492E43 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
@@ -12,25 +10,3 @@ TeleportSpecialAbilityUpdateModuleData::TeleportSpecialAbilityUpdateModuleData()
 }
 
 // FUNCTION: BFME2 0x00492E79 size=132 name=?vslot08@TeleportSpecialAbilityUpdate@@UAE_NH@Z evidence=X:proven (snapshot-name|module-name-key|module-factory|vtable-slot) tier=B hypothesis:mm1-gap-unit
-bool TeleportSpecialAbilityUpdate::vslot08(const Coord3D *location)
-{
-	if (location)
-	{
-		const ModuleData *moduleData = getModuleData();
-		const TeleportSpecialAbilityUpdateModuleData *data = static_cast<const TeleportSpecialAbilityUpdateModuleData *>(moduleData);
-		if (data && data->m_maxDistance > 0.0f)
-		{
-			const Object *object = m_object;
-			if (object)
-			{
-				const Coord3D *position = object->getPosition();
-				Real dx = location->x - position->x;
-				Real dy = location->y - position->y;
-				Real dz = location->z - position->z;
-				if (dx * dx + dy * dy + dz * dz > data->m_maxDistance * data->m_maxDistance)
-					return false;
-			}
-		}
-	}
-	return SpecialAbilityUpdate::vslot08(location);
-}
