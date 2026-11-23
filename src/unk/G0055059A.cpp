@@ -1,6 +1,11 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0055059A name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameNetwork/NetCommandWrapperList.h"
 // FUNCTION: BFME2 0x0055059A size=5 name=?init@NetCommandWrapperList@@QAEXXZ evidence=X:map request (link (from standalone link 0cf3e833)) tier=B hypothesis:mm1-gap-unit
+void NetCommandWrapperList::init()
+{
+	m_list = 0;
+}
 // FUNCTION: BFME2 0x005505D8 size=7 name=?get@Rva005505D8LeaGetter@@QBEPAXXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x005505DF size=4 name=?get@Rva005505DFByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
