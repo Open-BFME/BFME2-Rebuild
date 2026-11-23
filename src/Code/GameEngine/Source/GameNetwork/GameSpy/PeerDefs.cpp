@@ -17,6 +17,7 @@ namespace Msvcr71
 }
 #include <stdlib.h>
 #include "Common/UserPreferences.h"
+#include "Common/IgnorePreferences.h"
 #include "GameNetwork/GameSpy/GameSpyInfo.h"
 #include "GameNetwork/GameSpy/PeerThread.h"
 #include "GameNetwork/GameSpy/GameSpyConfig.h"
@@ -640,6 +641,13 @@ void GameSpyInfo::leaveStagingRoom()
 // FUNCTION: BFME2 0x00385956 size=424 name=?TearDownGameSpy@@YAXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00385B1C size=92 name=?removeFromSavedIgnoreList@GameSpyInfo@@UAEXH@Z evidence=N:ledger tier=A
+void GameSpyInfo::removeFromSavedIgnoreList(Int profileID)
+{
+	m_savedIgnoreMap.erase(profileID);
+	IgnorePreferences pref;
+	pref.setNumberedEntry(AsciiString::TheEmptyString, profileID, false);
+	pref.write();
+}
 
 // FUNCTION: BFME2 0x00385B78 size=100 name=?loadSavedIgnoreList@Rva00385B78@@QAEXXZ evidence=?:placeholder tier=A
 
@@ -686,6 +694,13 @@ void GameSpyInfo::reset()
 
 
 // FUNCTION: BFME2 0x00385E2A size=118 name=?addToSavedIgnoreList@GameSpyInfo@@UAEXHVAsciiString@@@Z evidence=N:ledger tier=A
+void GameSpyInfo::addToSavedIgnoreList(Int profileID, AsciiString nick)
+{
+	m_savedIgnoreMap[profileID] = nick;
+	IgnorePreferences pref;
+	pref.setNumberedEntry(nick, profileID, true);
+	pref.write();
+}
 
 // FUNCTION: BFME2 0x00385FE1 size=270 name=??0GameSpyInfo@@QAE@XZ evidence=N:ledger tier=A
 GameSpyInfo::GameSpyInfo()
