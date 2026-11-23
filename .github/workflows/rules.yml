@@ -195,13 +195,13 @@ jobs:
         run: python3 -I -S -B source-rule-tools/tools/gates/workflow.py publish
 
       - name: Retain the exact checked source-rules decision
-        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch')
+        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch' || github.event_name == 'merge_group')
         shell: bash
         env:
           SOURCE_RULE_RECEIPT: '${{ steps.publish.outputs.receipt }}'
         run: python3 -I -S -B source-rule-tools/tools/gates/landing_receipt.py "$RUNNER_TEMP/bfme-source-receipt"
       - name: Upload the exact source-rules decision
-        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch')
+        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch' || github.event_name == 'merge_group')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: bfme-source-receipt-${{ github.run_attempt }}
