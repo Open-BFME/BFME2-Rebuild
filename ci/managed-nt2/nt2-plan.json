@@ -8,7 +8,7 @@
     "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptOptions.cpp",
     "src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp"
   ],
-  "checker": "685eb12c0315c128718a38619db5faa48f3f60521a2c60a233d6921f4fb0d7a5",
+  "checker": "97bdf95bb916dd07f873f9083316e7fc8d21991afc696a9781515041cdaaa44e",
   "compile": {
     "base": [
       {

@@ -34,7 +34,7 @@ IMPORTED_FULL=checker_digest(CODE_ROOT)
 from result_cache import GitInputs,ResultCache,namespace,digest_file,forget_namespaces,remembered_namespace
 from binary_model import COFF,PE
 from relocation_proof import Resolver
-from emission_policy import folded_identity,classify_extras,compiler_local,GENERATED_DESCRIPTIONS
+from emission_policy import folded_identity,classify_extras,compiler_local,GENERATED_DESCRIPTIONS,retained_sections
 from identity_index import map_index,symbol_index,function_span
 import compiler_support
 from upstream_proof import pristine_c
@@ -609,12 +609,32 @@ def pilot_judge_tu(job, tu, led):
     #    Placed by bytes: only this file's own functions, never a select-any COMDAT (an inline or template body may live
     #    at an address this file does not annotate, like the emitted clear itself).
     model_ = coff(obj)
-    def own_body(n_):
+    def symbol_root(n_):
         try:
             sec_ = model_.symbols[model_.index(n_)]['section']
         except Exception:
+            return None
+        return model_.root(sec_) if sec_ > 0 else None
+    def own_body(n_):
+        root_ = symbol_root(n_)
+        return root_ is not None and model_.comdat.get(root_) not in (2, 3, 4, 6)
+    rows_index = map_index(MAP)['rows']
+    norm_names_index = map_index(MAP)['normalized_names']
+    EXTRA_ROLES = ('owned', 'comdat', 'icf_fold', 'thunk', 'import_thunk')
+    PLACEHOLDER_ = re.compile(r"[Rr]va[0-9A-Fa-f]{6,8}|Bfme|Gen_t_|_0x[0-9A-Fa-f]{6}")   # emission_policy.PLACEHOLDER
+    def role_compatible(rva, n_):
+        role_ = rows_index[rva]['role']
+        if role_ == 'ehhandler':
+            return n_.startswith('__ehhandler$')
+        if role_ in ('unwind', 'funclet'):
+            return n_.startswith('$L')
+        return not n_.startswith('__ehhandler$') and not n_.startswith('$L')
+    def known_elsewhere(rva, n_):
+        if own_body(n_):
             return False
-        return sec_ > 0 and model_.comdat.get(sec_) != 2
+        known_ = {a for a in norm_names_index.get(ANON.sub('?A0xHASH', n_), ())
+                  if rows_index[a]['role'] in EXTRA_ROLES}
+        return bool(known_ and rva not in known_)
     placed = {}
     for r_, syms_ in exact_of.items():
         for n_ in syms_:
@@ -623,15 +643,29 @@ def pilot_judge_tu(job, tu, led):
     for r_, (st_, _p, s_) in pair.items():
         if st_ == "MATCH": placed[s_] = [r_]; occupants[r_] = [s_]
     elsewhere = caller_bound_targets(obj, bodies, placed, info, occupants)
+    step2_live, step2_notes = retained_sections(model_, set(used) | {s for s in bodies if own_body(s) and s not in generated})
     ranked = []
     for position, (rva, syms) in enumerate(order):
         if rva in pair:
             continue
+        meta_ = rows_index[rva]
+        names_ = {info[rva][1]} | set(meta_.get('accepted_names', ()))
+        has_real_name_ = any(n_ and not PLACEHOLDER_.search(n_) for n_ in names_)
         for n in syms:
+            if not role_compatible(rva, n):
+                continue
             if n in elsewhere and rva not in elsewhere[n]:
                 continue
             if lands_elsewhere(bodies[n], rva, info[rva][0], elsewhere):
                 continue
+            if not own_body(n):
+                if known_elsewhere(rva, n) and rva not in elsewhere.get(n, ()) and not (meta_['role'] in ('comdat', 'icf_fold') and folded_identity(n, names_)):
+                    continue
+                root_ = symbol_root(n)
+                live_ = bool(step2_notes) or (root_ is not None and root_ in step2_live)
+                if not live_ and rva not in elsewhere.get(n, ()):
+                    if meta_['role'] == 'owned' or (has_real_name_ and n not in names_ and not (meta_['role'] in ('comdat', 'icf_fold') and folded_identity(n, names_))):
+                        continue
             if n not in used and n not in generated:
                 ranked.append((-reference_agreement(obj, bodies[n], rva, info[rva][0]), position, rva, n))
     for _score, _position, rva, n in sorted(ranked, key=lambda x: (x[0], x[1])):
@@ -648,21 +682,44 @@ def pilot_judge_tu(job, tu, led):
         if rva not in pair and oldname in bodies and oldname not in used and oldname not in generated:
             sc = max((r for r, a, s in scores if a == rva and s == oldname), default=0.0)
             used.add(oldname); pair[rva] = ("PARTIAL", round(100 * sc, 1), oldname)
-    PLACEHOLDER_ = re.compile(r"[Rr]va[0-9A-Fa-f]{6,8}|Bfme|Gen_t_|_0x[0-9A-Fa-f]{6}")   # emission_policy.PLACEHOLDER
+    live_sections, live_notes = retained_sections(model_, set(used) | {s for s in bodies if own_body(s) and s not in generated})
+    def is_live(n_):
+        if live_notes:
+            return True
+        root_ = symbol_root(n_)
+        return root_ is not None and root_ in live_sections
     def member_family(n_):
         # (member, class or template base): '?resize@?$hashtable@...' -> ('resize', 'hashtable'); '??0?$list@...' -> ('?0', 'list')
-        m_ = re.match(r'\?(\?[0-9A-Z_]|[A-Za-z_]\w*@)(?:\?\$)?([A-Za-z_]\w*)', n_ or '')
+        m_ = re.match(r'\?(\?_[0-9A-Z]|\?[0-9A-Z]|[A-Za-z_]\w*@)(?:\?\$)?([A-Za-z_]\w*)', n_ or '')
         return (m_.group(1).rstrip('@'), m_.group(2)) if m_ else None
     def similarity_candidate(rva, s):
-        # gen6 b11_2: a select-any COMDAT carrying none of an owned row's names, and not another instantiation of the
-        # same member of the same class or template, is another function's body: never a near miss of this row.
-        if own_body(s) or map_index(MAP)['rows'][rva]['role'] != 'owned':
+        # Never pair across incompatible structural roles (ehhandler/unwind/funclet vs ordinary code) or contradict
+        # a caller-bound retail target. For selectable COMDATs (header inlines, templates, synthesized special members,
+        # and their associative EH), refuse symbols already mapped elsewhere in the ledger or unreferenced by this TU's
+        # kept/owned code so classify_extras verifies them against their real retail identity or discardability.
+        if not role_compatible(rva, s):
+            return False
+        if s in elsewhere and rva not in elsewhere[s]:
+            return False
+        if own_body(s):
+            return s in same_eh_root(rva, [s])
+        if known_elsewhere(rva, s):
+            return False
+        if not is_live(s):
+            return False
+        meta_ = rows_index[rva]
+        role_ = meta_['role']
+        if role_ in ('ehhandler', 'unwind', 'funclet'):
+            return s in same_eh_root(rva, [s])
+        names_ = {info[rva][1]} | set(meta_.get('accepted_names', ()))
+        if s in names_:
             return True
-        names_ = {info[rva][1]} | set(map_index(MAP)['rows'][rva].get('accepted_names', ()))
+        if role_ in ('initializer', 'terminator'):
+            return False
         if not any(n_ and not PLACEHOLDER_.search(n_) for n_ in names_):
-            return True                       # a placeholder-named row: similarity is the only lead to its identity
+            return rva in elsewhere.get(s, ()) or role_ != 'owned'
         fam_ = member_family(s)
-        return s in names_ or (fam_ is not None and fam_ in {member_family(n_) for n_ in names_})
+        return fam_ is not None and fam_ in {member_family(n_) for n_ in names_}
     for r, rva, s in sorted(scores, reverse=True):
         if r < 0.30:
             break

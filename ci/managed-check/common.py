@@ -14,7 +14,7 @@ CONTEXT = "BFME II / Boat"
 PIN = {
     "image_sha256": "154f0ee3f79f129b5d2e09adaef61dd2fab208040bff6b64e7fb0e182181dcf6",
     "profile_sha256": "e1f176db430a157b71cfb2f1adffbe5d0464aecb25f7e8796a83e015232ba0e3",
-    "checker": "685eb12c0315c128718a38619db5faa48f3f60521a2c60a233d6921f4fb0d7a5",
+    "checker": "97bdf95bb916dd07f873f9083316e7fc8d21991afc696a9781515041cdaaa44e",
     "baseline_sha256": "f008b587570bad693981dc7218588c81d192a1e064b0f7f861539c51156a7640",
 }
 RUNNER_LABEL = "boat-small/from=bfme2-compiler-v1"
