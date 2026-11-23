@@ -72,9 +72,22 @@ the reference build. Changes need both good source and a passing check.
   or through other headers, is rebuilt and compared. Add to a shared header
   only what your change needs; an inline accessor that Zero Hour has is fine
   when it emits no code of its own, but say so in the pull request.
-- **Worklist generator:** `python3 worklist/generate.py` rewrites the tracked
-  TSV files. Use it to confirm an item drops out, then restore them
-  (`git checkout -- worklist/`); do not commit its output.
+- **Worklist generator:** with no input flags, `python3 worklist/generate.py`
+  refreshes only `draft_headers_in_use.tsv`, `draft_headers_unused.tsv` and
+  `stand_in_types.tsv` (and requires `src/` and `include/` to be clean against
+  `HEAD`); it leaves the function tables untouched. To confirm a finished
+  function drops out of `unwritten_with_zero_hour_counterpart.tsv`, commit your
+  source change, download `worklist/inputs/unwritten.tsv` from the `progress`
+  branch, and regenerate into a temporary directory:
+
+  ```sh
+  out=$(mktemp -d)
+  python3 worklist/generate.py --unwritten /path/to/unwritten.tsv --output "$out"
+  ```
+
+  See [Refresh the lists](worklist/README.md#refresh-the-lists) for the other
+  input reports. If you run without `--output`, restore tracked files with
+  `git checkout -- worklist/` and do not commit its output.
 
 ## A first contribution, step by step
 

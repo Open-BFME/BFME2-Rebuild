@@ -184,29 +184,38 @@ and slot establish ownership and behavior (recorded 2026-11-18).
 
 ## Refresh the lists
 
-From a clean checkout, run:
+From a clean checkout (`src/` and `include/` clean against `HEAD`), run:
 
 ```sh
 python3 worklist/generate.py
 ```
 
-This rebuilds the two Draft lists from the checked-out source.
-Use the included TSV snapshots for the other lists. Maintainers produce
-the dated correspondence and standalone-link reports outside the checkout.
-With both reports available, rebuild the lists as follows.
+This rebuilds `draft_headers_in_use.tsv`, `draft_headers_unused.tsv` and
+`stand_in_types.tsv` from the checked-out source, and leaves existing function
+tables untouched.
+
+To refresh `unwritten_with_zero_hour_counterpart.tsv`, `link_ranked.tsv` or
+`files.tsv` locally, pass the published inputs from `worklist/inputs/` on the
+`progress` branch (`--unwritten`, `--ranked` and `--verdicts`), ideally into a
+temporary directory with `--output`. For example, to check that a committed
+function drops out of `unwritten_with_zero_hour_counterpart.tsv`:
 
 ```sh
-python3 worklist/generate.py \
-  --unwritten /path/to/zh_named_unwritten.tsv \
-  --ranked /path/to/functions_ranked.tsv
+out=$(mktemp -d)
+python3 worklist/generate.py --unwritten /path/to/unwritten.tsv --output "$out"
 ```
+
+See [Progress card and worklists](../ci/progress/README.md#worklists) for the
+full recipe to regenerate all six tables from the published `worklist/inputs/`
+files on `progress`.
 
 The function lists depend on reference correspondence, current checker
 results and a standalone link report. Refresh those measurements before
 running the generator to reflect a new landing. The generator preserves
 each source report's original date and revision independently. Missing
-measurements should leave the previous dated snapshot in place.
+measurements leave the previous dated snapshot in place.
 
 The generator checks every function row against the checkout and leaves out
-rows that already have a body. It rewrites the tracked files; restore them
-(`git checkout -- worklist/`) before you commit.
+rows that already have a body. Without `--output`, it rewrites the tracked
+files in `worklist/`; restore them (`git checkout -- worklist/`) before you
+commit.
