@@ -725,6 +725,8 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
         measured_tree = TREE
         new_tree = "d" * 40
         new_commit = "e" * 40
+        base_tree = "6" * 40
+        target_tree = "7" * 40
         blob_sha = "b" * 40
         src_tree_m, code_tree_m = "1" * 40, "2" * 40
         src_tree_t, code_tree_t = "3" * 40, "4" * 40
@@ -743,6 +745,18 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                 "merge_base_commit": {"sha": ancestor_main},
                 "files": intervening_files,
             }
+            fx[f"git/commits/{ancestor_main}"] = {
+                "sha": ancestor_main,
+                "parents": [],
+                "tree": {"sha": base_tree},
+                "message": "Ancestor main\n",
+            }
+            fx[f"git/commits/{new_main}"] = {
+                "sha": new_main,
+                "parents": [{"sha": ancestor_main}],
+                "tree": {"sha": target_tree},
+                "message": "Current main\n",
+            }
             fx[f"git/commits/{new_commit}"] = {
                 "sha": new_commit,
                 "parents": [{"sha": new_main}],
@@ -754,10 +768,11 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                             f"{lander.TRAILER}, run 99."),
             }
             leaf = pr_file.split("/")[-1]
-            fx[f"git/trees/{measured_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_m}]}
+            # Only real main commit trees exist on GitHub; synthetic unpushed measured_tree / new_tree must not be fetched.
+            fx[f"git/trees/{base_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_m}]}
             fx[f"git/trees/{src_tree_m}"] = {"truncated": False, "tree": [{"path": "Code", "type": "tree", "sha": code_tree_m}]}
             fx[f"git/trees/{code_tree_m}"] = {"truncated": False, "tree": [{"path": leaf, "type": "blob", "sha": blob_sha}]}
-            fx[f"git/trees/{new_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_t}]}
+            fx[f"git/trees/{target_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_t}]}
             fx[f"git/trees/{src_tree_t}"] = {"truncated": False, "tree": [{"path": "Code", "type": "tree", "sha": code_tree_t}]}
             fx[f"git/trees/{code_tree_t}"] = {"truncated": False, "tree": [{"path": leaf, "type": "blob", "sha": blob_sha}]}
             statuses = fx[f"commits/{head}/statuses?per_page=100&page=1"]
@@ -830,6 +845,30 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                 idx_dispatch = write_ops.index(("dispatches", lander.LANDED_EVENT))
                 idx_status = write_ops.index((f"statuses/{ncommit}", "success"))
                 self.assertLess(idx_dispatch, idx_status)
+
+    def test_blob_sha_in_tree_handles_404_gracefully_and_holds_receipt(self):
+        api, new_main, anc, head, mtree, ntree, ncommit, _ = self._setup_ancestor_fixture(rules_on_current=True)
+        # Direct unit check: missing/unpushed tree SHA returns HTTP 404 -> None (never raises ApiError).
+        self.assertIsNone(lander.blob_sha_in_tree(api, mtree, "src/Code/A.cpp"))
+        self.assertIsNone(lander.blob_sha_in_tree(api, ntree, "src/Code/A.cpp"))
+
+        # End-to-end land check: if a commit tree returns 404, land holds with "receipt" (not unhandled ApiError).
+        del api.fx["git/trees/" + "7" * 40]
+        cfg = CONFIG | {"exceptions": set(), "auto_admission": True}
+        with tempfile.TemporaryDirectory() as tmp:
+            w = tmp + "/w"
+            code, _ = quiet(lander.run, ["select", w], env(main=new_main, mode="live", pr="2"), api=api, config=cfg)
+            self.assertEqual(code, 0)
+            put_receipts(w)
+            rp = Path(w, "rules/receipt.json")
+            rdoc = json.loads(rp.read_text())
+            rdoc.update({"base": new_main, "tools_commit": new_main, "tree": ntree, "run": "999002", "attempt": "1"})
+            rp.write_text(json.dumps(rdoc))
+            with self.assertRaises(lander.Held) as caught:
+                quiet(lander.run, ["land", w], env(main=new_main, mode="live", pr="2", run="99"),
+                      api=api, config=cfg, sleep=lambda _: None)
+        self.assertEqual(caught.exception.code, "receipt")
+        self.assertEqual([w for w in api.writes if w[0] == "PUT"], [])
 
     def test_disjoint_ancestor_refuses_overlapping_or_non_tu_or_spoofed_inline_failure(self):
         cfg = CONFIG | {"exceptions": set()}

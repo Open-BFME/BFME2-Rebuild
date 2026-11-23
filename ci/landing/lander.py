@@ -290,7 +290,7 @@ def resolve_disjoint_ancestor(api, prefix12, main, pr_files, compare_cache=None,
 
 def blob_sha_in_tree(api, tree_sha, rel_path, tree_cache=None):
     """Walk git/trees/{sha} path segments to find the exact blob SHA of rel_path in tree_sha."""
-    if not HEX40.fullmatch(tree_sha) or not rel_path or rel_path.startswith("/") or ".." in rel_path.split("/"):
+    if not isinstance(tree_sha, str) or not HEX40.fullmatch(tree_sha) or not rel_path or rel_path.startswith("/") or ".." in rel_path.split("/"):
         return None
     parts = rel_path.split("/")
     cur = tree_sha
@@ -298,7 +298,10 @@ def blob_sha_in_tree(api, tree_sha, rel_path, tree_cache=None):
         if tree_cache is not None and cur in tree_cache:
             entries = tree_cache[cur]
         else:
-            doc = api.call(f"git/trees/{cur}")
+            try:
+                doc = api.call(f"git/trees/{cur}")
+            except ApiError:
+                return None
             if not isinstance(doc, dict) or doc.get("truncated") is True or not isinstance(doc.get("tree"), list):
                 return None
             entries = {item.get("path"): item for item in doc["tree"] if isinstance(item, dict)}
@@ -1369,14 +1372,27 @@ def land_bound(api, env, config, directory, prior, sleep):
                 or rules.get("state") != "pass" or rules.get("policy_sha256") != rules_policy):
             raise Held("receipt", "source rules passed on current main", "mismatched or stale source rules receipt")
         tree = rules["tree"]
-        # Cryptographically prove every PR TU has the exact same blob SHA in target_tree as in measured_tree.
-        m_cache, t_cache = {}, {}
+        # base and target_main are real commits on main (measured_tree and rules["tree"] are unpushed local
+        # merge trees). Matching base blobs plus disjoint intervening commits plus identical head in both
+        # receipts proves the PR files merged identically, and post-merge verify() confirms rules["tree"] on main.
+        try:
+            base_doc = api.call(f"git/commits/{base}")
+            target_doc = api.call(f"git/commits/{target_main}")
+        except ApiError:
+            raise Held("receipt", "readable commit trees for ancestor and current main",
+                       f"missing commit metadata for {base[:12]} or {target_main[:12]}") from None
+        base_tree = ((base_doc or {}).get("tree") or {}).get("sha", "") if isinstance(base_doc, dict) else ""
+        target_tree = ((target_doc or {}).get("tree") or {}).get("sha", "") if isinstance(target_doc, dict) else ""
+        if not HEX40.fullmatch(base_tree) or not HEX40.fullmatch(target_tree):
+            raise Held("receipt", "valid commit trees for ancestor and current main",
+                       f"ancestor {str(base_tree)[:12]} vs current {str(target_tree)[:12]}")
+        b_cache, t_cache = {}, {}
         for fname in decision["pr_files"]:
-            m_blob = blob_sha_in_tree(api, measured_tree, fname, tree_cache=m_cache)
-            t_blob = blob_sha_in_tree(api, tree, fname, tree_cache=t_cache)
-            if not m_blob or m_blob != t_blob:
-                raise Held("receipt", f"identical blob for {fname} on ancestor and current main",
-                           f"ancestor {str(m_blob)[:12]} vs current {str(t_blob)[:12]}")
+            b_blob = blob_sha_in_tree(api, base_tree, fname, tree_cache=b_cache)
+            t_blob = blob_sha_in_tree(api, target_tree, fname, tree_cache=t_cache)
+            if not b_blob or b_blob != t_blob:
+                raise Held("receipt", f"identical base blob for {fname} on ancestor and current main",
+                           f"ancestor {str(b_blob)[:12]} vs current {str(t_blob)[:12]}")
     else:
         try:
             positions = lr.compare_receipts(match, inline, rules, binding, runs["match"][1], runs["match"][0],
