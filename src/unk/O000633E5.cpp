@@ -4,5 +4,9 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=rests-on:veto; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameLogic/W3DGhostObject.h"
 // FUNCTION: BFME2 0x000633E5 size=48 name=??1W3DGhostObject@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+W3DGhostObject::~W3DGhostObject()
+{
+}
 
