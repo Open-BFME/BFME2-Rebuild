@@ -102,6 +102,8 @@ public:
 	float Compute_Projected_Sphere_Radius(float dist, float radius);				// 0x00133E80
 
 	const OBBoxClass &Get_Near_Clip_Bounding_Box(void) const;					// 0x00135950
+	const FrustumClass &Get_Frustum(void) const;								// 0x0004CB06: the world-space frustum, refreshed first
+	const Vector3 *Get_Frustum_Corners(void) const;							// 0x00140C50: its eight corners, refreshed first
 	void Get_Projection_Matrix(Matrix4x4 *set_tm);							// 0x00134820
 	void Get_D3D_Projection_Matrix(Matrix4x4 *set_tm);						// 0x001348C0
 	void Get_D3D_View_Projection_Matrix(Matrix4x4 *set_tm);								// 0x00134A80 (the map's name: the D3D projection times the inverse camera transform)

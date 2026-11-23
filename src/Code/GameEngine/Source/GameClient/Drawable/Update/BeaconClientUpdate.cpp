@@ -11,6 +11,11 @@
 #include "Common/Xfer.h"
 #include "GameLogic/GameLogic.h"
 #include "GameClient/ParticleSys.h"
+#include "GameClient/Drawable.h"
+#include "GameClient/InGameUI.h"
+#include "Common/Radar.h"
+#include "GameLogic/Object.h"
+extern float g_secondsPerLogicFrame;
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00C5EB94), read back
 // entry by entry from the image.
@@ -71,8 +76,70 @@ void BeaconClientUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x004C9674 size=355 name=?createParticleSystem@@YA?AVBfmeParticleSystemHandle@@PAVDrawable@@@Z evidence=N:ledger
+static ParticleSystemHandle createParticleSystem(Drawable *draw)
+{
+	ParticleSystemHandle system;
+	if (draw)
+	{
+		Object *obj = draw->getObject();
+		if (obj)
+		{
+			AsciiString templateName;
+			templateName.format("BeaconSmoke%6.6X", (0xffffff & obj->getIndicatorColor()));
+			const ParticleSystemTemplate *particleTemplate = TheParticleSystemManager->findTemplate(templateName);
+			if (particleTemplate)
+			{
+				system = TheParticleSystemManager->createParticleSystem(particleTemplate, true);
+				if (system)
+				{
+					Coord3D offset(0.0f, 0.0f, 3.0f);
+					system->attachToDrawable(draw);
+					system->setPosition(&offset);
+				}
+			}
+			else
+			{
+				templateName.format("BeaconSmokeFFFFFF");
+				const ParticleSystemTemplate *failsafeTemplate = TheParticleSystemManager->findTemplate(templateName);
+				if (failsafeTemplate)
+				{
+					system = TheParticleSystemManager->createParticleSystem(failsafeTemplate, true);
+					if (system)
+						system->attachToDrawable(draw);
+				}
+			}
+		}
+	}
+	return system;
+}
 
 // FUNCTION: BFME2 0x004C97D7 size=216 name=?hideBeacon@BeaconClientUpdate@@QAEXXZ evidence=N:ledger
+void BeaconClientUpdate::hideBeacon()
+{
+	Drawable *draw = getDrawable();
+	if (draw)
+	{
+		draw->setDrawableHidden(true);
+		draw->setShadowsEnabled(false);
+		draw->setSelectable(false);
+		TheInGameUI->deselectDrawable(draw);
+	}
+
+	ParticleSystemHandle system;
+	if (draw && m_particleSystemID == 0)
+	{
+		system = createParticleSystem(draw);
+		if (system)
+			m_particleSystemID = system->m_systemID;
+	}
+
+	if (m_particleSystemID != 0)
+	{
+		ParticleSystemHandle found = TheParticleSystemManager->findParticleSystemByID((ParticleSystemID)m_particleSystemID);
+		if (found)
+			found->stop();
+	}
+}
 
 // FUNCTION: BFME2 0x004C98AF size=225 name=?clientUpdate@BeaconClientUpdate@@UAEXXZ evidence=N:ledger
 

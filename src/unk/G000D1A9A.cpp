@@ -2,3 +2,8 @@
 // object=G000D1A9A name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x000D1A9A size=7 name=?getProjectionBias@@YAMXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+extern float bfmeProjectionBias;
+float getProjectionBias()
+{
+	return bfmeProjectionBias;
+}
