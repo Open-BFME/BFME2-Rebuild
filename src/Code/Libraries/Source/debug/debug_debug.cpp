@@ -28,8 +28,8 @@ extern "C" __declspec(dllimport) int __stdcall DeleteFileA(const char *name);
 void *DebugReAllocMemory(void *oldPtr, unsigned int newSize);
 void DebugFreeMemory(void *ptr);
 void *DebugAllocMemory(unsigned int numBytes);
-// Typed view of the untyped allocator.
-template <class T> __forceinline T *DebugAllocArray(unsigned int numBytes) { return (T *)DebugAllocMemory(numBytes); }
+// A typed view of the untyped allocator.
+#define DEBUG_ALLOC(type, numBytes) ((type *)DebugAllocMemory(numBytes))
 
 // The debug singleton (retail VA 0x00DE0880).
 Debug *theDebug = 0;
@@ -545,7 +545,7 @@ const char *Debug::AddLogGroup(const char *fileOrGroup, const char *descr)
 	// no, add new entry
 	cur = (KnownLogGroupList *)DebugAllocMemory(sizeof(KnownLogGroupList));
 	cur->next = firstLogGroup;
-	cur->nameGroup = DebugAllocArray<char>(strlen(help) + 1);
+	cur->nameGroup = DEBUG_ALLOC(char, strlen(help) + 1);
 	strcpy(cur->nameGroup, help);
 	if (descr)
 	{
@@ -757,7 +757,7 @@ void Debug::StartOutput(DebugIOInterface::StringType type, const char *fmt, ...)
 bool Debug::ExecCommand(const char *cmdstart, const char *cmdend)
 {
 	// alloc & copy string
-	char *strbuf = DebugAllocArray<char>(cmdend - cmdstart + 1);
+	char *strbuf = DEBUG_ALLOC(char, cmdend - cmdstart + 1);
 	memcpy(strbuf, cmdstart, cmdend - cmdstart);
 	strbuf[cmdend - cmdstart] = 0;
 
