@@ -9,7 +9,7 @@
 // Edges: left=rests-on:name+profile right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:Z
 // FUNCTION: BFME2 0x001A441F size=58 name=?W3d_Shader_Reset@@YAXPAUW3dShaderStruct@@@Z evidence=N:ledger tier=B hypothesis:K
-void W3d_Shader_Reset(W3dShaderStruct *s)
+inline void W3d_Shader_Reset(W3dShaderStruct *s)
 {
 	s->DepthCompare = W3DSHADER_DEPTHCOMPARE_DEFAULT;
 	s->DepthMask = W3DSHADER_DEPTHMASK_DEFAULT;
