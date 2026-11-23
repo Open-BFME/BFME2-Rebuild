@@ -3,9 +3,9 @@
 // object=G00492E43 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x00492E43 size=54 name=??0TeleportSpecialAbilityUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-TeleportSpecialAbilityUpdateModuleData::TeleportSpecialAbilityUpdateModuleData()
+TeleportSpecialAbilityUpdateModuleData::TeleportSpecialAbilityUpdateModuleData() :
+	m_busyForDuration(0)
 {
-	m_busyForDuration = 0;
 	m_maxDistance = -1.0f;
 }
 
