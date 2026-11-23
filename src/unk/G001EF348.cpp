@@ -1,4 +1,10 @@
+#include "Common/MultiplayerColorDefinition.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G001EF348 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x001EF348 size=6 name=?Rva001EF348Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+// Returns the address of the table the row is named for (the ledger types it as int).
+int Rva001EF348Get()
+{
+	return (int)MultiplayerColorDefinition::m_fieldParseTable;
+}
