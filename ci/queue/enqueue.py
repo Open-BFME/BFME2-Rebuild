@@ -50,6 +50,12 @@ WIDE_HOLDS = ("Held: H1 ", "Held: H10 ")
 EVENTS = {"refresh": "bfme-source-refresh", "recheck": "bfme-source-recheck"}
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
+# The Actions token (GITHUB_TOKEN) has 1,000 REST calls an hour for the whole repository. Backfill stops while it has
+# ACTIONS_TOKEN_RESERVE or fewer, so queue checks, Boat reports and admission never run out, and above that charges
+# each head what its runs spend downstream: a refresh runs rules, admission and a Boat report (about 60 calls with
+# their G1-G8, source rules, Boat and inline statuses), a recheck runs the source rules only (about 20).
+ACTIONS_TOKEN_RESERVE = 250
+CALLS_PER_BACKFILL = {"refresh": 60, "recheck": 20}
 LIMIT = 4 * 1024**2
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 
@@ -198,6 +204,18 @@ class GitHubApi:
         if code != 200:
             raise ApiError(f"GET {path} returned HTTP {code}")
         return payload
+
+    def core_remaining(self):
+        """REST calls this token has left this hour (GET /rate_limit itself costs none)."""
+        code, payload = self._send("GET", "https://api.github.com/rate_limit")
+        try:
+            remaining = int(payload["resources"]["core"]["remaining"])
+        except (TypeError, KeyError, ValueError):
+            raise ApiError(f"GET rate_limit returned HTTP {code}") from None
+        if code != 200:
+            raise ApiError(f"GET rate_limit returned HTTP {code}")
+        self.ratelimit_remaining = remaining
+        return remaining
 
     def post(self, path, body):
         code, payload = self._send("POST", f"https://api.github.com/repos/{REPO}/{path}", body)
@@ -412,12 +430,20 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
 
     backfilled = []
-    dispatch_min_rl = MIN_RATELIMIT_BACKFILL if dispatch_api is api else MIN_RATELIMIT_ENQUEUE
-    dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
-    if (backfill_candidates
-            and main_sha and HEX40.fullmatch(main_sha)
-            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)
-            and (dispatch_rl is None or dispatch_rl > dispatch_min_rl)):
+    budget = None
+    if (backfill_candidates and main_sha and HEX40.fullmatch(main_sha)
+            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
+        # Every backfilled head spends the Actions token downstream (rules, admission, Boat), and that token is
+        # shared by every workflow in the repository: pace by what it has left, never by the queue token's quota.
+        try:
+            budget = dispatch_api.core_remaining()
+        except ApiError as exc:
+            print(f"Skipping backfill; could not read the Actions token quota: {exc}", file=sys.stderr)
+    spare = -1 if budget is None else budget - ACTIONS_TOKEN_RESERVE
+    if budget is not None and spare < CALLS_PER_BACKFILL[backfill_candidates[0][2]]:
+        print(f"Backfill paused: the Actions token has {budget} REST calls left "
+              f"({ACTIONS_TOKEN_RESERVE} are kept for checks and landings).", file=sys.stderr)
+    elif budget is not None:
         try:
             active = active_pipeline_runs(api)
         except ApiError as exc:
@@ -425,9 +451,11 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             active = MAX_ACTIVE_BOAT
         slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
         for _, pr, kind in backfill_candidates[:slots]:
+            if CALLS_PER_BACKFILL[kind] > spare:
+                break
             dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
             if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
-                    or (dispatch_rl is not None and dispatch_rl <= dispatch_min_rl)):
+                    or (dispatch_rl is not None and dispatch_rl <= ACTIONS_TOKEN_RESERVE)):
                 break
             num = pr["number"]
             oid = pr.get("headRefOid", "")
@@ -445,6 +473,7 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
                     "client_payload": {"number": num, "head": oid, "base": main_sha},
                 })
                 backfilled.append(num)
+                spare -= CALLS_PER_BACKFILL[kind]
                 print(f"Dispatched {event} for PR #{num} ({oid[:12]})")
             except ApiError as exc:
                 print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
@@ -458,6 +487,8 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             f"- **Enqueued:** {len(enqueued)} ({', '.join(f'#{n}' for n in enqueued) or 'none'})",
             f"- **Backfill waiting:** {len(backfill_candidates)}",
             f"- **Backfill dispatched:** {len(backfilled)} ({', '.join(f'#{n}' for n in backfilled) or 'none'})",
+            f"- **Actions token REST calls left:** {'not read' if budget is None else budget}"
+            f" (reserve {ACTIONS_TOKEN_RESERVE})",
         ]
         if enqueue_errors:
             lines.append(f"- **Enqueue rejections:** {len(enqueue_errors)}")

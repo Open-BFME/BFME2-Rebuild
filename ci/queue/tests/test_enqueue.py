@@ -49,7 +49,8 @@ def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEAB
 
 class FakeApi:
     def __init__(self, pages=(), *, active_in_progress=0, active_queued=0,
-                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=(), fail_status=False):
+                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=(), fail_status=False,
+                 fail_quota=False):
         self.pages = pages
         self.active_in_progress = active_in_progress
         self.active_queued = active_queued
@@ -58,6 +59,8 @@ class FakeApi:
         self.ratelimit_remaining = ratelimit
         self.fail_enqueue = set(fail_enqueue)
         self.fail_status = fail_status
+        self.fail_quota = fail_quota
+        self.quota_reads = 0
         self.enqueued = []
         self.dispatches = []
         self.statuses = []
@@ -98,6 +101,12 @@ class FakeApi:
         if "workflows/admission.yml/runs" in path:
             return {"total_count": 0}
         raise AssertionError(f"Unexpected GET {path}")
+
+    def core_remaining(self):
+        self.quota_reads += 1
+        if self.fail_quota:
+            raise enqueue.ApiError("GET rate_limit returned HTTP 500")
+        return self.ratelimit_remaining
 
     def post(self, path, body):
         if path.startswith("statuses/"):
@@ -419,6 +428,35 @@ class EnqueueTests(unittest.TestCase):
         self.assertIn("&& vars.BFME_MERGE_QUEUE_ENABLED != 'yes'", push)
         enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")
         self.assertIn("      statuses: write\n", enq_wf)
+
+    def test_backfill_is_paced_by_the_actions_token_quota_not_the_queue_token(self):
+        boat = {"BFME II / Boat": "SUCCESS"}
+        prs = ([make_pr(900 + i, statuses={}) for i in range(5)]
+               + [make_pr(910 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(3)])
+        queue_api = FakeApi([prs], ratelimit=4900)
+
+        # 250 kept in reserve; 370 left pays for two refreshes (60 each), not a third.
+        actions = FakeApi(ratelimit=370)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [900, 901])
+        self.assertEqual(actions.quota_reads, 1)
+
+        # Rechecks (20 each) fit where a refresh would not: all three heads are rechecks, 310 left pays for three.
+        rechecks = FakeApi([prs[5:]], ratelimit=4900)
+        self.assertEqual(run(rechecks, dispatch_api=FakeApi(ratelimit=310))["backfilled"], [910, 911, 912])
+
+        # At or under the reserve, or when the quota cannot be read, nothing is dispatched and no runs are listed.
+        for actions in (FakeApi(ratelimit=250), FakeApi(ratelimit=0), FakeApi(ratelimit=4000, fail_quota=True)):
+            with self.subTest(remaining=actions.ratelimit_remaining, fail=actions.fail_quota):
+                queue_api = FakeApi([prs], ratelimit=4900)
+                self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [])
+                self.assertEqual((actions.dispatches, actions.statuses), ([], []))
+                self.assertEqual(queue_api.gets, [])
+
+    def test_marker_and_dispatch_use_the_actions_token(self):
+        queue_api, actions = FakeApi([[make_pr(920, statuses={})]], ratelimit=4900), FakeApi(ratelimit=900)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [920])
+        self.assertEqual(([p for p, _ in actions.statuses], len(actions.dispatches)), ([f"statuses/{920:040x}"], 1))
+        self.assertEqual((queue_api.statuses, queue_api.dispatches), ([], []))
 
     def test_workflows_have_atomic_cutover_guards(self):
         enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")
