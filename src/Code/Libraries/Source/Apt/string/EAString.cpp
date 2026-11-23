@@ -114,7 +114,8 @@ unsigned short hashLower(const char *text)
 // FUNCTION: BFME2 0x006D3850 size=12 name=?Rva006D3850@@YA_NH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 bool Rva006D3850(int codePoint)
 {
-    return codePoint <= 0x10FFFF;
+    bool valid = codePoint <= 0x10FFFF;
+    return valid;
 }
 
 // FUNCTION: BFME2 0x006D3860 size=16 name=?HasCapacityAbove@EAStringC@@QBE_NI@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-contiguity-callers
