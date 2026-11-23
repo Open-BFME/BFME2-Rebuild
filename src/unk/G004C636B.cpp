@@ -15,12 +15,10 @@ void SiegeDeployHordeSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse 
 	p.add(dataFieldParse);
 }
 // FUNCTION: BFME2 0x004C6386 size=82 name=??0SiegeDeployHordeSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-SiegeDeployHordeSpecialPower::SiegeDeployHordeSpecialPower(Thing *thing, const ModuleData *moduleData)
-	: SpecialPowerUpdateModule(thing, moduleData)
+SiegeDeployHordeSpecialPower::SiegeDeployHordeSpecialPower(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerUpdateModule(thing, moduleData),
+	m_unk0x38(INVALID_ID),
+	m_unk0x3C(0.0f, 0.0f, 0.0f),
+	m_unk0x48(0)
 {
-	m_unk0x38 = INVALID_ID;
-	m_unk0x3C.x = 0.0f;
-	m_unk0x3C.y = 0.0f;
-	m_unk0x3C.z = 0.0f;
-	m_unk0x48 = 0;
 }
