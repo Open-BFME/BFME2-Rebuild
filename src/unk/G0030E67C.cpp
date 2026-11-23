@@ -1,8 +1,8 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0030E67C name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
-// FUNCTION: BFME2 0x0030E67C size=340 name=?rva0030E67C@Rva0030E7D0@@QAEMMM@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
-// FUNCTION: BFME2 0x0030E8DF size=44 name=?rva0030E8DF@Rva0030E8DF@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x0030E67C size=340 name=?getHeight@SmoothCameraHeightField@@QAEMMM@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x0030E8DF size=44 name=?clear@SmoothCameraHeightField@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0030E910 size=63 name=?resize@SmoothCameraHeightSamples@@QAEXIM@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0030E94F size=18 name=?resize@RvaVector@@QAEXI@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0030E961 size=788 name=?Initialize@SmoothCameraHeightField@@QAEXPBGHHHH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit

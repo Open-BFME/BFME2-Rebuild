@@ -449,7 +449,7 @@ Waypoint *TerrainLogic::getClosestWaypointOnPath(const Coord3D *pos, const Ascii
 
 // FUNCTION: BFME2 0x00281AED size=266 name=?isValidUnitType@Waypoint@@QAE_NPAVObject@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x00281BF7 size=28 name=?rva00281BF7@Rva00281BF7@@QAEHXZ evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x00281BF7 size=28 name=?getDrawable@Bridge@@QAEPAVDrawable@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00281C13 size=308 name=?updateDamageState@Bridge@@QAEXXZ evidence=N:ledger tier=A
 

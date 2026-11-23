@@ -5,7 +5,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:Z
-// FUNCTION: BFME2 0x00091A5A size=38 name=?store@BoundedShortGrid@@QAEXHHF@Z evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x00091A5A size=38 name=?setHeight@WorldHeightMap@@QAEXHHG@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00091AAC size=6 name=?name@Rva00091AACNamed@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:cohesion
 

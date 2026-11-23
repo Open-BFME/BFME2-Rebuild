@@ -20,6 +20,7 @@ class AABoxClass
 {
 public:
 	AABoxClass(void) {}
+	AABoxClass(Vector3 *points, int num);
 
 	// 0x0071AFA0: whether a point lies inside the box (gridcull.cpp's leaf test).
 	bool Contains(const Vector3 &point) const;

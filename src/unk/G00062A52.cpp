@@ -7,4 +7,4 @@ int Rva00062A52Get()
 {
 	return 65535;
 }
-// FUNCTION: BFME2 0x00062A58 size=38 name=?load@BoundedShortGrid@@QAEFHH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x00062A58 size=38 name=?getHeight@WorldHeightMap@@QBEGHH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit

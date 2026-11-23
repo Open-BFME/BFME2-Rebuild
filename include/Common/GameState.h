@@ -88,6 +88,20 @@ public:
 };
 // SIZE 0xDE8
 
+struct SaveGameEntry
+{
+	SaveGameEntry();
+	SaveGameEntry(const SaveGameEntry &other);
+	~SaveGameEntry();
+	SaveGameEntry &operator=(const SaveGameEntry &other);
+
+	UnicodeString filename;
+	SaveGameInfo info;
+	Int unk0xDEC;
+	Int unk0xDF0;
+};
+typedef char SaveGameEntrySize[(sizeof(SaveGameEntry) == 0xDF4) ? 1 : -1];
+
 // The label-and-size XferEnum call GameState's save-info xfer makes for the auto-save flag (0x002DB9EF).
 Xfer &XferIsAutoSaveOrNot(Xfer *xfer, void *value);					// 0x002DB9EF (map: Rva002DB9EFGet)
 
@@ -131,6 +145,7 @@ public:
 	void removePostProcessSnapshotsSince(void *unused, UnsignedInt sequence);	// 0x002DC4B8 (map: rva002DC4B8@GameState): drops the entries recorded at or after the sequence
 	void gameStatePostProcessLoad();								// 0x002DC52B
 	Int saveGame(UnicodeString filename, const UnicodeString &description, Int which, Bool showMessage, Int isAutoSave);	// 0x002DD38D
+	Int doLoadGame(SaveGameEntry entry);
 	void saveGameManual(const UnicodeString &filename, const UnicodeString &description, Int which, Bool showMessage);	// 0x002DDE43 (map: rva002DDE43@GameState): saveGame with isAutoSave 0
 	void populateSaveGameListbox(class GameWindow *saveList, class GameWindow *autoSaveList, bool saving, int kind);	// 0x002DF3B0 (map: ?populateSaveGameListbox@GameState@@QAEXPAVGameWindow@@0_NH@Z)
 

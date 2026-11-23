@@ -29,6 +29,7 @@
 #include "WWMath/Vector3.h"
 #include "WWMath/Vector4.h"
 #include "WWMath/wwinline.h"
+#include "WW3D2/DX8CleanupHook.h"
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/TextureAsset.h"
 #include "WW3D2/ww3dformat.h"
@@ -81,13 +82,6 @@ extern unsigned number_of_DX8_calls;		// ?number_of_DX8_calls@@3IA, 0x00DEDA98
 extern bool _DX8SingleThreaded;
 void DX8_Assert();
 void Log_DX8_ErrorCode(unsigned res);		// 0x0011F450 (Zero Hour's DX8_ErrorCode macro tests the HRESULT and calls it)
-
-class DX8_CleanupHook
-{
-public:
-	virtual void ReleaseResources(void) = 0;
-	virtual void ReAcquireResources(void) = 0;
-};
 
 struct RenderStateStruct
 {

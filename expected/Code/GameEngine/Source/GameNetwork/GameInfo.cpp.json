@@ -47,7 +47,8 @@
       "parent": null,
       "object": "O003FF0B4",
       "accepted_names": [
-        "??4TreeHintOpaque0043671B@@QAEAAU0@ABU0@@Z"
+        "??4TreeHintOpaque0043671B@@QAEAAU0@ABU0@@Z",
+        "??4SaveGameEntry@@QAEAAU0@ABU0@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

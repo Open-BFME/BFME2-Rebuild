@@ -111,7 +111,7 @@ WaterTracksRenderSystem::WaterTracksRenderSystem(void)
 
 // FUNCTION: BFME2 0x000FE93B size=140 name=?init@WaterTracksRenderSystem@@QAEXXZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x000FE9E3 size=248 name=?rva000FE9E3@Rva000FE9E3PointBounds@@QAEPAV1@PAVVector3@@H@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x000FE9E3 size=248 name=??0AABoxClass@@QAE@PAVVector3@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000FEADB size=2413 name=?render@WaterTracksObj@@QAEHPAVDX8VertexBufferClass@@HAAVRenderInfoClass@@@Z evidence=N:ledger tier=A
 

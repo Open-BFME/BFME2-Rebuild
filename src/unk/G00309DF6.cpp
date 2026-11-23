@@ -6,7 +6,7 @@
 // FUNCTION: BFME2 0x00309E24 size=6 name=?Rva00309E24Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00309E2A size=6 name=?getFireEffectFieldParseTable@@YAHXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00309E30 size=27 name=?bfmeReset@@YAXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-// FUNCTION: BFME2 0x00309E4B size=6 name=?Rva00309E4BGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x00309E4B size=6 name=?GetGlowEffect@@YAPAUGlowEffect@@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00309E51 size=20 name=?bfmeCopyTable@@YAXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00309E65 size=6 name=?Rva00309E65Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00309E6B size=20 name=?bfmeCopySecond@@YAXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit

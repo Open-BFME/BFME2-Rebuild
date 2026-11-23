@@ -1350,6 +1350,8 @@ void W3DView::slot29(Int value)
 	m_currentCameraWaypointID = value;
 }
 
+// FUNCTION: BFME2 0x0008BD5E size=269 name=??1W3DView@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+
 // FUNCTION: BFME2 0x0008BE6B size=953 name=?setCameraTransform@W3DView@@AAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0008C224 size=392 name=?init@W3DView@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion

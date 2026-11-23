@@ -20,6 +20,7 @@
 #include <vector>
 #include "GameClient/View.h"
 #include "GameClient/ParabolicEase.h"
+#include "GameClient/SmoothCameraHeightField.h"
 #include "Common/SubsystemInterface.h"
 #include "Common/AsciiString.h"
 #include "Common/Coord2D.h"
@@ -120,6 +121,26 @@ struct TerrainPositionRequest
 };
 
 typedef char TerrainPositionRequestSize[(sizeof(TerrainPositionRequest) == 0x18) ? 1 : -1];
+
+struct W3DViewEaseState
+{
+	W3DViewEaseState();
+	UnsignedByte m_unk0x00[0x68];
+	ParabolicEase m_ease;
+};
+typedef char W3DViewEaseStateSize[(sizeof(W3DViewEaseState) == 0x70) ? 1 : -1];
+
+class W3DViewMotionState
+{
+public:
+	W3DViewMotionState();
+	virtual ~W3DViewMotionState();
+
+	UnsignedByte m_unk0x04[0x28];
+	std::vector<Int> m_samples;
+	UnsignedByte m_unk0x38[0x28];
+};
+typedef char W3DViewMotionStateSize[(sizeof(W3DViewMotionState) == 0x60) ? 1 : -1];
 
 // The camera's settings object (the member at +0x24C8 of W3DView; retail builds a global of the same class at VA 0x00BCF670 with constructor 0x00101C92 and vftable
 // 0x007CF670, 22 slots). The map spells the class "Rva00BCF670CameraSettings"; the role names below are the map's own for the slots it names (the INI loaders
@@ -313,7 +334,7 @@ public:
 	Real m_shakeIntensity;					// +0x128
 	Vector3 m_shakerAngles;					// +0x12C
 	Real m_unk0x138;						// +0x138 (0 in the constructor)
-	UnsignedInt m_unk0x13C[0x1C];			// +0x13C: a 0x70-byte object the constructor builds with 0x00085815
+	W3DViewEaseState m_easeState;
 
 	TRotateCameraInfo m_rcInfo;				// +0x1AC
 	Bool m_doingRotateCamera;				// +0x1DC
@@ -346,13 +367,13 @@ public:
 	Real m_pathGroundEnd;					// +0x1EF0
 	Int m_pathTimeMultipliers[255];			// +0x1EF4
 	Int m_pathNumValues;					// +0x22F0
-	UnsignedInt m_unk0x22F4[0x18];			// +0x22F4: an object with a vftable (constructor 0x00312C95, 0x60 bytes)
+	W3DViewMotionState m_motionStateA;
 	Int m_cameraMovementMode;				// +0x2354
 	Int m_unk0x2358;						// +0x2358
 	Int m_unk0x235C;						// +0x235C
 	Int m_unk0x2360;						// +0x2360
 	Int m_unk0x2364;						// +0x2364
-	UnsignedInt m_unk0x2368[0x18];			// +0x2368: a second object of the same class
+	W3DViewMotionState m_motionStateB;
 	Bool m_unk0x23C8;						// +0x23C8
 	Int m_currentCameraWaypointID;   // +0x23CC  The waypoint test compares against this ID, and slot 28 notifies the message stream when it changes.
 	Bool m_freezeTimeForCameraMovement;		// +0x23D0 (slot 35 sets it, slot 54 reads it)
@@ -377,7 +398,7 @@ public:
 	Bool m_unk0x2448;						// +0x2448 (slots 164 / 165)
 	Bool m_unk0x2449;						// +0x2449 (slot 115 reads it)
 	Coord3D m_unk0x244C;					// +0x244C
-	UnsignedInt m_unk0x2458[8];				// +0x2458: a 0x20-byte object holding a vector and a string (its unwind cleanup is the StringBase destructor)
+	SmoothCameraHeightField m_smoothCameraHeightField;
 	UnsignedInt m_unk0x2478[6];				// +0x2478: a second 0x44-byte data record (to +0x24BC), the same shape as the one at +0xC0
 	Bool m_unk0x2490;						// +0x2490 (slots 160 / 161)
 	Bool m_unk0x2491;						// +0x2491
@@ -415,5 +436,9 @@ typedef char W3DViewGroundLevelOffset[(offsetof(W3DView, m_groundLevel) == 0x240
 typedef char W3DViewCameraConstraintOffset[(offsetof(W3DView, m_cameraConstraint) == 0x240C) ? 1 : -1];
 typedef char W3DViewNameOffset[(offsetof(W3DView, m_cameraSlaveObjectName) == 0x243C) ? 1 : -1];
 typedef char W3DViewTailOffset[(offsetof(W3DView, m_unk0x24F4) == 0x24F4) ? 1 : -1];
+typedef char W3DViewEaseStateOffset[(offsetof(W3DView, m_easeState) == 0x13C) ? 1 : -1];
+typedef char W3DViewMotionAOffset[(offsetof(W3DView, m_motionStateA) == 0x22F4) ? 1 : -1];
+typedef char W3DViewMotionBOffset[(offsetof(W3DView, m_motionStateB) == 0x2368) ? 1 : -1];
+typedef char W3DViewSmoothHeightOffset[(offsetof(W3DView, m_smoothCameraHeightField) == 0x2458) ? 1 : -1];
 
 #endif

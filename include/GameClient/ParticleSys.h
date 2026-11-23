@@ -14,10 +14,13 @@
 #include "Common/GameType.h"
 #include "Common/Coord3D.h"
 #include "Common/AsciiString.h"
+#include "Common/SubsystemInterface.h"
+#include "Common/Snapshot.h"
 
 class Xfer;
 class Drawable;
 class Object;
+class RenderInfoClass;
 class ParticleSystemTemplate;
 class ParticleSystemManager;
 class ParticleSystemHandle;
@@ -61,14 +64,33 @@ public:
 };
 // SIZE 0xC
 
-class ParticleSystemManager
+class ParticleSystemManager : public SubsystemInterface, public Snapshot
 {
 public:
+	ParticleSystemManager();
+	virtual ~ParticleSystemManager();
+
+	virtual void init();
+	virtual void reset();
+	virtual void update();
+
+	virtual Int vslot14() = 0;
+	virtual void vslot15(Int value);
+	virtual void render(RenderInfoClass &rinfo) = 0;
+	virtual void vslot17(RenderInfoClass &rinfo) = 0;
+	virtual void markDirty() = 0;
+	virtual void rva001F9F66();
+
 	ParticleSystemTemplate *findTemplate(const AsciiString &name) const;
 	ParticleSystemHandle createParticleSystem(const ParticleSystemTemplate *sysTemplate, Bool createSlaves = true);
 	ParticleSystemHandle findParticleSystemByID(ParticleSystemID id);
-    int rva001F5AA4(ParticleSystemTemplate *,const Object *,int);
+	int rva001F5AA4(ParticleSystemTemplate *, const Object *, int);
 	void destroyParticleSystemByID(ParticleSystemID id);
+
+protected:
+	virtual void loadPostProcess();
+	virtual const char *GetSnapshotName() const;
+	virtual void xfer(Xfer *xfer);
 };
 
 extern ParticleSystemManager *TheParticleSystemManager;

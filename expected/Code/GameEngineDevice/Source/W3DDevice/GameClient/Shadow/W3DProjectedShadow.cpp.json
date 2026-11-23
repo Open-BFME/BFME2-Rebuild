@@ -573,7 +573,8 @@
       "parent": null,
       "object": "O001085D7",
       "accepted_names": [
-        "??0Rva007B1380@@QAE@XZ"
+        "??0Rva007B1380@@QAE@XZ",
+        "??0W3DDualProjectedShadow@@QAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -673,7 +674,8 @@
       "parent": null,
       "object": "O001085D7",
       "accepted_names": [
-        "??0Rva007AFF00Owner@@QAE@XZ"
+        "??0Rva007AFF00Owner@@QAE@XZ",
+        "??0W3DProjectedShadow@@QAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -723,7 +725,8 @@
       "parent": null,
       "object": "O001085D7",
       "accepted_names": [
-        "??0Rva00109610@@QAE@XZ"
+        "??0Rva00109610@@QAE@XZ",
+        "??0W3DDualDecalShadow@@QAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"

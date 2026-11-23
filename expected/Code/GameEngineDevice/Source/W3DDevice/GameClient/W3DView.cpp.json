@@ -47,7 +47,8 @@
       "parent": null,
       "object": "O00085553",
       "accepted_names": [
-        "??0Rva00085815@@QAE@XZ"
+        "??0Rva00085815@@QAE@XZ",
+        "??0W3DViewEaseState@@QAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -973,7 +974,8 @@
       "parent": null,
       "object": "O00085553",
       "accepted_names": [
-        "??1Rva008B77D@@UAE@XZ"
+        "??1Rva008B77D@@UAE@XZ",
+        "??1W3DViewMotionState@@UAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -998,7 +1000,8 @@
       "parent": null,
       "object": "O00085553",
       "accepted_names": [
-        "??_GRva008B77D@@UAEPAXI@Z"
+        "??_GRva008B77D@@UAEPAXI@Z",
+        "??_GW3DViewMotionState@@UAEPAXI@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1076,32 +1079,6 @@
       "object": "O00085553",
       "accepted_names": [
         "?rva0008BD59@W3DView@@UAEXXZ"
-      ],
-      "seed_tier": "B",
-      "membership_hypothesis": "hypothesis:cohesion"
-    },
-    {
-      "rva": "0x0008BD5E",
-      "size": 269,
-      "section": ".text",
-      "role": "comdat",
-      "parent_rva": "",
-      "fold_group": "",
-      "name": "??1View@@UAE@XZ",
-      "name_evidence": "P:provisional (snapshot-name-shared)",
-      "confidence": "low",
-      "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-RenderObjClass|W3DView;N+O:special member placed in another class's object (implicit/inline)",
-      "object_id": "O00085553",
-      "object_evidence": "X:closure",
-      "parent_rvas": "",
-      "parent_evidence": "",
-      "depends_on": "L2:+cohesion/literals",
-      "weakest_link": "C/lit",
-      "parent": null,
-      "object": "O00085553",
-      "accepted_names": [
-        "??1View@@UAE@XZ",
-        "??1Rva008BD5E@@UAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1188,7 +1165,7 @@
       "role": "comdat",
       "parent_rva": "",
       "fold_group": "",
-      "name": "??_GRva008BD5E@@UAEPAXI@Z",
+      "name": "??_GW3DView@@UAEPAXI@Z",
       "name_evidence": "N:ledger",
       "confidence": "high",
       "evidence": "X:scalar-deleting-dtor shape",
@@ -1201,6 +1178,7 @@
       "parent": null,
       "object": "O00085553",
       "accepted_names": [
+        "??_GW3DView@@UAEPAXI@Z",
         "??_GRva008BD5E@@UAEPAXI@Z"
       ],
       "seed_tier": "B",
@@ -2288,8 +2266,8 @@
       "role": "ehhandler",
       "parent_rva": "0x0008BD5E",
       "fold_group": "",
-      "name": "__ehhandler$??1View@@UAE@XZ",
-      "name_evidence": "P:provisional (snapshot-name-shared)",
+      "name": "__ehhandler$??1W3DView@@UAE@XZ",
+      "name_evidence": "N:ledger",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x009028E8;X:parent-by-prologue",
       "object_id": "O00085553",
@@ -2301,6 +2279,7 @@
       "parent": "0x0008BD5E",
       "object": "O00085553",
       "accepted_names": [
+        "__ehhandler$??1W3DView@@UAE@XZ",
         "__ehhandler$??1View@@UAE@XZ",
         "__ehhandler$??1Rva008BD5E@@UAE@XZ"
       ],

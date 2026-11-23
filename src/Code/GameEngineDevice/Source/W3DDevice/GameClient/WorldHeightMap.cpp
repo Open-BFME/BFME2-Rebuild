@@ -83,7 +83,7 @@
 
 // FUNCTION: BFME2 0x000ADF1B size=29 name=?Rva000ADF1BRangeForward@@YAPAURva000ADF1BOutput@@PAURva000ADF1BInput@@0PAU1@ABURva000ADF1BIteratorTag@@@Z evidence=?:placeholder tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x000ADF41 size=79 name=?bfmeBitA@Gen_0074B410@@QBE_NHH@Z evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x000ADF41 size=79 name=?getFlipState@WorldHeightMap@@QBE_NHH@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000ADF90 size=430 name=?rva000ADF90@Rva000ADA1AMask@@QAEXPBUMaskCirclePoint@@ME@Z evidence=?:placeholder tier=B hypothesis:K
 

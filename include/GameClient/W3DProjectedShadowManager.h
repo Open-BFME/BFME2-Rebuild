@@ -7,9 +7,12 @@
 #ifndef BFME2_W3DPROJECTEDSHADOWMANAGER_H
 #define BFME2_W3DPROJECTEDSHADOWMANAGER_H
 
+#include <stddef.h>
 #include "GameClient/ProjectedShadowManager.h"
 
 class W3DProjectedShadow;
+class DX8VertexBufferClass;
+class DX8IndexBufferClass;
 
 class W3DProjectedShadowManager : public ProjectedShadowManager
 {
@@ -22,8 +25,21 @@ public:
 	virtual UnsignedInt forwardIf(UnsignedInt first, void *second, UnsignedInt third, UnsignedInt fourth);	// slot 5, 0x001087A6
 	virtual W3DProjectedShadow *rva0010C2D5(int, RenderObjClass *, Shadow::ShadowTypeInfo *, Shadow::ShadowTypeInfo *);	// slot 6, 0x0010C2D5
 
-	unsigned char m_unk0x04[0x270];																	// +0x04..0x274
+	Bool ReAcquireResources();
+	void ReleaseResources();
+
+	unsigned char m_unk0x04[0x250];
+	DX8VertexBufferClass *m_shadowVertexBuffer;
+	DX8IndexBufferClass *m_shadowIndexBuffer;
+	Int m_shadowVertexBufferOffset;
+	Int m_shadowVertexBufferBase;
+	Int m_shadowIndexBufferOffset;
+	Int m_shadowIndexBufferBase;
+	Int m_numShadowVertices;
+	Int m_numShadowIndices;
 };
 typedef char W3DProjectedShadowManagerSize[(sizeof(W3DProjectedShadowManager) == 0x274) ? 1 : -1];
+typedef char W3DProjectedShadowManagerVbOffset[(offsetof(W3DProjectedShadowManager, m_shadowVertexBuffer) == 0x254) ? 1 : -1];
+typedef char W3DProjectedShadowManagerIndicesOffset[(offsetof(W3DProjectedShadowManager, m_numShadowIndices) == 0x270) ? 1 : -1];
 
 #endif

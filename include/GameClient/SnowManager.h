@@ -35,4 +35,6 @@ public:
 };
 typedef char SnowManagerSize[(sizeof(SnowManager) == 0x74) ? 1 : -1];
 
+extern SnowManager *TheSnowManager;
+
 #endif

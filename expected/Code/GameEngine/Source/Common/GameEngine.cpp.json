@@ -7173,7 +7173,8 @@
       "parent": null,
       "object": "O00225D68",
       "accepted_names": [
-        "??0Rva00229811@@QAE@XZ"
+        "??0Rva00229811@@QAE@XZ",
+        "??0SaveGameEntry@@QAE@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -7199,7 +7200,8 @@
       "object": "O00225D68",
       "accepted_names": [
         "??1GameInfoOwned@@QAE@XZ",
-        "??1TreeHintOpaque0043671B@@QAE@XZ"
+        "??1TreeHintOpaque0043671B@@QAE@XZ",
+        "??1SaveGameEntry@@QAE@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -10703,7 +10705,8 @@
       "parent": null,
       "object": "O00225D68",
       "accepted_names": [
-        "??0TreeHintOpaque0043671B@@QAE@ABU0@@Z"
+        "??0TreeHintOpaque0043671B@@QAE@ABU0@@Z",
+        "??0SaveGameEntry@@QAE@ABU0@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

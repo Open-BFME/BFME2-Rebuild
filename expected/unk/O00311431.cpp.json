@@ -323,7 +323,8 @@
       "parent": null,
       "object": "O00311431",
       "accepted_names": [
-        "??0Rva00312C95@@QAE@XZ"
+        "??0Rva00312C95@@QAE@XZ",
+        "??0W3DViewMotionState@@QAE@XZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
