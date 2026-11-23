@@ -223,6 +223,12 @@ template const CategoryModuleClass<8> *CategoryModuleClass<8>::getFirst();
 // FUNCTION: BFME2 0x001F5B0A size=111 name=?findParticleSystemByID@ParticleSystemManager@@AAE?AVBfmeParticleSystemHandle@@W4ParticleSystemID@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x001F5B79 size=69 name=?destroyParticleSystemByID@ParticleSystemManager@@QAEXW4ParticleSystemID@@@Z evidence=N:ledger tier=A
+void ParticleSystemManager::destroyParticleSystemByID(ParticleSystemID id)
+{
+	ParticleSystemHandle sys = findParticleSystemByID(id);
+	if (sys.m_system)
+		sys.m_system->destroy();
+}
 
 // FUNCTION: BFME2 0x001F5BBE size=123 name=?rva001F5BBE@Rva001F58D4@@QAEXPAURva001F5BBEArg@@@Z evidence=?:placeholder tier=A
 
