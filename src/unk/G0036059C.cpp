@@ -1,6 +1,11 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0036059C name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameLogic/DamageFX.h"
 // FUNCTION: BFME2 0x0036059C size=19 name=?clear@DFX@DamageFX@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x003605AF size=38 name=?rva003605AF@Rva003605AF@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x003605D5 size=14 name=?rva003605D5@DamageFX@@QAEHHH@Z evidence=X:map request (link (from standalone link 0cf3e833)) tier=B hypothesis:mm1-gap-unit
+Int DamageFX::rva003605D5(Int damageType, Int source)
+{
+	return m_dfx[damageType][0].m_damageFXThrottleTime;
+}
