@@ -127,8 +127,16 @@ int ScoreKeeper::rva0039B773()
 }
 
 // FUNCTION: BFME2 0x0039B780 size=13 name=?setEnabled@W3DBridge@@QAEX_N@Z evidence=N:ledger tier=A
+void ScoreKeeper::setEnabled(Bool enabled)
+{
+	m_enabled = enabled;
+}
 
 // FUNCTION: BFME2 0x0039B78D size=8 name=?LoadPostProcess@ScoreKeeper@@UAEXXZ evidence=N:ledger tier=A
+void ScoreKeeper::loadPostProcess()
+{
+	m_enabled = true;
+}
 
 // FUNCTION: BFME2 0x0039B795 size=24 name=?rva0039B795@Rva0039B795@@QAEXH@Z evidence=?:placeholder tier=A
 void ScoreKeeper::rva0039B795(Int amount)
