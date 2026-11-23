@@ -2051,6 +2051,13 @@ ModuleData *UnleashSpecialPowerModuleData::friend_newModuleData(INI *ini)
 // FUNCTION: BFME2 0x002532CE size=6 name=?Rva002532CEGet@@YAHXZ evidence=?:placeholder tier=A
 // FUNCTION: BFME2 0x0025330B size=29 name=?clear@?$BitFlags@$0CEP@W4ModelConditionFlagType@@@@QAEXI@Z evidence=X:map request tier=A
 // FUNCTION: BFME2 0x00253390 size=61 name=??0UpdateModule@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=A
+UpdateModule::UpdateModule(Thing *thing, const ModuleData *moduleData)
+	: BehaviorModule(thing, moduleData)
+	, m_nextCallFrameAndPhase(0)
+	, m_indexInLogic(-1)
+	, m_unk0x1C(-1)
+{
+}
 // FUNCTION: BFME2 0x002533CD size=6 name=?GetSnapshotName@UpdateModule@@MBEPBDXZ evidence=N:ledger tier=A
 const char *UpdateModule::GetSnapshotName() const
 {
