@@ -1,6 +1,8 @@
 name: BFME II merge queue enqueue
 
 on:
+  push:
+    branches: [main]
   workflow_run:
     workflows:
       - BFME II Boat comparison
