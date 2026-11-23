@@ -39,6 +39,7 @@ permissions: {}
 jobs:
   group:
     if: >-
+      vars.BFME_MERGE_QUEUE_ENABLED != 'yes' &&
       github.repository == 'Open-BFME/BFME2-Rebuild' && github.event_name == 'merge_group' &&
       startsWith(github.ref, 'refs/heads/gh-readonly-queue/main/')
     runs-on: ubuntu-24.04
@@ -79,6 +80,7 @@ jobs:
 
   land:
     if: >-
+      vars.BFME_MERGE_QUEUE_ENABLED != 'yes' &&
       github.repository == 'Open-BFME/BFME2-Rebuild' && github.ref == 'refs/heads/main' &&
       github.event_name != 'merge_group' &&
       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')

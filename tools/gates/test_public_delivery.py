@@ -432,6 +432,97 @@ class Delivery(unittest.TestCase):
             self.assertEqual(self.publish(env, altered), 1)
         self.assertEqual(self.api.posts, [])
 
+    def _make_batch_commit(self, edits, *, parent=None):
+        parent = parent or self.base
+        work = self.run_root / f"batch-{len(tuple(self.run_root.iterdir()))}"
+        git(self.root, "clone", "-q", str(self.trusted), str(work))
+        for rel, content in edits.items():
+            dest = work / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(content)
+            git(work, "add", rel)
+        git(work, "commit", "-q", "-m", "Batch edit")
+        commit = git(work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(work), f"{commit}:refs/fixture/batch-{commit[:8]}")
+        tree = git(self.origin, "rev-parse", f"{commit}^{{tree}}")
+        return git(self.origin, "commit-tree", tree, "-p", parent, input="Batched queue candidate")
+
+    def test_queue_batched_merge_group_overrides_g6_when_g1_passes(self):
+        # Set up 5 existing src/*.cpp files on base so G1 passes while per-PR G6 (limit 3) triggers.
+        base_work = self.run_root / "multi-base"
+        git(self.root, "clone", "-q", str(self.trusted), str(base_work))
+        for i in range(5):
+            (base_work / f"src/Unit{i}.cpp").write_text(f"int Unit{i}() {{ return {i}; }}\n")
+        (base_work / "include").mkdir(exist_ok=True)
+        (base_work / "include/Shared.h").write_text("class SharedThing { int x; };\n")
+        git(base_work, "add", "src", "include")
+        git(base_work, "commit", "-q", "-m", "Add five units and shared header")
+        multi_base = git(base_work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(base_work), f"+{multi_base}:refs/heads/main")
+        self.main = multi_base
+
+        # Edit all 5 units in one batch (exceeds G6 limit of 3 substantive files).
+        batch_work = self.run_root / "multi-batch"
+        git(self.root, "clone", "-q", str(base_work), str(batch_work))
+        for i in range(5):
+            (batch_work / f"src/Unit{i}.cpp").write_text(f"int Unit{i}() {{ return {i + 10}; }}\n")
+        git(batch_work, "add", "src")
+        git(batch_work, "commit", "-q", "-m", "Batched 5-unit merge group")
+        batch_head = git(batch_work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(batch_work), f"+{batch_head}:{QUEUE}")
+        git(self.origin, "update-ref", f"refs/pull/{PR}/head", batch_head)
+
+        # In merge_group, G6 is overridden to pass when G1 passes.
+        self.queue_head = batch_head
+        with patch.object(source, "verified_tools", lambda _b: None):
+            env = self.environment("merge_group", head=batch_head, protected=multi_base)
+            result, markdown = self.evaluate(env)
+            self.assertEqual(result["state"], "pass")
+            self.assertEqual(result["overall"], "success")
+            self.assertEqual(result["states"]["G6"], "success")
+            self.assertIn("| G6 Change scope | Pass |", markdown)
+            self.assertEqual(self.publish(env, result), 0)
+
+            # On a normal pull_request_target, the same 5-file change MUST still fail G6.
+            self.api.posts.clear()
+            pr_env = self.environment("pull_request_target", head=batch_head, protected=multi_base)
+            pr_result, pr_markdown = self.evaluate(pr_env)
+            self.assertEqual(pr_result["state"], "fail")
+            self.assertEqual(pr_result["overall"], "failure")
+            self.assertEqual(pr_result["states"]["G6"], "failure")
+            self.assertIn("| G6 Change scope | Fail |", pr_markdown)
+
+            # In merge_group, G7 (repo-wide one-definition) MUST STILL FAIL even when G6 is overridden.
+            g7_work = self.run_root / "multi-g7"
+            git(self.root, "clone", "-q", str(batch_work), str(g7_work))
+            (g7_work / "src/Unit0.cpp").write_text("class SharedThing { int y; };\nint Unit0() { return 10; }\n")
+            git(g7_work, "add", "src/Unit0.cpp")
+            git(g7_work, "commit", "-q", "-m", "Duplicate class in batch")
+            g7_head = git(g7_work, "rev-parse", "HEAD")
+            git(self.origin, "fetch", "-q", str(g7_work), f"+{g7_head}:{QUEUE}")
+            self.queue_head = g7_head
+            g7_env = self.environment("merge_group", head=g7_head, protected=multi_base)
+            g7_result, _ = self.evaluate(g7_env)
+            self.assertEqual(g7_result["state"], "fail")
+            self.assertEqual(g7_result["overall"], "failure")
+            self.assertEqual(g7_result["states"]["G6"], "success")
+            self.assertEqual(g7_result["states"]["G7"], "failure")
+
+            # In merge_group, G1 failure MUST NOT override G6.
+            g1_work = self.run_root / "multi-g1"
+            git(self.root, "clone", "-q", str(batch_work), str(g1_work))
+            (g1_work / "README.md").write_text("disallowed\n")
+            git(g1_work, "add", "README.md")
+            git(g1_work, "commit", "-q", "-m", "G1 violation in batch")
+            g1_head = git(g1_work, "rev-parse", "HEAD")
+            git(self.origin, "fetch", "-q", str(g1_work), f"+{g1_head}:{QUEUE}")
+            self.queue_head = g1_head
+            g1_env = self.environment("merge_group", head=g1_head, protected=multi_base)
+            g1_result, _ = self.evaluate(g1_env)
+            self.assertEqual(g1_result["state"], "fail")
+            self.assertEqual(g1_result["states"]["G1"], "failure")
+            self.assertEqual(g1_result["states"]["G6"], "failure")
+
 
 class Copy(unittest.TestCase):
     def test_void_pointer_guidance_preserves_an_existing_ledger_signature(self):

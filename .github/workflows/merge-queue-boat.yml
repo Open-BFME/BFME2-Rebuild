@@ -1,0 +1,233 @@
+name: BFME II Merge Queue Boat
+
+on:
+  merge_group:
+    types: [checks_requested]
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  plan:
+    if: >-
+      github.repository_id == '1464323350' &&
+      vars.BFME_MERGE_QUEUE_ENABLED == 'yes' &&
+      startsWith(github.ref, 'refs/heads/gh-readonly-queue/main/')
+    name: Plan merge group shards
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      shards: '${{ steps.plan.outputs.shards }}'
+      has_shards: '${{ steps.plan.outputs.has_shards }}'
+    steps:
+      - name: Verify merge_group base matches current main
+        shell: bash
+        env:
+          QUEUE_READ_TOKEN: '${{ github.token }}'
+          BASE_SHA: '${{ github.event.merge_group.base_sha }}'
+        run: |
+          set -euo pipefail
+          if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Expected a 40-hex merge_group base_sha." >&2
+            exit 1
+          fi
+          main=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
+            --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/heads/main" \
+            <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha')
+          if [[ "$BASE_SHA" != "$main" ]]; then
+            echo "Expected merge_group base_sha ($BASE_SHA) to match current main ($main)." >&2
+            exit 1
+          fi
+      - name: Check out trusted main base
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.event.merge_group.base_sha }}'
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify protected check packages
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
+          (cd ci/managed-nt2 && sha256sum -c --quiet bundle.sha256)
+      - name: Build sharded Boat comparison plans
+        id: plan
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
+            GITHUB_EVENT_NAME="$GITHUB_EVENT_NAME" GITHUB_EVENT_PATH="$GITHUB_EVENT_PATH" \
+            GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_REPOSITORY="$GITHUB_REPOSITORY" \
+            GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" GITHUB_REF="$GITHUB_REF" \
+            GITHUB_SHA="$GITHUB_SHA" \
+            python3 -B ci/managed-check/merge_queue_plan.py "$RUNNER_TEMP/bfme-mq-plans"
+      - name: Upload merge group plans
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bfme-mq-plans
+          path: '${{ runner.temp }}/bfme-mq-plans'
+          if-no-files-found: ignore
+          retention-days: 1
+
+  boat:
+    needs: plan
+    if: needs.plan.result == 'success' && needs.plan.outputs.has_shards == 'yes'
+    name: Boat shard ${{ matrix.shard }}
+    runs-on: boat-small/from=bfme2-compiler-v1
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
+    permissions:
+      contents: read
+    steps:
+      - name: Wait for runner filesystem hydration
+        shell: bash
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 90))
+          runner_grace=$((SECONDS + 15))
+          waited=0
+          while true; do
+            pending=$(awk '
+              {
+                for (i = 7; i <= NF - 2; i++) {
+                  if ($i == "-") {
+                    if ($(i + 1) ~ /^fuse(\.|$)/ && ($(i + 1) ~ /^fuse\.ascii-lazyfs(-|$)/ || $(i + 2) ~ /^ascii-lazyfs(-|$)/) && $5 !~ /^\/var\/lib\/ascii-lazy\/retired(\/|$)/) {
+                      print $5
+                    }
+                    break
+                  }
+                }
+              }
+            ' /proc/self/mountinfo)
+            if [ -z "$pending" ]; then
+              if [ "$waited" -eq 1 ]; then
+                printf 'Runner filesystem hydration finished after %ss.\n' "$SECONDS"
+              fi
+              exit 0
+            fi
+            home_dir="${HOME%/}"
+            if [ -n "$home_dir" ] && [ "$pending" = "$home_dir" ] \
+              && [ "${pending#/opt/boat-compiler}" = "$pending" ] \
+              && [ "${pending#/var/}" = "$pending" ] \
+              && [ "${pending#/usr}" = "$pending" ] \
+              && [ "$SECONDS" -ge "$runner_grace" ]; then
+              printf 'Proceeding after %ss with persistent lazy mount %s (all other mounts retired).\n' "$SECONDS" "$home_dir"
+              exit 0
+            fi
+            waited=1
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              printf 'Expected lazy runner mounts to retire within 90s; still mounted:\n%s\n' "$pending" >&2
+              exit 1
+            fi
+            sleep 0.5
+          done
+      - name: Check out trusted main base
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.event.merge_group.base_sha }}'
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Download merge group plans
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: bfme-mq-plans
+          path: '${{ runner.temp }}/bfme-mq-plans'
+      - name: Verify image and comparison inputs
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
+          (cd ci/header-witness && sha256sum -c --quiet bundle.sha256)
+          (
+            cd ci/managed-nt2
+            sha256sum -c --quiet bundle.sha256
+            got=$(printf '%s\n' '?f@X@@QAEHXZ' | engine/gen/bin/demangle)
+            test "$got" = 'public: int __thiscall X::f(void)'
+          )
+          cd /opt/boat-compiler
+          sudo -n sha256sum -c --quiet input.sha256 runtime-files.sha256
+          sudo -n systemd-tmpfiles --create /etc/tmpfiles.d/boat-compiler.conf
+      - name: Restore trusted base object cache
+        continue-on-error: true
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: '${{ runner.temp }}/bfme-base-cache'
+          key: bfme-base-obj-v1-n-${{ github.event.merge_group.base_sha }}
+          restore-keys: |
+            bfme-base-obj-v1-n-
+            bfme-base-obj-v1-
+      - name: Compile and compare shard
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -z "${BFME_READ_TOKEN:-}${BFME_STATUS_TOKEN:-}${GITHUB_TOKEN:-}"
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C \
+            TMPDIR="$RUNNER_TEMP" GITHUB_SHA="${{ github.event.merge_group.base_sha }}" \
+            GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_RUN_ID="$GITHUB_RUN_ID" \
+            GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
+            BFME_BASE_CACHE="$RUNNER_TEMP/bfme-base-cache" \
+            python3 -B ci/managed-check/compare.py \
+            "$RUNNER_TEMP/bfme-mq-plans/shard-${{ matrix.shard }}" \
+            "$RUNNER_TEMP/bfme-mq-verdict"
+      - name: Upload shard verdict
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bfme-mq-verdict-${{ matrix.shard }}
+          path: '${{ runner.temp }}/bfme-mq-verdict/verdict.json'
+          if-no-files-found: error
+          retention-days: 1
+
+  report:
+    needs: [plan, boat]
+    if: >-
+      always() && !cancelled() &&
+      needs.plan.result != 'skipped' &&
+      github.repository_id == '1464323350' &&
+      vars.BFME_MERGE_QUEUE_ENABLED == 'yes' &&
+      startsWith(github.ref, 'refs/heads/gh-readonly-queue/main/')
+    name: Report merge group Boat verdict
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Check out trusted status writer
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.event.merge_group.base_sha }}'
+          persist-credentials: false
+          sparse-checkout: |
+            ci/managed-check
+      - name: Verify status writer bundle
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
+      - name: Download merge group plans
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: bfme-mq-plans
+          path: '${{ runner.temp }}/bfme-mq-plans'
+      - name: Download shard verdicts
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: bfme-mq-verdict-*
+          path: '${{ runner.temp }}/bfme-mq-verdicts'
+      - name: Publish aggregate BFME II / Boat status
+        shell: bash
+        env:
+          BFME_STATUS_TOKEN: '${{ github.token }}'
+        run: |
+          set -Eeuo pipefail
+          python3 -B ci/managed-check/merge_queue_report.py \
+            "$RUNNER_TEMP/bfme-mq-plans" "$RUNNER_TEMP/bfme-mq-verdicts"
