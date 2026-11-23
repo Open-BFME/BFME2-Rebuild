@@ -320,7 +320,7 @@ void Debug::AddHResultTranslator(unsigned int prio, HResultTranslator func, void
 				break;
 
 		hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators + 1) * sizeof(HResultTranslatorEntry));
-		memmove(hrTranslators + i + 1, hrTranslators + i, (numHrTranslators - i) * sizeof(HResultTranslatorEntry));
+		memmove(hrTranslators + i + 1, hrTranslators + i, (numHrTranslators - i) * sizeof(HResultTranslator));
 		numHrTranslators++;
 		hrTranslators[i].prio = prio;
 		hrTranslators[i].func = func;
@@ -337,9 +337,8 @@ void Debug::RemoveHResultTranslator(HResultTranslator func, void *user)
 		{
 			if (hrTranslators[i].func == func && hrTranslators[i].user == user)
 			{
-				memmove(hrTranslators + i, hrTranslators + i + 1, (numHrTranslators - i - 1) * sizeof(HResultTranslatorEntry));
-				hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators - 1) * sizeof(HResultTranslatorEntry));
-				numHrTranslators--;
+				memmove(hrTranslators + i, hrTranslators + i + 1, (numHrTranslators - i - 1) * sizeof(HResultTranslator));
+				hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(--hrTranslators, numHrTranslators * sizeof(HResultTranslatorEntry));
 			}
 		}
 	}
@@ -348,44 +347,52 @@ void Debug::RemoveHResultTranslator(HResultTranslator func, void *user)
 // FUNCTION: BFME2 0x00038DF0 size=78 name=?d_00889d20@Rva00889D20Class@@QAE_NPAX00@Z evidence=?:placeholder tier=A
 bool Debug::AddIOFactory(const char *ioID, const char *descr, DebugIOInterface *(*factory)())
 {
-	if (ioID && factory)
-	{
-		IOFactoryListEntry *e = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
-		e->next = firstIOFactory;
-		e->ioID = ioID;
-		e->descr = descr;
-		e->factory = factory;
-		e->io = NULL;
-		e->input = NULL;
-		e->inputAlloc = 0;
-		e->inputUsed = 0;
-		firstIOFactory = e;
-	}
+	// bail out if invalid parameters were passed in
+	if (!ioID || !factory)
+		return true;
+
+	// allocate and initialise a new list entry
+	IOFactoryListEntry *e = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
+	e->next = firstIOFactory;
+	e->ioID = ioID;
+	e->descr = descr;
+	e->factory = factory;
+	e->io = NULL;
+	e->input = NULL;
+	e->inputAlloc = 0;
+	e->inputUsed = 0;
+
+	// add to the list
+	firstIOFactory = e;
+
 	return true;
 }
 
 // FUNCTION: BFME2 0x00038E40 size=85 name=?d_00889d70@Rva00889D70Class@@QAE_NPAX0@Z evidence=?:placeholder tier=A
 bool Debug::AddCommands(const char *cmdgroup, DebugCmdInterface *cmdif)
 {
-	if (cmdgroup && cmdif)
+	// bail out if invalid parameters were passed in
+	if (!cmdgroup || !cmdif)
+		return true;
+
+	// walk to the end of the list, adding there (unless the interface is in the list already)
+	CmdInterfaceListEntry **listptr = &firstCmdGroup;
+	while (*listptr)
 	{
-		// is it known already? if not, append it
-		CmdInterfaceListEntry **link = &firstCmdGroup;
-		if (*link)
-		{
-			do
-			{
-				link = (CmdInterfaceListEntry **)*link;
-				if ((*link)->cmdif == cmdif)
-					return true;
-			} while ((*link)->next);
-		}
-		CmdInterfaceListEntry *e = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
-		e->next = NULL;
-		e->group = cmdgroup;
-		e->cmdif = cmdif;
-		*link = e;
+		if ((*listptr)->cmdif == cmdif)
+			return true;
+		listptr = &((*listptr)->next);
 	}
+
+	// allocate and initialise a new list entry
+	CmdInterfaceListEntry *e = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
+	e->next = NULL;
+	e->group = cmdgroup;
+	e->cmdif = cmdif;
+
+	// add to the list
+	*listptr = e;
+
 	return true;
 }
 
@@ -489,14 +496,16 @@ Debug::FrameHashEntry *Debug::AddFrameEntry(unsigned int addr, unsigned int type
 	else
 	{
 		// no, just add file name (without path though)
-		const char *name = fileOrGroup;
 		if (fileOrGroup)
 		{
+			const char *name = fileOrGroup;
 			for (const char *c = fileOrGroup; *c; ++c)
 				if (*c == '\\' || *c == '/')
 					name = c + 1;
+			e->fileOrGroup = name;
 		}
-		e->fileOrGroup = name;
+		else
+			e->fileOrGroup = NULL;
 	}
 
 	// add to hash
