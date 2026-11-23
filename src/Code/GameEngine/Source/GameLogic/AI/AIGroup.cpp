@@ -252,6 +252,57 @@ Bool AIGroup::getCenter(Coord3D *center)
 }
 
 // FUNCTION: BFME2 0x0036D14F size=374 name=?getMinMaxAndCenter@AIGroup@@QAE_NPAVCoord2D@@0PAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Bool AIGroup::getMinMaxAndCenter(Coord2D *min, Coord2D *max, Coord3D *center)
+{
+	Int count = 0;
+	min->x = 1e10f;
+	max->x = -1e10f;
+	min->y = 1e10f;
+	max->y = -1e10f;
+	center->x = 0.0f;
+	center->y = 0.0f;
+	center->z = 0.0f;
+
+	_STL::list<Object *>::iterator i;
+	Int id = 0;	// zero is no formation
+	for (i = m_memberList.begin(); i != m_memberList.end(); ++i)
+	{
+		if ((*i)->isDisabledByType(DISABLED_HELD))
+			continue;	// riders do not count toward the center
+		AIUpdateInterface *ai = (*i)->getAIUpdateInterface();
+		if (ai)
+		{
+			const Coord3D *objPos = (*i)->getPosition();
+			center->add((*i)->getPosition());
+
+			// the bounding coordinates of all units
+			min->x = min->x > objPos->x ? objPos->x : min->x;
+			max->x = max->x < objPos->x ? objPos->x : max->x;
+			min->y = min->y > objPos->y ? objPos->y : min->y;
+			max->y = max->y < objPos->y ? objPos->y : max->y;
+			if (count == 0)
+			{
+				id = (*i)->m_formationID;
+			}
+			else
+			{
+				// Zero Hour's test as written: it never changes the ID
+				if (id == 0)
+					id = 0;
+			}
+
+			count++;
+		}
+	}
+
+	center->x /= count;
+	center->y /= count;
+	center->z /= count;
+	Bool isFormation = (id != 0);
+	if (count < 2)
+		isFormation = false;
+	return isFormation;
+}
 
 // FUNCTION: BFME2 0x0036D2C5 size=222 name=?recompute@AIGroup@@AAEXXZ evidence=N:ledger tier=A
 void AIGroup::recompute()
