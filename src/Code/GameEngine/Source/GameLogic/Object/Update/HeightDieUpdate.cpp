@@ -5,6 +5,15 @@
 #include "Common/Xfer.h"
 #include "GameLogic/Module/HeightDieUpdate.h"
 #include "GameLogic/Module/HeightDieUpdateModuleData.h"
+#include "GameClient/ParticleSys.h"
+#include "GameLogic/AIPathfind.h"
+#include "GameLogic/GameLogic.h"
+#include "GameLogic/Object.h"
+#include "GameLogic/PartitionFilterAcceptByKindOf.h"
+#include "GameLogic/PartitionManager.h"
+#include "GameLogic/TerrainLogic.h"
+
+extern KindOfMaskType KINDOFMASK_NONE;
 // Tier B; object=O0048FBD3 evidence=Z flags=align=A
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unknown-rows right=unknown-rows
@@ -92,3 +101,90 @@ HeightDieUpdate::HeightDieUpdate(Thing *thing, const ModuleData *moduleData) :
 }
 
 // FUNCTION: BFME2 0x0048FD1B size=604 name=?update@HeightDieUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
+UpdateSleepTime HeightDieUpdate::update()
+{
+	UnsignedInt now = TheGameLogic->getFrame();
+	if (m_firstCheckFrame == 0xFFFFFFFF)
+		m_firstCheckFrame = now + getHeightDieUpdateModuleData()->m_initialDelay;
+
+	if (m_firstCheckFrame > now)
+		return UPDATE_SLEEP_NONE;
+
+	if (getObject()->getContainedBy() != NULL)
+	{
+		m_lastPosition = *getObject()->getPosition();
+		return UPDATE_SLEEP_NONE;
+	}
+
+	const HeightDieUpdateModuleData *modData = getHeightDieUpdateModuleData();
+	const Coord3D *pos = getObject()->getPosition();
+
+	Bool directionOK = TRUE;
+	if (m_triggeredHeightDeath == FALSE)
+	{
+		if (modData->m_onlyWhenMovingDown)
+		{
+			if (pos->z >= m_lastPosition.z)
+				directionOK = FALSE;
+		}
+
+		Real terrainHeightAtPos = TheTerrainLogic->getGroundHeight(pos->x, pos->y);
+
+		if (modData->m_targetHeightIncludesStructures)
+		{
+			PathfindLayerEnum layer = TheTerrainLogic->getHighestLayerForDestination(pos);
+			if (layer != LAYER_GROUND)
+			{
+				Real layerHeight = TheTerrainLogic->getLayerHeight(pos->x, pos->y, layer);
+				if (layerHeight > terrainHeightAtPos)
+					terrainHeightAtPos = layerHeight;
+			}
+		}
+
+		Real targetHeight = terrainHeightAtPos + modData->m_targetHeight;
+
+		if (modData->m_targetHeightIncludesStructures == TRUE)
+		{
+			Real tallestHeight = 0.0f;
+			Real range = getObject()->getMajorRadius();
+			PartitionFilterAcceptByKindOf filter(KindOfMaskType(KindOfMaskType::kInit, KINDOF_STRUCTURE), KINDOFMASK_NONE);
+			ObjectIterator iter = ThePartitionManager->iterateObjectsInRange(getObject()->getPosition(), range, 3, &filter, 0);
+			for (Object *obj = iter.next(); obj; obj = iter.next())
+			{
+				if (obj == getObject())
+					continue;
+
+				Real thisHeight = obj->getGeometryInfo()->getMaxHeightAbovePosition();
+				if (thisHeight > tallestHeight)
+					tallestHeight = thisHeight;
+			}
+
+			if (tallestHeight > modData->m_targetHeight)
+				targetHeight = tallestHeight + terrainHeightAtPos;
+		}
+
+		if (pos->z < targetHeight && directionOK)
+		{
+			if (modData->m_snapToGroundOnDeath || pos->z < terrainHeightAtPos)
+			{
+				Coord3D ground;
+				ground.x = pos->x;
+				ground.y = pos->y;
+				ground.z = terrainHeightAtPos;
+				getObject()->setPosition(&ground);
+			}
+
+			getObject()->kill(DAMAGE_UNRESISTABLE, DEATH_NORMAL);
+			m_triggeredHeightDeath = TRUE;
+		}
+	}
+
+	if (m_destroyedAttachedParticles == FALSE && pos->z < modData->m_destroyAttachedParticlesAtHeight && (m_triggeredHeightDeath || directionOK))
+	{
+		TheParticleSystemManager->destroyAttachedSystems(getObject());
+		m_destroyedAttachedParticles = TRUE;
+	}
+
+	m_lastPosition = *pos;
+	return UPDATE_SLEEP_NONE;
+}

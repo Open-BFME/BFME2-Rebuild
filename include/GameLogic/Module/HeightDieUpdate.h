@@ -10,6 +10,7 @@
 
 #include "Common/Coord3D.h"
 #include "GameLogic/Module/UpdateModule.h"
+#include "GameLogic/Module/HeightDieUpdateModuleData.h"
 
 class Xfer;
 
@@ -22,6 +23,7 @@ public:
 
 	virtual void loadPostProcess(void);
 	virtual NameKeyType getModuleNameKey(void) const;
+	const HeightDieUpdateModuleData *getHeightDieUpdateModuleData() const { return static_cast<const HeightDieUpdateModuleData *>(m_moduleData); }
 
 protected:
 	virtual const char *GetSnapshotName(void) const;

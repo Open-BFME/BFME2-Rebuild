@@ -69,6 +69,7 @@ public:
 	ParticleSystemHandle findParticleSystemByID(ParticleSystemID id);
     int rva001F5AA4(ParticleSystemTemplate *,const Object *,int);
 	void destroyParticleSystemByID(ParticleSystemID id);
+	void destroyAttachedSystems(Object *object);	// 0x001F5BBE
 };
 
 extern ParticleSystemManager *TheParticleSystemManager;
