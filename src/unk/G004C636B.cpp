@@ -18,7 +18,7 @@ void SiegeDeployHordeSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse 
 SiegeDeployHordeSpecialPower::SiegeDeployHordeSpecialPower(Thing *thing, const ModuleData *moduleData)
 	: SpecialPowerUpdateModule(thing, moduleData)
 {
-	m_unk0x38 = 0;
+	m_unk0x38 = INVALID_ID;
 	m_unk0x3C.x = 0.0f;
 	m_unk0x3C.y = 0.0f;
 	m_unk0x3C.z = 0.0f;
