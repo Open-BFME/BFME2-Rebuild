@@ -583,6 +583,23 @@ void LightPulseFXNugget::doFXObj(const Object *primary, const Object *secondary)
 }
 
 // FUNCTION: BFME2 0x001E0429 size=147 name=??0DynamicDecalFXNugget@@QAE@XZ evidence=N:ledger tier=A
+DynamicDecalFXNugget::DynamicDecalFXNugget() :
+	m_shader(0),
+	m_size(0.0f),
+	m_color(0),
+	m_orientToObject(true),
+	m_opacityStart(0),
+	m_opacityFadeTimeOne(0.0f),
+	m_opacityPeak(0),
+	m_opacityPeakTime(0.0f),
+	m_opacityFadeTimeTwo(0.0f),
+	m_opacityEnd(0),
+	m_startingDelay(0.0f),
+	m_lifetime(0.0f)
+{
+	m_offset.x = m_offset.y = 0.0f;
+	m_type = 13;
+}
 
 // FUNCTION: BFME2 0x001E04BC size=34 name=?doFXObj@DynamicDecalFXNugget@@UBEXPBVObject@@0@Z evidence=N:ledger tier=A
 void DynamicDecalFXNugget::doFXObj(const Object *primary, const Object *secondary) const
@@ -717,6 +734,11 @@ void ViewShakeFXNugget::buildFieldParse(MultiIniFieldParse &p)
 }
 
 // FUNCTION: BFME2 0x001E084A size=46 name=??0AttachedModelFXNugget@@QAE@XZ evidence=N:ledger tier=A
+AttachedModelFXNugget::AttachedModelFXNugget() :
+	m_randomlyRotate(false),
+	m_expireTimer(8 * BfmeLogicFramesPerSecond)
+{
+}
 
 // FUNCTION: BFME2 0x001E0878 size=97 name=?doFXObj@AttachedModelFXNugget@@UBEXPBVObject@@0@Z evidence=N:ledger tier=A
 void AttachedModelFXNugget::doFXObj(const Object *primary, const Object *secondary) const
@@ -727,6 +749,14 @@ void AttachedModelFXNugget::doFXObj(const Object *primary, const Object *seconda
 }
 
 // FUNCTION: BFME2 0x001E08D9 size=60 name=??0TerrainScorchFXNugget@@QAE@XZ evidence=N:ledger tier=A
+TerrainScorchFXNugget::TerrainScorchFXNugget() :
+	m_scorchType(-1),
+	m_radius(0.0f)
+{
+	m_randomRange.x = 0;
+	m_randomRange.y = 3;
+	m_type = 7;
+}
 
 // FUNCTION: BFME2 0x001E0915 size=80 name=?doFXPos@TerrainScorchFXNugget@@UBEXPBVCoord3D@@PBVMatrix3D@@M0@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 void TerrainScorchFXNugget::doFXPos(const Coord3D *primary, const Matrix3D *primaryMtx, Real primarySpeed,
