@@ -5,5 +5,8 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "GameLogic/Module/TeleportSpecialAbilityUpdateModuleData.h"
 // FUNCTION: BFME2 0x00492F19 size=74 name=??1TeleportSpecialAbilityUpdateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
-
+TeleportSpecialAbilityUpdateModuleData::~TeleportSpecialAbilityUpdateModuleData()
+{
+}

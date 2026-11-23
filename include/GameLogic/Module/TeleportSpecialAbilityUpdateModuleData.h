@@ -24,6 +24,7 @@ class TeleportSpecialAbilityUpdateModuleData : public SpecialAbilityUpdateModule
 {
 public:
 	TeleportSpecialAbilityUpdateModuleData();
+	virtual ~TeleportSpecialAbilityUpdateModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
