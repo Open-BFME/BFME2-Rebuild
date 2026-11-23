@@ -8,13 +8,17 @@
 #define BFME2_BASEHEIGHTMAPRENDEROBJCLASS_H
 
 #include "Common/GameType.h"
+#include "WW3D2/RenderObjClass.h"
 
 class Coord3D;
 class W3DTerrainLogic;
 
-class BaseHeightMapRenderObjClass
+// The retired draft's table named RefCountClass::Delete_This in slot 0, RenderObjClass::Get_Name in slot 6 and
+// BaseHeightMapRenderObjClass::Cast_Ray 0x0006BF62 in slot 60, which is RenderObjClass's own Cast_Ray slot.
+class BaseHeightMapRenderObjClass : public RenderObjClass
 {
 public:
+	virtual bool Cast_Ray(RayCollisionTestClass &raytest);						// 60: 0x0006BF62
 	Bool isClearLineOfSight(const Coord3D &start, const Coord3D &end) const;	// 0x00066AD1
 	Bool isCliffCell(Real x, Real y);											// 0x000671B2
 	UnsignedByte rva0006B187(Real x, Real y);									// 0x0006B187
