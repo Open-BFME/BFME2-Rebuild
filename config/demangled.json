@@ -5001,6 +5001,7 @@
   "?clone@Rva005FB400@@QBE?AV?$RvaCloneResult@VRva005FB400@@@@XZ": "public: class RvaCloneResult<class Rva005FB400> __thiscall Rva005FB400::clone(void) const",
   "?close@File@@UAEXXZ": "public: virtual void __thiscall File::close(void)",
   "?close@GateOpenAndCloseBehavior@@UAEXXZ": "public: virtual void __thiscall GateOpenAndCloseBehavior::close(void)",
+  "?close@LocalFile@@UAEXXZ": "public: virtual void __thiscall LocalFile::close(void)",
   "?close@RAMFile@@UAEXXZ": "public: virtual void __thiscall RAMFile::close(void)",
   "?close@StreamingArchiveFile@@UAEXXZ": "public: virtual void __thiscall StreamingArchiveFile::close(void)",
   "?closeAllStreams@VideoPlayer@@UAEXXZ": "public: virtual void __thiscall VideoPlayer::closeAllStreams(void)",

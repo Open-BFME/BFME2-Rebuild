@@ -26316,6 +26316,32 @@
         }
       ]
     },
+    "?TheOpenFileCount@@3HA": {
+      "candidates": [
+        {
+          "rva": "0x00A06E88",
+          "kind": "named-data",
+          "evidence_class": "X",
+          "proven": true,
+          "why": "open-file counter corroborated by consistent retail operands in 2 distinct exact named map-owned LocalFile functions",
+          "size": 4,
+          "references": [
+            {
+              "function_rva": "0x00605CA7",
+              "operand_offset": 48,
+              "compiled_addend": 0,
+              "retail_operand_va": "0x00E06E88"
+            },
+            {
+              "function_rva": "0x00605D36",
+              "operand_offset": 150,
+              "compiled_addend": 0,
+              "retail_operand_va": "0x00E06E88"
+            }
+          ]
+        }
+      ]
+    },
     "?ThePartTheHeavensUpdatePoolKey@?1??getModuleNameKey@PartTheHeavensUpdate@@UBE?AW4NameKeyType@@XZ@4W43@A": {
       "candidates": [
         {

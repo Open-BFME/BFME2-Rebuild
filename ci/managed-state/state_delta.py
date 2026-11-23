@@ -397,6 +397,20 @@ GRAPH_CHANGES += (DISJOINT_PUBLISH_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(DISJOINT_PUBLISH_GRAPH)
 
+CUT17_LOCALFILE_EH_GRAPH = {
+    'ci/managed-check/compare.py': ('9b5ca88a540ed2a555944542dd16f9a4d3e3933e5a3a058a82f20362f5a79537', '9161ea0a99eb48ef2ecd899136c2915136f323aa5ed67838216610d104232599'),
+    'ci/managed-check/emitted_data.py': ('2ac0335a3f5836b30f55671f72cb244eedb64bb4ebba08dd2cb38a1b3aa57658', 'fbd0ed8904dc549247687aa800970edbde08aa2eff85c8a3f6d81cd152674002'),
+    'ci/managed-check/bundle.sha256': ('b39102634ec516e37f0c04317c19f28d8bd7733aa327ad514ebf4688cb320646', '2ffd86ae19b71543207377ce0592a7b10c27c674546bdea71b26c26344af711e'),
+}
+GRAPH_CHANGES += (CUT17_LOCALFILE_EH_GRAPH,) + tuple(
+    advance_graph(previous, CUT17_LOCALFILE_EH_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == CUT17_LOCALFILE_EH_GRAPH[BUNDLE][0]
+    and all(previous[path][1] == CUT17_LOCALFILE_EH_GRAPH[path][0]
+            for path in previous.keys() & CUT17_LOCALFILE_EH_GRAPH.keys())
+)
+GRAPH_PATHS |= set(CUT17_LOCALFILE_EH_GRAPH)
+
 
 
 # Exact pinned TU-move migrations: carry untouched TUs across a maintainer TU relocation while
@@ -534,7 +548,28 @@ ISSUE541_PROFILES_AND_GAP_UNITS = {
         'src/unk/O00492EFD.cpp': ('2d2fbd752d9f27d052709f1b492547861210d43bbd906f5eb4d825410fe8e607', None),
     },
 }
-TU_MOVE_MIGRATIONS = (CUT14_TOOLS_TU_MOVE, CUT16_WB_RENAMES, ISSUE541_PROFILES_AND_GAP_UNITS)
+CUT17_LOCALFILE_LEDGER = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/common/localfile.h",
+        "src/code/gameengine/source/common/system/localfile.cpp",
+        "src/code/libraries/source/file/streamingarchivefile.cpp",
+    }),
+    "files": {
+        "config/demangled.json": ("25f6504bab2aa06472efbac9e9b46d194de564b6108ed5c0a57fe188be2785bf", "88a57a2021784998def670e58f8f5c730216e1b15782df00985fd4e4792ee3a7"),
+        "config/map.json": ("7adb5658117df6d75656f6138db4fa08cf68784707f25cc2c4b4f823c792f34e", "db50153057d80dba9ecfe3b9852910e97d555ba53a5e72c5144e9c5bafcb00b2"),
+        "config/symbols.json": ("d3580b3b46546f6c5f2e738d6c03edfd570d24f1b1289a2345597dfd3ac43b02", "c22f1058cd03c0259958aaa859d0f00ea3edf41cd4fdf74c3ad3d3a194c243ce"),
+        "expected/Code/Libraries/Source/file/StreamingArchiveFile.cpp.json": ("c1ab30e566745ca7780120cdb4be7a869ce5b156e57e9e53a0ffbc65450699d3", "ae08752a125eca13b69fa231777f7caeaca4d5a3cb0f990684ebbfcef8db8bec"),
+    },
+}
+ISSUE541_AND_CUT17_LOCALFILE_LEDGER = {
+    "old_tus": ISSUE541_PROFILES_AND_GAP_UNITS["old_tus"] | CUT17_LOCALFILE_LEDGER["old_tus"],
+    "new_tus": ISSUE541_PROFILES_AND_GAP_UNITS["new_tus"] | CUT17_LOCALFILE_LEDGER["new_tus"],
+    "force_changed": ISSUE541_PROFILES_AND_GAP_UNITS["force_changed"] | CUT17_LOCALFILE_LEDGER["force_changed"],
+    "files": advance_graph(ISSUE541_PROFILES_AND_GAP_UNITS["files"], CUT17_LOCALFILE_LEDGER["files"]),
+}
+TU_MOVE_MIGRATIONS = (CUT14_TOOLS_TU_MOVE, CUT16_WB_RENAMES, ISSUE541_PROFILES_AND_GAP_UNITS, CUT17_LOCALFILE_LEDGER, ISSUE541_AND_CUT17_LOCALFILE_LEDGER)
 
 
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",

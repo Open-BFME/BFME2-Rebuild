@@ -67,6 +67,57 @@ def protected_judge(work, roots, baseline):
 
 LOCAL_LABEL = re.compile(r"\$L\d+\Z")
 MAX_LOCAL_DEPTH = 8
+SHARED_EH_NO_IDENTITY = "extra is reachable from kept code/data, an associative parent or a linker root; no retail identity"
+
+
+def _verified_shared_eh_locations(outcome):
+    """COFF (section, offset) pairs already proven by relocation_proof as ICF-folded shared EH code.
+
+    When multiple matched functions in one TU share a single retail ICF-folded EH handler/unwind
+    funclet, only one function's handler/funclet pairs with the single expected row; the other
+    parents' handlers/funclets remain in rejected_extras with SHARED_EH_NO_IDENTITY even though
+    relocation_proof already verified their exact bytes and relocations inside the MATCH-proven
+    parent row. Fail closed: require status == MATCH and relocation_check.status == MATCH, plus
+    both a binary-shared-EH-parent/content-shared-EH proof and a matching code proof for the
+    same retail RVA.
+    """
+    locations = set()
+    for row in outcome.get("rows") or ():
+        if not isinstance(row, dict) or row.get("status") != "MATCH":
+            continue
+        rc = row.get("relocation_check")
+        if not isinstance(rc, dict) or rc.get("status") != "MATCH":
+            continue
+        proofs = rc.get("proofs")
+        if not isinstance(proofs, list):
+            continue
+        shared_rvas = {
+            p["rva"] for p in proofs
+            if isinstance(p, dict)
+            and p.get("kind") in ("binary-shared-EH-parent", "content-shared-EH")
+            and isinstance(p.get("rva"), str)
+        }
+        if not shared_rvas:
+            continue
+        for p in proofs:
+            if (isinstance(p, dict) and p.get("kind") == "code" and p.get("rva") in shared_rvas
+                    and type(p.get("compiled_section")) is int and type(p.get("compiled_offset")) is int):
+                locations.add((p["compiled_section"], p["compiled_offset"]))
+    return locations
+
+
+def _is_verified_shared_eh_extra(row, proven_shared_eh, coff):
+    if not proven_shared_eh or coff is None or row.get("why") != SHARED_EH_NO_IDENTITY:
+        return False
+    sym = row.get("symbol")
+    if not isinstance(sym, str) or not (sym.startswith("__ehhandler$") or LOCAL_LABEL.fullmatch(sym)):
+        return False
+    try:
+        idx = coff.index(sym)
+        entry = coff.symbols[idx]
+        return (entry["section"], entry["value"]) in proven_shared_eh
+    except _COFF_ERRORS:
+        return False
 
 
 _COFF_ERRORS = (OSError, KeyError, TypeError, ValueError, AttributeError, IndexError, struct.error)
@@ -194,7 +245,18 @@ def unexpected_extra_facts(outcome, *, judge=None, obj=None):
     facts = set()
     symbols = {}
     local_items = []
+    proven_shared_eh = _verified_shared_eh_locations(outcome)
+    coff = None
+    if proven_shared_eh and judge is not None and obj is not None and Path(obj).is_file():
+        coff_fn = getattr(judge, "coff", None)
+        if callable(coff_fn):
+            try:
+                coff = coff_fn(obj)
+            except _COFF_ERRORS:
+                coff = None
     for row in outcome.get("rejected_extras") or ():
+        if _is_verified_shared_eh_extra(row, proven_shared_eh, coff):
+            continue
         sym = row["symbol"]
         targets = {}
         fp = (local_label_fingerprint(row, judge=judge, obj=obj, targets_out=targets)

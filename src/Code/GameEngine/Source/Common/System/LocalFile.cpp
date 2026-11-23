@@ -19,6 +19,16 @@ Int TheOpenFileCount = 0;
 // Edges: left=no-edge-evidence right=rests-on:name+profile; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:Z
 // FUNCTION: BFME2 0x00605CA7 size=84 name=??1LocalFile@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:Z
+LocalFile::~LocalFile()
+{
+	if (m_fd != -1)
+	{
+		_close(m_fd);
+		m_fd = -1;
+		--TheOpenFileCount;
+	}
+	File::close();
+}
 
 // FUNCTION: BFME2 0x00605CFB size=59 name=?open@LocalFile@@UAE_NPBDH@Z evidence=N:ledger tier=B hypothesis:Z
 bool LocalFile::open(const char *name, int access)
@@ -61,6 +71,11 @@ bool LocalFile::open(const unsigned short *name, int access)
 		return false;
 	}
 	return true;
+}
+
+void LocalFile::close()
+{
+	File::close();
 }
 
 // FUNCTION: BFME2 0x00605DF7 size=61 name=?read@LocalFile@@UAEHPAXH@Z evidence=N:ledger tier=B hypothesis:Z

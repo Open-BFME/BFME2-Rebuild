@@ -27,8 +27,10 @@ def compare_public_data(before, after, known):
 
 
 def known_reference_names(judge, checkout):
+    symbols = judge.config_json(checkout / "config/symbols.json")
     return (set(judge.MAP_NAME_INDEX)
-            | set(judge.config_json(checkout / "config/symbols.json")["symbols"]))
+            | set(symbols["symbols"])
+            | set(symbols.get("vtables", ())))
 
 
 def record_pairs(judge, checkout, objects, outcomes):

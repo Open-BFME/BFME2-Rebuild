@@ -1455903,7 +1455903,8 @@
       "parent": "0x0060259A",
       "object": "O00605A28",
       "accepted_names": [
-        "?close@StreamingArchiveFile@@UAEXXZ"
+        "?close@StreamingArchiveFile@@UAEXXZ",
+        "?close@LocalFile@@UAEXXZ"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"

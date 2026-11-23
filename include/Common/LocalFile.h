@@ -17,6 +17,7 @@ class LocalFile : public File
 public:
 	virtual ~LocalFile();						// slot 0, 0x00605CA7
 	virtual bool open(const char *, int = 0);	// slot 1, 0x00605CFB
+	virtual void close();						// slot 2, folded with StreamingArchiveFile::close
 	virtual int read(void *, int);				// slot 3, 0x00605DF7
 	virtual int write(const void *, int);		// slot 4, 0x00605E34
 	virtual int seek(int, seekMode = CURRENT);	// slot 5, 0x00605E5D

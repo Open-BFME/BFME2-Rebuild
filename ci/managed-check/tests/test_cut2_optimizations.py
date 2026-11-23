@@ -324,5 +324,100 @@ class Cut12HeaderProbeTests(unittest.TestCase):
         self.assertTrue(any("preprocessor directive" in i["reason"] for i in plan.get("issues", [])), plan)
 
 
+class SharedEhAndVtableTests(unittest.TestCase):
+    def test_known_reference_names_includes_vtables(self):
+        import emitted_data
+
+        class FakeJudge:
+            MAP_NAME_INDEX = {"?open@LocalFile@@UAE_NPBDH@Z": {0x605CFB}}
+
+            def config_json(self, _path):
+                return {
+                    "symbols": {"?TheOpenFileCount@@3HA": {"candidates": []}},
+                    "vtables": {"??_7LocalFile@@6B@": [{"rva": "0x0087AB28", "slots": "18"}]},
+                }
+
+        known = emitted_data.known_reference_names(FakeJudge(), Path("."))
+        self.assertIn("??_7LocalFile@@6B@", known)
+        self.assertIn("?TheOpenFileCount@@3HA", known)
+        self.assertIsNone(emitted_data.compare_public_data(set(), {"??_7LocalFile@@6B@"}, known))
+        self.assertEqual(
+            emitted_data.compare_public_data(set(), {"??_7LocalFile@@6B@", "?UnknownGlobal@@3HA"}, known),
+            {"count": 1, "names": ["?UnknownGlobal@@3HA"]},
+        )
+
+    def test_verified_shared_eh_extras_excused_only_when_strictly_proven(self):
+        class FakeCoff:
+            def __init__(self, entries):
+                self.symbols = entries
+
+            def index(self, name):
+                for i, entry in enumerate(self.symbols):
+                    if entry["name"] == name:
+                        return i
+                raise KeyError(name)
+
+        class FakeJudgeWithCoff:
+            def __init__(self, coff_obj):
+                self._coff = coff_obj
+
+            def coff(self, _obj):
+                return self._coff
+
+        with tempfile.TemporaryDirectory() as tmp:
+            obj_path = Path(tmp) / "LocalFile.obj"
+            obj_path.write_bytes(b"stub")
+            lbl = "$" + "L2402"
+            eh_sym = "__ehhandler$?scanReal@LocalFile@@UAE_NAAM@Z"
+            other_sym = "?unexpectedHelper@@YAXXZ"
+            coff_obj = FakeCoff([
+                {"name": eh_sym, "section": 12, "value": 0},
+                {"name": lbl, "section": 13, "value": 0},
+                {"name": other_sym, "section": 14, "value": 0},
+            ])
+            judge = FakeJudgeWithCoff(coff_obj)
+
+            proven_row = {
+                "rva": "0x00606133",
+                "status": "MATCH",
+                "relocation_check": {
+                    "status": "MATCH",
+                    "proofs": [
+                        {"kind": "binary-shared-EH-parent", "rva": "0x007A6CA4", "compiled_parent": "0x00606133"},
+                        {"kind": "code", "rva": "0x007A6CA4", "size": 10, "compiled_section": 12, "compiled_offset": 0},
+                        {"kind": "binary-shared-EH-parent", "rva": "0x007A6C9C", "compiled_parent": "0x00606133"},
+                        {"kind": "code", "rva": "0x007A6C9C", "size": 8, "compiled_section": 13, "compiled_offset": 0},
+                    ],
+                },
+            }
+            outcome = {
+                "rows": [proven_row],
+                "expected": [],
+                "gates": [],
+                "verification_blockers": [],
+                "rejected_extras": [
+                    {"symbol": eh_sym, "why": compare.SHARED_EH_NO_IDENTITY},
+                    {"symbol": lbl, "why": compare.SHARED_EH_NO_IDENTITY},
+                ],
+            }
+            self.assertEqual(compare.native_blockers(outcome, judge=judge, obj=obj_path), [])
+            self.assertEqual(compare.unexpected_symbol_pairs(outcome, judge=judge, obj=obj_path), [])
+
+            # Fail closed: unproven parent row must NOT excuse shared EH extras.
+            unproven = dict(outcome, rows=[dict(proven_row, relocation_check=dict(proven_row["relocation_check"], status="UNVERIFIED_RELOCATION"))])
+            self.assertEqual(len(compare.native_blockers(unproven, judge=judge, obj=obj_path)), 2)
+
+            # Fail closed: non-EH symbol at a proven section/offset must NOT be excused.
+            non_eh = dict(outcome, rejected_extras=[{"symbol": other_sym, "why": compare.SHARED_EH_NO_IDENTITY}])
+            self.assertEqual(len(compare.native_blockers(non_eh, judge=judge, obj=obj_path)), 1)
+
+            # Fail closed: different rejection reason must NOT be excused.
+            mismatch_why = dict(outcome, rejected_extras=[{"symbol": eh_sym, "why": "retail duplicate WRONG_RELOCATION"}])
+            self.assertEqual(len(compare.native_blockers(mismatch_why, judge=judge, obj=obj_path)), 1)
+
+            # Fail closed: without readable COFF object, keep the blockers.
+            self.assertEqual(len(compare.native_blockers(outcome, judge=None, obj=None)), 2)
+
+
 if __name__ == "__main__":
     unittest.main()
