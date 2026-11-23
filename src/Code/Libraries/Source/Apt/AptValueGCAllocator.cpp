@@ -11,7 +11,33 @@ extern unsigned char snOffsetToStoreSize; // VA 0x00E177E0 (named by freeBlock's
 int Rva006CD3F0Get(void *);               // 0x006CD3F0 (Apt.cpp): the size of an AptValue block by its type
 
 // FUNCTION: BFME2 0x006D28D0 size=92 name=?SetAllocated@AptPoolItem@@QAEXH_N@Z evidence=X:map request (link (from standalone link a1a88198eb)) tier=B hypothesis:mm1-neighbour-callers
+void AptPoolItem::SetAllocated(int nOffsetToStoreSize, bool bAllocated)
+{
+    if (nOffsetToStoreSize == 4) {
+        mValueBitfield.mbIsAllocated = bAllocated;
+    } else if (nOffsetToStoreSize == 0) {
+        mBitfield0.mbIsAllocated = bAllocated;
+    } else {
+        g_bfmeAptAssertAtE17734("false", "..\\..\\include\\apt\\AptValueGCAllocator.h", 0x107);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) APT_ASSERT_BREAK();
+    }
+}
+
 // FUNCTION: BFME2 0x006D2930 size=171 name=?rva006D2930@AptValue@@QAEHH@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-neighbour-callers
+int AptPoolItem::GetSize(int nOffsetToStoreSize)
+{
+    if (IsAllocated(nOffsetToStoreSize)) {
+        g_bfmeAptAssertAtE17734("!IsAllocated(nSizeOffset)", "..\\..\\include\\apt\\AptValueGCAllocator.h", 0x121);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) APT_ASSERT_BREAK();
+    }
+    if (nOffsetToStoreSize == 4)
+        return mValueBitfield.mRaw & ~1;
+    if (nOffsetToStoreSize == 0)
+        return mBitfield0.mRaw & ~1;
+    g_bfmeAptAssertAtE17734("false", "..\\..\\include\\apt\\AptValueGCAllocator.h", 0x137);
+    if (g_bfmeAptBreakOnAssertAtDDC01C) APT_ASSERT_BREAK();
+    return 0;
+}
 // FUNCTION: BFME2 0x006D29E0 size=127 name=?allocBlock@Rva006D2A60@@QAEPAXH@Z evidence=?:placeholder tier=A
 void *AptValueGC_PoolManager::allocBlock(int size)
 {
