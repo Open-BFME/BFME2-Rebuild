@@ -436,6 +436,28 @@ Waypoint *TerrainLogic::getClosestWaypointOnPath(const Coord3D *pos, const Ascii
 }
 
 // FUNCTION: BFME2 0x002813EA size=261 name=?getWaypointByPath@TerrainLogic@@UAEPAVWaypoint@@ABVAsciiString@@@Z evidence=N:ledger tier=A
+Waypoint *TerrainLogic::getWaypointByPath(const AsciiString &label)
+{
+	if (label.isEmpty())
+		return NULL;
+
+	for (Waypoint *way = TheWaypointListHead; way; way = way->m_next)
+	{
+		Bool match = false;
+		if (label.compareNoCase(way->getPathLabel1()) == 0 ||
+			label.compareNoCase(way->getPathLabel2()) == 0 ||
+			label.compareNoCase(way->getPathLabel3()) == 0)
+			match = true;
+		if (match)
+		{
+			// the path's first waypoint is the one nothing links to
+			while (way->m_owner)
+				way = way->m_owner;
+			return way;
+		}
+	}
+	return NULL;
+}
 
 // FUNCTION: BFME2 0x002814EF size=543 name=?rva002814EF@TerrainLogic@@QAE_NPBVCoord3D@@0PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
