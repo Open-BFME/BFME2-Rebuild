@@ -1,5 +1,6 @@
 #include "Common/INI.h"
 #include "GameLogic/Module/SiegeDeployHordeSpecialPowerModuleData.h"
+#include "GameLogic/Module/SiegeDeployHordeSpecialPower.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G004C636B name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
