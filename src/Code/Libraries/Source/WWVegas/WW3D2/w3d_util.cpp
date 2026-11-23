@@ -168,4 +168,18 @@ void W3dUtilityClass::Convert_Shader(const W3dShaderStruct &shader, ShaderClass 
 }
 
 // FUNCTION: BFME2 0x001A45E3 size=120 name=?Convert_Shader@W3dUtilityClass@@SAXABVShaderClass@@PAUW3dShaderStruct@@@Z evidence=N:ledger tier=B hypothesis:K
+void W3dUtilityClass::Convert_Shader(const ShaderClass &shader, W3dShaderStruct *set)
+{
+	W3d_Shader_Reset(set);
+	set->DepthCompare = shader.Get_Depth_Compare();
+	set->DepthMask = shader.Get_Depth_Mask();
+	set->DestBlend = shader.Get_Dst_Blend_Func();
+	set->PriGradient = shader.Get_Primary_Gradient();
+	set->SecGradient = shader.Get_Secondary_Gradient();
+	set->SrcBlend = shader.Get_Src_Blend_Func();
+	set->Texturing = shader.Get_Texturing();
+	set->AlphaTest = shader.Get_Alpha_Test();
+	set->PostDetailColorFunc = shader.Get_Post_Detail_Color_Func();
+	set->PostDetailAlphaFunc = shader.Get_Post_Detail_Alpha_Func();
+}
 
