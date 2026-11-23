@@ -1146,22 +1146,19 @@ Real AIFollowWaypointPathState::calcExtraPathDistance()
 	Real extra = 1.0f;
 	const Waypoint *curWay = m_currentWaypoint;
 	Int limit = 5;
-	if (curWay)
+	while (curWay && limit > 0)
 	{
-		while (limit > 0)
-		{
-			limit--;
-			Int linkCount = curWay->m_numLinks;
-			if (linkCount == 0)
-				return extra;
-			Int which = 0;
-			const Waypoint *nextWay = curWay->getLink(which);
-			Coord2D delta;
-			delta.x = nextWay->m_location.x - curWay->m_location.x;
-			delta.y = nextWay->m_location.y - curWay->m_location.y;
-			extra += delta.length();
-			curWay = nextWay;
-		}
+		limit--;
+		Int linkCount = curWay->m_numLinks;
+		if (linkCount == 0)
+			return extra;
+		Int which = 0;
+		const Waypoint *nextWay = curWay->getLink(which);
+		Coord2D delta;
+		delta.x = nextWay->m_location.x - curWay->m_location.x;
+		delta.y = nextWay->m_location.y - curWay->m_location.y;
+		extra += delta.length();
+		curWay = nextWay;
 	}
 	return extra;
 }
