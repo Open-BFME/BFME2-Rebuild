@@ -19,6 +19,7 @@ class W3DTerrainLogic;
 class WorldHeightMap;
 class W3DShroud;
 class W3DTaint;
+class W3DBibBuffer;
 class RefRenderObjListIterator;
 
 class BaseHeightMapRenderObjClass : public RenderObjClass, public DX8_CleanupHook, public Snapshot
@@ -62,6 +63,12 @@ public:
 	Bool rva00067298(Real x, Real y);
 	UnsignedByte rva0006730B(Real x, Real y);
 	void loadRoadsAndBridges(W3DTerrainLogic *terrain, Bool saveGame);
+	void addTerrainBib(Vector3 corners[4], ObjectID id, Bool highlight);
+	void addTerrainBibDrawable(Vector3 corners[4], DrawableID id, Bool highlight);
+	void removeTerrainBib(ObjectID id);
+	void removeTerrainBibDrawable(DrawableID id);
+	void removeAllTerrainBibs();
+	void removeTerrainBibHighlighting();
 
 	WorldHeightMap *getMap() const { return m_map; }
 	Real getTransparentWaterDepth() const { return m_transparentWaterDepth; }
@@ -78,7 +85,9 @@ public:
 	UnsignedByte m_unk0x37C4[0x20];
 	Real m_transparentWaterDepth;
 	Real m_minWaterOpacity;
-	UnsignedByte m_unk0x37EC[0x8C];
+	UnsignedByte m_unk0x37EC[0x70];
+	W3DBibBuffer *m_bibBuffer;
+	UnsignedByte m_unk0x3860[0x18];
 	W3DShroud *m_shroud;
 	W3DTaint *m_taint;
 	Bool m_needFullUpdate;
@@ -88,6 +97,7 @@ typedef char BaseHeightMapSize[(sizeof(BaseHeightMapRenderObjClass) == 0x3884) ?
 typedef char BaseHeightMapMapOffset[(offsetof(BaseHeightMapRenderObjClass, m_map) == 0x37C0) ? 1 : -1];
 typedef char BaseHeightMapWaterDepthOffset[(offsetof(BaseHeightMapRenderObjClass, m_transparentWaterDepth) == 0x37E4) ? 1 : -1];
 typedef char BaseHeightMapWaterOpacityOffset[(offsetof(BaseHeightMapRenderObjClass, m_minWaterOpacity) == 0x37E8) ? 1 : -1];
+typedef char BaseHeightMapBibBufferOffset[(offsetof(BaseHeightMapRenderObjClass, m_bibBuffer) == 0x385C) ? 1 : -1];
 typedef char BaseHeightMapShroudOffset[(offsetof(BaseHeightMapRenderObjClass, m_shroud) == 0x3878) ? 1 : -1];
 typedef char BaseHeightMapNeedFullUpdateOffset[(offsetof(BaseHeightMapRenderObjClass, m_needFullUpdate) == 0x3880) ? 1 : -1];
 

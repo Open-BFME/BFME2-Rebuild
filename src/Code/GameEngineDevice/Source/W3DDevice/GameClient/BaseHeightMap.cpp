@@ -7,6 +7,8 @@
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
+#include "GameClient/BaseHeightMapRenderObjClass.h"
+#include "GameClient/W3DBibBuffer.h"
 // FUNCTION: BFME2 0x000664BE size=49 name=?Rva006C5BE0@@YANNH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000664EF size=5 name=?enable@Rva000664EFOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x000664F4 size=21 name=?rva000664F4@BaseHeightMap@@QAEXPBUGapQuad@@@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-callers
@@ -126,16 +128,40 @@
 // FUNCTION: BFME2 0x000683DC size=35 name=?rva000683DC@Rva000683DC@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x000683FF size=11 name=?rva000683FF@Rva000683FF@@QAEXQAVVector3@@W4ObjectID@@_N@Z evidence=?:placeholder tier=A
+void BaseHeightMapRenderObjClass::addTerrainBib(Vector3 corners[4], ObjectID id, Bool highlight)
+{
+	m_bibBuffer->addBib(corners, id, highlight);
+}
 
 // FUNCTION: BFME2 0x0006840A size=11 name=?rva0006840A@Rva0006840A@@QAEXQAVVector3@@W4DrawableID@@_N@Z evidence=?:placeholder tier=A
+void BaseHeightMapRenderObjClass::addTerrainBibDrawable(Vector3 corners[4], DrawableID id, Bool highlight)
+{
+	m_bibBuffer->addBibDrawable(corners, id, highlight);
+}
 
 // FUNCTION: BFME2 0x00068415 size=11 name=?rva00068415@Rva00068415@@QAEXXZ evidence=?:placeholder tier=A
+void BaseHeightMapRenderObjClass::removeTerrainBibHighlighting()
+{
+	m_bibBuffer->removeHighlighting();
+}
 
 // FUNCTION: BFME2 0x00068420 size=11 name=?removeAllTerrainBibs@BaseHeightMapRenderObjClass@@QAEXXZ evidence=N:ledger tier=A
+void BaseHeightMapRenderObjClass::removeAllTerrainBibs()
+{
+	m_bibBuffer->clearAllBibs();
+}
 
 // FUNCTION: BFME2 0x0006842B size=11 name=?rva0006842B@Rva0006842B@@QAEXW4ObjectID@@@Z evidence=?:placeholder tier=A
+void BaseHeightMapRenderObjClass::removeTerrainBib(ObjectID id)
+{
+	m_bibBuffer->removeBib(id);
+}
 
 // FUNCTION: BFME2 0x00068436 size=11 name=?rva00068436@Rva00068436@@QAEXH@Z evidence=?:placeholder tier=A
+void BaseHeightMapRenderObjClass::removeTerrainBibDrawable(DrawableID id)
+{
+	m_bibBuffer->removeBibDrawable(id);
+}
 
 // FUNCTION: BFME2 0x00068441 size=41 name=?vslot137@BaseHeightMapRenderObjClass@@UAEXH@Z evidence=N:ledger tier=A
 
