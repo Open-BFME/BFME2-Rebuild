@@ -31,6 +31,7 @@ public:
 	virtual ~XferSave();
 
 	UnsignedByte Open(File *file, Int version, Bool stringTable);
+	void Close();																// 0x0060C8CD: writes the END tag and detaches the file
 
 	virtual Bool IsStoring() const { return true; }								// slot 2 (retail folds the body into 0x0050B5C6)
 	virtual Int BeginBlock(const char *name);									// slot 5, 0x0060D435 (map: rva0060D435@XferSave)

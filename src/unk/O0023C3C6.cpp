@@ -14,4 +14,8 @@ void UpdateModule::friend_setNextCallFrame(UnsignedInt frame)
 }
 
 // FUNCTION: BFME2 0x0023C3DA size=15 name=?rva0023C3DA@UpdateModule@@QAEHPAH@Z evidence=?:placeholder tier=B hypothesis:Z
-
+Int UpdateModule::rva0023C3DA(Int *phase)
+{
+	*phase = m_unk0x1C;
+	return m_indexInLogic;
+}
