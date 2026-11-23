@@ -1,4 +1,5 @@
 """Unit tests for the GitHub Native Merge Queue auto-enqueuer (ci/queue/enqueue.py)."""
+import datetime
 from pathlib import Path
 import sys
 import tempfile
@@ -11,13 +12,21 @@ sys.path.insert(0, str(ROOT / "ci/queue"))
 import enqueue  # noqa: E402
 
 MAIN_SHA = "a" * 40
+NOW = datetime.datetime(2026, 11, 23, 12, 0, tzinfo=datetime.timezone.utc)
+OLD = "2026-11-23T10:00:00Z"      # two hours before NOW: outside the cooldown
+RECENT = "2026-11-23T11:50:00Z"   # ten minutes before NOW: inside the cooldown
 
 
 def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEABLE",
             branch="feat/test", author_id=100, labels=(), files=("src/Foo.cpp",),
-            total_files=None, statuses=None, reviews=()):
+            total_files=None, statuses=None, reviews=(), removed=None):
+    """statuses maps a context to a state, or to (state, description[, createdAt])."""
     oid = oid or f"{number:040x}"
-    contexts = [{"context": k, "state": v, "description": ""} for k, v in (statuses or {}).items()]
+    contexts = []
+    for context, value in (statuses or {}).items():
+        state, description, created = (value, "", OLD) if isinstance(value, str) or value is None else (
+            tuple(value) + (OLD,))[:3]
+        contexts.append({"context": context, "state": state, "description": description, "createdAt": created})
     return {
         "id": f"PR_node_{number}",
         "number": number,
@@ -33,13 +42,14 @@ def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEAB
             "nodes": [{"path": p} for p in files],
         },
         "commits": {"nodes": [{"commit": {"status": {"contexts": contexts}}}]},
+        "timelineItems": {"nodes": [{"createdAt": removed}] if removed else []},
         "latestOpinionatedReviews": {"nodes": list(reviews)},
     }
 
 
 class FakeApi:
     def __init__(self, pages=(), *, active_in_progress=0, active_queued=0,
-                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=()):
+                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=(), fail_status=False):
         self.pages = pages
         self.active_in_progress = active_in_progress
         self.active_queued = active_queued
@@ -47,8 +57,10 @@ class FakeApi:
         self.rules_queued = rules_queued
         self.ratelimit_remaining = ratelimit
         self.fail_enqueue = set(fail_enqueue)
+        self.fail_status = fail_status
         self.enqueued = []
         self.dispatches = []
+        self.statuses = []
         self.gets = []
 
     def graphql(self, query, variables):
@@ -83,11 +95,23 @@ class FakeApi:
                 return {"total_count": self.rules_in_progress}
             if "status=queued" in path:
                 return {"total_count": self.rules_queued}
+        if "workflows/admission.yml/runs" in path:
+            return {"total_count": 0}
         raise AssertionError(f"Unexpected GET {path}")
 
     def post(self, path, body):
+        if path.startswith("statuses/"):
+            if self.fail_status:
+                raise enqueue.ApiError(f"POST {path} returned HTTP 403")
+            self.statuses.append((path, body))
+            return {}
         self.dispatches.append((path, body))
         return {}
+
+
+def run(api, **kwargs):
+    kwargs.setdefault("env", {})
+    return enqueue.run(api, now=NOW, **kwargs)
 
 
 class EnqueueTests(unittest.TestCase):
@@ -131,17 +155,21 @@ class EnqueueTests(unittest.TestCase):
         api = FakeApi([prs[:8], prs[8:]])
         with tempfile.TemporaryDirectory() as td:
             summary = Path(td) / "summary.md"
-            result = enqueue.run(api, env={"GITHUB_STEP_SUMMARY": str(summary)})
-            self.assertEqual(result["enqueued"], [101, 102, 103])
-            self.assertEqual(result["backfilled"], [])
-            self.assertIn("#101, #102, #103", summary.read_text(encoding="utf-8"))
+            result = run(api, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            # 103 waits: one header change in the merge queue at a time.
+            self.assertEqual(result["enqueued"], [101, 102])
+            # 104 and 105 passed Boat but have no Header rules yet: a wide check on the current main is requested.
+            self.assertEqual(result["backfilled"], [104, 105])
+            self.assertIn("#101, #102", summary.read_text(encoding="utf-8"))
 
     def test_caps_enqueue_at_16_and_survives_individual_rejection(self):
         ok_src = {"BFME II / source rules": "SUCCESS", "BFME II / Boat": "SUCCESS"}
         prs = [make_pr(200 + i, statuses=ok_src) for i in range(20)]
         api = FakeApi([prs], fail_enqueue={"PR_node_201"})
-        result = enqueue.run(api, env={})
-        self.assertEqual(len(result["enqueued"]), 15)
+        result = run(api)
+        # A rejected entry does not use one of the 16 places.
+        self.assertEqual(len(result["enqueued"]), 16)
+        self.assertNotIn(201, result["enqueued"])
         self.assertEqual(len(result["errors"]), 1)
         self.assertEqual(result["errors"][0][0], 201)
 
@@ -158,12 +186,12 @@ class EnqueueTests(unittest.TestCase):
         # PR touching disallowed path should NOT be backfilled.
         prs.insert(0, make_pr(298, files=("docs/x.md",), statuses={}))
 
-        # With 0 active runs, fills up to MAX_BACKFILL (18), including ERROR Boat PRs.
+        # With 0 active runs, fills up to MAX_BACKFILL (18), including ERROR Boat PRs; never-touched heads first.
         idle = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=1500)
-        idle_result = enqueue.run(idle, env={})
+        idle_result = run(idle)
         self.assertEqual(idle_result["enqueued"], [])
         self.assertEqual(len(idle_result["backfilled"]), 18)
-        self.assertEqual(idle_result["backfilled"], [300 + i for i in range(18)])
+        self.assertEqual(idle_result["backfilled"], [320, 321] + [300 + i for i in range(16)])
         self.assertIn(302, idle_result["backfilled"])  # ERROR Boat status
         self.assertEqual(idle.dispatches[0][0], "dispatches")
         self.assertEqual(idle.dispatches[0][1]["event_type"], "bfme-source-refresh")
@@ -171,23 +199,23 @@ class EnqueueTests(unittest.TestCase):
 
         # With 12 active runs (6 in_progress + 6 queued), only fills remaining 6 slots (18 - 12).
         partial = FakeApi([prs], active_in_progress=6, active_queued=6, ratelimit=1500)
-        partial_result = enqueue.run(partial, env={})
+        partial_result = run(partial)
         self.assertEqual(partial_result["enqueued"], [])
         self.assertEqual(len(partial_result["backfilled"]), 6)
-        self.assertEqual(partial_result["backfilled"], [300 + i for i in range(6)])
+        self.assertEqual(partial_result["backfilled"], [320, 321, 300, 301, 302, 303])
 
     def test_skips_backfill_when_ratelimit_low_or_boat_busy(self):
         prs = [make_pr(400, statuses={}), make_pr(401, statuses={"BFME II / Boat": "ERROR"})]
         low_rl = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=500)
-        self.assertEqual(enqueue.run(low_rl, env={})["backfilled"], [])
+        self.assertEqual(run(low_rl)["backfilled"], [])
         self.assertEqual(low_rl.dispatches, [])
 
         at_cap = FakeApi([prs], active_in_progress=10, active_queued=8, ratelimit=3000)
-        self.assertEqual(enqueue.run(at_cap, env={})["backfilled"], [])
+        self.assertEqual(run(at_cap)["backfilled"], [])
         self.assertEqual(at_cap.dispatches, [])
 
         over_cap = FakeApi([prs], active_in_progress=12, active_queued=8, ratelimit=3000)
-        self.assertEqual(enqueue.run(over_cap, env={})["backfilled"], [])
+        self.assertEqual(run(over_cap)["backfilled"], [])
         self.assertEqual(over_cap.dispatches, [])
 
     def test_dispatch_api_receives_backfill_while_api_receives_enqueue(self):
@@ -199,7 +227,7 @@ class EnqueueTests(unittest.TestCase):
         ]
         queue_api = FakeApi([prs], ratelimit=3000)
         dispatch_api = FakeApi(ratelimit=800)
-        result = enqueue.run(queue_api, dispatch_api=dispatch_api, env={})
+        result = run(queue_api, dispatch_api=dispatch_api)
         self.assertEqual(result["enqueued"], [501])
         self.assertEqual(result["backfilled"], [502, 503])
         self.assertEqual([node for node, _ in queue_api.enqueued], ["PR_node_501"])
@@ -248,7 +276,7 @@ class EnqueueTests(unittest.TestCase):
             rules_queued=3,
             ratelimit=3000,
         )
-        result = enqueue.run(partial, env={})
+        result = run(partial)
         self.assertEqual(result["backfilled"], [600, 601, 602, 603])
         self.assertEqual(len(partial.dispatches), 4)
         self.assertTrue(any("workflows/managed-pr.yml/runs" in p for p in partial.gets))
@@ -263,8 +291,134 @@ class EnqueueTests(unittest.TestCase):
             rules_queued=6,
             ratelimit=3000,
         )
-        self.assertEqual(enqueue.run(rules_full, env={})["backfilled"], [])
+        self.assertEqual(run(rules_full)["backfilled"], [])
         self.assertEqual(rules_full.dispatches, [])
+
+    def test_backfill_writes_a_marker_first_and_skips_heads_touched_within_the_cooldown(self):
+        prs = [
+            make_pr(700, statuses={"BFME II / Boat": ("PENDING", "", RECENT)}),                # in flight
+            make_pr(701, statuses={"BFME II / Queue backfill": ("SUCCESS", "", RECENT)}),      # just requested
+            make_pr(702, statuses={"BFME II / Admission": ("SUCCESS", "", RECENT)}),           # just admitted
+            make_pr(703, statuses={"BFME II / Boat": ("ERROR", "", OLD)}),
+            make_pr(704, statuses={}),
+        ]
+        api = FakeApi([prs])
+        result = run(api)
+        self.assertEqual(result["backfilled"], [704, 703])
+        self.assertEqual([path for path, _ in api.statuses], [f"statuses/{704:040x}", f"statuses/{703:040x}"])
+        marker = api.statuses[0][1]
+        self.assertEqual((marker["context"], marker["state"]), ("BFME II / Queue backfill", "success"))
+        self.assertEqual(marker["description"], f"Requested bfme-source-refresh on main {MAIN_SHA[:12]}")
+
+        # The next run sees the markers and requests nothing again.
+        touched = [make_pr(704, statuses={"BFME II / Queue backfill": ("SUCCESS", "", RECENT)}),
+                   make_pr(703, statuses={"BFME II / Boat": ("ERROR", "", OLD),
+                                          "BFME II / Queue backfill": ("SUCCESS", "", RECENT)})]
+        again = FakeApi([prs[:3] + touched])
+        self.assertEqual(run(again)["backfilled"], [])
+        self.assertEqual(again.dispatches, [])
+
+    def test_no_dispatch_without_a_marker(self):
+        api = FakeApi([[make_pr(710, statuses={})]], fail_status=True)
+        self.assertEqual(run(api)["backfilled"], [])
+        self.assertEqual(api.dispatches, [])
+
+    def test_retries_rotate_least_recently_touched_first(self):
+        prs = [
+            make_pr(720, statuses={"BFME II / Boat": ("ERROR", "", "2026-11-23T11:00:00Z")}),
+            make_pr(721, statuses={"BFME II / Boat": ("ERROR", "", "2026-11-23T09:00:00Z")}),
+            make_pr(722, statuses={"BFME II / Boat": ("ERROR", "", "2026-11-23T10:00:00Z")}),
+        ]
+        api = FakeApi([prs], active_in_progress=16)
+        self.assertEqual(run(api)["backfilled"], [721, 722])
+
+    def test_passed_boat_with_unfinished_source_rules_gets_a_source_only_recheck(self):
+        boat = {"BFME II / Boat": "SUCCESS"}
+        conflict = "Conflicts with main: merge or rebase main into your branch and push (main x)"
+        prs = [
+            make_pr(730, statuses=boat | {"BFME II / source rules": ("ERROR", "Source rules could not finish (main x)")}),
+            make_pr(731, statuses=boat),
+            make_pr(732, statuses=boat | {"BFME II / source rules": "FAILURE"}),
+            make_pr(733, statuses=boat | {"BFME II / source rules": ("ERROR", conflict)}),
+            make_pr(734, statuses=boat | {"BFME II / Inline virtual": "FAILURE"}),
+        ]
+        api = FakeApi([prs])
+        result = run(api)
+        self.assertEqual((result["enqueued"], result["backfilled"]), ([], [730, 731]))
+        self.assertEqual({body["event_type"] for _, body in api.dispatches}, {"bfme-source-recheck"})
+        self.assertEqual(api.dispatches[0][1]["client_payload"],
+                         {"number": 730, "head": f"{730:040x}", "base": MAIN_SHA})
+
+    def test_passed_header_change_needs_a_wide_check_on_the_current_main_only_for_h1_or_h10(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        hdr = ("include/A.h",)
+        prs = [
+            make_pr(740, files=hdr, statuses=ok | {"BFME II / Header rules": (
+                "PENDING", "Held: H10 no wide check admitted for this commit yet (main x)")}),
+            make_pr(741, files=hdr, statuses=ok | {"BFME II / Header rules": (
+                "PENDING", "Held: H1 The wide comparison has not reported on this main. (main x)")}),
+            make_pr(742, files=hdr, statuses=ok),
+            make_pr(743, files=hdr, statuses=ok | {"BFME II / Header rules": (
+                "PENDING", "Held: ledger request Foo::Bar (main x)")}),
+            make_pr(744, files=hdr, statuses=ok | {"BFME II / Header rules": ("FAILURE", "H4: removes X (main x)")}),
+        ]
+        api = FakeApi([prs])
+        result = run(api)
+        self.assertEqual((result["enqueued"], result["backfilled"]), ([], [740, 741, 742]))
+        self.assertEqual({body["event_type"] for _, body in api.dispatches}, {"bfme-source-refresh"})
+
+    def test_merge_queue_removal_needs_a_newer_boat_verdict(self):
+        ok = {"BFME II / Boat": ("SUCCESS", "", "2026-11-23T09:00:00Z"), "BFME II / source rules": "SUCCESS"}
+        prs = [
+            make_pr(750, statuses=ok, removed="2026-11-23T10:30:00Z"),   # removed after its Boat: measure again
+            make_pr(751, statuses=ok, removed="2026-11-23T08:30:00Z"),   # measured again since: enqueue
+        ]
+        result = run(FakeApi([prs]))
+        self.assertEqual((result["enqueued"], result["backfilled"]), ([751], [750]))
+
+    def test_final_holds_are_left_alone(self):
+        prs = [
+            make_pr(760, statuses={"BFME II / Admission": (
+                "PENDING", "Held: the compiler check failed to run five times; a maintainer will look")}),
+            make_pr(761, statuses={"BFME II / Admission": (
+                "PENDING", "Held: source-only admission covers at most eight paths")}),
+            make_pr(762, statuses={"BFME II / Boat": "FAILURE"}),
+            make_pr(763, statuses={"BFME II / Admission": (
+                "PENDING", "Held: checking the source rules on main 0123456789ab, retried automatically")}),
+        ]
+        self.assertEqual(run(FakeApi([prs]))["backfilled"], [763])
+
+    def test_enqueue_keeps_the_merge_queue_inside_the_group_planner_limits(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        prs = [
+            make_pr(800, in_queue=True, files=tuple(f"src/Q{i}.cpp" for i in range(50))),
+            make_pr(801, files=tuple(f"src/A{i}.cpp" for i in range(8)), statuses=ok),   # 58: fits
+            make_pr(802, files=tuple(f"src/B{i}.cpp" for i in range(3)), statuses=ok),   # 61: over the limit
+            make_pr(803, files=("src/C.cpp", "src/D.cpp"), statuses=ok),                  # 60: fits
+        ]
+        self.assertEqual(run(FakeApi([prs]))["enqueued"], [801, 803])
+
+        headers = [
+            make_pr(810, in_queue=True, files=("include/Q.h",)),
+            make_pr(811, files=("include/A.h",), statuses=ok | {"BFME II / Header rules": "SUCCESS"}),
+            make_pr(812, statuses=ok),
+        ]
+        self.assertEqual(run(FakeApi([headers]))["enqueued"], [812])
+
+    def test_queue_wakeups_cover_every_completion_and_skip_needless_runs(self):
+        managed = (ROOT / ".github/workflows/managed-pr.yml").read_text(encoding="utf-8")
+        notify = managed.split("\n  notify-landing:\n")[1].split("\n  notify-unmeasured:\n")[0]
+        self.assertIn("(needs.report.result != 'skipped' || needs.fallback-report.result != 'skipped')", notify)
+        self.assertNotIn("outputs.passed", notify)
+        rules = (ROOT / ".github/workflows/rules.yml").read_text(encoding="utf-8")
+        self.assertIn("types: [bfme-source-refresh, bfme-source-recheck]\n", rules)
+        admission = rules.split("\n  notify-admission:\n")[1].split("\n  notify-landing:\n")[0]
+        self.assertIn('"bfme-admit-request"', admission)
+        self.assertIn('"bfme-land-next"', admission)
+        push = (ROOT / ".github/workflows/admission-push.yml").read_text(encoding="utf-8")
+        self.assertIn("&& vars.BFME_MERGE_QUEUE_ENABLED != 'yes'", push)
+        enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")
+        self.assertIn("      statuses: write\n", enq_wf)
 
     def test_workflows_have_atomic_cutover_guards(self):
         enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")

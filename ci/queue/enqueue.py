@@ -1,4 +1,16 @@
-"""Auto-enqueue ready pull requests into GitHub Native Merge Queue."""
+"""Auto-enqueue ready pull requests into GitHub Native Merge Queue and backfill the rest.
+
+Every open pull request lands in one bucket per run:
+  enqueue  Boat and source rules passed (and Header rules, for include/), so it goes into the merge queue.
+  recheck  Boat passed but source rules are missing or unfinished: bfme-source-recheck (hosted, no Boat VM).
+  refresh  Boat is missing, unfinished or older than its last merge-queue removal, or a header change needs a
+           wide check on the current main: bfme-source-refresh, then admission decides and measures.
+  none     a verdict or hold only the author or a maintainer can change.
+Backfill writes a BFME II / Queue backfill marker on the head before it dispatches, rotates least recently touched
+first, and never touches the same head twice within COOLDOWN_SECONDS, so it always moves forward through the
+backlog and stops by itself when nothing is left.
+"""
+import datetime
 import json
 import os
 from pathlib import Path
@@ -17,7 +29,25 @@ MAX_FILES = 60
 MAX_ENQUEUE = 16
 MAX_BACKFILL = 18
 MAX_ACTIVE_BOAT = 18
-PIPELINE_WORKFLOWS = ("managed-pr.yml", "rules.yml")
+PIPELINE_WORKFLOWS = ("managed-pr.yml", "rules.yml", "admission.yml")
+COOLDOWN_SECONDS = 1800
+SOURCE = "BFME II / source rules"
+BOAT = "BFME II / Boat"
+HEADER = "BFME II / Header rules"
+INLINE = "BFME II / Inline virtual"
+ADMISSION = "BFME II / Admission"
+MARKER = "BFME II / Queue backfill"
+TOUCHED = (SOURCE, BOAT, ADMISSION, MARKER)
+# Holds on this exact head that no re-run changes (ci/admission/admit.py, tools/gates/workflow.py).
+FINAL_HOLDS = {
+    SOURCE: ("Conflicts with main", "No shared history with main"),
+    ADMISSION: ("Held: source-only admission covers at most eight paths",
+                "Held: the compiler check failed to run five times", "This conflicts with main",
+                "This branch shares no history"),
+}
+# Header rules holds that only a wide check on the current main clears (ci/header/compose.py H1, H10).
+WIDE_HOLDS = ("Held: H1 ", "Held: H10 ")
+EVENTS = {"refresh": "bfme-source-refresh", "recheck": "bfme-source-recheck"}
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
 LIMIT = 4 * 1024**2
@@ -59,9 +89,15 @@ query($owner: String!, $name: String!, $cursor: String) {
                   context
                   state
                   description
+                  createdAt
                 }
               }
             }
+          }
+        }
+        timelineItems(last: 1, itemTypes: [REMOVED_FROM_MERGE_QUEUE_EVENT]) {
+          nodes {
+            ... on RemovedFromMergeQueueEvent { createdAt }
           }
         }
         latestOpinionatedReviews(first: 20) {
@@ -192,7 +228,20 @@ def status_map(pr):
         return {}
     status = ((commits[-1] or {}).get("commit") or {}).get("status") or {}
     contexts = status.get("contexts") or []
-    return {c["context"]: c.get("state") for c in contexts if isinstance(c, dict) and c.get("context")}
+    return {c["context"]: c for c in contexts if isinstance(c, dict) and c.get("context")}
+
+
+def state(statuses, context):
+    return (statuses.get(context) or {}).get("state")
+
+
+def created(statuses, context):
+    return (statuses.get(context) or {}).get("createdAt") or ""
+
+
+def removed_at(pr):
+    nodes = ((pr.get("timelineItems") or {}).get("nodes") or [])
+    return max((n.get("createdAt") or "" for n in nodes if isinstance(n, dict)), default="")
 
 
 def header_approved(pr, approvers):
@@ -233,26 +282,51 @@ def base_eligible(pr, refused_prefixes):
     return paths
 
 
-def ready_to_enqueue(pr, paths, statuses, approvers):
-    if statuses.get("BFME II / source rules") != "SUCCESS":
-        return False
-    if statuses.get("BFME II / Boat") != "SUCCESS":
-        return False
-    if statuses.get("BFME II / Inline virtual") == "FAILURE":
-        return False
-    if any(p.startswith("include/") for p in paths):
-        if statuses.get("BFME II / Header rules") != "SUCCESS" and not header_approved(pr, approvers):
-            return False
-    return True
+def classify(pr, paths, statuses, approvers):
+    """Return "enqueue", "recheck", "refresh" or None (see the module docstring)."""
+    if state(statuses, SOURCE) == "FAILURE" or state(statuses, BOAT) == "FAILURE":
+        return None
+    for context, prefixes in FINAL_HOLDS.items():
+        if ((statuses.get(context) or {}).get("description") or "").startswith(prefixes):
+            return None
+    # A merge-queue removal (a failed group, a conflict, a maintainer) needs a Boat verdict newer than it, so a
+    # change that keeps failing in the queue is measured again instead of being re-enqueued forever.
+    if state(statuses, BOAT) != "SUCCESS" or removed_at(pr) > created(statuses, BOAT):
+        return "refresh"
+    if any(p.startswith("include/") for p in paths) and not header_approved(pr, approvers):
+        header = statuses.get(HEADER)
+        if header is None or (header.get("state") == "PENDING"
+                              and (header.get("description") or "").startswith(WIDE_HOLDS)):
+            return "refresh"
+        if header.get("state") != "SUCCESS":
+            return None
+    if state(statuses, INLINE) == "FAILURE":
+        return None
+    return "enqueue" if state(statuses, SOURCE) == "SUCCESS" else "recheck"
 
 
-def needs_backfill(statuses):
-    boat = statuses.get("BFME II / Boat")
-    if boat not in (None, "PENDING", "ERROR"):
+def touched(statuses):
+    return max(created(statuses, context) for context in TOUCHED)
+
+
+def cooling(stamp, now):
+    if not stamp:
         return False
-    if statuses.get("BFME II / source rules") == "FAILURE":
+    try:
+        when = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
         return False
-    return True
+    return (now - when).total_seconds() < COOLDOWN_SECONDS
+
+
+def file_count(pr):
+    files = pr.get("files") or {}
+    return int(files.get("totalCount", len(files.get("nodes") or [])) or 0)
+
+
+def has_header(pr):
+    return any(isinstance(n, dict) and (n.get("path") or "").startswith("include/")
+               for n in ((pr.get("files") or {}).get("nodes") or []))
 
 
 def list_open_prs(api):
@@ -282,17 +356,22 @@ def active_pipeline_runs(api):
     return total
 
 
-active_boat_runs = active_pipeline_runs
 
-
-def run(api=None, *, dispatch_api=None, config_path=None, env=None):
+def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     env = os.environ if env is None else env
+    now = now or datetime.datetime.now(datetime.timezone.utc)
     api = GitHubApi(env.get("BFME_QUEUE_TOKEN", "")) if api is None else api
     if dispatch_api is None:
         dispatch_token = env.get("BFME_DISPATCH_TOKEN", "")
         dispatch_api = GitHubApi(dispatch_token, token_name="BFME_DISPATCH_TOKEN") if dispatch_token else api
     approvers, refused_prefixes = load_config(config_path)
     main_sha, prs = list_open_prs(api)
+
+    # A merge group stacks up to five queued changes; keep the whole queue inside the group planner's file limit
+    # and admit at most one header change at a time (ci/managed-check/merge_queue_plan.py).
+    queued = [pr for pr in prs if pr.get("isInMergeQueue")]
+    queue_files = sum(file_count(pr) for pr in queued)
+    queue_header = any(has_header(pr) for pr in queued)
 
     enqueue_candidates = []
     backfill_candidates = []
@@ -301,20 +380,32 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None):
         if paths is None:
             continue
         statuses = status_map(pr)
-        if ready_to_enqueue(pr, paths, statuses, approvers):
+        kind = classify(pr, paths, statuses, approvers)
+        if kind == "enqueue":
             enqueue_candidates.append(pr)
-        elif needs_backfill(statuses):
-            backfill_candidates.append(pr)
+        elif kind is not None:
+            stamp = touched(statuses)
+            if not cooling(stamp, now):
+                backfill_candidates.append((stamp, pr, kind))
+    # Least recently touched first: never-measured heads before retries, so every head gets its turn.
+    backfill_candidates.sort(key=lambda item: item[0])
 
     enqueued = []
     enqueue_errors = []
-    for pr in enqueue_candidates[:MAX_ENQUEUE]:
+    for pr in enqueue_candidates:
+        if len(enqueued) >= MAX_ENQUEUE:
+            break
         if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
             break
+        count, header = file_count(pr), has_header(pr)
+        if queue_files + count > MAX_FILES or (header and queue_header):
+            continue
         num = pr["number"]
         try:
             api.graphql(ENQUEUE_MUTATION, {"id": pr["id"], "oid": pr["headRefOid"]})
             enqueued.append(num)
+            queue_files += count
+            queue_header = queue_header or header
             print(f"Enqueued PR #{num} ({pr['headRefOid'][:12]})")
         except ApiError as exc:
             enqueue_errors.append((num, str(exc)))
@@ -333,25 +424,30 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None):
             print(f"Skipping backfill; could not inspect active pipeline runs: {exc}", file=sys.stderr)
             active = MAX_ACTIVE_BOAT
         slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
-        if slots > 0:
-            for pr in backfill_candidates[:slots]:
-                dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
-                if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
-                        or (dispatch_rl is not None and dispatch_rl <= dispatch_min_rl)):
-                    break
-                num = pr["number"]
-                oid = pr.get("headRefOid", "")
-                if not HEX40.fullmatch(oid):
-                    continue
-                try:
-                    dispatch_api.post("dispatches", {
-                        "event_type": "bfme-source-refresh",
-                        "client_payload": {"number": num, "head": oid, "base": main_sha},
-                    })
-                    backfilled.append(num)
-                    print(f"Dispatched bfme-source-refresh for PR #{num} ({oid[:12]})")
-                except ApiError as exc:
-                    print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
+        for _, pr, kind in backfill_candidates[:slots]:
+            dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
+            if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
+                    or (dispatch_rl is not None and dispatch_rl <= dispatch_min_rl)):
+                break
+            num = pr["number"]
+            oid = pr.get("headRefOid", "")
+            if not HEX40.fullmatch(oid):
+                continue
+            event = EVENTS[kind]
+            try:
+                # The marker starts the cooldown first; if it cannot be written, nothing is dispatched.
+                dispatch_api.post(f"statuses/{oid}", {
+                    "state": "success", "context": MARKER,
+                    "description": f"Requested {event} on main {main_sha[:12]}",
+                })
+                dispatch_api.post("dispatches", {
+                    "event_type": event,
+                    "client_payload": {"number": num, "head": oid, "base": main_sha},
+                })
+                backfilled.append(num)
+                print(f"Dispatched {event} for PR #{num} ({oid[:12]})")
+            except ApiError as exc:
+                print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
 
     summary_path = env.get("GITHUB_STEP_SUMMARY")
     if summary_path:
@@ -360,6 +456,7 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None):
             "",
             f"- **Open PRs scanned:** {len(prs)}",
             f"- **Enqueued:** {len(enqueued)} ({', '.join(f'#{n}' for n in enqueued) or 'none'})",
+            f"- **Backfill waiting:** {len(backfill_candidates)}",
             f"- **Backfill dispatched:** {len(backfilled)} ({', '.join(f'#{n}' for n in backfilled) or 'none'})",
         ]
         if enqueue_errors:

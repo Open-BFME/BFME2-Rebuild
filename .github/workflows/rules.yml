@@ -5,9 +5,11 @@ on:
     branches: [main]
     types: [opened, reopened, synchronize, ready_for_review, edited]
   repository_dispatch:
-    # bfme-source-refresh: admission asks for the source rules of a fork commit on a main that moved since its
-    # last event (ci/admission/admit.py); source rules only, then admission decides again.
-    types: [bfme-remeasure, bfme-source-refresh, bfme-source-recheck]
+    # bfme-source-refresh: admission or the merge queue backfill (ci/queue/enqueue.py) asks for the source rules of
+    # a commit on a main that moved since its last event; source rules only, then admission decides again.
+    # bfme-source-recheck: source rules only, then the landing and enqueue workflows look again.
+    # bfme-remeasure is not listed: with BFME_PR_COMPACT=yes managed-pr.yml publishes those source rules itself.
+    types: [bfme-source-refresh, bfme-source-recheck]
   merge_group:
     types: [checks_requested]
     branches: [main]
@@ -263,6 +265,17 @@ jobs:
             exit 1
           fi
           jq -n --argjson number "$NUMBER" '{event_type: "bfme-admit-request", client_payload: {number: $number}}' |
+            gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" --input - >/dev/null
+      # A refresh that admission then holds starts no compiler check, so nothing else would tell the enqueue
+      # workflow that this backfill slot is free. It skips this head for its cooldown, so this cannot loop.
+      - name: Ask the enqueue workflow to look now
+        if: github.event_name == 'repository_dispatch'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jq -n '{event_type: "bfme-land-next", client_payload: {}}' |
             gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" --input - >/dev/null
 
   # After a landing-triggered hosted source recheck (bfme-source-recheck), wake landing immediately instead of

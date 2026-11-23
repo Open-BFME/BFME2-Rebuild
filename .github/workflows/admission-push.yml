@@ -5,6 +5,8 @@ name: BFME II admission after a push
 # admission.yml on main (its retry mode; it decides by itself, from main's code). It is a separate file because GitHub
 # refused the push trigger in admission.yml itself. No checkout, no pull request content, no input.
 # A landing by the Actions bot starts no push run; the landing workflow covers that case.
+# With the merge queue on, every queue merge is a push: ci/queue/enqueue.py (enqueue.yml, on push) backfills within
+# its run cap instead, so this retry would only add uncapped dispatches and spend the shared Actions token quota.
 on:
   push:
     branches: [main]
@@ -13,7 +15,7 @@ permissions: {}
 
 jobs:
   retry:
-    if: github.repository_id == '1464323350' && github.ref == 'refs/heads/main'
+    if: github.repository_id == '1464323350' && github.ref == 'refs/heads/main' && vars.BFME_MERGE_QUEUE_ENABLED != 'yes'
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     permissions:

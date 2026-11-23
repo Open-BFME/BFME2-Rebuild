@@ -2281,14 +2281,15 @@ jobs:
             gh api --method POST "repos/$repo/dispatches" --input -
           printf 'Requested a fresh comparison of the admitted head on main %s.\n' "${base:0:12}" >> "$GITHUB_STEP_SUMMARY"
 
-  # GitHub starts no workflow_run event for a run whose trigger was sent with the Actions token, so the landing
-  # workflow never hears that a dispatch-started check finished. After this run published a passing verdict for the
-  # current main, ask it to look now (it decides what lands). No checkout, no pull request content, no payload.
+  # GitHub starts no workflow_run event for a run whose trigger was sent with the Actions token, so the landing and
+  # enqueue workflows never hear that a dispatch-started check finished. After this run reported, whatever the
+  # verdict, ask them to look now: a pass can land and a refusal or outage frees a backfill slot. It cannot loop, as
+  # enqueue never re-requests a head within its cooldown. No checkout, no pull request content, no payload.
   notify-landing:
     needs: [report, fallback-report]
     if: >-
       always() && !cancelled() &&
-      (needs.report.outputs.passed == 'yes' || needs.fallback-report.outputs.passed == 'yes') &&
+      (needs.report.result != 'skipped' || needs.fallback-report.result != 'skipped') &&
       github.repository_id == '1464323350' && github.ref == 'refs/heads/main' &&
       github.event_name == 'repository_dispatch' && github.actor_id == '41898282'
     name: Ask the landing workflow to look now
