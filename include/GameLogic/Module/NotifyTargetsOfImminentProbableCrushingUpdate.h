@@ -56,6 +56,7 @@ class HordeNotifyTargetsOfImminentProbableCrushingUpdate : public UpdateModule
 {
 public:
 	HordeNotifyTargetsOfImminentProbableCrushingUpdate(Thing *thing, const ModuleData *data);
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual ~HordeNotifyTargetsOfImminentProbableCrushingUpdate();
 	virtual NameKeyType getModuleNameKey() const;
 	virtual UpdateSleepTime update();
