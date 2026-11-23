@@ -310,6 +310,30 @@ typedef char W3dTimeCodedAnimChannelStructSize[(sizeof(W3dTimeCodedAnimChannelSt
 typedef char W3dTimeCodedBitChannelStructSize[(sizeof(W3dTimeCodedBitChannelStruct) == 0x0C) ? 1 : -1];
 typedef char W3dAdaptiveDeltaAnimChannelStructSize[(sizeof(W3dAdaptiveDeltaAnimChannelStruct) == 0x10) ? 1 : -1];
 
+// Chunk ids of an uncompressed hierarchical animation (HRawAnimClass::Load_W3D 0x0018E8D0): the header comes first, then one
+// chunk per motion or bit channel.
+enum
+{
+	W3D_CHUNK_ANIMATION_HEADER = 0x201,
+	W3D_CHUNK_ANIMATION_CHANNEL = 0x202,
+	W3D_CHUNK_BIT_CHANNEL = 0x203
+};
+
+#define W3D_ANIMATION_VERSION_3_0 0x30000
+
+// The animation header record (0x2C bytes; Load_W3D reads it with one Read): the version dword, the animation's own name, the
+// hierarchy it animates, the frame count and the frame rate.
+struct W3dAnimHeaderStruct
+{
+	unsigned int Version;			// +0x00
+	char Name[16];				// +0x04
+	char HierarchyName[16];			// +0x14
+	unsigned int NumFrames;			// +0x24
+	unsigned int FrameRate;			// +0x28
+};
+
+typedef char W3dAnimHeaderStructSize[(sizeof(W3dAnimHeaderStruct) == 0x2C) ? 1 : -1];
+
 // The mesh chunk records the loader reads (Zero Hour's w3d_file.h): the header (MeshModelClass::Load_W3D 0x0018BA10
 // reads 0x74 bytes of it), the material counts and a texture coordinate.
 struct W3dMeshHeader3Struct

@@ -2,11 +2,14 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <new>
 #include "WW3D2/hrawanim.h"
+#include "WW3D2/htree.h"
+#include "WW3D2/w3d_file.h"
 #include "WWLib/chunkio.h"
 #include "WWMath/FloatToLong.h"
 #include "WWMath/Matrix3D.h"
 #include "WWMath/Quaternion.h"
 #include "Common/NameKeyGenerator.h"
+#include <ctype.h>
 #include <string.h>
 // Tier B; object=O0018D2A0 evidence=Z flags=align=U;ehform=EH_prolog
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
@@ -349,6 +352,97 @@ void HRawAnimClass::Free(void)
 }
 
 // FUNCTION: BFME2 0x0018E8D0 size=750 name=?Load_W3D@HRawAnimClass@@QAEHAAVChunkLoadClass@@@Z evidence=N:ledger
+int HRawAnimClass::Load_W3D(ChunkLoadClass &cload)
+{
+	bool pre30 = false;
+	MotionChannelClass *newchan;
+	BitChannelClass *newbitchan;
+
+	Free();
+
+	if (!cload.Open_Chunk()) {
+		return 1;
+	}
+
+	if (cload.Cur_Chunk_ID() != W3D_CHUNK_ANIMATION_HEADER) {
+		return 1;
+	}
+
+	W3dAnimHeaderStruct aheader;
+	if (cload.Read(&aheader, sizeof(W3dAnimHeaderStruct)) != sizeof(W3dAnimHeaderStruct)) {
+		return 1;
+	}
+
+	cload.Close_Chunk();
+
+	// Before version 3.0 the bone indexes start at zero instead of one.
+	if (aheader.Version < W3D_ANIMATION_VERSION_3_0) {
+		pre30 = true;
+	}
+
+	strcpy(Name, aheader.HierarchyName);
+	strcat(Name, ".");
+	strcat(Name, aheader.Name);
+	for (char *c = Name; *c != 0; ++c) {
+		*c = toupper(*c);
+	}
+	NameKey = TheNameKeyGenerator->nameToKey(Name);
+
+	strncpy(HTreeName, aheader.HierarchyName, W3D_NAME_LEN);
+
+	HTreeClass *base_pose = Get_HTree(HTreeName);
+	if (base_pose == NULL) {
+		goto Error;
+	}
+	NumNodes = base_pose->Num_Pivots();
+
+	NumFrames = aheader.NumFrames;
+	FrameRate = (float)aheader.FrameRate;
+
+	NodeMotion = new NodeMotionStruct[NumNodes];
+	if (NodeMotion == NULL) {
+		goto Error;
+	}
+
+	while (cload.Open_Chunk()) {
+		switch (cload.Cur_Chunk_ID()) {
+		case W3D_CHUNK_ANIMATION_CHANNEL:
+			if (!read_channel(cload, &newchan, pre30)) {
+				goto Error;
+			}
+
+			// A channel for a bone outside the tree is dropped; the animation must be re-exported.
+			if (newchan->Get_Pivot() < NumNodes) {
+				add_channel(newchan);
+			} else {
+				delete newchan;
+			}
+			break;
+
+		case W3D_CHUNK_BIT_CHANNEL:
+			if (!read_bit_channel(cload, &newbitchan, pre30)) {
+				goto Error;
+			}
+
+			if (newbitchan->Get_Pivot() < NumNodes) {
+				add_bit_channel(newbitchan);
+			} else {
+				delete newbitchan;
+			}
+			break;
+
+		default:
+			break;
+		}
+		cload.Close_Chunk();
+	}
+
+	return 0;
+
+Error:
+	Free();
+	return 1;
+}
 
 // FUNCTION: BFME2 0x0018EBC0 size=126 name=??1HRawAnimClass@@UAE@XZ evidence=N:ledger
 HRawAnimClass::~HRawAnimClass(void)
