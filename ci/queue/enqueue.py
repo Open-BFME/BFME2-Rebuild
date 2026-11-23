@@ -15,8 +15,8 @@ DEFAULT_REFUSED_PREFIXES = ("canary/", "ci-corpus/", "corpus/")
 HOLD_LABEL = "landing-hold"
 MAX_FILES = 60
 MAX_ENQUEUE = 16
-MAX_BACKFILL = 10
-MAX_ACTIVE_BOAT = 12
+MAX_BACKFILL = 18
+MAX_ACTIVE_BOAT = 18
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
 LIMIT = 4 * 1024**2
@@ -247,7 +247,7 @@ def ready_to_enqueue(pr, paths, statuses, approvers):
 
 def needs_backfill(statuses):
     boat = statuses.get("BFME II / Boat")
-    if boat not in (None, "PENDING"):
+    if boat not in (None, "PENDING", "ERROR"):
         return False
     if statuses.get("BFME II / source rules") == "FAILURE":
         return False
@@ -320,9 +320,10 @@ def run(api=None, *, config_path=None, env=None):
             active = active_boat_runs(api)
         except ApiError as exc:
             print(f"Skipping backfill; could not inspect active Boat runs: {exc}", file=sys.stderr)
-            active = MAX_ACTIVE_BOAT + 1
-        if active <= MAX_ACTIVE_BOAT:
-            for pr in backfill_candidates[:MAX_BACKFILL]:
+            active = MAX_ACTIVE_BOAT
+        slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
+        if slots > 0:
+            for pr in backfill_candidates[:slots]:
                 if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL:
                     break
                 num = pr["number"]

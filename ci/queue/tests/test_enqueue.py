@@ -135,42 +135,62 @@ class EnqueueTests(unittest.TestCase):
         self.assertEqual(len(result["errors"]), 1)
         self.assertEqual(result["errors"][0][0], 201)
 
-    def test_backfills_up_to_10_unmeasured_prs_when_headroom_and_ratelimit_ok(self):
+    def test_backfills_unmeasured_pending_and_error_prs_up_to_available_slots(self):
+        boat_states = (None, "PENDING", "ERROR")
         prs = [
-            make_pr(300 + i, statuses={"BFME II / Boat": "PENDING" if i % 2 else None} if i < 12 else {})
-            for i in range(13)
+            make_pr(300 + i, statuses={"BFME II / Boat": boat_states[i % 3]} if i < 20 else {})
+            for i in range(22)
         ]
-        # PR with failed source rules should NOT be backfilled.
-        prs.insert(0, make_pr(299, statuses={"BFME II / source rules": "FAILURE"}))
+        # PR with failed Boat status should NOT be backfilled.
+        prs.insert(0, make_pr(297, statuses={"BFME II / Boat": "FAILURE"}))
+        # PR with failed source rules should NOT be backfilled (even if Boat is ERROR).
+        prs.insert(0, make_pr(299, statuses={"BFME II / source rules": "FAILURE", "BFME II / Boat": "ERROR"}))
         # PR touching disallowed path should NOT be backfilled.
         prs.insert(0, make_pr(298, files=("docs/x.md",), statuses={}))
 
-        api = FakeApi([prs], active_in_progress=6, active_queued=6, ratelimit=1500)
-        result = enqueue.run(api, env={})
-        self.assertEqual(result["enqueued"], [])
-        self.assertEqual(len(result["backfilled"]), 10)
-        self.assertEqual(result["backfilled"], [300 + i for i in range(10)])
-        self.assertEqual(api.dispatches[0][0], "dispatches")
-        self.assertEqual(api.dispatches[0][1]["event_type"], "bfme-source-refresh")
-        self.assertEqual(api.dispatches[0][1]["client_payload"]["base"], MAIN_SHA)
+        # With 0 active runs, fills up to MAX_BACKFILL (18), including ERROR Boat PRs.
+        idle = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=1500)
+        idle_result = enqueue.run(idle, env={})
+        self.assertEqual(idle_result["enqueued"], [])
+        self.assertEqual(len(idle_result["backfilled"]), 18)
+        self.assertEqual(idle_result["backfilled"], [300 + i for i in range(18)])
+        self.assertIn(302, idle_result["backfilled"])  # ERROR Boat status
+        self.assertEqual(idle.dispatches[0][0], "dispatches")
+        self.assertEqual(idle.dispatches[0][1]["event_type"], "bfme-source-refresh")
+        self.assertEqual(idle.dispatches[0][1]["client_payload"]["base"], MAIN_SHA)
+
+        # With 12 active runs (6 in_progress + 6 queued), only fills remaining 6 slots (18 - 12).
+        partial = FakeApi([prs], active_in_progress=6, active_queued=6, ratelimit=1500)
+        partial_result = enqueue.run(partial, env={})
+        self.assertEqual(partial_result["enqueued"], [])
+        self.assertEqual(len(partial_result["backfilled"]), 6)
+        self.assertEqual(partial_result["backfilled"], [300 + i for i in range(6)])
 
     def test_skips_backfill_when_ratelimit_low_or_boat_busy(self):
-        prs = [make_pr(400, statuses={})]
+        prs = [make_pr(400, statuses={}), make_pr(401, statuses={"BFME II / Boat": "ERROR"})]
         low_rl = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=500)
         self.assertEqual(enqueue.run(low_rl, env={})["backfilled"], [])
         self.assertEqual(low_rl.dispatches, [])
 
-        busy = FakeApi([prs], active_in_progress=8, active_queued=5, ratelimit=3000)
-        self.assertEqual(enqueue.run(busy, env={})["backfilled"], [])
-        self.assertEqual(busy.dispatches, [])
+        at_cap = FakeApi([prs], active_in_progress=10, active_queued=8, ratelimit=3000)
+        self.assertEqual(enqueue.run(at_cap, env={})["backfilled"], [])
+        self.assertEqual(at_cap.dispatches, [])
+
+        over_cap = FakeApi([prs], active_in_progress=12, active_queued=8, ratelimit=3000)
+        self.assertEqual(enqueue.run(over_cap, env={})["backfilled"], [])
+        self.assertEqual(over_cap.dispatches, [])
 
     def test_workflows_have_atomic_cutover_guards(self):
         enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")
         land_wf = (ROOT / ".github/workflows/landing.yml").read_text(encoding="utf-8")
         self.assertIn("vars.BFME_MERGE_QUEUE_ENABLED == 'yes'", enq_wf)
         self.assertIn("BFME II Boat comparison", enq_wf)
-        self.assertIn("BFME II source rules", enq_wf)
         self.assertIn("BFME II header rules", enq_wf)
+        self.assertNotIn("BFME II source rules", enq_wf)
+        self.assertIn("bfme-land-next", enq_wf)
+        self.assertIn("github.event.workflow_run.conclusion == 'failure'", enq_wf)
+        self.assertNotIn("\nconcurrency:\n", enq_wf)
+        self.assertIn("\n    concurrency:\n", enq_wf)
         self.assertEqual(land_wf.count("vars.BFME_MERGE_QUEUE_ENABLED != 'yes'"), 2)
 
 
