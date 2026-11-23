@@ -13,7 +13,7 @@ extern "C" __declspec(dllimport) int __stdcall wvsprintfA(char *out, const char 
 #include <new>
 #include <eh.h>
 void LocalSETranslator(unsigned int code, struct _EXCEPTION_POINTERS *exptr);
-extern "C" __declspec(dllimport) int __stdcall GetTimeFormatA(unsigned long locale, unsigned long flags, const void *time, const char *format, char *out, int count);
+extern "C" __declspec(dllimport) int __stdcall GetTimeFormatA(unsigned long locale, unsigned long flags, const SYSTEMTIME *time, const char *format, char *out, int count);
 extern "C" __declspec(dllimport) unsigned long __stdcall WaitForSingleObject(void *handle, unsigned long milliseconds);
 extern "C" __declspec(dllimport) unsigned long __stdcall GetCurrentThreadId(void);
 extern "C" __declspec(dllimport) int __stdcall IsBadReadPtr(const void *pointer, unsigned int bytes);
@@ -26,6 +26,15 @@ extern "C" __declspec(dllimport) int __stdcall DeleteFileA(const char *name);
 void *DebugReAllocMemory(void *oldPtr, unsigned int newSize);
 void DebugFreeMemory(void *ptr);
 void *DebugAllocMemory(unsigned int numBytes);
+struct _RTL_CRITICAL_SECTION;
+extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(struct _RTL_CRITICAL_SECTION *section);
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(struct _RTL_CRITICAL_SECTION *section);
+// The assert/log nesting counter Debug::disableAssertsEtc is an int, so the interlocked imports take it as one.
+extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement(int *addend);
+extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(int *addend);
+extern "C" __declspec(dllimport) int __stdcall ReleaseMutex(void *mutex);
+// Serializes asserts, checks and logs across threads.
+extern struct _RTL_CRITICAL_SECTION g_CritSect;
 
 // The debug singleton (retail VA 0x00DE0880).
 Debug *theDebug = 0;
@@ -55,14 +64,35 @@ Debug::FrameHashEntry *Debug::LookupFrame(unsigned int addr)
 }
 
 // FUNCTION: BFME2 0x00038370 size=11 name=?rva00038370@@YAXXZ evidence=?:placeholder tier=B hypothesis:Z
+void DebugInstallExceptionHandler()
+{
+	theDebug->InstallExceptionHandler();
+}
 
 // FUNCTION: BFME2 0x00038380 size=11 name=?rva00038380@@YA_NXZ evidence=?:placeholder tier=B hypothesis:Z
+bool DebugNoRecursion()
+{
+	return theDebug->SkipNext();
+}
 
 // FUNCTION: BFME2 0x00038390 size=27 name=?rva00038390@@YAXHHH@Z evidence=?:placeholder tier=B hypothesis:Z
 
+// Set once an assert has been answered; read and cleared by DebugIsAssertDone.
+static bool s_assertDone = false;
+
 // FUNCTION: BFME2 0x000383B0 size=8 name=?rva000383B0@@YAXXZ evidence=?:placeholder tier=B hypothesis:Z
+void DebugSetAssertDone()
+{
+	s_assertDone = true;
+}
 
 // FUNCTION: BFME2 0x000383C0 size=13 name=?rva000383C0@@YA_NXZ evidence=?:placeholder tier=B hypothesis:Z
+bool DebugIsAssertDone()
+{
+	bool done = s_assertDone;
+	s_assertDone = false;
+	return done;
+}
 
 // FUNCTION: BFME2 0x000383D0 size=30 name=?rva002E27F0@@YAXPAX00@Z evidence=?:placeholder tier=B hypothesis:Z
 
@@ -134,6 +164,10 @@ Debug *Debug::PreStaticInit()
 }
 
 // FUNCTION: BFME2 0x00038710 size=66 name=??1Debug@@UAE@XZ evidence=N:ledger tier=A
+Debug::~Debug()
+{
+	// the singleton is never really destroyed: StaticExit only shuts the I/O classes down
+}
 
 // FUNCTION: BFME2 0x00038760 size=14 name=?LocalSETranslator@@YAXIPAU_EXCEPTION_POINTERS@@@Z evidence=N:ledger tier=A
 void LocalSETranslator(unsigned int, struct _EXCEPTION_POINTERS *exptr)
@@ -148,6 +182,10 @@ void Debug::InstallExceptionHandler()
 }
 
 // FUNCTION: BFME2 0x00038780 size=13 name=?rva0038780@@YAXXZ evidence=?:placeholder tier=A
+void DebugDisableDialogBox()
+{
+	theDebug->noAssertDialog = true;
+}
 
 // FUNCTION: BFME2 0x000387C0 size=12 name=?bfmeRva000387C0@@YA_NXZ evidence=N:ledger tier=A
 bool bfmeRva000387C0()
@@ -156,8 +194,24 @@ bool bfmeRva000387C0()
 }
 
 // FUNCTION: BFME2 0x000387D0 size=27 name=?bfmeGoDWC@BfmeThingDWC@@QAE_NXZ evidence=N:ledger tier=A
+bool Debug::SkipNext()
+{
+	// no recursion: the counter makes nested asserts, checks and logs skip themselves
+	InterlockedIncrement(&disableAssertsEtc);
+	EnterCriticalSection(&g_CritSect);
+	return false;
+}
 
 // FUNCTION: BFME2 0x000387F0 size=54 name=?d_00889720@Rva00889720Class@@QAE_NXZ evidence=?:placeholder tier=A
+bool Debug::LogDone()
+{
+	// we're not flushing here on intention!
+	curFrameEntry = NULL;
+	LeaveCriticalSection(&g_CritSect);
+	InterlockedDecrement(&disableAssertsEtc);
+	ReleaseMutex(m_mutex);
+	return false;
+}
 
 // FUNCTION: BFME2 0x00038830 size=26 name=?d_00889760@@YAHPAX00@Z evidence=N:ledger tier=A
 
@@ -308,84 +362,101 @@ bool Debug::isInAssertDialog()
 // FUNCTION: BFME2 0x00038CC0 size=160 name=?insert@Rva00889BF0Context@@QAEXIPAX0@Z evidence=?:placeholder tier=A
 void Debug::AddHResultTranslator(unsigned int prio, HResultTranslator func, void *user)
 {
-	if (func)
-	{
-		// remove it first if it is known already
-		RemoveHResultTranslator(func, user);
+	// bail out if invalid parameter passed in
+	if (!func)
+		return;
 
-		// find the position in the priority order
-		unsigned int i;
-		for (i = 0; i < numHrTranslators; i++)
-			if (hrTranslators[i].prio < prio)
-				break;
+	// just remove it first (if it's not in there nothing is done)
+	// necessary in case we want to 'change' the priority of an
+	// existing HR translator
+	RemoveHResultTranslator(func, user);
 
-		hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators + 1) * sizeof(HResultTranslatorEntry));
-		memmove(hrTranslators + i + 1, hrTranslators + i, (numHrTranslators - i) * sizeof(HResultTranslatorEntry));
-		numHrTranslators++;
-		hrTranslators[i].prio = prio;
-		hrTranslators[i].func = func;
-		hrTranslators[i].user = user;
-	}
+	// now find the right place to insert the translator
+	unsigned int k;
+	for (k = 0; k < numHrTranslators; ++k)
+		if (hrTranslators[k].prio < prio)
+			break;
+
+	// grow & move (only a pointer's worth per entry is moved, as in Zero Hour)
+	hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators + 1) * sizeof(HResultTranslatorEntry));
+	memmove(hrTranslators + k + 1, hrTranslators + k, (numHrTranslators - k) * sizeof(HResultTranslator));
+
+	// add new
+	++numHrTranslators;
+	hrTranslators[k].prio = prio;
+	hrTranslators[k].func = func;
+	hrTranslators[k].user = user;
 }
 
 // FUNCTION: BFME2 0x00038D60 size=129 name=?d_00889c90@Rva00889C90Class@@QAEXPAX0@Z evidence=?:placeholder tier=A
 void Debug::RemoveHResultTranslator(HResultTranslator func, void *user)
 {
-	if (func)
-	{
-		for (unsigned int i = 0; i < numHrTranslators; i++)
+	// bail out if invalid parameter passed in
+	if (!func)
+		return;
+
+	// look for func/user pair
+	for (unsigned int k = 0; k < numHrTranslators; ++k)
+		if (hrTranslators[k].func == func && hrTranslators[k].user == user)
 		{
-			if (hrTranslators[i].func == func && hrTranslators[i].user == user)
-			{
-				memmove(hrTranslators + i, hrTranslators + i + 1, (numHrTranslators - i - 1) * sizeof(HResultTranslatorEntry));
-				hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators - 1) * sizeof(HResultTranslatorEntry));
-				numHrTranslators--;
-			}
+			// remove it (as in Zero Hour, the move is a pointer's worth per entry
+			// and the array pointer rather than the count is stepped back)
+			memmove(hrTranslators + k, hrTranslators + k + 1, (numHrTranslators - k - 1) * sizeof(HResultTranslator));
+			--hrTranslators;
+			hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, numHrTranslators * sizeof(HResultTranslatorEntry));
 		}
-	}
 }
 
 // FUNCTION: BFME2 0x00038DF0 size=78 name=?d_00889d20@Rva00889D20Class@@QAE_NPAX00@Z evidence=?:placeholder tier=A
 bool Debug::AddIOFactory(const char *ioID, const char *descr, DebugIOInterface *(*factory)())
 {
-	if (ioID && factory)
-	{
-		IOFactoryListEntry *e = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
-		e->next = firstIOFactory;
-		e->ioID = ioID;
-		e->descr = descr;
-		e->factory = factory;
-		e->io = NULL;
-		e->input = NULL;
-		e->inputAlloc = 0;
-		e->inputUsed = 0;
-		firstIOFactory = e;
-	}
+	// bail out if invalid parameters passed in
+	if (!ioID || !factory)
+		return true;
+
+	// allocate & init new list entry
+	IOFactoryListEntry *entry = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
+	entry->next = firstIOFactory;
+	entry->ioID = ioID;
+	entry->descr = descr;
+	entry->factory = factory;
+	entry->io = NULL;
+	entry->input = NULL;
+	entry->inputAlloc = 0;
+	entry->inputUsed = 0;
+
+	// add to list
+	firstIOFactory = entry;
+
 	return true;
 }
 
 // FUNCTION: BFME2 0x00038E40 size=85 name=?d_00889d70@Rva00889D70Class@@QAE_NPAX0@Z evidence=?:placeholder tier=A
 bool Debug::AddCommands(const char *cmdgroup, DebugCmdInterface *cmdif)
 {
-	if (cmdgroup && cmdif)
+	// bail out if invalid parameters passed in
+	if (!cmdgroup || !cmdif)
+		return true;
+
+	// walk to end of list, add there (unless interface pointer already in list)
+	CmdInterfaceListEntry **listptr = &firstCmdGroup;
+	while (*listptr)
 	{
-		// is it known already? if not, append it
-		CmdInterfaceListEntry **link = &firstCmdGroup;
-		if (*link)
-		{
-			do
-			{
-				link = (CmdInterfaceListEntry **)*link;
-				if ((*link)->cmdif == cmdif)
-					return true;
-			} while ((*link)->next);
-		}
-		CmdInterfaceListEntry *e = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
-		e->next = NULL;
-		e->group = cmdgroup;
-		e->cmdif = cmdif;
-		*link = e;
+		if ((*listptr)->cmdif == cmdif)
+			// interface already in list, don't add twice
+			return true;
+		listptr = &(*listptr)->next;
 	}
+
+	// allocate & init new list entry
+	CmdInterfaceListEntry *entry = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
+	entry->next = NULL;
+	entry->group = cmdgroup;
+	entry->cmdif = cmdif;
+
+	// add to list
+	*listptr = entry;
+
 	return true;
 }
 
@@ -489,14 +560,21 @@ Debug::FrameHashEntry *Debug::AddFrameEntry(unsigned int addr, unsigned int type
 	else
 	{
 		// no, just add file name (without path though)
-		const char *name = fileOrGroup;
 		if (fileOrGroup)
 		{
-			for (const char *c = fileOrGroup; *c; ++c)
-				if (*c == '\\' || *c == '/')
-					name = c + 1;
+			const char *p = fileOrGroup, *q = fileOrGroup;
+			while (*q)
+			{
+				if (*q == '\\' || *q == '/')
+					p = q + 1;
+				++q;
+			}
+			e->fileOrGroup = p;
 		}
-		e->fileOrGroup = name;
+		else
+		{
+			e->fileOrGroup = NULL;
+		}
 	}
 
 	// add to hash
@@ -624,7 +702,7 @@ void Debug::AddPatternEntry(unsigned int types, bool isActive, const char *patte
 // FUNCTION: BFME2 0x00039480 size=135 name=?SimpleMatch@Debug@@SA_NPBD0@Z evidence=N:ledger tier=A
 bool Debug::SimpleMatch(const char *str, const char *pattern)
 {
-	while (*str && *pattern)
+	while (*str && *pattern || *pattern == '*')
 	{
 		if (*pattern == '*')
 		{
@@ -636,11 +714,17 @@ bool Debug::SimpleMatch(const char *str, const char *pattern)
 		}
 		else
 		{
-			char c = *str++;
-			if (c >= 'A' && c <= 'Z')
-				c += 'a' - 'A';
-			if (c != *pattern++)
-				return false;
+			// patterns are lower case
+			if (*str >= 'A' && *str <= 'Z')
+			{
+				if (*str++ + 'a' - 'A' != *pattern++)
+					return false;
+			}
+			else
+			{
+				if (*str++ != *pattern++)
+					return false;
+			}
 		}
 	}
 
@@ -726,12 +810,45 @@ unsigned int Debug::ScheduleFrameCommand(int frame, const char *command)
 // FUNCTION: BFME2 0x000397D0 size=169 name=?bfmeProbeAAS@BfmeHostAAS@@QAE_NXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00039880 size=25 name=?bfmeSetSign@Gen_0088A5D0@@QAEXE@Z evidence=N:ledger tier=A
+void Debug::SetWindowed(bool windowed)
+{
+	m_windowed = windowed ? 1 : -1;
+}
 
 // FUNCTION: BFME2 0x000398A0 size=80 name=__heap_abort evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000398F0 size=42 name=?bfmeFormatToBuffer88A640@@YAXPBDZZ evidence=N:ledger tier=A
+void __stl_debug_message(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+	char buffer[512];
+	_vsnprintf(buffer, sizeof(buffer) - 1, format, va);
+	va_end(va);
+}
 
 // FUNCTION: BFME2 0x00039A60 size=194 name=?UpdateFrameStatus@Rva0088A7E0Debug@@QAEXAAURva0088A7E0FrameHashEntry@@@Z evidence=?:placeholder tier=A
+void Debug::UpdateFrameStatus(FrameHashEntry &entry)
+{
+	// build pattern match entry
+	char help[512];
+	if (entry.frameType == FrameTypeAssert || entry.frameType == FrameTypeCheck)
+		wsprintfA(help, "%s(%i)", entry.fileOrGroup, entry.line);
+	else
+		strcpy(help, entry.fileOrGroup);
+
+	// update frame status
+	bool active = entry.frameType != FrameTypeLog;
+	for (PatternListEntry *cur = firstPatternEntry; cur; cur = cur->next)
+	{
+		if (!(cur->frameTypes & entry.frameType))
+			continue;
+		if (SimpleMatch(help, cur->pattern))
+			active = cur->isActive;
+	}
+	if (entry.status == Unknown || (entry.status == Skip) == active)
+		entry.status = active ? NoSkip : Skip;
+}
 
 // FUNCTION: BFME2 0x00039B30 size=58 name=?StartOutput@Debug@@EAAXW4StringType@DebugIOInterface@@PBDZZ evidence=N:ledger tier=A
 void Debug::StartOutput(DebugIOInterface::StringType type, const char *fmt, ...)
@@ -780,7 +897,51 @@ Debug &Debug::operator<<(const RepeatChar &c)
 	return *this;
 }
 
+// Debug::LookupFrame's search, forced inline the way Zero Hour declares LookupFrame (frameStatus inlines it).
+static __forceinline Debug::FrameHashEntry *FindFrameEntry(Debug &debug, unsigned int addr)
+{
+	for (Debug::FrameHashEntry *e = debug.frameHash[addr % Debug::FRAME_HASH_SIZE]; e; e = e->next)
+		if (e->frameAddr == addr)
+			return e;
+	return NULL;
+}
+
 // FUNCTION: BFME2 0x0003A6A0 size=175 name=?frameStatus@Debug@@UAE_NI_N@Z evidence=N:ledger tier=A
+bool Debug::frameStatus(unsigned int address, bool reset)
+{
+	// this is typically set while an assertion is running
+	if (disableAssertsEtc)
+		return true;
+
+	EnterCriticalSection(&g_CritSect);
+	curStackFrame = address;
+
+	// do we know if to skip the following code?
+	FrameHashEntry *e = FindFrameEntry(*this, address);
+
+	if (reset)
+	{
+		if (e)
+			e->status = Unknown;
+		LeaveCriticalSection(&g_CritSect);
+		return false;
+	}
+
+	// unknown frame (added later) or a frame known to be active
+	if (!e || e->status == NoSkip || e->status == 3)
+	{
+		LeaveCriticalSection(&g_CritSect);
+		return false;
+	}
+
+	// status is unknown, must update
+	if (e->status == Unknown)
+		UpdateFrameStatus(*e);
+
+	// now we know whether to skip or not
+	LeaveCriticalSection(&g_CritSect);
+	return e->status == Skip;
+}
 
 // FUNCTION: BFME2 0x0003A750 size=334 name=?CheckBegin@Debug@@UAEAAV1@PBDHH0@Z evidence=N:ledger tier=A
 Debug &Debug::CheckBegin(const char *file, int line, int reserved, const char *expr)
