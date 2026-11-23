@@ -382,6 +382,21 @@ GRAPH_CHANGES += (
 )
 GRAPH_PATHS |= set(CUT16_GATES_DXWRAPPER_GRAPH)
 
+DISJOINT_PUBLISH_GRAPH = {
+    'ci/managed-check/github_io.py': ('c34a1c9bde3d83f39346bdb8246ee74290cebd5058672d9e24b13388bb02c9e8', '5fd7f45a9af086ad83f19ed1fa4925a041da85de8466a5c621e0a5e0554fe754'),
+    'ci/managed-check/github_status.py': ('4e54773993a7868b6a6d20d198e12b51babb7cdde52880f7ab50949e4d620eaf', '0df044f72234d6366819ddfddce407bffaf439aa1c4d82fd400a8a085997ccb1'),
+    'ci/managed-check/inline_status.py': ('c8b03c2bbf2a9ed3b6fa21b4b30fb84de6d7b522c24975d5f70aaf71b305adbf', '61efa6f732bbf7dbc736492e37b9ab37411274fefd046ce87def8295131d974f'),
+    'ci/managed-check/bundle.sha256': ('af8387224c9d53242728b6e4b70aa1ca97567670c00b6a8a3a2527cd1a28f49a', 'db134457bdbb68b1aed9571f374e1d829e4f9abf7e314994f847ce49966538d8'),
+}
+GRAPH_CHANGES += (DISJOINT_PUBLISH_GRAPH,) + tuple(
+    advance_graph(previous, DISJOINT_PUBLISH_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == DISJOINT_PUBLISH_GRAPH[BUNDLE][0]
+    and all(previous[path][1] == DISJOINT_PUBLISH_GRAPH[path][0]
+            for path in previous.keys() & DISJOINT_PUBLISH_GRAPH.keys())
+)
+GRAPH_PATHS |= set(DISJOINT_PUBLISH_GRAPH)
+
 
 
 # Exact pinned TU-move migrations: carry untouched TUs across a maintainer TU relocation while

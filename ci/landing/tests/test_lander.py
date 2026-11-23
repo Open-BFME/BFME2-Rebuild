@@ -1087,6 +1087,75 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
         anc = lander.resolve_disjoint_ancestor(api, older[:12], MEASURED, ["src/Code/GameEngine/Mine.cpp"])
         self.assertEqual(anc, older)
 
+    def test_disjoint_ancestor_supports_src_unk_and_nbench_and_rejects_code_tools(self):
+        api = FakeApi(live=True, main=MEASURED)
+        older = "7" * 40
+        api.fx[f"compare/{older[:12]}...{MEASURED}"] = {
+            "status": "ahead", "ahead_by": 4, "behind_by": 0,
+            "base_commit": {"sha": older}, "merge_base_commit": {"sha": older},
+            "files": [
+                {"filename": "src/unk/O00999999.cpp", "status": "modified"},
+                {"filename": "src/nbench/Benchmark/emfloat.c", "status": "modified"},
+            ],
+        }
+        self.assertEqual(
+            lander.resolve_disjoint_ancestor(api, older[:12], MEASURED, ["src/unk/O00123456.cpp"]),
+            older,
+        )
+        self.assertEqual(
+            lander.resolve_disjoint_ancestor(api, older[:12], MEASURED, ["src/nbench/Benchmark/nbench0.c"]),
+            older,
+        )
+        # Overlap in src/unk (case-insensitive) must be rejected.
+        self.assertIsNone(
+            lander.resolve_disjoint_ancestor(api, older[:12], MEASURED, ["src/unk/o00999999.cpp"]),
+        )
+        # src/Code/Tools/ is always excluded from disjoint TUs.
+        self.assertFalse(lander._is_disjoint_tu_path("src/Code/Tools/WW3D/pluglib/matrix4.cpp"))
+        self.assertIsNone(
+            lander.resolve_disjoint_ancestor(api, older[:12], MEASURED, ["src/Code/Tools/WW3D/pluglib/matrix4.cpp"]),
+        )
+
+    def test_disjoint_ancestor_missing_rules_triggers_source_recheck_prioritized_over_full_remeasure(self):
+        api, new_main, anc, head, *_ = self._setup_ancestor_fixture(
+            pr_file="src/unk/O00123456.cpp",
+            intervening_files=[{"filename": "src/unk/O00999999.cpp", "status": "modified"}],
+            rules_on_current=False,
+        )
+        # Simulate compact trusted PR whose source rules were never published because main moved.
+        api.fx[f"commits/{head}/statuses?per_page=100&page=1"] = [
+            st for st in api.fx[f"commits/{head}/statuses?per_page=100&page=1"]
+            if st.get("context") != lander.RULES
+        ]
+        cfg = CONFIG | {"exceptions": set(), "auto_admission": True}
+        dec = lander.evaluate(api, 2, new_main, cfg)
+        self.assertEqual(dec["stage"], "remeasure")
+        self.assertTrue(dec.get("source_recheck_only"))
+        self.assertEqual(dec["measured_base"], anc)
+
+        # Add an older PR #1 needing a full remeasure; PR #2 (source_recheck_only) dispatches first.
+        pr1 = copy.deepcopy(api.fx["pulls/2"])
+        pr1["number"] = 1
+        pr1["head"]["sha"] = "1" * 40
+        api.fx["pulls/1"] = pr1
+        api.fx["pulls/1/files?per_page=100&page=1"] = [{"filename": "src/unk/O00000001.cpp", "status": "modified"}]
+        api.fx[f"commits/{'1'*40}/statuses?per_page=100&page=1"] = [
+            {"id": 1, "context": lander.BOAT, "state": "success",
+             "description": "BFME II comparison passed (main 000000000000)", "creator": {"id": lander.lr.BOT_ID}},
+            {"id": 2, "context": lander.RULES, "state": "success",
+             "description": "Source rules passed (main 000000000000)", "creator": {"id": lander.lr.BOT_ID}},
+        ]
+        api.fx["pulls?state=open&base=main&sort=created&direction=asc&per_page=100&page=1"] = [{"number": 1}, {"number": 2}]
+        with tempfile.TemporaryDirectory() as tmp:
+            code, _ = quiet(lander.run, ["select", tmp + "/w"], env(main=new_main, mode="live"), api=api, config=cfg)
+        self.assertEqual(code, 0)
+        dispatches = [b for _, path, b in api.writes if path == "dispatches"]
+        self.assertGreaterEqual(len(dispatches), 2)
+        self.assertEqual(dispatches[0]["event_type"], lander.SOURCE_RECHECK_EVENT)
+        self.assertEqual(dispatches[0]["client_payload"]["number"], 2)
+        self.assertEqual(dispatches[1]["event_type"], lander.ADMIT_REQUEST_EVENT)
+        self.assertEqual(dispatches[1]["client_payload"]["number"], 1)
+
     def test_merge_http_403_holds_pr_without_blocking_other_candidates(self):
         api = FakeApi(live=True, main=MEASURED)
         api.fx[f"commits/{PR2}/statuses?per_page=100&page=1"].append({

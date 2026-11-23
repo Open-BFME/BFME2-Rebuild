@@ -960,6 +960,32 @@ class Cut11SwarmTests(unittest.TestCase):
                                    allow_ancestor_skip=True, source_proof=lambda *_: None)
         self.assertIn("admitted by rule", out_far)
 
+    def test_prior_boat_pass_accepts_src_unk_and_nbench_and_rejects_code_tools(self):
+        old_main = "1" * 40
+        boat_st = {
+            "id": 11, "context": admit.BOAT_CONTEXT, "state": "success",
+            "description": f"BFME II comparison passed (main {old_main[:12]})",
+            "created_at": "2026-11-20T11:00:00Z",
+            "creator": {"id": admit.BOT_ID},
+        }
+        api = LedgerApi(True, [fork_pr(number=46)], {46: ["src/unk/O00123456.cpp"]})
+        orig = api.call
+        api.call = lambda path: ({"status": "ahead", "ahead_by": 3, "behind_by": 0,
+                                  "files": [{"filename": "src/unk/O00999999.cpp", "status": "modified"},
+                                            {"filename": "src/nbench/Benchmark/emfloat.c", "status": "modified"}]}
+                                 if path.startswith("compare/") else orig(path))
+        self.assertEqual(
+            admit.prior_boat_pass(api, HEAD, MAIN, ["src/unk/O00123456.cpp"], boat_status=boat_st, clock=CLOCK),
+            old_main[:12],
+        )
+        self.assertEqual(
+            admit.prior_boat_pass(api, HEAD, MAIN, ["src/nbench/Benchmark/nbench0.c"], boat_status=boat_st, clock=CLOCK),
+            old_main[:12],
+        )
+        self.assertIsNone(
+            admit.prior_boat_pass(api, HEAD, MAIN, ["src/Code/Tools/WW3D/pluglib/matrix4.cpp"], boat_status=boat_st, clock=CLOCK),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

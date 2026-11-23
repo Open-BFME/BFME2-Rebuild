@@ -31,7 +31,16 @@ sys.path.insert(1, str(HERE.parent / "managed-check"))
 import landing_read as lr  # noqa: E402
 from common import CONTEXT as BOAT, HEX40, REPO, REPO_ID, read  # noqa: E402
 from inline_status import CONTEXT as INLINE  # noqa: E402
-from github_status import admitted  # noqa: E402  (the compiler check's own admission rule)
+from github_status import (  # noqa: E402  (the compiler check's own admission & disjoint-TU rules)
+    BUILD_NEUTRAL_PREFIXES,
+    BUILD_NEUTRAL_WORKFLOWS,
+    DISJOINT_TU_PREFIXES,
+    DISJOINT_TU_SUFFIXES,
+    MAX_ANCESTOR_AHEAD,
+    admitted,
+    is_build_neutral_path as _is_build_neutral_path,
+    is_disjoint_tu_path as _is_disjoint_tu_path,
+)
 from api import Api, ApiError, ReadOnly, printable  # noqa: E402
 
 RULES = lr.RULES
@@ -55,9 +64,6 @@ LAND_SETTLE_SECONDS = 180           # bounded wait for just-completed runs on st
 MAX_PARALLEL_REMEASURES = 5         # fan out stale-ready PRs without holding the global lock
 POLL_SECONDS = 20
 MAX_OPEN_PULLS = 1000
-DISJOINT_TU_PREFIX = "src/Code/"
-DISJOINT_TU_SUFFIXES = (".c", ".cpp")
-MAX_ANCESTOR_AHEAD = 32
 HEADER_PRIORITY_WAIT_SECONDS = 720
 TRAILER = "Landed by the BFME II landing workflow"
 # Reconciliation reads only the body this workflow writes (after the title, which a pull request author chooses).
@@ -171,14 +177,6 @@ def admission_status(api, head):
 
 
 MAX_ANCESTOR_AGE_SECONDS = 20 * 3600
-BUILD_NEUTRAL_PREFIXES = (
-    "docs/", "worklist/", "ci/nightly/", "ci/progress/", "ci/alarms/",
-    "ci/public-text/", "ci/managed-check/tests/", "ci/landing/tests/", "ci/admission/tests/",
-)
-BUILD_NEUTRAL_WORKFLOWS = frozenset({
-    ".github/workflows/nightly.yml", ".github/workflows/nightly-trial.yml",
-    ".github/workflows/progress.yml", ".github/workflows/ci-tests.yml",
-})
 
 
 def _status_fresh_enough(status_obj, max_age_seconds, now=None):
@@ -193,19 +191,6 @@ def _status_fresh_enough(status_obj, max_age_seconds, now=None):
         return False
     ref_now = now if now is not None else datetime.datetime.now(datetime.timezone.utc)
     return (ref_now - created).total_seconds() <= max_age_seconds
-
-
-def _is_build_neutral_path(name):
-    return (isinstance(name, str) and bool(name)
-            and (name.startswith(BUILD_NEUTRAL_PREFIXES)
-                 or name in BUILD_NEUTRAL_WORKFLOWS
-                 or ("/" not in name and name.endswith(".md"))))
-
-
-def _is_disjoint_tu_path(name):
-    return (isinstance(name, str)
-            and name.startswith(DISJOINT_TU_PREFIX)
-            and name.lower().endswith(DISJOINT_TU_SUFFIXES))
 
 
 def changed_files_detail(api, number):
@@ -641,7 +626,14 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
                      "before the compiler runs it; you do not need to do anything")
         else:
             hold("no-status", f"{context} from GitHub Actions on head {head[:12]}", kind)
-    if not reasons:
+    only_missing_rules = (
+        bool(config.get("auto_admission"))
+        and len(reasons) == 1
+        and reasons[0].code == "no-status"
+        and decision["checks"].get(RULES) == "missing"
+        and decision["checks"].get(BOAT) == "stale-success"
+    )
+    if not reasons or only_missing_rules:
         if (stale and not decision.get("header_stale") and not header_change and all_simple_tu
                 and pr.get("mergeable") is not False
                 and decision["checks"].get(BOAT) == "stale-success"
@@ -652,7 +644,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
                 ancestor = resolve_disjoint_ancestor(api, boat_prefix, main, files,
                                                      compare_cache=compare_cache, cache_lock=cache_lock)
                 if ancestor:
-                    if decision["checks"].get(RULES) == "fresh-success":
+                    if not reasons and decision["checks"].get(RULES) == "fresh-success":
                         # Repo-wide G1-G8 (including G7 one-definition) passed on current main, and Boat
                         # compiled this exact TU against a disjoint ancestor with identical headers/configs.
                         decision["stage"] = "land"
@@ -664,12 +656,14 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
                                      and marker(ancestor) in (inline_st.get("description") or ""))
                         decision["inline"] = "success" if inline_ok else "pending"
                         return decision
-                    if decision["checks"].get(RULES) == "stale-success":
+                    if decision["checks"].get(RULES) in {"stale-success", "missing"}:
                         # Refresh only hosted source rules on current main (0 Boat VMs) to prove G7.
+                        reasons.clear()
                         decision["source_recheck_only"] = True
                         decision["measured_base"] = ancestor
-        decision["stage"] = "remeasure" if stale or decision.get("header_stale") else "land"
-        decision["inline"] = bot_statuses.get(INLINE, {}).get("state") if decision["checks"][INLINE] == "fresh-success" else "pending"
+        if not reasons:
+            decision["stage"] = "remeasure" if stale or decision.get("header_stale") else "land"
+            decision["inline"] = bot_statuses.get(INLINE, {}).get("state") if decision["checks"][INLINE] == "fresh-success" else "pending"
     return decision
 
 
@@ -1179,7 +1173,7 @@ def select(api, env, config, directory, clock=time.monotonic, sleep=time.sleep):
                 )
             )
         )
-        pending_dispatch.sort(key=lambda d: (0 if d.get("header_change") else 1, d["number"]))
+        pending_dispatch.sort(key=lambda d: (0 if d.get("header_change") else (1 if d.get("source_recheck_only") else 2), d["number"]))
         for item in pending_dispatch:
             if len(active) + in_flight_measuring + len(dispatched) >= MAX_PARALLEL_REMEASURES:
                 break

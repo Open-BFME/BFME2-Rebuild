@@ -16,7 +16,38 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def event(api=None):
+DISJOINT_TU_PREFIXES = ("src/Code/", "src/unk/", "src/nbench/")
+DISJOINT_TU_FORBIDDEN_PREFIXES = ("src/code/tools/",)
+DISJOINT_TU_SUFFIXES = (".c", ".cpp")
+MAX_ANCESTOR_AHEAD = 32
+BUILD_NEUTRAL_PREFIXES = (
+    "docs/", "worklist/", "ci/nightly/", "ci/progress/", "ci/alarms/",
+    "ci/public-text/", "ci/managed-check/tests/", "ci/landing/tests/", "ci/admission/tests/",
+)
+BUILD_NEUTRAL_WORKFLOWS = frozenset({
+    ".github/workflows/nightly.yml", ".github/workflows/nightly-trial.yml",
+    ".github/workflows/progress.yml", ".github/workflows/ci-tests.yml",
+})
+
+
+def is_build_neutral_path(name):
+    return (isinstance(name, str) and bool(name)
+            and ".." not in name.split("/")
+            and (name.startswith(BUILD_NEUTRAL_PREFIXES)
+                 or name in BUILD_NEUTRAL_WORKFLOWS
+                 or ("/" not in name and name.endswith(".md"))))
+
+
+def is_disjoint_tu_path(name):
+    if not isinstance(name, str) or not name or name.startswith("/") or ".." in name.split("/"):
+        return False
+    lower = name.lower()
+    if lower.startswith(DISJOINT_TU_FORBIDDEN_PREFIXES):
+        return False
+    return name.startswith(DISJOINT_TU_PREFIXES) and lower.endswith(DISJOINT_TU_SUFFIXES)
+
+
+def event(api=None, *, allow_moved_main=False):
     if (os.environ.get("GITHUB_REPOSITORY") != REPO
             or os.environ.get("GITHUB_REPOSITORY_ID") != str(REPO_ID)
             or os.environ.get("GITHUB_REF") != "refs/heads/main"
@@ -37,7 +68,10 @@ def event(api=None):
         number, head = request["number"], request["head"]
         pr = api.call(f"pulls/{number}")
         if ((pr.get("head") or {}).get("sha") != head
-                or api.call("git/ref/heads/main")["object"]["sha"] != base or pr.get("state") != "open"):
+                or pr.get("state") != "open"
+                or (pr.get("base") or {}).get("ref") != "main"):
+            raise Superseded()
+        if not allow_moved_main and api.call("git/ref/heads/main")["object"]["sha"] != base:
             raise Superseded()
     else:
         pr = payload["pull_request"]
@@ -84,6 +118,74 @@ class GitHub:
             raise Superseded()
         validate_pr(pr, number, head)
         if (pr["head"]["sha"] != head or self.call("git/ref/heads/main")["object"]["sha"] != base):
+            raise Superseded()
+        return pr
+
+    def disjoint_ancestor_ok(self, binding, actual_main):
+        """Return True iff binding['base'] is a disjoint ancestor of actual_main for a narrow disjoint-TU PR."""
+        number, base = binding["number"], binding["base"]
+        if not HEX40.fullmatch(base) or not HEX40.fullmatch(actual_main) or base == actual_main:
+            return False
+        try:
+            entries = self.call(f"pulls/{number}/files?per_page=100&page=1")
+        except ValueError:
+            return False
+        if not isinstance(entries, list) or not (0 < len(entries) <= 8):
+            return False
+        pr_files = []
+        for item in entries:
+            if not isinstance(item, dict):
+                return False
+            fname = item.get("filename", "")
+            if item.get("previous_filename"):
+                return False
+            if item.get("status") not in {"modified", "added"} or not is_disjoint_tu_path(fname):
+                return False
+            pr_files.append(fname)
+        try:
+            cmp = self.call(f"compare/{base}...{actual_main}")
+        except ValueError:
+            return False
+        if not isinstance(cmp, dict):
+            return False
+        if cmp.get("status") != "ahead" or cmp.get("behind_by") != 0:
+            return False
+        ahead_by = cmp.get("ahead_by")
+        if type(ahead_by) is not int or not 1 <= ahead_by <= MAX_ANCESTOR_AHEAD:
+            return False
+        base_sha = (cmp.get("base_commit") or {}).get("sha", "")
+        merge_base_sha = (cmp.get("merge_base_commit") or {}).get("sha", "")
+        if base_sha != base or merge_base_sha != base:
+            return False
+        intervening = cmp.get("files")
+        if not isinstance(intervening, list) or not (0 < len(intervening) < 300):
+            return False
+        intervening_lower = set()
+        for item in intervening:
+            if not isinstance(item, dict):
+                return False
+            fname = item.get("filename", "")
+            prev = item.get("previous_filename")
+            if is_build_neutral_path(fname) and (not prev or is_build_neutral_path(prev)):
+                continue
+            if item.get("status") != "modified" or prev or not is_disjoint_tu_path(fname):
+                return False
+            intervening_lower.add(fname.lower())
+        pr_lower = {name.lower() for name in pr_files}
+        if intervening_lower & pr_lower:
+            return False
+        return True
+
+    def current_or_disjoint(self, binding):
+        number, head, base = (binding[key] for key in ("number", "head", "base"))
+        pr = self.call(f"pulls/{number}")
+        if pr["state"] != "open" or pr["base"]["ref"] != "main":
+            raise Superseded()
+        validate_pr(pr, number, head)
+        if pr["head"]["sha"] != head:
+            raise Superseded()
+        actual_main = self.call("git/ref/heads/main")["object"]["sha"]
+        if actual_main != base and not self.disjoint_ancestor_ok(binding, actual_main):
             raise Superseded()
         return pr
 

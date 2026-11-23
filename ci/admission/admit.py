@@ -43,6 +43,15 @@ sys.path.insert(2, str(HERE.parent / "managed-check"))
 
 from api import Api, ApiError, ReadOnly, printable  # noqa: E402
 from common import HEX40, REPO, REPO_ID, read  # noqa: E402
+from github_status import (  # noqa: E402
+    BUILD_NEUTRAL_PREFIXES,
+    BUILD_NEUTRAL_WORKFLOWS,
+    DISJOINT_TU_PREFIXES,
+    DISJOINT_TU_SUFFIXES,
+    MAX_ANCESTOR_AHEAD as ANCESTOR_LIMIT,
+    is_build_neutral_path as _is_build_neutral,
+    is_disjoint_tu_path as _is_simple_tu,
+)
 import ledger  # noqa: E402
 import source_approval  # noqa: E402
 import subprocess
@@ -154,19 +163,8 @@ def prior_code_refusal(api, head, base):
 
 
 PASSED_MAIN_RE = re.compile(r"^BFME II comparison passed \(main ([0-9a-f]{12})\)\Z")
-ANCESTOR_LIMIT = 32
 MAX_ANCESTOR_AGE_SECONDS = 18 * 3600
 LAND_NEXT_EVENT = "bfme-land-next"
-DISJOINT_TU_PREFIX = "src/Code/"
-DISJOINT_TU_SUFFIXES = (".c", ".cpp")
-BUILD_NEUTRAL_PREFIXES = (
-    "docs/", "worklist/", "ci/nightly/", "ci/progress/", "ci/alarms/",
-    "ci/public-text/", "ci/managed-check/tests/", "ci/landing/tests/", "ci/admission/tests/",
-)
-BUILD_NEUTRAL_WORKFLOWS = frozenset({
-    ".github/workflows/nightly.yml", ".github/workflows/nightly-trial.yml",
-    ".github/workflows/progress.yml", ".github/workflows/ci-tests.yml",
-})
 
 
 def _status_fresh_enough(status_obj, max_age_seconds, clock=None):
@@ -181,18 +179,6 @@ def _status_fresh_enough(status_obj, max_age_seconds, clock=None):
         return False
     now = clock() if clock else datetime.datetime.now(datetime.timezone.utc)
     return (now - created).total_seconds() <= max_age_seconds
-
-
-def _is_build_neutral(name):
-    return (isinstance(name, str) and bool(name)
-            and (name.startswith(BUILD_NEUTRAL_PREFIXES)
-                 or name in BUILD_NEUTRAL_WORKFLOWS
-                 or ("/" not in name and name.endswith(".md"))))
-
-
-def _is_simple_tu(name):
-    return (isinstance(name, str) and name.startswith(DISJOINT_TU_PREFIX)
-            and name.lower().endswith(DISJOINT_TU_SUFFIXES))
 
 
 def _cached_compare(api, old12, base, compare_cache=None):

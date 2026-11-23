@@ -6,6 +6,7 @@ import sys
 from common import HEX40, HEX64, REPO_ID, policy, read
 from github_status import GitHub, Superseded, event
 
+_STATUS_EVENT = event
 CONTEXT = "BFME II / Inline virtual"
 VERDICTS = {
     "pass": ("success", "Inline virtual behaviour passed"),
@@ -38,13 +39,18 @@ def verified_state(record, binding, admission):
 
 def publish(path, admission):
     api = GitHub()
-    binding = event(api)
-    api.current(binding)
-    if path.is_file() and admission.is_file():
-        state, text = verified_state(read(path, 4096), binding, read(admission, 4096))
+    decision = read(admission, 4096) if admission.is_file() else None
+    allow_disjoint = (path.is_file() and isinstance(decision, dict)
+                      and decision.get("kind") == "compile"
+                      and decision.get("automatic_kind") != "wide")
+    binding = event(api, allow_moved_main=allow_disjoint) if event is _STATUS_EVENT else event(api)
+    check = api.current_or_disjoint if (allow_disjoint and hasattr(api, "current_or_disjoint")) else api.current
+    check(binding)
+    if path.is_file() and decision is not None:
+        state, text = verified_state(read(path, 4096), binding, decision)
     else:
         state, text = "pending", "Inline virtual evidence is unavailable; see the Actions run"
-    api.current(binding)
+    check(binding)
     api.status(binding, state, f"{text} (main {binding['base'][:12]})", context=CONTEXT)
 
 

@@ -8,6 +8,28 @@ from github_status import GitHub, Superseded, event
 from fork_admission import authority, bot_dispatch, enabled, reservation_kind, wide_enabled
 from gitrepo import Git, GitFailure
 
+_STATUS_EVENT = event
+
+
+def _event_for_publish(api, *, allow_moved_main=False):
+    if allow_moved_main and event is _STATUS_EVENT:
+        return event(api, allow_moved_main=True)
+    return event(api)
+
+
+def _check_current(api, binding, *, allow_disjoint=False):
+    if allow_disjoint and hasattr(api, "current_or_disjoint"):
+        return api.current_or_disjoint(binding)
+    return api.current(binding)
+
+
+def _allow_disjoint_publish(decision, record):
+    return (isinstance(decision, dict)
+            and decision.get("kind") == "compile"
+            and decision.get("automatic_kind") != "wide"
+            and isinstance(record, dict)
+            and record.get("kind") in {"ok", "regression"})
+
 
 def bind(work):
     api = GitHub()
@@ -77,22 +99,22 @@ def wide_notes(matrix, units):
 def publish(phase, admission=None, result=None):
     from quality_format import quality_report
     api = GitHub()
-    binding = event(api)
-    pr = api.current(binding)
     if phase == "start":
+        binding = event(api)
+        pr = api.current(binding)
         if enabled(os.environ) and authority(pr, binding, os.environ).get("automatic_pending"):
             return
         api.status(binding, "pending", "Waiting for protected intake and Boat comparison")
         from inline_status import CONTEXT as INLINE_CONTEXT
         api.status(binding, "pending", "Waiting for admitted inline-virtual evidence", context=INLINE_CONTEXT)
         return
+    binding = _event_for_publish(api, allow_moved_main=True)
     decision_path = admission / "decision.json"
     final_path = result / "verdict.json"
-    out = Path(os.environ["MANAGED_PUBLIC_REPORT"])
-    out.mkdir(mode=0o700, exist_ok=True)
     record = {"kind": "infrastructure", "messages": [
         "Protected source intake did not produce a verified receipt. Re-run all jobs."]}
     decision = read(decision_path, 4096) if decision_path.is_file() else None
+    verdict_payload = None
     if decision:
         identity = {"version": 1, "repo": REPO_ID} | {k: binding[k] for k in ("base", "head", "number")}
         if any(decision.get(key) != value for key, value in identity.items()):
@@ -124,7 +146,13 @@ def publish(phase, admission=None, result=None):
                 matrix = verdict["matrix"]
                 record["messages"].extend(wide_notes(matrix, record["judged"]))
                 metadata["matrix"] = matrix
-            write(out / "verdict.json", identity | metadata)
+            verdict_payload = identity | metadata
+    allow_disjoint = _allow_disjoint_publish(decision, record)
+    _check_current(api, binding, allow_disjoint=allow_disjoint)
+    out = Path(os.environ["MANAGED_PUBLIC_REPORT"])
+    out.mkdir(mode=0o700, exist_ok=True)
+    if verdict_payload is not None:
+        write(out / "verdict.json", verdict_payload)
     report = quality_report(binding["base"], binding["head"], record) + "\n"
     (out / "summary.md").write_text(report)
     with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as stream:
@@ -137,7 +165,7 @@ def publish(phase, admission=None, result=None):
                "error": ("Boat comparison unavailable. Re-run all jobs." if decision else
                          "Protected Git intake unavailable. Re-run all jobs.")}[status]
     # Keep the status pending if the event was superseded while preparing the report.
-    latest = api.current(binding)
+    latest = _check_current(api, binding, allow_disjoint=allow_disjoint)
     if decision and (decision["kind"] == "awaiting-automatic"
                      or ("automatic_author" in decision and os.environ.get("BFME_AUTOMATIC_CLAIM") != "yes")):
         return
@@ -152,8 +180,9 @@ def publish(phase, admission=None, result=None):
             raise Superseded()
     api.status(binding, status, f"{message} (main {binding['base'][:12]})")
     if phase == "finish" and status == "success" and os.environ.get("GITHUB_OUTPUT"):
-        # Only a passing verdict, written for the current main, is announced. GitHub starts no workflow_run for a
-        # run started with the Actions token, so the dispatch-started check wakes the landing workflow itself.
+        # Only a passing verdict, written for the current main or a verified disjoint ancestor, is announced.
+        # GitHub starts no workflow_run for a run started with the Actions token, so the dispatch-started check
+        # wakes the landing workflow itself.
         with Path(os.environ["GITHUB_OUTPUT"]).open("a") as stream:
             stream.write("verdict=success\n")
     if phase == "finish" and status == "error" and decision and os.environ.get("GITHUB_OUTPUT"):
