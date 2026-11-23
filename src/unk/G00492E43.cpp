@@ -16,7 +16,8 @@ bool TeleportSpecialAbilityUpdate::vslot08(const Coord3D *location)
 {
 	if (location)
 	{
-		const TeleportSpecialAbilityUpdateModuleData *data = (const TeleportSpecialAbilityUpdateModuleData *)getModuleData();
+		const ModuleData *moduleData = getModuleData();
+		const TeleportSpecialAbilityUpdateModuleData *data = static_cast<const TeleportSpecialAbilityUpdateModuleData *>(moduleData);
 		if (data && data->m_maxDistance > 0.0f)
 		{
 			const Object *object = m_object;
