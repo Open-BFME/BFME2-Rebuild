@@ -1128,6 +1128,18 @@ void CPUDetectClass::Init_Processor_Features()
 
 
 // FUNCTION: BFME2 0x006123F0 size=153 name=?Init_OS@CPUDetectClass@@CAXXZ evidence=N:ledger tier=B hypothesis:K
+void CPUDetectClass::Init_OS()
+{
+	OSVERSIONINFO os;
+	os.dwOSVersionInfoSize = sizeof(os);
+	GetVersionEx(&os);
+
+	OSVersionNumberMajor = os.dwMajorVersion;
+	OSVersionNumberMinor = os.dwMinorVersion;
+	OSVersionBuildNumber = os.dwBuildNumber;
+	OSVersionPlatformId  = os.dwPlatformId;
+	OSVersionExtraInfo   = os.szCSDVersion;
+}
 
 // FUNCTION: BFME2 0x00612490 size=612 name=?Init_Processor_String@CPUDetectClass@@CAXXZ evidence=N:ledger tier=B hypothesis:K
 void CPUDetectClass::Init_Processor_String()
