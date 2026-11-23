@@ -138,7 +138,7 @@ def read_statuses(api, head):
     latest, _ = read_statuses_all(api, head)
     return latest
 
-def classify(status, main):
+def classify(status, main, wall_clock=None):
     """fresh-* = measured on this main; stale-* = measured on another main."""
     if not status:
         return "missing"
@@ -147,6 +147,9 @@ def classify(status, main):
     if (status.get("creator") or {}).get("id") != lr.BOT_ID:
         return "untrusted"
     if state == "pending":
+        age = _status_age_seconds(status, wall_clock)
+        if (not bound and age >= MEASURE_WAIT_SECONDS) or age >= 2 * MEASURE_WAIT_SECONDS:
+            return "stale-pending"
         return "pending"
     if state not in {"success", "failure", "error"}:
         return "missing"
@@ -493,7 +496,7 @@ def fetch_open_pulls_batch(api):
         return None
 
 
-def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, cache_lock=None):
+def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, cache_lock=None, wall_clock=None):
     """Return a decision dict: stage land | remeasure | hold, with every named reason found."""
     pr = prefetched["pr"] if prefetched is not None else api.call(f"pulls/{number}")
     head = (pr.get("head") or {}).get("sha", "")
@@ -538,6 +541,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     else:
         statuses, bot_statuses = read_statuses_all(api, head)
     adm_status = bot_statuses.get(ADMISSION_CONTEXT) or {}
+    decision["admission_status"] = adm_status
     if not head_repo:
         hold("head-repository-missing", "the pull request's source repository",
              "a deleted repository; open a new pull request from an existing fork", True)
@@ -571,7 +575,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     header_change = any(name.startswith("include/") for name in files)
     decision["header_change"] = header_change
     decision["boat_status"] = bot_statuses.get(BOAT)
-    boat_kind = classify(decision["boat_status"], main)
+    boat_kind = classify(decision["boat_status"], main, wall_clock)
     pf_reviews = prefetched.get("reviews") if prefetched is not None else None
     can_check_reviews_rest = not reasons and boat_kind in {"fresh-success", "stale-success"}
     if header_change and config.get("auto_headers"):
@@ -630,7 +634,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     # GitHub does not recompute "mergeable" when main moves. A compiler check that passed on this exact main composed
     # this head onto it (unique ancestor, three-way merge), so an older "false" does not hold it; the merge itself is
     # still GitHub's and refuses a real conflict.
-    if pr.get("mergeable") is False and classify(bot_statuses.get(BOAT), main) != "fresh-success":
+    if pr.get("mergeable") is False and boat_kind != "fresh-success":
         hold("merge-conflict", "a pull request that merges cleanly into main",
              "a conflict; merge or rebase main into the branch", True)
     decision["landing_status"] = bot_statuses.get(LANDING_CONTEXT)
@@ -642,7 +646,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     stale = False
     required = REQUIRED + ((INLINE,) if INLINE_VIRTUAL_POLICY == "required" else ())
     for context in (BOAT, RULES, INLINE):
-        kind = classify(bot_statuses.get(context), main)
+        kind = classify(bot_statuses.get(context), main, wall_clock)
         decision["checks"][context] = kind
         if context == INLINE and context not in required:
             if kind == "fresh-failure":
@@ -652,7 +656,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
             continue
         if kind == "fresh-success":
             continue
-        if kind == "stale-success":
+        if kind in {"stale-success", "stale-pending"}:
             stale = True
         elif kind == "fresh-error":
             hold("infrastructure-error", f"{context} to complete on main {main[:12]}",
@@ -710,7 +714,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
                                      and marker(ancestor) in (inline_st.get("description") or ""))
                         decision["inline"] = "success" if inline_ok else "pending"
                         return decision
-                    if decision["checks"].get(RULES) in {"stale-success", "missing"}:
+                    if decision["checks"].get(RULES) in {"stale-success", "stale-pending", "missing"}:
                         # Refresh only hosted source rules on current main (0 Boat VMs) to prove G7.
                         reasons.clear()
                         decision["source_recheck_only"] = True
@@ -1002,9 +1006,7 @@ def active_header_measuring(decisions, main, wall_clock=None):
                         and (boat_st.get("creator") or {}).get("id") == lr.BOT_ID
                         and marker(main) in (boat_st.get("description") or "")
                         and _status_age_seconds(boat_st, wall_clock) < HEADER_PRIORITY_WAIT_SECONDS)
-        landing_active = (measuring_state(item, main, wall_clock) == "active"
-                          and _status_age_seconds(item.get("landing_status"), wall_clock) < HEADER_PRIORITY_WAIT_SECONDS)
-        if boat_pending or landing_active:
+        if boat_pending:
             active.append(item)
     return active
 
@@ -1165,6 +1167,7 @@ def select(api, env, config, directory, clock=time.monotonic, sleep=time.sleep):
             item for item in decisions
             if item.get("header_change") and item["stage"] == "remeasure" and not timed_out(item, main)
             and measuring_state(item, main) is None
+            and not ((item.get("admission_status") or {}).get("description") or "").startswith("Held:")
             and (config.get("auto_admission") or item.get("trusted"))
         ]
         current_active = sum(

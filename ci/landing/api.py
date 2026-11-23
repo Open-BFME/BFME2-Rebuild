@@ -5,6 +5,7 @@ unless the job runs in live mode, so a dry run cannot change anything.
 """
 import json
 import re
+import sys
 import threading
 import time
 import urllib.error
@@ -39,6 +40,8 @@ def printable(text, limit=200):
 
 class Api:
     thread_safe_reads = False
+    ratelimit_remaining = None
+    ratelimit_reset = None
 
     def __init__(self, repo, token, live):
         if not token or not re.fullmatch(r"[A-Za-z0-9_.-]{15,2048}", token):
@@ -51,6 +54,29 @@ class Api:
         self.opener = self._opener()
         self.thread_safe_reads = True
         self.writes = []
+        self.last_headers = {}
+        self.ratelimit_remaining = None
+        self.ratelimit_reset = None
+
+    def _record_headers(self, resp_headers):
+        if not resp_headers:
+            return {}
+        wanted = ("X-Accepted-GitHub-Permissions", "X-GitHub-Request-Id",
+                  "X-RateLimit-Remaining", "X-RateLimit-Reset")
+        headers = {k.lower(): resp_headers.get(k) for k in wanted if resp_headers.get(k) is not None}
+        rem = resp_headers.get("X-RateLimit-Remaining")
+        if rem is not None:
+            try:
+                self.ratelimit_remaining = int(rem)
+            except (TypeError, ValueError):
+                pass
+        rst = resp_headers.get("X-RateLimit-Reset")
+        if rst is not None:
+            try:
+                self.ratelimit_reset = int(rst)
+            except (TypeError, ValueError):
+                pass
+        return headers
 
     def _opener(self):
         local = getattr(self, "_local", None)
@@ -74,10 +100,16 @@ class Api:
         try:
             with self._opener().open(request, timeout=30) as response:
                 code, raw = response.status, response.read(LIMIT + 1)
-                headers = {k.lower(): response.headers.get(k) for k in ("X-Accepted-GitHub-Permissions", "X-GitHub-Request-Id") if response.headers and response.headers.get(k)}
+                headers = self._record_headers(response.headers)
         except urllib.error.HTTPError as exc:
             code, raw = exc.code, exc.read(LIMIT + 1)
-            headers = {k.lower(): exc.headers.get(k) for k in ("X-Accepted-GitHub-Permissions", "X-GitHub-Request-Id") if exc.headers and exc.headers.get(k)}
+            headers = self._record_headers(exc.headers)
+            if code == 403 and (self.ratelimit_remaining is not None or self.ratelimit_reset is not None):
+                print(
+                    f"GitHub API HTTP 403 on {method} {path.split('?')[0]} "
+                    f"(X-RateLimit-Remaining={self.ratelimit_remaining}, X-RateLimit-Reset={self.ratelimit_reset})",
+                    file=sys.stderr,
+                )
         except (urllib.error.URLError, OSError) as exc:
             raise TransientApiError(f"Expected a response from GitHub for {method} {path.split('?')[0]}. "
                                     f"Found a connection failure ({type(exc).__name__}).") from None

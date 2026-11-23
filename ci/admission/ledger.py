@@ -112,8 +112,8 @@ def _prune(data, yesterday, base):
 
 def reserve(api, limits, author, number, head, base, run, attempt, clock=None, tree=None, kind="narrow"):
     """'reserved', 'already' (this exact tuple is in the ledger, any day) or 'over-budget'."""
-    if kind not in ("narrow", "wide", "trusted-narrow"):
-        raise LedgerError(f"Expected kind narrow, wide or trusted-narrow. Found {kind!r}.")
+    if kind not in ("narrow", "wide", "trusted-narrow", "trusted-wide"):
+        raise LedgerError(f"Expected kind narrow, wide, trusted-narrow or trusted-wide. Found {kind!r}.")
     total_key, authors_key = ("total", "authors") if kind == "narrow" else ("wide_total", "wide_authors")
     ensure(api)
     today, yesterday = days(clock)
@@ -129,7 +129,7 @@ def reserve(api, limits, author, number, head, base, run, attempt, clock=None, t
             and r.get("author") == author
             for r in data["reservations"]
         )
-        if kind != "trusted-narrow" and not already_paid_today:
+        if kind not in ("trusted-narrow", "trusted-wide") and not already_paid_today:
             counts = data["days"].setdefault(today, {"total": 0, "authors": {}, "wide_total": 0, "wide_authors": {}})
             key = str(author)
             if counts[total_key] >= limits["daily_total"] or counts[authors_key].get(key, 0) >= limits["daily_per_author"]:
@@ -225,9 +225,9 @@ def reissue_unmeasured(api, limits, number, head, base, claimed_by, run, attempt
         if type(used) is not int or not 0 <= used < MAX_REISSUES:
             return "exhausted"
         kind = item.get("kind")
-        if kind not in ("narrow", "wide", "trusted-narrow"):
-            raise LedgerError(f"Expected kind narrow, wide or trusted-narrow. Found {kind!r}.")
-        if kind != "trusted-narrow" and not limits:
+        if kind not in ("narrow", "wide", "trusted-narrow", "trusted-wide"):
+            raise LedgerError(f"Expected kind narrow, wide, trusted-narrow or trusted-wide. Found {kind!r}.")
+        if kind not in ("trusted-narrow", "trusted-wide") and not limits:
             return "over-budget"
         # Infrastructure faults never double-charge the daily quota already paid on initial reserve().
         item["reissues"] = used + 1

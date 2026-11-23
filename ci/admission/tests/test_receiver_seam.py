@@ -112,6 +112,40 @@ class Seam(unittest.TestCase):
         finally:
             admit.ledger.days = original
 
+    def test_trusted_wide_header_reservation_claimed_by_receiver(self):
+        trusted_pr = fork_pr(number=317)
+        trusted_pr["head"]["repo"] = {"id": admit.REPO_ID}
+        trusted_pr["author_association"] = "OWNER"
+        book = LedgerApi(True, [trusted_pr], {317: ["include/Game/Foo.h"]})
+        book.run_id = ADMISSION_RUN
+        with redirect_stdout(io.StringIO()):
+            out = admit.handle(book, 317, CONFIG, MAIN, None, CLOCK, auto_headers=True,
+                               wide_budget=None, source_proof=lambda *_: None)
+        self.assertIn("admitted by rule", out)
+        binding = {"number": 317, "head": HEAD, "base": MAIN, "event_association": "OWNER"}
+        decision = {"version": 1, "repo": admit.REPO_ID, "number": 317, "base": MAIN, "head": HEAD,
+                    "tree": TREE, "kind": "wide", "plan": "5" * 64, "automatic_author": 424242,
+                    "automatic_kind": "wide"}
+        env_no_headers = receiver_env()
+        env_headers = receiver_env() | {"BFME_AUTO_HEADERS": "yes"}
+        # authority() grants automatic_wide_allowed for trusted PRs only when BFME_AUTO_HEADERS=yes.
+        self.assertNotIn("automatic_wide_allowed", fork_admission.authority(trusted_pr, binding, env_no_headers))
+        self.assertTrue(fork_admission.authority(trusted_pr, binding, env_headers).get("automatic_wide_allowed"))
+        original = admit.ledger.days
+        admit.ledger.days = lambda clock=None: original(CLOCK)
+        try:
+            self.assertFalse(fork_admission.claim_compiler(Receiver(trusted_pr), book, admit.ledger, binding,
+                                                           decision, env_no_headers))
+            # Budget-free trusted-wide claims cleanly even without wide daily limit env vars.
+            self.assertTrue(fork_admission.claim_compiler(Receiver(trusted_pr), book, admit.ledger, binding,
+                                                          decision, env_headers))
+            self.assertEqual(admit.ledger.find(book, 317, HEAD, MAIN, CLOCK)["claimed_by"],
+                             {"run": "900", "attempt": "1"})
+            self.assertFalse(fork_admission.claim_compiler(Receiver(trusted_pr), book, admit.ledger, binding,
+                                                           decision, env_headers | {"GITHUB_RUN_ID": "901"}))
+        finally:
+            admit.ledger.days = original
+
 
 if __name__ == "__main__":
     unittest.main()

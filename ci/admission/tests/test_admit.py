@@ -1013,5 +1013,105 @@ class Cut11SwarmTests(unittest.TestCase):
         self.assertEqual(status_calls, [])
 
 
+class ThroughputAndDeadlockFixTests(unittest.TestCase):
+    def test_retry_caps_dispatches_and_clamps_env_override(self):
+        self.assertEqual(admit._retry_max_dispatches({}), admit.MAX_RETRY_DISPATCHES)
+        self.assertEqual(admit._retry_max_dispatches({"BFME_ADMISSION_RETRY_MAX_DISPATCHES": "0"}), 1)
+        self.assertEqual(admit._retry_max_dispatches({"BFME_ADMISSION_RETRY_MAX_DISPATCHES": "999"}), 25)
+        self.assertEqual(admit._retry_max_dispatches({"BFME_ADMISSION_RETRY_MAX_DISPATCHES": "bad"}), admit.MAX_RETRY_DISPATCHES)
+
+        prs = [fork_pr(number=100 + i, head=f"{i + 1:040x}", author=5000 + i) for i in range(9)]
+        for i, pr in enumerate(prs):
+            pr["merge_commit_sha"] = f"{0xaa00 + i:040x}"
+        api = LedgerApi(True, prs, {pr["number"]: ["src/Code/A.cpp"] for pr in prs})
+        run_env = env(event="schedule", total="100", per_author="50")
+        with redirect_stdout(io.StringIO()) as out:
+            run_with_proof(["retry"], run_env, api=api, config=CONFIG, clock=CLOCK)
+        self.assertEqual(len(dispatches(api)), admit.MAX_RETRY_DISPATCHES)
+        self.assertIn(f"Stopped retry sweep after {admit.MAX_RETRY_DISPATCHES} dispatches to protect GitHub API quota",
+                      out.getvalue())
+
+        # Custom env override (clamped to 2)
+        api2 = LedgerApi(True, prs, {pr["number"]: ["src/Code/A.cpp"] for pr in prs})
+        with redirect_stdout(io.StringIO()) as out2:
+            run_with_proof(["retry"], run_env | {"BFME_ADMISSION_RETRY_MAX_DISPATCHES": "2"},
+                           api=api2, config=CONFIG, clock=CLOCK)
+        self.assertEqual(len(dispatches(api2)), 2)
+        self.assertIn("Stopped retry sweep after 2 dispatches to protect GitHub API quota", out2.getvalue())
+
+    def test_retry_stops_cleanly_when_ratelimit_remaining_is_low(self):
+        prs = [fork_pr(number=200 + i, head=f"{i + 10:040x}", author=6000 + i) for i in range(5)]
+        for i, pr in enumerate(prs):
+            pr["merge_commit_sha"] = f"{0xbb00 + i:040x}"
+        api = LedgerApi(True, prs, {pr["number"]: ["src/Code/A.cpp"] for pr in prs})
+        api.ratelimit_remaining = 149
+        with redirect_stdout(io.StringIO()) as out:
+            code = run_with_proof(["retry"], env(event="schedule", total="100", per_author="50"),
+                                  api=api, config=CONFIG, clock=CLOCK)
+        self.assertEqual(code, 0)
+        self.assertEqual(dispatches(api), [])
+        self.assertIn("Stopped retry sweep with 149 GitHub API requests remaining", out.getvalue())
+
+    def test_request_mode_uses_single_refresh_attempt(self):
+        api = LedgerApi(True, [fork_pr()], {21: ["src/Code/A.cpp"]})
+        seen_attempts = []
+        orig_handle = admit.handle
+
+        def spy_handle(*args, **kwargs):
+            seen_attempts.append(kwargs.get("refresh_attempts"))
+            return orig_handle(*args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "event.json")
+            path.write_text(json.dumps({"action": "bfme-admit-request", "client_payload": {"number": 21}}))
+            with patch.object(admit, "handle", side_effect=spy_handle), redirect_stdout(io.StringIO()):
+                run_with_proof(["request"], env(event="repository_dispatch", path=str(path)),
+                               api=api, config=CONFIG, clock=CLOCK)
+        self.assertEqual(seen_attempts, [1])
+
+    def test_trusted_header_pr_is_admitted_wide_budget_free_and_not_skipped_on_pending_boat(self):
+        for origin in ("owner", "same-repo"):
+            with self.subTest(origin=origin):
+                pr = fork_pr(number=317)
+                if origin == "owner":
+                    pr["author_association"] = "OWNER"
+                else:
+                    pr["head"]["repo"] = {"id": admit.REPO_ID}
+                # With auto_headers=False, still waits for a maintainer.
+                self.assertEqual(admit.decide(pr, ["include/Game/Foo.h"], CONFIG, False)[0], "wait")
+                # With auto_headers=True, routes to admit-trusted-wide.
+                verdict, state, desc = admit.decide(pr, ["include/Game/Foo.h"], CONFIG, True)
+                self.assertEqual((verdict, state, desc), ("admit-trusted-wide", "success", admit.ADMITTED_TRUSTED_WIDE))
+
+                api = LedgerApi(True, [pr], {317: ["include/Game/Foo.h", "src/Code/Foo.cpp"]})
+                # Orphaned pending Boat status must NOT skip admission.
+                api.statuses[HEAD] = [{
+                    "id": 1, "context": admit.BOAT_CONTEXT, "state": "pending",
+                    "description": "Waiting for protected intake and Boat comparison",
+                    "creator": {"id": admit.BOT_ID},
+                }]
+                with redirect_stdout(io.StringIO()):
+                    line = handle_with_proof(api, 317, CONFIG, MAIN, None, CLOCK,
+                                             sleep=lambda s: None, auto_headers=True, wide_budget=None)
+                self.assertIn("admitted by rule", line)
+                self.assertEqual(latest(api)["description"], admit.admitted_text(MAIN, "trusted-wide"))
+                self.assertEqual(len(dispatches(api)), 1)
+                data = json.loads(api.store["ledger.json"][0])
+                self.assertEqual(data["days"], {})
+                self.assertEqual(data["reservations"][0]["kind"], "trusted-wide")
+
+                # Once a final Boat verdict exists on current main, trusted-wide skips cleanly.
+                api.statuses[HEAD].append({
+                    "id": 99, "context": admit.BOAT_CONTEXT, "state": "success",
+                    "description": f"BFME II comparison passed (main {MAIN[:12]})",
+                    "creator": {"id": admit.BOT_ID},
+                })
+                with redirect_stdout(io.StringIO()):
+                    line2 = handle_with_proof(api, 317, CONFIG, MAIN, None, CLOCK,
+                                              sleep=lambda s: None, auto_headers=True, wide_budget=None)
+                self.assertIn("already has a compiler verdict", line2)
+                self.assertEqual(len(dispatches(api)), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

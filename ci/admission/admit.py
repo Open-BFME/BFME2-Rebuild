@@ -62,12 +62,17 @@ BOT_ID = 41898282                       # github-actions[bot], the only writer o
 ADMITTED = "Admitted by rule: source files only"
 ADMITTED_TRUSTED = "Admitted by rule: trusted source files only"
 ADMITTED_WIDE = "Admitted by rule: header change, wide check"
+ADMITTED_TRUSTED_WIDE = "Admitted by rule: trusted header change, wide check"
 DAILY_LIMIT = "Held: daily limit, retried automatically"
 SOURCE_HOLD = "Held: current source rules have not passed, retried automatically"
 UNMEASURED = "Held: the compiler check failed to run five times; a maintainer will look"
 OUTAGE = "Held: compiler runners unavailable; retried automatically"
 OUTAGE_WINDOW_SECONDS = 900
 OUTAGE_CONSECUTIVE = 4
+MAX_RETRY_DISPATCHES = 6
+MIN_RETRY_DISPATCHES = 1
+MAX_RETRY_DISPATCHES_CEILING = 25
+MIN_RATELIMIT_REMAINING = 150
 BOAT_JOB_PREFIXES = ("Isolated Boat compiler", "Plan the paired Boat matrix", "Compare wide shard ")
 COMPILER_WORKFLOW = ".github/workflows/managed-pr.yml"
 RUN_NUMBER = re.compile(r"[1-9][0-9]{0,19}")
@@ -118,7 +123,12 @@ def limits(env, kind="narrow"):
 
 
 def admitted_text(base, kind="narrow"):
-    texts = {"narrow": ADMITTED, "trusted-narrow": ADMITTED_TRUSTED, "wide": ADMITTED_WIDE}
+    texts = {
+        "narrow": ADMITTED,
+        "trusted-narrow": ADMITTED_TRUSTED,
+        "wide": ADMITTED_WIDE,
+        "trusted-wide": ADMITTED_TRUSTED_WIDE,
+    }
     return f"{texts[kind]} (main {base[:12]})"
 
 
@@ -390,7 +400,7 @@ def decide(pr, files, config, auto_headers=False):
         return "draft", "pending", "Waiting: the pull request is a draft"
     if any(name.startswith("include/") for name in files):
         if trusted_source(pr):
-            return "wait", "pending", "Held: trusted header admission still requires the header rules"
+            return "admit-trusted-wide", "success", ADMITTED_TRUSTED_WIDE
         return "admit-wide", "success", ADMITTED_WIDE
     if not files:
         return "wait", "pending", "Waiting: no source changes to compare"
@@ -674,16 +684,20 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
         prior = latest_status(api, head)
     pf_boat_known = pf_bot is not None and not (BOAT_CONTEXT in pf_any and BOAT_CONTEXT not in pf_bot)
     pf_boat = (pf_bot.get(BOAT_CONTEXT) or {}) if pf_boat_known else None
-    kind = {"admit-wide": "wide", "admit-trusted": "trusted-narrow"}.get(verdict, "narrow")
+    kind = {
+        "admit-wide": "wide",
+        "admit-trusted": "trusted-narrow",
+        "admit-trusted-wide": "trusted-wide",
+    }.get(verdict, "narrow")
     if kind == "wide":
         budget = wide_budget
-    if verdict not in ("admit", "admit-wide", "admit-trusted"):
+    if verdict not in ("admit", "admit-wide", "admit-trusted", "admit-trusted-wide"):
         if not (prior and prior.get("state") == state and prior.get("description") == description):
             post(api, head, state, description)
         return f"#{number}: {description}"
     if owner_origin and trusted_source(pr):
         return f"#{number}: owner-started protected direct comparison"
-    if kind == "trusted-narrow":
+    if kind in ("trusted-narrow", "trusted-wide"):
         if pf_boat is not None:
             btxt = pf_boat.get("description") or ""
             bpref = {"success": "BFME II comparison passed", "failure": "BFME II check refused this patch"}.get(pf_boat.get("state"))
@@ -706,7 +720,7 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
                             "landing handles hosted source-only recheck")
     if not api.live:
         return f"#{number}: would check source receipts and reserve {kind} commit {head[:12]} on main {base[:12]}"
-    if kind != "trusted-narrow" and budget is None:
+    if kind not in ("trusted-narrow", "trusted-wide") and budget is None:
         post(api, head, "pending", DAILY_LIMIT)
         return f"#{number}: held, the daily limits are not configured"
     tree = merge_preview(api, number, head, base, sleep)
@@ -991,6 +1005,17 @@ def retry_candidates(api):
     return numbers
 
 
+def _retry_max_dispatches(env):
+    raw = (env.get("BFME_ADMISSION_RETRY_MAX_DISPATCHES") or "").strip()
+    if not raw:
+        return MAX_RETRY_DISPATCHES
+    try:
+        val = int(raw)
+    except ValueError:
+        return MAX_RETRY_DISPATCHES
+    return max(MIN_RETRY_DISPATCHES, min(MAX_RETRY_DISPATCHES_CEILING, val))
+
+
 def run(argv, env, api=None, config=None, clock=None):
     mode = argv[0] if argv else ""
     if env.get("GITHUB_REPOSITORY") != REPO or env.get("GITHUB_REPOSITORY_ID") != str(REPO_ID) \
@@ -1035,13 +1060,41 @@ def run(argv, env, api=None, config=None, clock=None):
         and env.get("GITHUB_TRIGGERING_ACTOR") == "Ancalgonn"
     compare_cache = {}
     pf_by_num = {item["number"]: item for item in (prefetched_batch or ())}
-    lines = [handle(api, number, config, main, budget, clock, auto_headers=auto_headers,
-                    wide_budget=wide_budget, source_attempts=25 if mode == "event" else 1,
-                    owner_origin=owner_origin, expected_head=expected_head, refresh=mode != "event",
-                    refresh_attempts=12 if mode == "request" else 1,
-                    prefetched=pf_by_num.get(number), compare_cache=compare_cache,
-                    allow_ancestor_skip=(mode == "retry"))
-             for number in numbers]
+    if mode == "retry":
+        max_dispatches = _retry_max_dispatches(env)
+        dispatches_sent = 0
+        lines = []
+        for number in numbers:
+            remaining = getattr(api, "ratelimit_remaining", None)
+            if isinstance(remaining, int) and remaining < MIN_RATELIMIT_REMAINING:
+                note = f"Stopped retry sweep with {remaining} GitHub API requests remaining to protect quota"
+                print(f"::notice title=BFME II admission::{note}")
+                lines.append(note)
+                break
+            if dispatches_sent >= max_dispatches:
+                note = f"Stopped retry sweep after {dispatches_sent} dispatches to protect GitHub API quota"
+                print(f"::notice title=BFME II admission::{note}")
+                lines.append(note)
+                break
+            writes_before = len(getattr(api, "writes", ()))
+            line = handle(api, number, config, main, budget, clock, auto_headers=auto_headers,
+                          wide_budget=wide_budget, source_attempts=1,
+                          owner_origin=owner_origin, expected_head=expected_head, refresh=True,
+                          refresh_attempts=1, prefetched=pf_by_num.get(number),
+                          compare_cache=compare_cache, allow_ancestor_skip=True)
+            lines.append(line)
+            for write_rec in getattr(api, "writes", ())[writes_before:]:
+                if (len(write_rec) >= 3 and write_rec[1] == "dispatches"
+                        and isinstance(write_rec[2], dict)
+                        and write_rec[2].get("event_type") in {REMEASURE_EVENT, REFRESH_EVENT}):
+                    dispatches_sent += 1
+    else:
+        lines = [handle(api, number, config, main, budget, clock, auto_headers=auto_headers,
+                        wide_budget=wide_budget, source_attempts=25 if mode == "event" else 1,
+                        owner_origin=owner_origin, expected_head=expected_head, refresh=mode != "event",
+                        refresh_attempts=1, prefetched=pf_by_num.get(number),
+                        compare_cache=compare_cache, allow_ancestor_skip=False)
+                 for number in numbers]
     if mode == "retry" and api.live and any("Boat already passed on disjoint ancestor" in line for line in lines):
         try:
             api.write("POST", "dispatches", {"event_type": LAND_NEXT_EVENT, "client_payload": {}})

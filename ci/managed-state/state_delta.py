@@ -411,6 +411,19 @@ GRAPH_CHANGES += (CUT17_LOCALFILE_EH_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(CUT17_LOCALFILE_EH_GRAPH)
 
+TRUSTED_WIDE_ADMISSION_GRAPH = {
+    'ci/managed-check/fork_admission.py': ('25badb095dabc6c8a717145f3ea1e14342fbb5982fb10982608e9df7b8e01e34', 'f96323dad8d71a945b74b4eb33dec0ca860e3388d7af8a9d75ae78a53389e36e'),
+    'ci/managed-check/bundle.sha256': ('2ffd86ae19b71543207377ce0592a7b10c27c674546bdea71b26c26344af711e', 'c5d8fb205e785853cf3bfe36147852b17e750b20764fb5d5e2164f4b57aee4d0'),
+}
+GRAPH_CHANGES += (TRUSTED_WIDE_ADMISSION_GRAPH,) + tuple(
+    advance_graph(previous, TRUSTED_WIDE_ADMISSION_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == TRUSTED_WIDE_ADMISSION_GRAPH[BUNDLE][0]
+    and all(previous[path][1] == TRUSTED_WIDE_ADMISSION_GRAPH[path][0]
+            for path in previous.keys() & TRUSTED_WIDE_ADMISSION_GRAPH.keys())
+)
+GRAPH_PATHS |= set(TRUSTED_WIDE_ADMISSION_GRAPH)
+
 
 
 # Exact pinned TU-move migrations: carry untouched TUs across a maintainer TU relocation while
