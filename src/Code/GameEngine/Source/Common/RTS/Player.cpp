@@ -57,6 +57,7 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 #include "Common/BattlePlanBonuses.h"
 #include "Common/BitFlagsIO.h"
 #include "GameLogic/AICommandInterface.h"
+#include "GameLogic/VictoryConditions.h"
 #include "GameLogic/AICommandParms.h"
 
 Int localApplyBattlePlanBonusesToObject(Object *obj, void *userData);	// 0x002AC7E6, below
@@ -364,6 +365,14 @@ Upgrade *Player::findUpgrade(const UpgradeTemplate *wanted)
 }
 
 // FUNCTION: BFME2 0x002AA04C size=66 name=?rva002AA04C@Rva002AA04C@@QAEHXZ evidence=?:placeholder tier=A
+Bool Player::okToPlayRadarEdgeSound()
+{
+	return !TheVictoryConditions->hasSinglePlayerBeenDefeated(this)
+		&& !m_isPlayerDead
+		&& !TheInGameUI->m_8C5
+		&& TheGameLogic->m_unk0x70
+		&& TheGameLogic->m_frame > 0;
+}
 
 // FUNCTION: BFME2 0x002AA08E size=35 name=?hasRadar@Player@@QBE_NXZ evidence=N:ledger tier=A
 Bool Player::hasRadar() const
@@ -473,6 +482,10 @@ Int callHandleShroud(Object *obj, void *userData)
 // FUNCTION: BFME2 0x002AA21C size=7 name=?get@Rva002AA21CDwordField@@QBEHXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002AA22A size=7 name=?get@Rva002AA22AByteField@@QBEEXZ evidence=?:placeholder tier=A
+bool Player::isPlayerDead() const
+{
+	return m_isPlayerDead;
+}
 
 // FUNCTION: BFME2 0x002AA231 size=20 name=?bfmeAskRV@BfmeMemberRV@@QAE_NXZ evidence=N:ledger tier=A
 Bool Player::isPlayerActive()
@@ -1781,6 +1794,10 @@ Upgrade *Player::addUpgrade(const UpgradeTemplate *upgradeTemplate, UpgradeStatu
 // FUNCTION: BFME2 0x002AE4C5 size=121 name=?rva002AE4C5@Rva002AE4C5@@QAEAAHPBVAsciiString@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002AE621 size=6 name=?name@Rva002AE621Named@@QBEPBDXZ evidence=?:placeholder tier=A
+const char *Command::GetSnapshotName() const
+{
+	return "Command";
+}
 
 // FUNCTION: BFME2 0x002AE657 size=92 name=?aiHunt@AICommandInterface@@QAEXW4CommandSourceType@@@Z evidence=N:ledger tier=A
 void AICommandInterface::aiHunt(CommandSourceType cmdSource)
