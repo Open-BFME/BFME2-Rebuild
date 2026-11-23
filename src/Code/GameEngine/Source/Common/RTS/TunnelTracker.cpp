@@ -1,6 +1,7 @@
 // cl: /O1 /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport46
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include <algorithm>
 #include "Common/TunnelTracker.h"
 #include "GameLogic/Damage.h"
 #include "GameLogic/Module/BodyModule.h"
@@ -88,8 +89,21 @@ Bool TunnelTracker::isValidContainerFor(Object *obj, Bool checkCapacity)
 }
 
 // FUNCTION: BFME2 0x004F54BF size=75 name=?removeFromContain@TunnelTracker@@QAEXW4ObjectID@@H@Z evidence=N:ledger
+void TunnelTracker::removeFromContain(Object *obj, Bool exposeStealthUnits)
+{
+	std::list<Object *>::iterator it = std::find(m_containList.begin(), m_containList.end(), obj);
+	if (it != m_containList.end())
+	{
+		m_containList.erase(it);
+		--m_containListSize;
+	}
+}
 
 // FUNCTION: BFME2 0x004F550A size=53 name=?isInContainer@TunnelTracker@@QAE_NW4ObjectID@@@Z evidence=N:ledger
+Bool TunnelTracker::isInContainer(Object *obj)
+{
+	return std::find(m_containList.begin(), m_containList.end(), obj) != m_containList.end();
+}
 
 // FUNCTION: BFME2 0x004F553F size=77 name=?iterateContained@TunnelTracker@@QAEXP6AXPAVObject@@PAX@Z1_N@Z evidence=N:ledger
 void TunnelTracker::iterateContained(ContainIterateFunc func, void *userData, Bool reverse)
