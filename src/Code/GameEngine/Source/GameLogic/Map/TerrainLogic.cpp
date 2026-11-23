@@ -17,6 +17,7 @@
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Object.h"
 #include "GameClient/TerrainRoadType.h"
+#include "GameLogic/AI.h"
 
 // The singleton (retail VA 0x00DFEC50).
 TerrainLogic *TheTerrainLogic = NULL;
@@ -499,6 +500,39 @@ void TerrainLogic::updateBridgeDamageStates()
 // FUNCTION: BFME2 0x00281ECA size=181 name=?pickBridge@TerrainLogic@@UAE_NABVVector3@@0PAV2@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00281F7F size=162 name=?deleteBridge@TerrainLogic@@UAEXPAVBridge@@@Z evidence=N:ledger tier=A
+void TerrainLogic::deleteBridge(Bridge *bridge)
+{
+	if (bridge == NULL)
+		return;
+
+	if (m_bridgeListHead == bridge)
+	{
+		m_bridgeListHead = bridge->getNext();
+	}
+	else
+	{
+		for (Bridge *otherBridge = getFirstBridge(); otherBridge; otherBridge = otherBridge->getNext())
+		{
+			// the bridge that points at the deleted one takes over its next pointer
+			if (otherBridge->getNext() == bridge)
+			{
+				otherBridge->setNext(bridge->getNext());
+				break;
+			}
+		}
+	}
+
+	BridgeInfo bridgeInfo;
+	bridgeInfo = *bridge->peekBridgeInfo();
+	TheAI->pathfinder()->SetBridgeStateRepaired(bridge->getLayer(), false);
+
+	GameLogic *logic = TheGameLogic;
+	Object *bridgeObj = logic->findObjectByID(bridgeInfo.bridgeObjectID);
+	if (bridgeObj)
+		logic->destroyObject(bridgeObj);
+
+	::delete bridge;
+}
 
 // FUNCTION: BFME2 0x002820A0 size=61 name=?loadPostProcess@TerrainLogic@@MAEXXZ evidence=N:ledger tier=A
 void TerrainLogic::loadPostProcess()
