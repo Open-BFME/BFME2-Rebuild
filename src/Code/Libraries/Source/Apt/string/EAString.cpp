@@ -74,8 +74,21 @@ void EAStringC::Reserve(int size)
     representation->m_uMaxSize = static_cast<unsigned short>(rounded - 9);
 }
 
+// The setting word the two accessors below write (retail 0x00E177EC, .bss); nothing in the image reads it.
+int g_eaStringSetting;
+
 // FUNCTION: BFME2 0x006D37E0 size=10 name=?Rva006D37E0Set@@YAXH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+void Rva006D37E0Set(int value)
+{
+    g_eaStringSetting = value;
+}
+
 // FUNCTION: BFME2 0x006D37F0 size=11 name=?Rva006D37F0Clear@@YAXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+void Rva006D37F0Clear()
+{
+    g_eaStringSetting = 0;
+}
+
 // FUNCTION: BFME2 0x006D3800 size=57 name=?hashLower@@YAGPBD@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
 unsigned short hashLower(const char *text)
 {
@@ -99,6 +112,11 @@ unsigned short hashLower(const char *text)
 
 // FUNCTION: BFME2 0x006D3840 size=9 name=?clear@EAStringC@@QAEXXZ evidence=S:strong (position+fit) tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x006D3850 size=12 name=?Rva006D3850@@YA_NH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+bool Rva006D3850(int codePoint)
+{
+    return codePoint <= 0x10FFFF;
+}
+
 // FUNCTION: BFME2 0x006D3860 size=16 name=?HasCapacityAbove@EAStringC@@QBE_NI@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-contiguity-callers
 bool EAStringC::HasCapacityAbove(unsigned int limit) const
 {
