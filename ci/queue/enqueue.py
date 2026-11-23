@@ -17,6 +17,7 @@ MAX_FILES = 60
 MAX_ENQUEUE = 16
 MAX_BACKFILL = 18
 MAX_ACTIVE_BOAT = 18
+PIPELINE_WORKFLOWS = ("managed-pr.yml", "rules.yml")
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
 LIMIT = 4 * 1024**2
@@ -100,9 +101,9 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class GitHubApi:
-    def __init__(self, token):
+    def __init__(self, token, token_name="BFME_QUEUE_TOKEN"):
         if not token or not re.fullmatch(r"[A-Za-z0-9_.-]{15,2048}", token):
-            raise ApiError("Missing or malformed BFME_QUEUE_TOKEN.")
+            raise ApiError(f"Missing or malformed {token_name}.")
         self._token = token
         self._opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
         self.ratelimit_remaining = None
@@ -272,17 +273,24 @@ def list_open_prs(api):
     return main_sha, prs
 
 
-def active_boat_runs(api):
+def active_pipeline_runs(api):
     total = 0
-    for status in ("in_progress", "queued"):
-        data = api.get(f"actions/workflows/managed-pr.yml/runs?status={status}&per_page=1")
-        total += int((data or {}).get("total_count", 0))
+    for workflow in PIPELINE_WORKFLOWS:
+        for status in ("in_progress", "queued"):
+            data = api.get(f"actions/workflows/{workflow}/runs?status={status}&per_page=1")
+            total += int((data or {}).get("total_count", 0))
     return total
 
 
-def run(api=None, *, config_path=None, env=None):
+active_boat_runs = active_pipeline_runs
+
+
+def run(api=None, *, dispatch_api=None, config_path=None, env=None):
     env = os.environ if env is None else env
     api = GitHubApi(env.get("BFME_QUEUE_TOKEN", "")) if api is None else api
+    if dispatch_api is None:
+        dispatch_token = env.get("BFME_DISPATCH_TOKEN", "")
+        dispatch_api = GitHubApi(dispatch_token, token_name="BFME_DISPATCH_TOKEN") if dispatch_token else api
     approvers, refused_prefixes = load_config(config_path)
     main_sha, prs = list_open_prs(api)
 
@@ -313,25 +321,30 @@ def run(api=None, *, config_path=None, env=None):
             print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
 
     backfilled = []
+    dispatch_min_rl = MIN_RATELIMIT_BACKFILL if dispatch_api is api else MIN_RATELIMIT_ENQUEUE
+    dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
     if (backfill_candidates
             and main_sha and HEX40.fullmatch(main_sha)
-            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
+            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)
+            and (dispatch_rl is None or dispatch_rl > dispatch_min_rl)):
         try:
-            active = active_boat_runs(api)
+            active = active_pipeline_runs(api)
         except ApiError as exc:
-            print(f"Skipping backfill; could not inspect active Boat runs: {exc}", file=sys.stderr)
+            print(f"Skipping backfill; could not inspect active pipeline runs: {exc}", file=sys.stderr)
             active = MAX_ACTIVE_BOAT
         slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
         if slots > 0:
             for pr in backfill_candidates[:slots]:
-                if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL:
+                dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
+                if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
+                        or (dispatch_rl is not None and dispatch_rl <= dispatch_min_rl)):
                     break
                 num = pr["number"]
                 oid = pr.get("headRefOid", "")
                 if not HEX40.fullmatch(oid):
                     continue
                 try:
-                    api.post("dispatches", {
+                    dispatch_api.post("dispatches", {
                         "event_type": "bfme-source-refresh",
                         "client_payload": {"number": num, "head": oid, "base": main_sha},
                     })

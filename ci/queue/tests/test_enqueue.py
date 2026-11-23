@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "ci/queue"))
@@ -37,10 +38,13 @@ def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEAB
 
 
 class FakeApi:
-    def __init__(self, pages, *, active_in_progress=0, active_queued=0, ratelimit=4000, fail_enqueue=()):
+    def __init__(self, pages=(), *, active_in_progress=0, active_queued=0,
+                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=()):
         self.pages = pages
         self.active_in_progress = active_in_progress
         self.active_queued = active_queued
+        self.rules_in_progress = rules_in_progress
+        self.rules_queued = rules_queued
         self.ratelimit_remaining = ratelimit
         self.fail_enqueue = set(fail_enqueue)
         self.enqueued = []
@@ -69,10 +73,16 @@ class FakeApi:
 
     def get(self, path):
         self.gets.append(path)
-        if "status=in_progress" in path:
-            return {"total_count": self.active_in_progress}
-        if "status=queued" in path:
-            return {"total_count": self.active_queued}
+        if "workflows/managed-pr.yml/runs" in path:
+            if "status=in_progress" in path:
+                return {"total_count": self.active_in_progress}
+            if "status=queued" in path:
+                return {"total_count": self.active_queued}
+        if "workflows/rules.yml/runs" in path:
+            if "status=in_progress" in path:
+                return {"total_count": self.rules_in_progress}
+            if "status=queued" in path:
+                return {"total_count": self.rules_queued}
         raise AssertionError(f"Unexpected GET {path}")
 
     def post(self, path, body):
@@ -180,6 +190,82 @@ class EnqueueTests(unittest.TestCase):
         self.assertEqual(enqueue.run(over_cap, env={})["backfilled"], [])
         self.assertEqual(over_cap.dispatches, [])
 
+    def test_dispatch_api_receives_backfill_while_api_receives_enqueue(self):
+        ok_src = {"BFME II / source rules": "SUCCESS", "BFME II / Boat": "SUCCESS"}
+        prs = [
+            make_pr(501, statuses=ok_src),
+            make_pr(502, statuses={}),
+            make_pr(503, statuses={"BFME II / Boat": "PENDING"}),
+        ]
+        queue_api = FakeApi([prs], ratelimit=3000)
+        dispatch_api = FakeApi(ratelimit=800)
+        result = enqueue.run(queue_api, dispatch_api=dispatch_api, env={})
+        self.assertEqual(result["enqueued"], [501])
+        self.assertEqual(result["backfilled"], [502, 503])
+        self.assertEqual([node for node, _ in queue_api.enqueued], ["PR_node_501"])
+        self.assertEqual(queue_api.dispatches, [])
+        self.assertEqual(dispatch_api.enqueued, [])
+        self.assertEqual(dispatch_api.gets, [])
+        self.assertEqual(len(dispatch_api.dispatches), 2)
+        self.assertEqual(dispatch_api.dispatches[0][0], "dispatches")
+        self.assertEqual(dispatch_api.dispatches[0][1]["event_type"], "bfme-source-refresh")
+        self.assertEqual(
+            [d[1]["client_payload"]["number"] for d in dispatch_api.dispatches],
+            [502, 503],
+        )
+
+    def test_env_dispatch_token_builds_separate_dispatch_api(self):
+        prs = [make_pr(510, statuses={})]
+        queue_api = FakeApi([prs], ratelimit=3000)
+        dispatch_api = FakeApi(ratelimit=800)
+        tokens = []
+
+        def fake_github_api(token, token_name="BFME_QUEUE_TOKEN"):
+            tokens.append((token, token_name))
+            return queue_api if token_name == "BFME_QUEUE_TOKEN" else dispatch_api
+
+        with mock.patch.object(enqueue, "GitHubApi", side_effect=fake_github_api):
+            result = enqueue.run(env={
+                "BFME_QUEUE_TOKEN": "pat_123456789012345",
+                "BFME_DISPATCH_TOKEN": "ghs_123456789012345",
+            })
+        self.assertEqual(tokens, [
+            ("pat_123456789012345", "BFME_QUEUE_TOKEN"),
+            ("ghs_123456789012345", "BFME_DISPATCH_TOKEN"),
+        ])
+        self.assertEqual(result["backfilled"], [510])
+        self.assertEqual(queue_api.dispatches, [])
+        self.assertEqual(len(dispatch_api.dispatches), 1)
+
+    def test_in_flight_rules_runs_count_toward_occupied_backfill_slots(self):
+        prs = [make_pr(600 + i, statuses={}) for i in range(20)]
+        # 4 boat in_progress + 2 boat queued + 5 rules in_progress + 3 rules queued = 14 occupied -> 4 slots left.
+        partial = FakeApi(
+            [prs],
+            active_in_progress=4,
+            active_queued=2,
+            rules_in_progress=5,
+            rules_queued=3,
+            ratelimit=3000,
+        )
+        result = enqueue.run(partial, env={})
+        self.assertEqual(result["backfilled"], [600, 601, 602, 603])
+        self.assertEqual(len(partial.dispatches), 4)
+        self.assertTrue(any("workflows/managed-pr.yml/runs" in p for p in partial.gets))
+        self.assertTrue(any("workflows/rules.yml/runs" in p for p in partial.gets))
+
+        # 0 boat runs, but 18 in-flight rules runs -> 0 slots left (prevents double-dispatch).
+        rules_full = FakeApi(
+            [prs],
+            active_in_progress=0,
+            active_queued=0,
+            rules_in_progress=12,
+            rules_queued=6,
+            ratelimit=3000,
+        )
+        self.assertEqual(enqueue.run(rules_full, env={})["backfilled"], [])
+        self.assertEqual(rules_full.dispatches, [])
+
     def test_workflows_have_atomic_cutover_guards(self):
         enq_wf = (ROOT / ".github/workflows/enqueue.yml").read_text(encoding="utf-8")
         land_wf = (ROOT / ".github/workflows/landing.yml").read_text(encoding="utf-8")
@@ -189,6 +275,7 @@ class EnqueueTests(unittest.TestCase):
         self.assertNotIn("BFME II source rules", enq_wf)
         self.assertIn("bfme-land-next", enq_wf)
         self.assertIn("github.event.workflow_run.conclusion == 'failure'", enq_wf)
+        self.assertIn("BFME_DISPATCH_TOKEN: '${{ github.token }}'", enq_wf)
         self.assertNotIn("\nconcurrency:\n", enq_wf)
         self.assertIn("\n    concurrency:\n", enq_wf)
         self.assertEqual(land_wf.count("vars.BFME_MERGE_QUEUE_ENABLED != 'yes'"), 2)
