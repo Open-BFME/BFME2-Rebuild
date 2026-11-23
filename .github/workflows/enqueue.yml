@@ -51,7 +51,7 @@ jobs:
       - name: Enqueue ready PRs and backfill unmeasured PRs
         shell: bash
         env:
-          BFME_QUEUE_TOKEN: '${{ github.token }}'
+          BFME_QUEUE_TOKEN: '${{ secrets.BFME_QUEUE_TOKEN || github.token }}'
         run: |
           set -Eeuo pipefail
           python3 -B ci/queue/enqueue.py

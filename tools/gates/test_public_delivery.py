@@ -523,6 +523,31 @@ class Delivery(unittest.TestCase):
             self.assertEqual(g1_result["states"]["G1"], "failure")
             self.assertEqual(g1_result["states"]["G6"], "failure")
 
+    def test_stacked_queue_uses_source_tools_sha_as_trusted_main_base(self):
+        # Stacked merge_group: main -> q1 (group.base_sha) -> q2 (group.head_sha),
+        # with SOURCE_TOOLS_SHA pointing to protected main.
+        q1 = self._make_batch_commit({"src/Size.cpp": "int Size() { return 2; }\n"}, parent=self.base)
+        q2 = self._make_batch_commit({"src/Size.cpp": "int Size() { return 3; }\n"}, parent=q1)
+        git(self.origin, "update-ref", QUEUE, q2)
+        self.queue_head = q2
+
+        env = self.environment("merge_group", head=q2, protected=q1) | {"SOURCE_TOOLS_SHA": self.base}
+        result, markdown = self.evaluate(env)
+        self.assertEqual(result["state"], "pass")
+        self.assertEqual(result["overall"], "success")
+        self.assertEqual(result["base"], self.base)
+        self.assertEqual(result["tools_commit"], self.base)
+        self.assertEqual(result["head"], q2)
+        self.assertEqual(result["projection"], "queue-candidate")
+        self.assertIn("| G1 Paths | Pass |", markdown)
+        self.assertEqual(self.publish(env, result), 0)
+        self.assert_statuses(q2)
+
+        # Invalid or head-equal SOURCE_TOOLS_SHA is still rejected.
+        for bad_sha in ("not-a-sha", q2):
+            bad_env = self.environment("merge_group", head=q2, protected=q1) | {"SOURCE_TOOLS_SHA": bad_sha}
+            self.assertEqual(self.authorize(bad_env)["reason"], "unexpected-event")
+
 
 class Copy(unittest.TestCase):
     def test_void_pointer_guidance_preserves_an_existing_ledger_signature(self):

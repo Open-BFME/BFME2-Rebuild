@@ -24,6 +24,9 @@ def _event_shas(env):
     group = payload.get("merge_group") or {}
     base = group.get("base_sha")
     head = group.get("head_sha")
+    main_sha = env.get("BFME_MQ_MAIN_SHA", "")
+    if HEX40.fullmatch(str(main_sha or "")):
+        base = main_sha
     return (base if HEX40.fullmatch(str(base or "")) else None,
             head if HEX40.fullmatch(str(head or "")) else None)
 

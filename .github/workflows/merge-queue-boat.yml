@@ -21,8 +21,10 @@ jobs:
     outputs:
       shards: '${{ steps.plan.outputs.shards }}'
       has_shards: '${{ steps.plan.outputs.has_shards }}'
+      main_sha: '${{ steps.main.outputs.sha }}'
     steps:
-      - name: Verify merge_group base matches current main
+      - name: Resolve current protected main
+        id: main
         shell: bash
         env:
           QUEUE_READ_TOKEN: '${{ github.token }}'
@@ -36,14 +38,15 @@ jobs:
           main=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
             --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/heads/main" \
             <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha')
-          if [[ "$BASE_SHA" != "$main" ]]; then
-            echo "Expected merge_group base_sha ($BASE_SHA) to match current main ($main)." >&2
+          if [[ ! "$main" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Expected a 40-hex current main SHA." >&2
             exit 1
           fi
+          echo "sha=$main" >> "$GITHUB_OUTPUT"
       - name: Check out trusted main base
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: '${{ github.event.merge_group.base_sha }}'
+          ref: '${{ steps.main.outputs.sha }}'
           fetch-depth: 1
           persist-credentials: false
       - name: Verify protected check packages
@@ -55,13 +58,15 @@ jobs:
       - name: Build sharded Boat comparison plans
         id: plan
         shell: bash
+        env:
+          BFME_MQ_MAIN_SHA: '${{ steps.main.outputs.sha }}'
         run: |
           set -Eeuo pipefail
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
             GITHUB_EVENT_NAME="$GITHUB_EVENT_NAME" GITHUB_EVENT_PATH="$GITHUB_EVENT_PATH" \
             GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_REPOSITORY="$GITHUB_REPOSITORY" \
             GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" GITHUB_REF="$GITHUB_REF" \
-            GITHUB_SHA="$GITHUB_SHA" \
+            GITHUB_SHA="$GITHUB_SHA" BFME_MQ_MAIN_SHA="$BFME_MQ_MAIN_SHA" \
             python3 -B ci/managed-check/merge_queue_plan.py "$RUNNER_TEMP/bfme-mq-plans"
       - name: Upload merge group plans
         if: always()
@@ -131,7 +136,7 @@ jobs:
       - name: Check out trusted main base
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: '${{ github.event.merge_group.base_sha }}'
+          ref: '${{ needs.plan.outputs.main_sha }}'
           fetch-depth: 1
           persist-credentials: false
       - name: Download merge group plans
@@ -159,7 +164,7 @@ jobs:
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: '${{ runner.temp }}/bfme-base-cache'
-          key: bfme-base-obj-v1-n-${{ github.event.merge_group.base_sha }}
+          key: bfme-base-obj-v1-n-${{ needs.plan.outputs.main_sha }}
           restore-keys: |
             bfme-base-obj-v1-n-
             bfme-base-obj-v1-
@@ -169,7 +174,7 @@ jobs:
           set -Eeuo pipefail
           test -z "${BFME_READ_TOKEN:-}${BFME_STATUS_TOKEN:-}${GITHUB_TOKEN:-}"
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C \
-            TMPDIR="$RUNNER_TEMP" GITHUB_SHA="${{ github.event.merge_group.base_sha }}" \
+            TMPDIR="$RUNNER_TEMP" GITHUB_SHA="${{ needs.plan.outputs.main_sha }}" \
             GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_RUN_ID="$GITHUB_RUN_ID" \
             GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
             BFME_BASE_CACHE="$RUNNER_TEMP/bfme-base-cache" \
@@ -202,7 +207,7 @@ jobs:
       - name: Check out trusted status writer
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: '${{ github.event.merge_group.base_sha }}'
+          ref: ${{ needs.plan.outputs.main_sha || 'refs/heads/main' }}
           persist-credentials: false
           sparse-checkout: |
             ci/managed-check
@@ -227,6 +232,7 @@ jobs:
         shell: bash
         env:
           BFME_STATUS_TOKEN: '${{ github.token }}'
+          BFME_MQ_MAIN_SHA: '${{ needs.plan.outputs.main_sha }}'
         run: |
           set -Eeuo pipefail
           python3 -B ci/managed-check/merge_queue_report.py \

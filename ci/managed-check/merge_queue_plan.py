@@ -71,6 +71,11 @@ def parse_event(env):
     base_ref = group.get("base_ref")
     if base_ref is not None and base_ref != "refs/heads/main":
         raise ValueError("Unexpected merge_group base_ref.")
+    main_sha = env.get("BFME_MQ_MAIN_SHA", "")
+    if main_sha:
+        if not HEX40.fullmatch(main_sha):
+            raise ValueError("Expected 40-hex BFME_MQ_MAIN_SHA.")
+        base_sha = main_sha
     return base_sha, head_sha, head_ref
 
 

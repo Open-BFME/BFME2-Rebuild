@@ -266,6 +266,67 @@ class MergeQueuePlanTests(unittest.TestCase):
                 env = mq_env(tmp, good_base, good_head, **kwargs)
                 with self.assertRaises(ValueError):
                     mq_plan.parse_event(env)
+            bad_main = mq_env(tmp, good_base, good_head) | {"BFME_MQ_MAIN_SHA": "not-a-sha"}
+            with self.assertRaises(ValueError):
+                mq_plan.parse_event(bad_main)
+
+    def test_stacked_merge_group_uses_main_sha_as_base(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            work, remote, main_sha = make_repo(root, {
+                "include/Stub.h": "int stub();\n",
+                "src/A.cpp": "int a() { return 0; }\n",
+                "expected/A.cpp.json": "{}\n",
+                "src/B.cpp": "int b() { return 0; }\n",
+                "expected/B.cpp.json": "{}\n",
+            })
+            # Entry #1 (q1) edits A.cpp on top of main; Entry #2 (head) stacks B.cpp on top of q1.
+            q1_sha = commit_queue(work, remote, {"src/A.cpp": "int a() { return 1; }\n"},
+                                  queue_ref="refs/heads/gh-readonly-queue/main/pr-41-0123456789abcdef")
+            head_sha = commit_queue(work, remote, {"src/B.cpp": "int b() { return 1; }\n"})
+
+            # Mirror Job 1 shallow checkout of live main_sha.
+            checkout = root / "checkout"
+            run_git(root, "clone", "-q", "--depth=1", f"file://{remote.as_posix()}", str(checkout))
+            self.assertEqual(run_git(checkout, "rev-parse", "HEAD"), main_sha)
+
+            out = root / "plans"
+            # Event's merge_group.base_sha is q1_sha, while BFME_MQ_MAIN_SHA is main_sha.
+            env = mq_env(root, q1_sha, head_sha) | {"BFME_MQ_MAIN_SHA": main_sha}
+            manifest = mq_plan.plan_merge_group(out, env=env, repo_dir=checkout, remote=str(remote))
+
+            self.assertEqual(manifest["status"], "planned")
+            self.assertEqual(manifest["base"], main_sha)
+            self.assertEqual(manifest["head"], head_sha)
+            self.assertEqual(manifest["shards"], [0])
+            self.assertEqual(manifest["total_tus"], 2)
+            self.assertEqual(manifest["changed_count"], 2)
+
+            plan = common.validate_binding(common.read(out / "shard-0/plan.json"))
+            self.assertEqual(plan["base"], main_sha)
+            self.assertEqual(sorted(plan["request_paths"]), ["src/A.cpp", "src/B.cpp"])
+
+            # Verify merge_queue_report accepts manifest.base == BFME_MQ_MAIN_SHA != group.base_sha.
+            verdicts = root / "verdicts"
+            (verdicts / "bfme-mq-verdict-0").mkdir(parents=True)
+            common.write(verdicts / "bfme-mq-verdict-0/verdict.json", {
+                "version": 1,
+                "repo": common.REPO_ID,
+                "number": 1,
+                "base": main_sha,
+                "head": head_sha,
+                "tree": manifest["tree"],
+                "plan": manifest["shard_plans"]["0"],
+                "report": {"kind": "ok", "judged": 2, "messages": []},
+                "counts": {"gained": 2, "lost_credit": 0},
+                "functions": [],
+            })
+            api = FakeGitHub()
+            rc = mq_report.report_merge_group(out, verdicts, env=env, api=api)
+            self.assertEqual(rc, 0)
+            self.assertEqual(api.calls[0][0], head_sha)
+            self.assertEqual(api.calls[0][1], "success")
+            self.assertIn(main_sha[:12], api.calls[0][2])
 
 
 class MergeQueueReportTests(unittest.TestCase):

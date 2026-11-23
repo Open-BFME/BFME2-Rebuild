@@ -120,13 +120,20 @@ def event(env):
         if name == "merge_group":
             group_event = read_json(env["GITHUB_EVENT_PATH"], 2 * 1024**2)
             group = group_event["merge_group"]
-            base = group["base_sha"]
+            group_base = group["base_sha"]
             if (group_event["action"] != "checks_requested"
                     or group_event["repository"]["id"] != repo_id
-                    or group["base_ref"] != MAIN_REF or not is_oid(base) or base == sha
+                    or group["base_ref"] != MAIN_REF or not is_oid(group_base) or group_base == sha
                     or group["head_sha"] != sha or group["head_ref"] != ref
                     or not QUEUE_REF.fullmatch(ref) or ".." in ref or ref.endswith((".", ".lock"))):
                 raise ValueError
+            tools_sha = env.get("SOURCE_TOOLS_SHA", "")
+            if tools_sha:
+                if not is_oid(tools_sha) or tools_sha == sha:
+                    raise ValueError
+                base = tools_sha
+            else:
+                base = group_base
             return Binding(repo, repo_id, None, base, sha, base, ref)
         if ref != MAIN_REF:
             raise ValueError
