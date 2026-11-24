@@ -416,7 +416,7 @@ class Delivery(unittest.TestCase):
     def test_pr_check_publishes_for_its_main_when_main_moved_on_other_paths(self):
         env = self.environment()
         result, _ = self.evaluate(env)
-        self.advance_main({"docs/Notes.md": "Unrelated notes\n"})
+        self.advance_main({"docs/Notes.md": "Unrelated notes\n", "ci/README.md": "CI documentation\n"})
         self.assertEqual(self.publish(env, result), 0)
         self.assert_statuses(self.head)
         receipt = json.loads(self.output(env)["receipt"])
@@ -432,7 +432,9 @@ class Delivery(unittest.TestCase):
 
     def test_pr_check_writes_nothing_when_main_moved_on_its_paths_or_rule_inputs(self):
         for edits in ({"src/Size.cpp": "int Size() { return 3; }\n"}, {"SRC/size.cpp": "int Other();\n"},
-                      {"tools/gates/extra.py": "VALUE = 1\n"}, {"config/symbols.json": "{}\n"}):
+                      {"tools/gates/extra.py": "VALUE = 1\n"}, {"config/symbols.json": "{}\n"},
+                      {"src/Other.cpp": "int Other() { return 1; }\n"},
+                      {"include/Foo.h": "class Foo {};\n"}):
             with self.subTest(edits=edits):
                 self.main = self.base
                 git(self.origin, "update-ref", "refs/heads/main", self.base)
@@ -615,6 +617,40 @@ class Delivery(unittest.TestCase):
             self.assertEqual(g1_result["states"]["G1"], "failure")
             self.assertEqual(g1_result["states"]["G6"], "failure")
 
+    def test_queue_merge_group_refuses_remaining_includers_even_with_g6_count_waived(self):
+        base_work = self.run_root / "draft-base"
+        git(self.root, "clone", "-q", str(self.trusted), str(base_work))
+        (base_work / "include/Draft").mkdir(parents=True)
+        (base_work / "include/Draft/Temp.h").write_text("struct Temp { int v; };\n")
+        for i in range(4):
+            (base_work / f"src/Unit{i}.cpp").write_text(
+                f'#include "Draft/Temp.h"\nint Unit{i}() {{ return {i}; }}\n')
+        git(base_work, "add", "src", "include")
+        git(base_work, "commit", "-q", "-m", "Base with Draft header and includers")
+        draft_base = git(base_work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(base_work), f"+{draft_base}:refs/heads/main")
+        self.main = draft_base
+
+        cand_work = self.run_root / "draft-cand"
+        git(self.root, "clone", "-q", str(base_work), str(cand_work))
+        (cand_work / "include/Draft/Temp.h").unlink()
+        git(cand_work, "rm", "-q", "include/Draft/Temp.h")
+        for i in range(4):
+            (cand_work / f"src/Unit{i}.cpp").write_text(
+                f'#include "Draft/Temp.h"\nint Unit{i}() {{ return {i + 10}; }}\n')
+        git(cand_work, "add", "src")
+        git(cand_work, "commit", "-q", "-m", "Delete Draft header, keep includers")
+        cand_head = git(cand_work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(cand_work), f"+{cand_head}:{QUEUE}")
+
+        self.queue_head = cand_head
+        with patch.object(source, "verified_tools", lambda _b: None):
+            env = self.environment("merge_group", head=cand_head, protected=draft_base)
+            result, markdown = self.evaluate(env)
+            self.assertEqual(result["state"], "fail")
+            self.assertEqual(result["states"]["G6"], "failure")
+            self.assertIn("A literal include still points to a deleted Draft header", markdown)
+
     def test_stacked_queue_uses_source_tools_sha_as_trusted_main_base(self):
         # Stacked merge_group: main -> q1 (group.base_sha) -> q2 (group.head_sha),
         # with SOURCE_TOOLS_SHA pointing to protected main.
@@ -740,7 +776,7 @@ class QueueMainMoved(unittest.TestCase):
     def _moved(self, **changes):
         compare = {"status": "ahead", "ahead_by": 2, "behind_by": 0,
                    "base_commit": {"sha": self.OLD_MAIN}, "merge_base_commit": {"sha": self.OLD_MAIN},
-                   "files": [{"filename": "src/Other.cpp", "status": "modified"},
+                   "files": [{"filename": "README.md", "status": "modified"},
                              {"filename": "docs/Notes.md", "status": "added"}]}
         return compare | changes
 
@@ -763,6 +799,8 @@ class QueueMainMoved(unittest.TestCase):
         cases = {
             "touches the pull request path": dict(compare=self._moved(files=[{"filename": "src/size.CPP"}])),
             "renames the pull request path": dict(compare=self._moved(files=[renamed])),
+            "touches another source file": dict(compare=self._moved(files=[{"filename": "src/Other.cpp", "status": "modified"}])),
+            "touches a header": dict(compare=self._moved(files=[{"filename": "include/Foo.h", "status": "modified"}])),
             "touches the source rules": dict(compare=self._moved(files=[{"filename": "tools/gates/rules.py"}])),
             "touches the rule configuration": dict(compare=self._moved(files=[{"filename": "config/map.json"}])),
             "diverged": dict(compare=self._moved(status="diverged")),

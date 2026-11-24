@@ -29,7 +29,7 @@ SOURCE_CONTEXT = "BFME II / source rules"
 # A pull request check may still publish for its checked main when main only moved ahead of it by a few commits that
 # changed none of the pull request's paths and none of the source rules' own inputs (its status names that main).
 MAX_MAIN_AHEAD = 32
-RULE_INPUTS = ("tools/gates/", "config/")
+RULE_INPUTS = ("tools/gates/", "config/", "src/", "include/")
 # Both jobs load these siblings from the selected protected checkout.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from source_report import public_text, public_report
@@ -579,9 +579,13 @@ def evaluate_bound(binding, scratch):
         raise CheckUnavailable("check-unavailable")
 
     if binding.queue_ref and statuses["G1"] == "pass" and statuses["G6"] != "pass":
-        statuses["G6"] = "pass"
+        SCOPE_MSG = "source files contain real changes beyond Draft include/use updates"
+        g6_item = next(item for item in items if item["id"] == "G6")
+        kept = [f for f in g6_item["findings"] if SCOPE_MSG not in f.get("message", "")]
+        if not kept:
+            statuses["G6"] = "pass"
         items = [
-            {**item, "status": "pass", "findings": []} if item["id"] == "G6" else item
+            {**item, "status": statuses["G6"], "findings": kept} if item["id"] == "G6" else item
             for item in items
         ]
         expected = "pass" if all(state == "pass" for state in statuses.values()) else "fail"
