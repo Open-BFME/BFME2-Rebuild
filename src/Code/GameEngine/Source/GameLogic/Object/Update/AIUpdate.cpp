@@ -444,6 +444,10 @@ void AIUpdateInterface::vslot153()
 // FUNCTION: BFME2 0x002628E0 size=25 name=?rva002628E0@Rva002628E0@@QAEXPBURva002628E0Arg@@H@Z evidence=?:placeholder tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x002628F9 size=14 name=?setHeightAboveGround@View@@UAEXM@Z evidence=N:ledger tier=B hypothesis:name:invented
+void AIUpdateInterface::setDesiredSpeed(Real speed)
+{
+	m_desiredSpeed = speed;
+}
 
 // FUNCTION: BFME2 0x00262912 size=44 name=?queueWaypoint@AIUpdateInterface@@QAE_NPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:name:invented
 Bool AIUpdateInterface::queueWaypoint(const Coord3D *pos)
