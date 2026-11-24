@@ -490,5 +490,24 @@ class TuMoveMigrationTests(unittest.TestCase):
                     self.assertIsNone(state_delta.source_changes(repo, parent, moved_sha))
 
 
+
+    def test_require_artifact_checks_published_state_age_even_when_main_is_fresh(self):
+        class StubApi:
+            def __init__(self, state_date):
+                self.state_date = state_date
+            def get(self, path):
+                if path.startswith("actions/runs/"):
+                    return {"artifacts": []}
+                if path == "commits/state":
+                    return {"commit": {"committer": {"date": self.state_date}}}
+                raise KeyError(path)
+        result = {"action": "publish", "run_id": "99", "attempt": "1", "sha": "a" * 40}
+        import datetime as _dt
+        now_ts = int(_dt.datetime(2027, 1, 15, 8, 0, 0, tzinfo=_dt.timezone.utc).timestamp())
+        out_stale = resolve.require_artifact(StubApi("2027-01-15T00:00:00Z"), result, age_seconds=60, now=now_ts)
+        self.assertEqual(out_stale["action"], "stale")
+        out_fresh = resolve.require_artifact(StubApi("2027-01-15T07:30:00Z"), result, age_seconds=60, now=now_ts)
+        self.assertEqual(out_fresh["action"], "wait")
+
 if __name__ == "__main__":
     unittest.main()

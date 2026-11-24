@@ -8,6 +8,7 @@ Writes `action`, `run_id`, `attempt` and `sha` to GITHUB_OUTPUT. Actions:
   stale           main has had no measurement for longer than STALE_HOURS
   ignore          the triggering run is not a main state run (wrong branch or event)
 """
+import datetime
 import json
 import os
 import re
@@ -85,16 +86,34 @@ def from_main(api, main, age_seconds, input_run=""):
     return {"action": "wait", "sha": main, "why": f"no measurement of main {main} yet; it is {age_seconds // 60} min old"}
 
 
-def require_artifact(api, result, age_seconds=0):
-    """A successful run whose jobs were all skipped has no measurement; that is not a failure to publish."""
+def _published_state_age(api, now=None):
+    """Age in seconds of the latest commit on the published `state` branch, or None if unreadable."""
+    try:
+        commit = api.get("commits/state")
+        stamp = ((commit.get("commit") or {}).get("committer") or {}).get("date") or (
+            ((commit.get("commit") or {}).get("author") or {}).get("date")
+        )
+        if not isinstance(stamp, str) or not stamp:
+            return None
+        when = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        current = time.time() if now is None else now
+        return max(0, int(current - when.timestamp()))
+    except (urllib.error.URLError, KeyError, TypeError, ValueError, AttributeError):
+        return None
+
+
+def require_artifact(api, result, age_seconds=0, *, now=None):
+    """A successful run whose jobs were all skipped has no measurement; raise stale if published state is old."""
     name = f"bfme-numeric-main-state-{result['attempt']}"
     found = api.get(f"actions/runs/{result['run_id']}/artifacts?name={name}&per_page=5")["artifacts"]
     if any(a.get("name") == name and not a.get("expired") for a in found):
         return result
-    if age_seconds > STALE_HOURS * 3600:
+    published_age = _published_state_age(api, now=now)
+    effective_age = published_age if published_age is not None else age_seconds
+    if effective_age > STALE_HOURS * 3600:
         return {"action": "stale", "sha": result["sha"],
                 "why": f"run {result['run_id']} finished without artifact {name} and main {result['sha']} "
-                       f"has had no published measurement for {age_seconds // 3600} h (threshold {STALE_HOURS} h)"}
+                       f"has had no published measurement for {effective_age // 3600} h (threshold {STALE_HOURS} h)"}
     return {"action": "wait", "sha": result["sha"],
             "why": f"run {result['run_id']} finished without artifact {name} (its jobs were skipped or it expired); "
                    "nothing to publish"}
