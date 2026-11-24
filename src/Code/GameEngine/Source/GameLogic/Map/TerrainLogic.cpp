@@ -13,6 +13,7 @@
 #include "GameLogic/Bridge.h"
 #include "GameLogic/Map/PolygonTrigger.h"
 #include "WWMath/Vector3.h"
+#include "WWMath/Matrix3D.h"
 #include "GameLogic/AIPathfind.h"
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Object.h"
@@ -20,6 +21,10 @@
 
 // The singleton (retail VA 0x00DFEC50).
 TerrainLogic *TheTerrainLogic = NULL;
+// The game's float trig wrappers.
+Real Sin(Real x);
+Real Cos(Real x);
+
 extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint list (TerrainLogic::getFirstWaypoint, slot 33, returns it)
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 
@@ -50,6 +55,29 @@ Real TerrainLogic::getLayerHeight(Real x, Real y, PathfindLayerEnum layer, Coord
 }
 
 // FUNCTION: BFME2 0x0027CEDE size=337 name=?alignToTerrain@@YAXMABVCoord3D@@0AAVMatrix3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void alignToTerrain(Real angle, const Coord3D &pos, const Coord3D &normal, Matrix3D &mtx)
+{
+	Coord3D x, y, z;
+
+	z = normal;
+
+	x.x = Cos(angle);
+	x.y = Sin(angle);
+	x.z = 0.0f;
+	if (z.z != 0.0f)
+	{
+		// tilt the heading vector into the plane of the normal
+		x.z = -(x.x * z.x + x.y * z.y) / z.z;
+		x.normalize();
+	}
+
+	Coord3D::crossProduct(&z, &x, &y);
+	y.normalize();
+
+	mtx.Set(x.x, y.x, z.x, pos.x,
+		x.y, y.y, z.y, pos.y,
+		x.z, y.z, z.z, pos.z);
+}
 
 // FUNCTION: BFME2 0x0027D08D size=11 name=?ensureByte18@Rva0027D02F@@QAEXXZ evidence=?:placeholder tier=A
 
