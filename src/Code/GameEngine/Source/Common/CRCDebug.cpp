@@ -5,11 +5,25 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
+#include "Common/BFMEDesyncCheck.h"
+#include "GameLogic/GameLogic.h"
+
+extern unsigned char BfmeClientCRCCheckEnabled;	// CommandLine.cpp
+
 // The logic-random / desync log file (.bss 0x00DFEFF0, before RayEffect.cpp's TheRayEffects 0x00DFEFF4);
 // RandomValue, GameEngine, GameLogic and the AI dock-desync traces read it (callers declare it extern "C").
 extern "C" void *theLogicRandomLogFile = 0;
 
 // FUNCTION: BFME2 0x002CEA22 size=51 name=??0BFMEDesyncCheck@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+BFMEDesyncCheck::BFMEDesyncCheck()
+{
+	GameLogic *logic = TheGameLogic;
+	if (BfmeClientCRCCheckEnabled && logic->rva0042219())
+		m_crc = logic->getCRC(0);
+	else
+		m_crc = 0;
+}
+
 // FUNCTION: BFME2 0x002CEA55 size=409 name=?writeReportIfMismatched@BFMEDesyncCheck@@QAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002CEC34 size=14 name=?rva002CEC34@Rva002CEC0A@@QAEXXZ evidence=?:placeholder tier=A
