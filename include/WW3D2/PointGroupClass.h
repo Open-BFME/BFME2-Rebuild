@@ -51,6 +51,7 @@ public:
 
 	void Set_Texture(const TextureAsset &texture);
 	TextureAsset Get_Texture() const;
+	void Set_Shader(ShaderClass shader);
 	ShaderClass Get_Shader();
 
 protected:
