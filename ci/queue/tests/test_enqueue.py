@@ -52,22 +52,40 @@ def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEAB
 
 class FakeApi:
     def __init__(self, pages=(), *, active_in_progress=0, active_queued=0,
-                 rules_in_progress=0, rules_queued=0, ratelimit=4000, fail_enqueue=(), fail_status=False,
-                 fail_quota=False):
+                 rules_in_progress=0, rules_queued=0,
+                 admission_in_progress=0, admission_queued=0,
+                 ratelimit=4000, fail_enqueue=(), fail_status=False,
+                 fail_quota=False, merge_queue_entries=None):
         self.pages = pages
         self.active_in_progress = active_in_progress
         self.active_queued = active_queued
         self.rules_in_progress = rules_in_progress
         self.rules_queued = rules_queued
+        self.admission_in_progress = admission_in_progress
+        self.admission_queued = admission_queued
         self.ratelimit_remaining = ratelimit
+        self.graphql_ratelimit_remaining = None
+        self.graphql_ratelimit_limit = None
+        self.rest_ratelimit_remaining = None
+        self.rest_ratelimit_limit = None
         self.fail_enqueue = set(fail_enqueue)
         self.fail_status = fail_status
         self.fail_quota = fail_quota
+        self.merge_queue_entries = merge_queue_entries
         self.quota_reads = 0
         self.enqueued = []
         self.dispatches = []
         self.statuses = []
         self.gets = []
+
+    def _auto_merge_queue_entries(self):
+        """Build merge queue entries from isInMergeQueue PRs across all pages."""
+        entries = []
+        for page in self.pages:
+            for pr in page:
+                if pr.get("isInMergeQueue"):
+                    entries.append({"number": pr["number"], "files": pr.get("files", {"totalCount": 0, "nodes": []})})
+        return entries
 
     def graphql(self, query, variables):
         if "enqueuePullRequest" in query:
@@ -75,6 +93,12 @@ class FakeApi:
                 raise enqueue.ApiError("GraphQL error: Pull request is already in queue")
             self.enqueued.append((variables["id"], variables["oid"]))
             return {"enqueuePullRequest": {"mergeQueueEntry": {"id": "MQE_1", "position": 1}}}
+        if "mergeQueue" in query and "pullRequests" not in query:
+            entries = self.merge_queue_entries if self.merge_queue_entries is not None else self._auto_merge_queue_entries()
+            return {"repository": {"mergeQueue": {"entries": {
+                "totalCount": len(entries),
+                "nodes": [{"pullRequest": e} for e in entries],
+            }}}}
         cursor = variables.get("cursor")
         idx = 0 if cursor is None else int(cursor)
         nodes = self.pages[idx]
@@ -102,7 +126,10 @@ class FakeApi:
             if "status=queued" in path:
                 return {"total_count": self.rules_queued}
         if "workflows/admission.yml/runs" in path:
-            return {"total_count": 0}
+            if "status=in_progress" in path:
+                return {"total_count": self.admission_in_progress}
+            if "status=queued" in path:
+                return {"total_count": self.admission_queued}
         raise AssertionError(f"Unexpected GET {path}")
 
     def core_remaining(self):
@@ -378,7 +405,8 @@ class EnqueueTests(unittest.TestCase):
         ]
         api = FakeApi([prs])
         result = run(api)
-        self.assertEqual((result["enqueued"], result["backfilled"]), ([], [740, 741, 742]))
+        # MAX_WIDE_BACKFILL=2: at most 2 wide refreshes per run; PR 742 waits for the next cycle.
+        self.assertEqual((result["enqueued"], result["backfilled"]), ([], [740, 741]))
         self.assertEqual({body["event_type"] for _, body in api.dispatches}, {"bfme-source-refresh"})
 
     def test_merge_queue_removal_needs_a_newer_boat_verdict(self):
@@ -437,18 +465,32 @@ class EnqueueTests(unittest.TestCase):
 
     def test_backfill_is_paced_by_the_actions_token_quota_not_the_queue_token(self):
         boat = {"BFME II / Boat": "SUCCESS"}
-        prs = ([make_pr(900 + i, statuses={}) for i in range(5)]
-               + [make_pr(910 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(3)])
+        refreshes = [make_pr(900 + i, statuses={}) for i in range(5)]
+        rechecks = [make_pr(910 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(3)]
+        prs = refreshes + rechecks
         queue_api = FakeApi([prs], ratelimit=4900)
 
-        # 400 kept in reserve; 600 left pays for two refreshes (100 each), not a third.
-        actions = FakeApi(ratelimit=600)
-        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [900, 901])
+        # Rechecks sort first (15 each), then narrow refreshes (75 each). 445 spare = 445 - 400 reserve = 45.
+        # 3 rechecks at 15 = 45 spare gone, no room for a refresh.
+        actions = FakeApi(ratelimit=445)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [910, 911, 912])
         self.assertEqual(actions.quota_reads, 1)
 
-        # Rechecks (25 each) fit where a refresh would not: all three heads are rechecks, 475 left pays for three.
-        rechecks = FakeApi([prs[5:]], ratelimit=4900)
-        self.assertEqual(run(rechecks, dispatch_api=FakeApi(ratelimit=475))["backfilled"], [910, 911, 912])
+        # 475 spare fits 3 rechecks (45) + 0 refreshes (remaining 0 < 75).
+        queue_api = FakeApi([prs], ratelimit=4900)
+        self.assertEqual(run(queue_api, dispatch_api=FakeApi(ratelimit=445))["backfilled"], [910, 911, 912])
+
+        # 490 spare = 90: 3 rechecks (45) + 1 refresh (75) = 120 > 90, so just 3 rechecks.
+        queue_api = FakeApi([prs], ratelimit=4900)
+        self.assertEqual(run(queue_api, dispatch_api=FakeApi(ratelimit=490))["backfilled"], [910, 911, 912])
+
+        # 520 spare = 120: 3 rechecks (45) + 1 refresh (75) = 120, exactly fits.
+        queue_api = FakeApi([prs], ratelimit=4900)
+        self.assertEqual(run(queue_api, dispatch_api=FakeApi(ratelimit=520))["backfilled"], [910, 911, 912, 900])
+
+        # Rechecks only: 415 spare = 15, fits exactly 1 recheck.
+        rechecks_only = FakeApi([rechecks], ratelimit=4900)
+        self.assertEqual(run(rechecks_only, dispatch_api=FakeApi(ratelimit=415))["backfilled"], [910])
 
         # At or under the reserve, or when the quota cannot be read, nothing is dispatched and no runs are listed.
         for actions in (FakeApi(ratelimit=400), FakeApi(ratelimit=0), FakeApi(ratelimit=4000, fail_quota=True)):
@@ -463,27 +505,29 @@ class EnqueueTests(unittest.TestCase):
         refreshes = [make_pr(950 + i, statuses={}) for i in range(6)]
         rechecks = [make_pr(960 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(4)]
 
-        # 5 active runs (5 * 100 = 500 committed) with 900 raw -> 400 effective == reserve -> 0 refreshes dispatched.
+        # 5 active runs: managed=4×65=260, rules=1×15=15 → inflight=275. 675 raw → 675-275=400 effective == reserve.
         queue_api = FakeApi([refreshes], active_in_progress=3, active_queued=1, rules_in_progress=1, ratelimit=4900)
-        actions = FakeApi(ratelimit=900)
+        actions = FakeApi(ratelimit=675)
         with tempfile.TemporaryDirectory() as td:
             summary = Path(td) / "summary.md"
             result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
             self.assertEqual(result["backfilled"], [])
             self.assertEqual((actions.dispatches, actions.statuses), ([], []))
             text = summary.read_text(encoding="utf-8")
-            self.assertIn("900 (-500 in-flight for 5 active runs = 400 effective; reserve 400)", text)
+            self.assertIn("-275 in-flight for 5 active runs", text)
+            self.assertIn("= 400 effective; reserve 400)", text)
 
-        # 2 active runs (2 * 100 = 200 committed) with 900 raw -> 700 effective -> at most 3 refreshes (700 - 300 = 400).
+        # 2 active runs: managed=1×65=65, rules=1×15=15 → inflight=80. 900 raw → 820 effective → 420 spare → 5 refreshes.
         queue_api = FakeApi([refreshes], active_in_progress=1, rules_queued=1, ratelimit=4900)
         actions = FakeApi(ratelimit=900)
         with tempfile.TemporaryDirectory() as td:
             summary = Path(td) / "summary.md"
             result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
-            self.assertEqual(result["backfilled"], [950, 951, 952])
-            self.assertEqual(len(actions.dispatches), 3)
+            self.assertEqual(result["backfilled"], [950, 951, 952, 953, 954])
+            self.assertEqual(len(actions.dispatches), 5)
             text = summary.read_text(encoding="utf-8")
-            self.assertIn("900 (-200 in-flight for 2 active runs = 700 effective; reserve 400)", text)
+            self.assertIn("-80 in-flight for 2 active runs", text)
+            self.assertIn("= 820 effective; reserve 400)", text)
 
         # In-flight spend exceeding raw remaining clamps effective budget at 0 and dispatches nothing.
         queue_api = FakeApi([refreshes], active_in_progress=6, active_queued=6, ratelimit=4900)
@@ -492,15 +536,17 @@ class EnqueueTests(unittest.TestCase):
             summary = Path(td) / "summary.md"
             result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
             self.assertEqual(result["backfilled"], [])
-            self.assertIn("900 (-1200 in-flight for 12 active runs = 0 effective; reserve 400)",
-                          summary.read_text(encoding="utf-8"))
+            text = summary.read_text(encoding="utf-8")
+            self.assertIn("-780 in-flight for 12 active runs", text)
+            self.assertIn("= 120 effective; reserve 400)", text)
 
-        # 4 active runs (400 committed) with 875 raw -> 475 effective -> 75 spare fits 3 rechecks (25 each), 0 refreshes.
+        # 4 active runs: managed=2×65=130, rules=2×15=30 → inflight=160. 575 raw → 415 effective → 15 spare.
+        # 15 spare fits 1 recheck (15 each), not a refresh (75).
         queue_api = FakeApi([rechecks], active_in_progress=2, rules_in_progress=2, ratelimit=4900)
-        actions = FakeApi(ratelimit=875)
-        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [960, 961, 962])
+        actions = FakeApi(ratelimit=575)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [960])
         queue_api = FakeApi([refreshes], active_in_progress=2, rules_in_progress=2, ratelimit=4900)
-        actions = FakeApi(ratelimit=875)
+        actions = FakeApi(ratelimit=575)
         self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [])
 
     def test_marker_and_dispatch_use_the_actions_token(self):
@@ -583,7 +629,8 @@ class EnqueueTests(unittest.TestCase):
             make_pr(793, statuses={"BFME II / Admission": ("SUCCESS", "Held: daily limit, retried automatically",
                                                            "2026-11-23T11:20:00Z")}),
         ]
-        self.assertEqual(run(FakeApi([prs]))["backfilled"], [790, 791, 792, 793])
+        # New backfill order: recheck (790), narrow refresh (791, 793), wide refresh (792).
+        self.assertEqual(run(FakeApi([prs]))["backfilled"], [790, 791, 793, 792])
         self.assertEqual(enqueue.backoff({}), (enqueue.COOLDOWN_SECONDS, False))
 
     def test_a_header_change_enters_only_an_empty_queue_alone_after_narrow_changes(self):
@@ -625,14 +672,19 @@ class EnqueueTests(unittest.TestCase):
 
     def test_summary_reports_both_tokens_remaining_and_limit(self):
         queue_api = FakeApi([[make_pr(840, statuses={})]], ratelimit=1918)
-        queue_api.ratelimit_limit = 5000
+        queue_api.graphql_ratelimit_remaining = 1918
+        queue_api.graphql_ratelimit_limit = 5000
+        queue_api.rest_ratelimit_remaining = 1800
+        queue_api.rest_ratelimit_limit = 5000
         actions = FakeApi(ratelimit=900)
-        actions.ratelimit_limit = 1000
+        actions.rest_ratelimit_remaining = 900
+        actions.rest_ratelimit_limit = 1000
         with tempfile.TemporaryDirectory() as td:
             summary = Path(td) / "summary.md"
             run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
             text = summary.read_text(encoding="utf-8")
-        self.assertIn("- **Queue token rate limit:** 1918/5000", text)
+        self.assertIn("- **Queue token rate limit (GraphQL):** 1918/5000", text)
+        self.assertIn("- **Queue token rate limit (REST):** 1800/5000", text)
         self.assertIn("- **Actions token rate limit:** 900/1000", text)
         self.assertEqual(enqueue.ratelimit_text(FakeApi(ratelimit=None)), "not read")
         self.assertEqual(enqueue.ratelimit_text(FakeApi(ratelimit=12)), "12/unknown")
@@ -641,6 +693,168 @@ class EnqueueTests(unittest.TestCase):
         self.assertIn("first: 25, after: $cursor", enqueue.OPEN_PRS_QUERY)
         self.assertNotIn("%d", enqueue.OPEN_PRS_QUERY)
         self.assertGreaterEqual(enqueue.PAGE_SIZE * enqueue.MAX_PAGES, 1500)
+
+
+class R2bTests(unittest.TestCase):
+    """Tests for Hillclimb R2b: enqueue hardening, anti-starvation and narrow-first backfill."""
+
+    def test_merge_queue_occupancy_via_graphql(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow = make_pr(850, statuses=ok)
+        wide = make_pr(851, files=("include/A.h",), statuses=wide_ok)
+        mq_entries = [{"number": 860, "files": {"totalCount": 1, "nodes": [{"path": "include/X.h"}]}}]
+        api = FakeApi([[narrow, wide]], merge_queue_entries=mq_entries)
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+
+        api = FakeApi([[narrow, wide]], merge_queue_entries=[])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [850])
+
+    def test_merge_queue_fallback_on_null(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        narrow = make_pr(852, statuses=ok)
+        api = FakeApi([[narrow]])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [852])
+
+    def test_narrow_reject_falls_back_to_wide(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow1 = make_pr(853, statuses=ok)
+        narrow2 = make_pr(854, statuses=ok)
+        wide = make_pr(855, files=("include/A.h",), statuses=wide_ok)
+        api = FakeApi([[narrow1, narrow2, wide]], fail_enqueue={"PR_node_853", "PR_node_854"})
+        result = run(api)
+        self.assertEqual(result["enqueued"], [855])
+
+    def test_no_wide_fallback_when_narrow_succeeds(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow = make_pr(856, statuses=ok)
+        wide = make_pr(857, files=("include/A.h",), statuses=wide_ok)
+        api = FakeApi([[narrow, wide]])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [856])
+        self.assertNotIn(857, result["enqueued"])
+
+    def test_wide_anti_starvation_yields_solo_slot(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        very_old = "2026-11-23T09:00:00Z"
+        narrow = make_pr(858, statuses=ok)
+        wide = make_pr(859, files=("include/A.h",),
+                       statuses={"BFME II / Boat": ("SUCCESS", "", very_old),
+                                 "BFME II / source rules": ("SUCCESS", "", very_old),
+                                 "BFME II / Header rules": ("SUCCESS", "", very_old)})
+        api = FakeApi([[narrow, wide]])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [859])
+
+    def test_wide_at_exactly_threshold_does_not_trigger_starvation(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow = make_pr(860, statuses=ok)
+        wide = make_pr(861, files=("include/A.h",),
+                       statuses={"BFME II / Boat": ("SUCCESS", "", OLD),
+                                 "BFME II / source rules": ("SUCCESS", "", OLD),
+                                 "BFME II / Header rules": ("SUCCESS", "", OLD)})
+        api = FakeApi([[narrow, wide]])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [860])
+
+    def test_wide_stays_solo_no_stacking(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow = make_pr(862, statuses=ok)
+        wide1 = make_pr(863, files=("include/A.h",), statuses=wide_ok)
+        wide2 = make_pr(864, files=("include/B.h",), statuses=wide_ok)
+        api = FakeApi([[narrow, wide1, wide2]], fail_enqueue={"PR_node_862"})
+        result = run(api)
+        self.assertLessEqual(len(result["enqueued"]), 1)
+        if result["enqueued"]:
+            self.assertIn(result["enqueued"][0], [863, 864])
+
+    def test_narrow_first_backfill_ordering(self):
+        boat = {"BFME II / Boat": "SUCCESS"}
+        narrow_refresh1 = make_pr(870, statuses={})
+        narrow_refresh2 = make_pr(871, statuses={})
+        recheck1 = make_pr(872, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)})
+        wide_refresh = make_pr(873, files=("include/A.h",), statuses={})
+        api = FakeApi([[narrow_refresh1, narrow_refresh2, recheck1, wide_refresh]])
+        result = run(api)
+        backfilled = result["backfilled"]
+        self.assertIn(872, backfilled)
+        self.assertIn(870, backfilled)
+        self.assertIn(873, backfilled)
+        self.assertLess(backfilled.index(872), backfilled.index(870))
+        self.assertLess(backfilled.index(870), backfilled.index(873))
+
+    def test_max_wide_backfill_cap(self):
+        wide_prs = [make_pr(880 + i, files=("include/A.h",), statuses={}) for i in range(5)]
+        api = FakeApi([wide_prs])
+        result = run(api)
+        wide_in_backfill = [n for n in result["backfilled"]
+                            if any(pr["number"] == n and enqueue.has_header(pr) for pr in wide_prs)]
+        self.assertLessEqual(len(wide_in_backfill), enqueue.MAX_WIDE_BACKFILL)
+        self.assertEqual(len(wide_in_backfill), 2)
+
+    def test_narrow_refresh_not_displaced_by_wide(self):
+        narrow_refreshes = [make_pr(1100 + i, statuses={}) for i in range(enqueue.MAX_BACKFILL)]
+        wide_refresh = make_pr(1199, files=("include/A.h",), statuses={})
+        api = FakeApi([narrow_refreshes + [wide_refresh]])
+        result = run(api)
+        self.assertNotIn(1199, result["backfilled"])
+        self.assertEqual(len(result["backfilled"]), enqueue.MAX_BACKFILL)
+
+    def test_per_workflow_inflight_cost_weights(self):
+        prs = [make_pr(1000 + i, statuses={}) for i in range(5)]
+        # managed-pr.yml: 2 runs × 65 = 130, rules.yml: 3 runs × 15 = 45, admission.yml: 1 run × 15 = 15
+        # Total cost = 190. With 600 raw → 410 effective → 10 spare → 0 refreshes (each costs 75).
+        api = FakeApi([prs], active_in_progress=1, active_queued=1,
+                      rules_in_progress=2, rules_queued=1,
+                      admission_in_progress=1, ratelimit=4900)
+        actions = FakeApi(ratelimit=600)
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            result = run(api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            self.assertEqual(result["backfilled"], [])
+            text = summary.read_text(encoding="utf-8")
+            self.assertIn("managed-pr.yml=2", text)
+            self.assertIn("rules.yml=3", text)
+            self.assertIn("admission.yml=1", text)
+
+    def test_graphql_vs_rest_ratelimit_separation(self):
+        api = enqueue.GitHubApi.__new__(enqueue.GitHubApi)
+        api._token = "ghs_123456789012345"
+        api.ratelimit_remaining = None
+        api.ratelimit_limit = None
+        api.ratelimit_reset = None
+        api.graphql_ratelimit_remaining = None
+        api.graphql_ratelimit_limit = None
+        api.rest_ratelimit_remaining = None
+        api.rest_ratelimit_limit = None
+        gql_headers = {"X-RateLimit-Remaining": "4800", "X-RateLimit-Limit": "5000"}
+        api._record_ratelimit(gql_headers, kind="graphql")
+        self.assertEqual(api.graphql_ratelimit_remaining, 4800)
+        self.assertEqual(api.graphql_ratelimit_limit, 5000)
+        self.assertIsNone(api.rest_ratelimit_remaining)
+        rest_headers = {"X-RateLimit-Remaining": "900", "X-RateLimit-Limit": "1000"}
+        api._record_ratelimit(rest_headers, kind="rest")
+        self.assertEqual(api.rest_ratelimit_remaining, 900)
+        self.assertEqual(api.rest_ratelimit_limit, 1000)
+        self.assertEqual(api.graphql_ratelimit_remaining, 4800)
+
+    def test_ratelimit_text_per_kind(self):
+        api = FakeApi(ratelimit=1500)
+        api.graphql_ratelimit_remaining = 4800
+        api.graphql_ratelimit_limit = 5000
+        api.rest_ratelimit_remaining = 900
+        api.rest_ratelimit_limit = 1000
+        self.assertEqual(enqueue.ratelimit_text(api, "graphql"), "4800/5000")
+        self.assertEqual(enqueue.ratelimit_text(api, "rest"), "900/1000")
+        self.assertEqual(enqueue.ratelimit_text(api), "1500/unknown")
 
 
 class FakeResponse:
