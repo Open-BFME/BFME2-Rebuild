@@ -57,7 +57,7 @@ public:
 	// 0x000456C1 (`mov ecx,[ecx+4]; jmp ThingTemplate::isKindOf 0x000456AC`) has no caller in retail. Defined after
 	// ThingTemplate in Common/ThingTemplate.h.
 	inline Bool isKindOf(KindOfType t) const;
-	void transformPoint(const Coord3D *in, Coord3D *out);
+	void transformPoint(const Coord3D *in, Coord3D *out) const;
 	void convertBonePosToWorldPos(const Coord3D *bonePos, const Matrix3D *boneTransform,
 		Coord3D *worldPos, Matrix3D *worldTransform) const;
 	Drawable *getDrawable() const;

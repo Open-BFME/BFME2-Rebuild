@@ -133,23 +133,16 @@ Real Thing::getHeightAboveTerrainOrWater() const
 // FUNCTION: BFME2 0x0030A528 size=746 name=?convertBonePosToWorldPos@Thing@@QBEXPBVCoord3D@@PBVMatrix3D@@PAU2@PAV3@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x0030A812 size=191 name=?transformPoint@Thing@@QAEXPBVCoord3D@@PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
-void Thing::transformPoint(const Coord3D *in, Coord3D *out)
+void Thing::transformPoint(const Coord3D *in, Coord3D *out) const
 {
 	if (in == NULL || out == NULL)
 		return;
 
-	Vector3 vectorIn;
-	Vector3 vectorOut;
-
-	vectorIn.X = in->x;
-	vectorIn.Y = in->y;
-	vectorIn.Z = in->z;
-
-	m_transform.Transform_Vector(m_transform, vectorIn, &vectorOut);
-
-	out->x = vectorOut.X;
-	out->y = vectorOut.Y;
-	out->z = vectorOut.Z;
+	Coord3D res;
+	res.x = m_transform[0][0] * in->x + m_transform[0][1] * in->y + m_transform[0][2] * in->z + m_transform[0][3];
+	res.y = m_transform[1][0] * in->x + m_transform[1][1] * in->y + m_transform[1][2] * in->z + m_transform[1][3];
+	res.z = m_transform[2][0] * in->x + m_transform[2][1] * in->y + m_transform[2][2] * in->z + m_transform[2][3];
+	*out = res;
 }
 
 // FUNCTION: BFME2 0x0030A8EE size=62 name=?getUnitDirectionVector3D@Thing@@QBEXAAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
