@@ -52,16 +52,52 @@ def select_ancestor_artifact(api, shas):
         if sha in allowed and verified_run(row, sha):
             by_base.setdefault(sha, (row["id"], row["run_attempt"]))
     nearest = [by_base[sha] for sha in shas if sha in by_base][:25]
+    # Most successful state runs measured nothing (only reports changed) and retain no state, so asking each run in
+    # turn costs up to 25 calls; one repository-wide listing of the artifact name answers for every listed run.
+    indexes = {}
     for run, attempt in nearest:
-        if artifact := select_artifact(api, run, attempt):
+        if attempt not in indexes:
+            indexes[attempt] = artifact_index(api, attempt)
+        by_run, complete = indexes[attempt]
+        if run in by_run:
+            artifact = checked_artifact(by_run[run])
+        elif complete:
+            artifact = None
+        else:
+            artifact = select_artifact(api, run, attempt)
+        if artifact:
             return artifact
     return None
 
 
+def artifact_name(attempt):
+    return f"bfme-exact-main-state-{attempt}"
+
+
+def artifact_index(api, attempt):
+    """Unexpired state artifacts of one attempt by run id, from one listing, and whether that listing holds every
+    such artifact. If the listing cannot be read, nothing is known and each run is asked on its own."""
+    name = artifact_name(attempt)
+    filters = urllib.parse.urlencode({"name": name, "per_page": 100})
+    try:
+        artifacts = api.call("actions/artifacts?" + filters)["artifacts"]
+    except (LookupError, TypeError, ValueError):
+        return {}, False
+    by_run = {}
+    for item in artifacts:
+        run = (item.get("workflow_run") or {}).get("id")
+        if item.get("name") == name and not item.get("expired") and RUN_ID.fullmatch(str(run)):
+            by_run.setdefault(int(run), []).append(item)
+    return by_run, len(artifacts) < 100
+
+
 def select_artifact(api, run, attempt):
-    name = f"bfme-exact-main-state-{attempt}"
+    name = artifact_name(attempt)
     artifacts = api.call(f"actions/runs/{run}/artifacts?name={name}&per_page=5")["artifacts"]
-    rows = [item for item in artifacts if item.get("name") == name and not item.get("expired")]
+    return checked_artifact([item for item in artifacts if item.get("name") == name and not item.get("expired")])
+
+
+def checked_artifact(rows):
     if len(rows) != 1:
         return None
     row = rows[0]

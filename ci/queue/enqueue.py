@@ -8,14 +8,22 @@ Every open pull request lands in one bucket per run:
   none     a verdict or hold only the author or a maintainer can change.
 Backfill writes a BFME II / Queue backfill marker on the head before it dispatches, rotates least recently touched
 first, and never touches the same head twice within COOLDOWN_SECONDS, so it always moves forward through the
-backlog and stops by itself when nothing is left.
+backlog and stops by itself when nothing is left. A head held on a quota (a wide H1/H10 hold or the admission daily
+limit) waits for the next UTC day or QUOTA_HOLD_SECONDS, and one held on a runner outage waits OUTAGE_HOLD_SECONDS:
+admission's own hourly sweep already retries both, so a 30-minute refresh only spends the Actions token for nothing.
+
+A wide (include/) change is compared again by every merge group stacked behind it, so it enters the merge queue
+alone: narrow changes go first, a wide change is enqueued only into an empty queue when no narrow change is ready,
+and nothing is stacked behind a wide change already in the queue.
 """
 import datetime
+import http.client
 import json
 import os
 from pathlib import Path
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -47,6 +55,11 @@ FINAL_HOLDS = {
 }
 # Header rules holds that only a wide check on the current main clears (ci/header/compose.py H1, H10).
 WIDE_HOLDS = ("Held: H1 ", "Held: H10 ")
+# Admission holds that its hourly retry sweep re-decides by itself (ci/admission/admit.py DAILY_LIMIT, OUTAGE).
+QUOTA_HOLDS = ("Held: daily limit",)
+OUTAGE_HOLDS = ("Held: compiler runners unavailable",)
+QUOTA_HOLD_SECONDS = 6 * 3600
+OUTAGE_HOLD_SECONDS = 2 * 3600
 EVENTS = {"refresh": "bfme-source-refresh", "recheck": "bfme-source-recheck"}
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
@@ -60,6 +73,13 @@ ACTIONS_TOKEN_RESERVE = 400
 CALLS_PER_BACKFILL = {"refresh": 100, "recheck": 25}
 LIMIT = 4 * 1024**2
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
+# Smaller pages keep the nested status/file/review query under GitHub's GraphQL timeout (502/504 at 50 a page);
+# MAX_PAGES keeps the same 1,500 pull request reach.
+PAGE_SIZE = 25
+MAX_PAGES = 60
+# Query and GET retries after a transient failure (5xx, an empty or non-JSON body, a dropped connection).
+RETRY_PAUSES = (2, 5)
+TRANSIENT = frozenset({500, 502, 503, 504})
 
 OPEN_PRS_QUERY = """
 query($owner: String!, $name: String!, $cursor: String) {
@@ -67,7 +87,7 @@ query($owner: String!, $name: String!, $cursor: String) {
     defaultBranchRef {
       target { oid }
     }
-    pullRequests(states: OPEN, baseRefName: "main", first: 50, after: $cursor,
+    pullRequests(states: OPEN, baseRefName: "main", first: %d, after: $cursor,
                  orderBy: {field: UPDATED_AT, direction: ASC}) {
       pageInfo { hasNextPage endCursor }
       nodes {
@@ -121,7 +141,7 @@ query($owner: String!, $name: String!, $cursor: String) {
     }
   }
 }
-"""
+""" % PAGE_SIZE
 
 ENQUEUE_MUTATION = """
 mutation($id: ID!, $oid: GitObjectID!) {
@@ -145,32 +165,30 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class GitHubApi:
-    def __init__(self, token, token_name="BFME_QUEUE_TOKEN"):
+    def __init__(self, token, token_name="BFME_QUEUE_TOKEN", *, opener=None, sleep=time.sleep):
         if not token or not re.fullmatch(r"[A-Za-z0-9_.-]{15,2048}", token):
             raise ApiError(f"Missing or malformed {token_name}.")
         self._token = token
-        self._opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+        self._opener = opener or urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+        self._sleep = sleep
         self.ratelimit_remaining = None
+        self.ratelimit_limit = None
         self.ratelimit_reset = None
 
     def _record_ratelimit(self, headers):
         if not headers:
             return
-        rem = headers.get("X-RateLimit-Remaining")
-        if rem is not None:
-            try:
-                self.ratelimit_remaining = int(rem)
-            except (TypeError, ValueError):
-                pass
-        rst = headers.get("X-RateLimit-Reset")
-        if rst is not None:
-            try:
-                self.ratelimit_reset = int(rst)
-            except (TypeError, ValueError):
-                pass
+        for header, attr in (("X-RateLimit-Remaining", "ratelimit_remaining"),
+                             ("X-RateLimit-Limit", "ratelimit_limit"),
+                             ("X-RateLimit-Reset", "ratelimit_reset")):
+            value = headers.get(header)
+            if value is not None:
+                try:
+                    setattr(self, attr, int(value))
+                except (TypeError, ValueError):
+                    pass
 
-    def _send(self, method, url, body=None):
-        data = json.dumps(body, sort_keys=True).encode("utf-8") if body is not None else None
+    def _request(self, method, url, data):
         req = urllib.request.Request(url, data=data, method=method, headers={
             "Authorization": "Bearer " + self._token,
             "Accept": "application/vnd.github+json",
@@ -184,16 +202,45 @@ class GitHubApi:
         except urllib.error.HTTPError as exc:
             code, raw = exc.code, exc.read(LIMIT + 1)
             self._record_ratelimit(exc.headers)
-        except (urllib.error.URLError, OSError) as exc:
+        except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
             raise ApiError(f"Connection failure on {method} {url}: {type(exc).__name__}") from None
-        if len(raw) > LIMIT:
-            raise ApiError("GitHub API response exceeded size limit.")
-        payload = json.loads(raw) if raw.strip() else None
-        return code, payload
+        return code, raw
+
+    def _send(self, method, url, body=None, *, retries=0, expect_json=False):
+        """Return (HTTP code, decoded JSON or None). A 5xx, a dropped connection, a body that is not JSON, or (with
+        expect_json) a 200 without a JSON object is transient: it is tried again up to `retries` times."""
+        data = json.dumps(body, sort_keys=True).encode("utf-8") if body is not None else None
+        for attempt in range(retries + 1):
+            last = attempt == retries
+            try:
+                code, raw = self._request(method, url, data)
+            except ApiError:
+                if last:
+                    raise
+                self._sleep(RETRY_PAUSES[min(attempt, len(RETRY_PAUSES) - 1)])
+                continue
+            if len(raw) > LIMIT:
+                raise ApiError("GitHub API response exceeded size limit.")
+            malformed = False
+            try:
+                payload = json.loads(raw) if raw.strip() else None
+            except ValueError:      # json.JSONDecodeError and UnicodeDecodeError: an HTML or truncated 5xx page
+                payload, malformed = None, True
+            transient = (code in TRANSIENT or malformed
+                         or (expect_json and code == 200 and not isinstance(payload, dict)))
+            if transient and not last:
+                self._sleep(RETRY_PAUSES[min(attempt, len(RETRY_PAUSES) - 1)])
+                continue
+            if malformed:
+                raise ApiError(f"{method} {url} returned HTTP {code} without a JSON body")
+            return code, payload
+        raise AssertionError("unreachable")
 
     def graphql(self, query, variables):
+        # A query is safe to repeat; a mutation is sent once (a repeat could act twice).
+        retries = 0 if query.lstrip().startswith("mutation") else len(RETRY_PAUSES)
         code, payload = self._send("POST", "https://api.github.com/graphql",
-                                   {"query": query, "variables": variables})
+                                   {"query": query, "variables": variables}, retries=retries, expect_json=True)
         if code != 200 or not isinstance(payload, dict):
             raise ApiError(f"GraphQL HTTP {code}")
         if payload.get("errors"):
@@ -202,21 +249,28 @@ class GitHubApi:
         return payload.get("data") or {}
 
     def get(self, path):
-        code, payload = self._send("GET", f"https://api.github.com/repos/{REPO}/{path}")
+        code, payload = self._send("GET", f"https://api.github.com/repos/{REPO}/{path}",
+                                   retries=len(RETRY_PAUSES), expect_json=True)
         if code != 200:
             raise ApiError(f"GET {path} returned HTTP {code}")
         return payload
 
     def core_remaining(self):
         """REST calls this token has left this hour (GET /rate_limit itself costs none)."""
-        code, payload = self._send("GET", "https://api.github.com/rate_limit")
+        code, payload = self._send("GET", "https://api.github.com/rate_limit",
+                                   retries=len(RETRY_PAUSES), expect_json=True)
         try:
-            remaining = int(payload["resources"]["core"]["remaining"])
+            core = payload["resources"]["core"]
+            remaining = int(core["remaining"])
         except (TypeError, KeyError, ValueError):
             raise ApiError(f"GET rate_limit returned HTTP {code}") from None
         if code != 200:
             raise ApiError(f"GET rate_limit returned HTTP {code}")
         self.ratelimit_remaining = remaining
+        try:
+            self.ratelimit_limit = int(core["limit"])
+        except (KeyError, TypeError, ValueError):
+            pass
         return remaining
 
     def post(self, path, body):
@@ -329,14 +383,35 @@ def touched(statuses):
     return max(created(statuses, context) for context in TOUCHED)
 
 
-def cooling(stamp, now):
+def _held(statuses, context, prefixes):
+    status = statuses.get(context) or {}
+    return status.get("state") == "PENDING" and (status.get("description") or "").startswith(prefixes)
+
+
+def backoff(statuses):
+    """Return (seconds, daily): how long a head waits after it was last touched, and whether a new UTC day (the
+    daily budgets' reset) ends the wait early. Quota and outage holds only clear on admission's hourly sweep or a new
+    day, so refreshing them every COOLDOWN_SECONDS spends the Actions token and changes nothing."""
+    if _held(statuses, HEADER, WIDE_HOLDS) or _held(statuses, ADMISSION, QUOTA_HOLDS):
+        return QUOTA_HOLD_SECONDS, True
+    if _held(statuses, ADMISSION, OUTAGE_HOLDS):
+        return OUTAGE_HOLD_SECONDS, False
+    return COOLDOWN_SECONDS, False
+
+
+def cooling(stamp, now, seconds=COOLDOWN_SECONDS, daily=False):
     if not stamp:
         return False
     try:
         when = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
     except ValueError:
         return False
-    return (now - when).total_seconds() < COOLDOWN_SECONDS
+    elapsed = (now - when).total_seconds()
+    if elapsed < COOLDOWN_SECONDS:
+        return True
+    if daily and when.astimezone(datetime.timezone.utc).date() < now.astimezone(datetime.timezone.utc).date():
+        return False
+    return elapsed < seconds
 
 
 def file_count(pr):
@@ -353,7 +428,7 @@ def list_open_prs(api):
     prs = []
     main_sha = None
     cursor = None
-    for _ in range(30):
+    for _ in range(MAX_PAGES):
         data = api.graphql(OPEN_PRS_QUERY, {"owner": OWNER, "name": NAME, "cursor": cursor})
         repo = data.get("repository") or {}
         if main_sha is None:
@@ -367,6 +442,20 @@ def list_open_prs(api):
     return main_sha, prs
 
 
+def wave(candidates, queued):
+    """The ready pull requests this run may enqueue, narrow (src/ only) before wide (include/).
+
+    Every merge group behind a header change recompiles that change's wide shards, so a header change in a five-entry
+    queue costs five wide comparisons instead of one. Nothing is stacked behind a header change already in the queue;
+    a header change is enqueued alone, into an empty queue, and only when no narrow change is ready to go first."""
+    if any(has_header(pr) for pr in queued):
+        return []
+    narrow = [pr for pr in candidates if not has_header(pr)]
+    if narrow or queued:
+        return narrow
+    return [pr for pr in candidates if has_header(pr)]
+
+
 def active_pipeline_runs(api):
     total = 0
     for workflow in PIPELINE_WORKFLOWS:
@@ -375,6 +464,15 @@ def active_pipeline_runs(api):
             total += int((data or {}).get("total_count", 0))
     return total
 
+
+
+def ratelimit_text(api):
+    """remaining/limit from the last X-RateLimit-Remaining and X-RateLimit-Limit headers this token saw."""
+    remaining = getattr(api, "ratelimit_remaining", None)
+    limit = getattr(api, "ratelimit_limit", None)
+    if remaining is None:
+        return "not read"
+    return f"{remaining}/{limit}" if limit is not None else f"{remaining}/unknown"
 
 
 def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
@@ -388,13 +486,15 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     main_sha, prs = list_open_prs(api)
 
     # A merge group stacks up to five queued changes; keep the whole queue inside the group planner's file limit
-    # and admit at most one header change at a time (ci/managed-check/merge_queue_plan.py).
+    # (ci/managed-check/merge_queue_plan.py). Every group stacked behind a header change recompiles its wide shards,
+    # so a header change only ever lands alone (see wave()).
     queued = [pr for pr in prs if pr.get("isInMergeQueue")]
     queue_files = sum(file_count(pr) for pr in queued)
     queue_header = any(has_header(pr) for pr in queued)
 
     enqueue_candidates = []
     backfill_candidates = []
+    held_back = 0
     for pr in prs:
         paths = base_eligible(pr, refused_prefixes)
         if paths is None:
@@ -405,20 +505,22 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             enqueue_candidates.append(pr)
         elif kind is not None:
             stamp = touched(statuses)
-            if not cooling(stamp, now):
+            if not cooling(stamp, now, *backoff(statuses)):
                 backfill_candidates.append((stamp, pr, kind))
+            else:
+                held_back += 1
     # Least recently touched first: never-measured heads before retries, so every head gets its turn.
     backfill_candidates.sort(key=lambda item: item[0])
 
     enqueued = []
     enqueue_errors = []
-    for pr in enqueue_candidates:
+    for pr in wave(enqueue_candidates, queued):
         if len(enqueued) >= MAX_ENQUEUE:
             break
         if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
             break
         count, header = file_count(pr), has_header(pr)
-        if queue_files + count > MAX_FILES or (header and queue_header):
+        if queue_files + count > MAX_FILES or queue_header or (header and enqueued):
             continue
         num = pr["number"]
         try:
@@ -510,8 +612,11 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             f"- **Open PRs scanned:** {len(prs)}",
             f"- **Enqueued:** {len(enqueued)} ({', '.join(f'#{n}' for n in enqueued) or 'none'})",
             f"- **Backfill waiting:** {len(backfill_candidates)}",
+            f"- **Backfill cooling down:** {held_back}",
             f"- **Backfill dispatched:** {len(backfilled)} ({', '.join(f'#{n}' for n in backfilled) or 'none'})",
             quota_line,
+            f"- **Queue token rate limit:** {ratelimit_text(api)}",
+            f"- **Actions token rate limit:** {ratelimit_text(dispatch_api)}",
         ]
         if enqueue_errors:
             lines.append(f"- **Enqueue rejections:** {len(enqueue_errors)}")

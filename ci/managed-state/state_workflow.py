@@ -14,6 +14,14 @@ from state_evidence import LIMIT, cached_pairs, header
 from state_delta import inherited, merge
 
 
+class OverBudget(ValueError):
+    """The plan needs more runners than the approved cap."""
+
+    def __init__(self, count, budget):
+        super().__init__(f"This full refresh requires {count} runners, above the {budget}-runner cap.")
+        self.count, self.budget = count, budget
+
+
 def make_checked_plan(root, main, budget, *, measured=None):
     if not re.fullmatch(r"[1-9][0-9]{0,2}", budget) or int(budget) > 128:
         raise ValueError("Set BFME_STATE_BUDGET_JOBS to the approved runner cap, between 1 and 128.")
@@ -23,8 +31,29 @@ def make_checked_plan(root, main, budget, *, measured=None):
         validate_plan(plan)
     count = len(plan["batches"])
     if count > int(budget):
-        raise ValueError(f"This full refresh requires {count} runners, above the {budget}-runner cap.")
+        raise OverBudget(count, budget)
     return plan
+
+
+def plan_budget(env):
+    """An explicit seed may use its own, higher cap (BFME_STATE_SEED_BUDGET_JOBS); every other run uses the
+    standing cap."""
+    if env.get("BFME_STATE_SEED") == "true" and env.get("STATE_SEED_BUDGET"):
+        return env["STATE_SEED_BUDGET"]
+    return env.get("STATE_BUDGET", "")
+
+
+def skip_over_budget(error, env, output):
+    """A routine refresh that needs more runners than the cap cannot finish here: it measures nothing (active=no)
+    and succeeds, instead of failing on every push until a maintainer seeds the state. An explicit seed must
+    finish its baseline, so it still fails."""
+    if env.get("BFME_STATE_SEED") == "true":
+        return False
+    print(f"::notice title=Protected main state not measured::{error} "
+          "Run 'Measure protected main state' by hand with seed enabled to refresh the protected baseline.")
+    with Path(output).open("a") as file:
+        file.write("active=no\n")
+    return True
 
 
 def select_shards(plan, directory, plan_attempt, current_attempt):
@@ -118,7 +147,12 @@ def main(mode, *args):
         if not measured:
             measured.append(units[0])
             del carried[units[0]]
-        result = make_checked_plan(root, main, os.environ.get("STATE_BUDGET", ""), measured=measured)
+        try:
+            result = make_checked_plan(root, main, plan_budget(os.environ), measured=measured)
+        except OverBudget as error:
+            if skip_over_budget(error, os.environ, os.environ["GITHUB_OUTPUT"]):
+                return
+            raise
         print(f"Measuring {len(measured)} units. Reusing {len(carried)} unaffected units from the exact predecessor.")
         if len(args) == 3:
             tree = Git(root / ".git").value("rev-parse", main + "^{tree}")
@@ -129,7 +163,7 @@ def main(mode, *args):
                 file.write(stored)
         batches = ",".join(str(index) for index in range(len(result["batches"])))
         with Path(os.environ["GITHUB_OUTPUT"]).open("a") as file:
-            file.write(f"batches=[{batches}]\n")
+            file.write(f"batches=[{batches}]\nactive=yes\n")
         out = Path(args[0])
     elif mode == "assemble":
         plan, shards, out, *cache = map(Path, args)

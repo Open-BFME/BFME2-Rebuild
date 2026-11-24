@@ -49,7 +49,8 @@ jobs:
       contents: read
       actions: read
     outputs:
-      active: '${{ steps.origin.outputs.active }}'
+      # The plan step decides last: a refresh over the runner cap measures nothing (state_workflow.py).
+      active: '${{ steps.plan.outputs.active == ''yes'' && ''yes'' || ''no'' }}'
       batches: '${{ steps.plan.outputs.batches }}'
       attempt: '${{ steps.plan.outputs.attempt }}'
     steps:
@@ -83,6 +84,7 @@ jobs:
         id: plan
         env:
           STATE_BUDGET: '${{ vars.BFME_STATE_BUDGET_JOBS }}'
+          STATE_SEED_BUDGET: '${{ vars.BFME_STATE_SEED_BUDGET_JOBS }}'
           BFME_READ_TOKEN: '${{ github.token }}'
         run: |
           set -Eeuo pipefail
@@ -96,7 +98,7 @@ jobs:
             "$RUNNER_TEMP/state-plan/carry.json" "$RUNNER_TEMP/previous-state.json"
           printf 'attempt=%s\n' "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        if: steps.origin.outputs.active == 'yes'
+        if: steps.plan.outputs.active == 'yes'
         with:
           name: bfme-state-plan-${{ github.run_attempt }}
           path: '${{ runner.temp }}/state-plan'

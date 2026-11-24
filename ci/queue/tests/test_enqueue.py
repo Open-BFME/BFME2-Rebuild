@@ -1,10 +1,12 @@
 """Unit tests for the GitHub Native Merge Queue auto-enqueuer (ci/queue/enqueue.py)."""
 import datetime
+import io
 from pathlib import Path
 import sys
 import tempfile
 import unittest
 from unittest import mock
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "ci/queue"))
@@ -15,6 +17,7 @@ MAIN_SHA = "a" * 40
 NOW = datetime.datetime(2026, 11, 23, 12, 0, tzinfo=datetime.timezone.utc)
 OLD = "2026-11-23T10:00:00Z"      # two hours before NOW: outside the cooldown
 RECENT = "2026-11-23T11:50:00Z"   # ten minutes before NOW: inside the cooldown
+YESTERDAY = "2026-11-22T20:00:00Z"  # sixteen hours before NOW, on the previous UTC day
 
 
 def make_pr(number, *, oid=None, draft=False, in_queue=False, mergeable="MERGEABLE",
@@ -165,11 +168,11 @@ class EnqueueTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             summary = Path(td) / "summary.md"
             result = run(api, env={"GITHUB_STEP_SUMMARY": str(summary)})
-            # 103 waits: one header change in the merge queue at a time.
-            self.assertEqual(result["enqueued"], [101, 102])
+            # 102 and 103 wait: a header change only enters an empty queue, after every ready narrow change.
+            self.assertEqual(result["enqueued"], [101])
             # 104 and 105 passed Boat but have no Header rules yet: a wide check on the current main is requested.
             self.assertEqual(result["backfilled"], [104, 105])
-            self.assertIn("#101, #102", summary.read_text(encoding="utf-8"))
+            self.assertIn("**Enqueued:** 1 (#101)", summary.read_text(encoding="utf-8"))
 
     def test_caps_enqueue_at_16_and_survives_individual_rejection(self):
         ok_src = {"BFME II / source rules": "SUCCESS", "BFME II / Boat": "SUCCESS"}
@@ -360,11 +363,13 @@ class EnqueueTests(unittest.TestCase):
 
     def test_passed_header_change_needs_a_wide_check_on_the_current_main_only_for_h1_or_h10(self):
         ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        # Last touched on the previous UTC day: the wide holds' daily budget has reset since.
+        yesterday = {"BFME II / Boat": ("SUCCESS", "", YESTERDAY), "BFME II / source rules": ("SUCCESS", "", YESTERDAY)}
         hdr = ("include/A.h",)
         prs = [
-            make_pr(740, files=hdr, statuses=ok | {"BFME II / Header rules": (
+            make_pr(740, files=hdr, statuses=yesterday | {"BFME II / Header rules": (
                 "PENDING", "Held: H10 no wide check admitted for this commit yet (main x)")}),
-            make_pr(741, files=hdr, statuses=ok | {"BFME II / Header rules": (
+            make_pr(741, files=hdr, statuses=yesterday | {"BFME II / Header rules": (
                 "PENDING", "Held: H1 The wide comparison has not reported on this main. (main x)")}),
             make_pr(742, files=hdr, statuses=ok),
             make_pr(743, files=hdr, statuses=ok | {"BFME II / Header rules": (
@@ -412,7 +417,8 @@ class EnqueueTests(unittest.TestCase):
             make_pr(811, files=("include/A.h",), statuses=ok | {"BFME II / Header rules": "SUCCESS"}),
             make_pr(812, statuses=ok),
         ]
-        self.assertEqual(run(FakeApi([headers]))["enqueued"], [812])
+        # Nothing is stacked behind a header change: each group behind it would recompile its wide shards.
+        self.assertEqual(run(FakeApi([headers]))["enqueued"], [])
 
     def test_queue_wakeups_cover_every_completion_and_skip_needless_runs(self):
         managed = (ROOT / ".github/workflows/managed-pr.yml").read_text(encoding="utf-8")
@@ -516,6 +522,208 @@ class EnqueueTests(unittest.TestCase):
         self.assertNotIn("\nconcurrency:\n", enq_wf)
         self.assertIn("\n    concurrency:\n", enq_wf)
         self.assertEqual(land_wf.count("vars.BFME_MERGE_QUEUE_ENABLED != 'yes'"), 2)
+
+    def test_quota_holds_wait_for_a_new_utc_day_or_six_hours(self):
+        hdr = ("include/A.h",)
+        h10 = ("PENDING", "Held: H10 daily limit for wide checks reached; retried automatically (main x)")
+        daily = ("PENDING", "Held: daily limit, retried automatically")
+
+        def wide(number, touched):
+            return make_pr(number, files=hdr, statuses={
+                "BFME II / source rules": ("SUCCESS", "", touched), "BFME II / Boat": ("SUCCESS", "", touched),
+                "BFME II / Header rules": h10})
+
+        def narrow(number, touched):
+            return make_pr(number, statuses={"BFME II / Admission": daily + (touched,)})
+
+        prs = [
+            wide(770, "2026-11-23T10:00:00Z"),     # 2h ago, same UTC day: waits
+            wide(771, "2026-11-23T05:30:00Z"),     # 6.5h ago: retried
+            narrow(772, "2026-11-23T09:00:00Z"),   # 3h ago, same UTC day: waits
+            narrow(773, "2026-11-23T05:00:00Z"),   # 7h ago: retried
+        ]
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            result = run(FakeApi([prs]), env={"GITHUB_STEP_SUMMARY": str(summary)})
+            self.assertEqual(result["backfilled"], [773, 771])
+            self.assertIn("- **Backfill cooling down:** 2", summary.read_text(encoding="utf-8"))
+
+        # A new UTC day resets the daily budgets, so the wait ends early; the 30-minute floor still applies.
+        after_midnight = datetime.datetime(2026, 11, 24, 1, 0, tzinfo=datetime.timezone.utc)
+        prs = [
+            wide(774, "2026-11-23T23:00:00Z"),     # 2h ago, previous UTC day: retried
+            narrow(775, "2026-11-23T22:00:00Z"),   # 3h ago, previous UTC day: retried
+            wide(776, "2026-11-24T00:15:00Z"),     # 45 min ago, today: waits
+            narrow(777, "2026-11-24T00:50:00Z"),   # 10 min ago: inside the floor
+        ]
+        result = enqueue.run(FakeApi([prs]), env={}, now=after_midnight)
+        self.assertEqual(result["backfilled"], [775, 774])
+
+    def test_runner_outage_holds_back_off_two_hours(self):
+        outage = ("PENDING", "Held: compiler runners unavailable; retried automatically")
+        prs = [
+            make_pr(780, statuses={"BFME II / Admission": outage + ("2026-11-23T11:00:00Z",)}),  # 1h ago: waits
+            make_pr(781, statuses={"BFME II / Admission": outage + ("2026-11-23T09:30:00Z",)}),  # 2.5h ago: retried
+        ]
+        self.assertEqual(run(FakeApi([prs]))["backfilled"], [781])
+
+    def test_self_healing_holds_keep_the_30_minute_cooldown(self):
+        boat = {"BFME II / Boat": "SUCCESS"}
+        prs = [
+            # A source rules ERROR on a passed Boat is rechecked as before.
+            make_pr(790, statuses=boat | {"BFME II / source rules": ("ERROR", "Source rules could not finish (main x)",
+                                                                       "2026-11-23T11:20:00Z")}),
+            make_pr(791, statuses={"BFME II / Admission": (
+                "PENDING", "Held: current source rules have not passed, retried automatically",
+                "2026-11-23T11:20:00Z")}),
+            # A header change without a Header rules verdict yet.
+            make_pr(792, files=("include/A.h",), statuses=boat | {
+                "BFME II / source rules": ("SUCCESS", "", "2026-11-23T11:20:00Z")}),
+            # A settled admission status that is not pending is not a quota hold.
+            make_pr(793, statuses={"BFME II / Admission": ("SUCCESS", "Held: daily limit, retried automatically",
+                                                           "2026-11-23T11:20:00Z")}),
+        ]
+        self.assertEqual(run(FakeApi([prs]))["backfilled"], [790, 791, 792, 793])
+        self.assertEqual(enqueue.backoff({}), (enqueue.COOLDOWN_SECONDS, False))
+
+    def test_a_header_change_enters_only_an_empty_queue_alone_after_narrow_changes(self):
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+
+        # Narrow changes go first even when the header change was updated earlier; the header change waits.
+        prs = [make_pr(820, files=("include/A.h",), statuses=wide_ok),
+               make_pr(821, statuses=ok), make_pr(822, statuses=ok)]
+        api = FakeApi([prs])
+        self.assertEqual(run(api)["enqueued"], [821, 822])
+        self.assertEqual([node for node, _ in api.enqueued], ["PR_node_821", "PR_node_822"])
+
+        # Empty queue, no narrow change ready: exactly one header change, alone.
+        prs = [make_pr(823, files=("include/A.h",), statuses=wide_ok),
+               make_pr(824, files=("include/B.h", "src/B.cpp"), statuses=wide_ok)]
+        self.assertEqual(run(FakeApi([prs]))["enqueued"], [823])
+
+        # A rejected header change does not use the slot: the next one goes alone.
+        self.assertEqual(run(FakeApi([prs], fail_enqueue={"PR_node_823"}))["enqueued"], [824])
+
+        # A narrow change in the queue: more narrow changes join it, the header change waits for an empty queue.
+        prs = [make_pr(825, in_queue=True), make_pr(826, files=("include/A.h",), statuses=wide_ok),
+               make_pr(827, statuses=ok)]
+        self.assertEqual(run(FakeApi([prs]))["enqueued"], [827])
+        prs = [make_pr(825, in_queue=True), make_pr(826, files=("include/A.h",), statuses=wide_ok)]
+        self.assertEqual(run(FakeApi([prs]))["enqueued"], [])
+
+        # A header change in the queue: nothing narrow or wide is stacked behind it until it lands.
+        prs = [make_pr(828, in_queue=True, files=("include/Q.h", "src/Q.cpp")),
+               make_pr(829, statuses=ok), make_pr(830, files=("include/A.h",), statuses=wide_ok)]
+        self.assertEqual(run(FakeApi([prs]))["enqueued"], [])
+
+        # A header change approved by a listed approver is still a header change.
+        oid = "9" * 40
+        approved = make_pr(831, oid=oid, files=("include/C.h",), statuses=ok, reviews=[
+            {"state": "APPROVED", "commit": {"oid": oid}, "author": {"databaseId": 1760627}}])
+        self.assertEqual(run(FakeApi([[approved, make_pr(832, statuses=ok)]]))["enqueued"], [832])
+
+    def test_summary_reports_both_tokens_remaining_and_limit(self):
+        queue_api = FakeApi([[make_pr(840, statuses={})]], ratelimit=1918)
+        queue_api.ratelimit_limit = 5000
+        actions = FakeApi(ratelimit=900)
+        actions.ratelimit_limit = 1000
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            text = summary.read_text(encoding="utf-8")
+        self.assertIn("- **Queue token rate limit:** 1918/5000", text)
+        self.assertIn("- **Actions token rate limit:** 900/1000", text)
+        self.assertEqual(enqueue.ratelimit_text(FakeApi(ratelimit=None)), "not read")
+        self.assertEqual(enqueue.ratelimit_text(FakeApi(ratelimit=12)), "12/unknown")
+
+    def test_open_pull_request_pages_are_small_but_reach_as_far(self):
+        self.assertIn("first: 25, after: $cursor", enqueue.OPEN_PRS_QUERY)
+        self.assertNotIn("%d", enqueue.OPEN_PRS_QUERY)
+        self.assertGreaterEqual(enqueue.PAGE_SIZE * enqueue.MAX_PAGES, 1500)
+
+
+class FakeResponse:
+    def __init__(self, code, body, headers):
+        self.status, self._body, self.headers = code, body, headers
+
+    def read(self, limit):
+        return self._body[:limit]
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class FakeOpener:
+    """Replays (code, body, headers) answers; 4xx/5xx answers raise HTTPError like urllib does."""
+
+    def __init__(self, answers):
+        self.answers = list(answers)
+        self.requests = []
+
+    def open(self, req, timeout):
+        self.requests.append((req.get_method(), req.full_url))
+        answer = self.answers.pop(0)
+        if isinstance(answer, BaseException):
+            raise answer
+        code, body, headers = answer
+        if code >= 400:
+            raise urllib.error.HTTPError(req.full_url, code, "error", headers, io.BytesIO(body))
+        return FakeResponse(code, body, headers)
+
+
+HEADERS = {"X-RateLimit-Remaining": "1918", "X-RateLimit-Limit": "5000", "X-RateLimit-Reset": "1795000000"}
+GRAPHQL_OK = (200, b'{"data": {"repository": {}}}', HEADERS)
+BAD_GATEWAY = (502, b"<html><body>502 Bad Gateway</body></html>", {})
+
+
+class GitHubApiTests(unittest.TestCase):
+    def api(self, answers):
+        self.opener, self.pauses = FakeOpener(answers), []
+        return enqueue.GitHubApi("ghs_123456789012345", opener=self.opener, sleep=self.pauses.append)
+
+    def test_graphql_query_retries_an_html_or_empty_5xx_body(self):
+        api = self.api([BAD_GATEWAY, (504, b"", {}), GRAPHQL_OK])
+        self.assertEqual(api.graphql(enqueue.OPEN_PRS_QUERY, {}), {"repository": {}})
+        self.assertEqual(self.pauses, list(enqueue.RETRY_PAUSES))
+        self.assertEqual((api.ratelimit_remaining, api.ratelimit_limit), (1918, 5000))
+
+    def test_graphql_query_retries_an_empty_or_truncated_200_body(self):
+        api = self.api([(200, b"", {}), (200, b'{"data": {', {}), GRAPHQL_OK])
+        self.assertEqual(api.graphql(enqueue.OPEN_PRS_QUERY, {}), {"repository": {}})
+        self.assertEqual(len(self.opener.requests), 3)
+
+    def test_persistent_5xx_raises_an_api_error_not_a_decode_error(self):
+        api = self.api([BAD_GATEWAY] * 3)
+        with self.assertRaisesRegex(enqueue.ApiError, "HTTP 502"):
+            api.graphql(enqueue.OPEN_PRS_QUERY, {})
+        self.assertEqual(len(self.opener.requests), 3)
+
+    def test_connection_failures_are_retried(self):
+        api = self.api([urllib.error.URLError("reset"), (200, b'{"total_count": 2}', HEADERS)])
+        self.assertEqual(api.get("actions/runs"), {"total_count": 2})
+        self.assertEqual(len(self.pauses), 1)
+
+    def test_mutations_and_rest_writes_are_sent_once(self):
+        api = self.api([BAD_GATEWAY])
+        with self.assertRaisesRegex(enqueue.ApiError, "HTTP 502"):
+            api.graphql(enqueue.ENQUEUE_MUTATION, {"id": "PR_1", "oid": "a" * 40})
+        self.assertEqual((len(self.opener.requests), self.pauses), (1, []))
+        api = self.api([(502, b'{"message": "Server Error"}', {})])
+        with self.assertRaisesRegex(enqueue.ApiError, "returned HTTP 502"):
+            api.post("dispatches", {"event_type": "x"})
+        self.assertEqual((len(self.opener.requests), self.pauses), (1, []))
+        api = self.api([(204, b"", {})])
+        self.assertIsNone(api.post("dispatches", {"event_type": "x"}))
+
+    def test_core_remaining_records_the_limit(self):
+        body = b'{"resources": {"core": {"remaining": 640, "limit": 1000}}}'
+        api = self.api([BAD_GATEWAY, (200, body, {})])
+        self.assertEqual(api.core_remaining(), 640)
+        self.assertEqual((api.ratelimit_remaining, api.ratelimit_limit), (640, 1000))
 
 
 if __name__ == "__main__":
