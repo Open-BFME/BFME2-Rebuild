@@ -54,8 +54,12 @@ class FakeApi:
     def __init__(self, pages=(), *, active_in_progress=0, active_queued=0,
                  rules_in_progress=0, rules_queued=0,
                  admission_in_progress=0, admission_queued=0,
-                 ratelimit=4000, fail_enqueue=(), fail_status=False,
-                 fail_quota=False, merge_queue_entries=None):
+                 ratelimit=4000, fail_enqueue=(), fail_enqueue_transport=(),
+                 fail_status=False, fail_quota=False,
+                 merge_queue_entries=None, merge_queue_fail=False,
+                 merge_queue_null_mq=False, merge_queue_total_override=None,
+                 merge_queue_has_next_page=False,
+                 merge_queue_entries_on_requery=None):
         self.pages = pages
         self.active_in_progress = active_in_progress
         self.active_queued = active_queued
@@ -64,14 +68,21 @@ class FakeApi:
         self.admission_in_progress = admission_in_progress
         self.admission_queued = admission_queued
         self.ratelimit_remaining = ratelimit
-        self.graphql_ratelimit_remaining = None
+        self.graphql_ratelimit_remaining = ratelimit
         self.graphql_ratelimit_limit = None
         self.rest_ratelimit_remaining = None
         self.rest_ratelimit_limit = None
         self.fail_enqueue = set(fail_enqueue)
+        self.fail_enqueue_transport = set(fail_enqueue_transport)
         self.fail_status = fail_status
         self.fail_quota = fail_quota
         self.merge_queue_entries = merge_queue_entries
+        self.merge_queue_fail = merge_queue_fail
+        self.merge_queue_null_mq = merge_queue_null_mq
+        self.merge_queue_total_override = merge_queue_total_override
+        self.merge_queue_has_next_page = merge_queue_has_next_page
+        self.merge_queue_entries_on_requery = merge_queue_entries_on_requery
+        self._mq_query_count = 0
         self.quota_reads = 0
         self.enqueued = []
         self.dispatches = []
@@ -89,15 +100,29 @@ class FakeApi:
 
     def graphql(self, query, variables):
         if "enqueuePullRequest" in query:
+            if variables["id"] in self.fail_enqueue_transport:
+                raise enqueue.ApiError("GraphQL HTTP 502")
             if variables["id"] in self.fail_enqueue:
                 raise enqueue.ApiError("GraphQL error: Pull request is already in queue")
             self.enqueued.append((variables["id"], variables["oid"]))
             return {"enqueuePullRequest": {"mergeQueueEntry": {"id": "MQE_1", "position": 1}}}
         if "mergeQueue" in query and "pullRequests" not in query:
-            entries = self.merge_queue_entries if self.merge_queue_entries is not None else self._auto_merge_queue_entries()
+            self._mq_query_count += 1
+            if self.merge_queue_fail:
+                raise enqueue.ApiError("GraphQL HTTP 502")
+            if self.merge_queue_null_mq:
+                return {"repository": {"mergeQueue": None}}
+            if self._mq_query_count > 1 and self.merge_queue_entries_on_requery is not None:
+                entries = self.merge_queue_entries_on_requery
+            elif self.merge_queue_entries is not None:
+                entries = self.merge_queue_entries
+            else:
+                entries = self._auto_merge_queue_entries()
+            total = self.merge_queue_total_override if self.merge_queue_total_override is not None else len(entries)
             return {"repository": {"mergeQueue": {"entries": {
-                "totalCount": len(entries),
-                "nodes": [{"pullRequest": e} for e in entries],
+                "totalCount": total,
+                "pageInfo": {"hasNextPage": self.merge_queue_has_next_page},
+                "nodes": [{"pullRequest": e} if e is not None else {"pullRequest": None} for e in entries],
             }}}}
         cursor = variables.get("cursor")
         idx = 0 if cursor is None else int(cursor)
@@ -855,6 +880,155 @@ class R2bTests(unittest.TestCase):
         self.assertEqual(enqueue.ratelimit_text(api, "graphql"), "4800/5000")
         self.assertEqual(enqueue.ratelimit_text(api, "rest"), "900/1000")
         self.assertEqual(enqueue.ratelimit_text(api), "1500/unknown")
+
+    def test_h1_hold_uses_normal_cooldown_not_quota_hold(self):
+        """H1 is a freshness hold (30m cooldown), not a daily quota like H10 (6h)."""
+        hdr = ("include/A.h",)
+        h1 = ("PENDING", "Held: H1 The wide comparison has not reported on this main. (main x)")
+        h10 = ("PENDING", "Held: H10 daily limit for wide checks reached; retried automatically (main x)")
+        h1_statuses = {"BFME II / Header rules": h1}
+        h10_statuses = {"BFME II / Header rules": h10}
+        self.assertEqual(enqueue.backoff(enqueue.status_map(make_pr(1, files=hdr, statuses=h1_statuses))),
+                         (enqueue.COOLDOWN_SECONDS, False))
+        self.assertEqual(enqueue.backoff(enqueue.status_map(make_pr(2, files=hdr, statuses=h10_statuses))),
+                         (enqueue.QUOTA_HOLD_SECONDS, True))
+
+        # H1 at 40 minutes ago (> 30m cooldown): retried. H10 at 40 minutes ago (< 6h): held.
+        forty_min_ago = "2026-11-23T11:20:00Z"
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        prs = [
+            make_pr(1400, files=hdr, statuses={k: (v, "", forty_min_ago) for k, v in ok.items()}
+                    | {"BFME II / Header rules": h1 + (forty_min_ago,)}),
+            make_pr(1401, files=hdr, statuses={k: (v, "", forty_min_ago) for k, v in ok.items()}
+                    | {"BFME II / Header rules": h10 + (forty_min_ago,)}),
+        ]
+        result = run(FakeApi([prs]))
+        self.assertEqual(result["backfilled"], [1400])
+
+    def test_merge_queue_fail_closed_pauses_enqueue(self):
+        """API error or truncated merge queue data pauses enqueue; null mergeQueue is a clean empty."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        narrow = make_pr(1250, statuses=ok)
+
+        # API error: pauses enqueue, backfill still works
+        api = FakeApi([[narrow]], merge_queue_fail=True)
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+        self.assertEqual(result["backfilled"], [])  # narrow is enqueue-eligible, not backfill
+
+        # Null mergeQueue (no merge queue configured): proceeds cleanly
+        api = FakeApi([[narrow]], merge_queue_null_mq=True)
+        result = run(api)
+        self.assertEqual(result["enqueued"], [1250])
+
+        # Truncated entries (totalCount > nodes): pauses enqueue
+        entry = {"number": 1260, "files": {"totalCount": 1, "nodes": [{"path": "src/X.cpp"}]}}
+        api = FakeApi([[narrow]], merge_queue_entries=[entry], merge_queue_total_override=5)
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+
+        # hasNextPage: pauses enqueue
+        api = FakeApi([[narrow]], merge_queue_entries=[entry], merge_queue_has_next_page=True)
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+
+        # Null pullRequest in an entry: pauses enqueue
+        api = FakeApi([[narrow]], merge_queue_entries=[None])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+
+    def test_merge_queue_derives_queue_files_from_native_snapshot(self):
+        """queue_files comes from the native mergeQueue query, not the UPDATED_AT scan."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        # In-queue PR in the UPDATED_AT scan has 50 files, but merge queue snapshot says 55
+        in_queue = make_pr(1260, in_queue=True, files=tuple(f"src/Q{i}.cpp" for i in range(50)))
+        # Override merge queue entries to have 55 files
+        mq_entry = {"number": 1260, "files": {
+            "totalCount": 55, "nodes": [{"path": f"src/Q{i}.cpp"} for i in range(55)]}}
+        candidate = make_pr(1261, files=tuple(f"src/A{i}.cpp" for i in range(6)), statuses=ok)
+        api = FakeApi([[in_queue, candidate]], merge_queue_entries=[mq_entry])
+        result = run(api)
+        # 55 (from native) + 6 = 61 > MAX_FILES (60): should NOT fit
+        self.assertEqual(result["enqueued"], [])
+
+    def test_ambiguous_narrow_error_blocks_wide_fallback(self):
+        """A transport-error narrow mutation may have committed; wide fallback is blocked
+        unless a fresh merge queue re-query confirms the queue is empty."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        wide_ok = ok | {"BFME II / Header rules": "SUCCESS"}
+        narrow = make_pr(1230, statuses=ok)
+        wide = make_pr(1231, files=("include/A.h",), statuses=wide_ok)
+
+        # Transport error on narrow; re-query shows it was committed
+        requery_entries = [{"number": 1230, "files": {"totalCount": 1, "nodes": [{"path": "src/Foo.cpp"}]}}]
+        api = FakeApi([[narrow, wide]],
+                      fail_enqueue_transport={"PR_node_1230"},
+                      merge_queue_entries_on_requery=requery_entries)
+        result = run(api)
+        self.assertNotIn(1231, result["enqueued"])
+        self.assertEqual(result["enqueued"], [])
+
+        # Transport error on narrow; re-query confirms empty → wide is allowed
+        api = FakeApi([[narrow, wide]],
+                      fail_enqueue_transport={"PR_node_1230"},
+                      merge_queue_entries_on_requery=[])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [1231])
+
+    def test_starvation_drain_stops_narrow_topping(self):
+        """When the queue is non-empty and a wide PR is starving, stop topping up narrow PRs."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        very_old = "2026-11-23T09:00:00Z"
+        in_queue = make_pr(1200, in_queue=True)
+        narrow = make_pr(1201, statuses=ok)
+        wide = make_pr(1202, files=("include/A.h",),
+                       statuses={"BFME II / Boat": ("SUCCESS", "", very_old),
+                                 "BFME II / source rules": ("SUCCESS", "", very_old),
+                                 "BFME II / Header rules": ("SUCCESS", "", very_old)})
+        api = FakeApi([[in_queue, narrow, wide]])
+        result = run(api)
+        self.assertEqual(result["enqueued"], [])
+
+    def test_starvation_wide_definite_rejection_resumes_narrow(self):
+        """When a starving wide PR gets a definite GraphQL error, narrow PRs are tried."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        very_old = "2026-11-23T09:00:00Z"
+        narrow = make_pr(1210, statuses=ok)
+        wide = make_pr(1211, files=("include/A.h",),
+                       statuses={"BFME II / Boat": ("SUCCESS", "", very_old),
+                                 "BFME II / source rules": ("SUCCESS", "", very_old),
+                                 "BFME II / Header rules": ("SUCCESS", "", very_old)})
+        api = FakeApi([[narrow, wide]], fail_enqueue={"PR_node_1211"})
+        result = run(api)
+        self.assertEqual(result["enqueued"], [1210])
+
+    def test_starving_wide_backfill_slot_reserved(self):
+        """When narrow refreshes would fill all backfill slots, one is reserved for a starving wide refresh."""
+        narrow_refreshes = [make_pr(1300 + i, statuses={}) for i in range(enqueue.MAX_BACKFILL)]
+        starving_wide = make_pr(1399, files=("include/A.h",), statuses={
+            "BFME II / Boat": ("ERROR", "", "2026-11-23T09:00:00Z")})
+        api = FakeApi([narrow_refreshes + [starving_wide]])
+        result = run(api)
+        self.assertIn(1399, result["backfilled"])
+        self.assertEqual(len(result["backfilled"]), enqueue.MAX_BACKFILL)
+
+    def test_rest_ratelimit_cannot_trigger_graphql_gate(self):
+        """A low REST X-RateLimit-Remaining cannot block GraphQL enqueue or backfill gates."""
+        ok = {"BFME II / Boat": "SUCCESS", "BFME II / source rules": "SUCCESS"}
+        prs = [make_pr(1050, statuses=ok)]
+        # Generic/REST ratelimit low, but GraphQL ratelimit high
+        api = FakeApi([prs], ratelimit=50)
+        api.graphql_ratelimit_remaining = 4000
+        result = run(api)
+        self.assertEqual(result["enqueued"], [1050])
+
+        # Also verify backfill proceeds with low REST but high GraphQL
+        backfill_prs = [make_pr(1055, statuses={})]
+        api = FakeApi([backfill_prs], ratelimit=50)
+        api.graphql_ratelimit_remaining = 4000
+        dispatch = FakeApi(ratelimit=900)
+        result = run(api, dispatch_api=dispatch)
+        self.assertEqual(result["backfilled"], [1055])
 
 
 class FakeResponse:

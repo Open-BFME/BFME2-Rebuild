@@ -146,6 +146,7 @@ query($owner: String!, $name: String!) {
     mergeQueue(branch: "main") {
       entries(first: 25) {
         totalCount
+        pageInfo { hasNextPage }
         nodes {
           pullRequest {
             number
@@ -419,7 +420,7 @@ def backoff(statuses):
     """Return (seconds, daily): how long a head waits after it was last touched, and whether a new UTC day (the
     daily budgets' reset) ends the wait early. Quota and outage holds only clear on admission's hourly sweep or a new
     day, so refreshing them every COOLDOWN_SECONDS spends the Actions token and changes nothing."""
-    if _held(statuses, HEADER, WIDE_HOLDS) or _held(statuses, ADMISSION, QUOTA_HOLDS):
+    if _held(statuses, HEADER, ("Held: H10 ",)) or _held(statuses, ADMISSION, QUOTA_HOLDS):
         return QUOTA_HOLD_SECONDS, True
     if _held(statuses, ADMISSION, OUTAGE_HOLDS):
         return OUTAGE_HOLD_SECONDS, False
@@ -470,23 +471,42 @@ def list_open_prs(api):
 
 
 def fetch_merge_queue(api):
-    """Return (count, has_wide) from the native merge queue, or (None, None) if unavailable."""
+    """Return (count, queue_files, has_wide) from the native merge queue.
+    Returns (0, 0, False) if the repository has no merge queue configured.
+    Returns (None, None, None) on API error or incomplete/truncated data (fail-closed)."""
     try:
         data = api.graphql(MERGE_QUEUE_QUERY, {"owner": OWNER, "name": NAME})
     except ApiError:
-        return None, None
-    mq = ((data.get("repository") or {}).get("mergeQueue") or {}).get("entries")
+        return None, None, None
+    repo = data.get("repository") or {}
+    mq = repo.get("mergeQueue")
     if mq is None:
-        return None, None
-    count = mq.get("totalCount", 0)
+        return 0, 0, False
+    entries = mq.get("entries")
+    if entries is None:
+        return None, None, None
+    total = entries.get("totalCount", 0)
+    nodes = entries.get("nodes") or []
+    page_info = entries.get("pageInfo") or {}
+    if total > len(nodes) or page_info.get("hasNextPage"):
+        return None, None, None
+    queue_files = 0
     has_wide = False
-    for node in (mq.get("nodes") or []):
-        pr = (node or {}).get("pullRequest") or {}
-        for f in ((pr.get("files") or {}).get("nodes") or []):
-            if isinstance(f, dict) and (f.get("path") or "").startswith("include/"):
-                has_wide = True
-                break
-    return count, has_wide
+    for node in nodes:
+        pr = (node or {}).get("pullRequest")
+        if pr is None:
+            return None, None, None
+        files_obj = pr.get("files") or {}
+        file_nodes = files_obj.get("nodes") or []
+        file_total = files_obj.get("totalCount", len(file_nodes))
+        queue_files += file_total
+        pr_has_include = any(isinstance(f, dict) and (f.get("path") or "").startswith("include/")
+                             for f in file_nodes)
+        if pr_has_include:
+            has_wide = True
+        elif file_total > len(file_nodes):
+            return None, None, None
+    return total, queue_files, has_wide
 
 
 def _oldest_boat_stamp(pr):
@@ -511,6 +531,16 @@ def wave(candidates, queued, *, mq_count=None, mq_has_wide=None, now=None):
     narrow = [pr for pr in candidates if not has_header(pr)]
     wide = [pr for pr in candidates if has_header(pr)]
     if queue_count > 0:
+        if wide and now:
+            wide_by_age = sorted(wide, key=lambda pr: _oldest_boat_stamp(pr) or "9")
+            oldest_stamp = _oldest_boat_stamp(wide_by_age[0])
+            if oldest_stamp:
+                try:
+                    when = datetime.datetime.fromisoformat(oldest_stamp.replace("Z", "+00:00"))
+                    if (now - when).total_seconds() > WIDE_STARVATION_SECONDS:
+                        return [], []
+                except ValueError:
+                    pass
         return narrow, []
     if not wide:
         return narrow, []
@@ -577,6 +607,32 @@ def _backfill_sort_key(item):
     return (tier, stamp)
 
 
+def _reserve_starving_wide_slot(candidates, now):
+    """Promote the oldest starving wide refresh ahead of the last narrow refresh when narrow
+    refreshes would otherwise take all MAX_BACKFILL slots."""
+    starving_idx = None
+    for i, (stamp, pr, kind) in enumerate(candidates):
+        if kind == "refresh" and has_header(pr) and starving_idx is None:
+            if stamp:
+                try:
+                    when = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+                    if (now - when).total_seconds() > WIDE_STARVATION_SECONDS:
+                        starving_idx = i
+                except ValueError:
+                    pass
+    if starving_idx is None or starving_idx < MAX_BACKFILL:
+        return
+    last_narrow_idx = None
+    for i in range(starving_idx):
+        _, pr, kind = candidates[i]
+        if kind == "refresh" and not has_header(pr):
+            last_narrow_idx = i
+    if last_narrow_idx is None:
+        return
+    item = candidates.pop(starving_idx)
+    candidates.insert(last_narrow_idx, item)
+
+
 def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     env = os.environ if env is None else env
     now = now or datetime.datetime.now(datetime.timezone.utc)
@@ -588,9 +644,15 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     main_sha, prs = list_open_prs(api)
 
     queued = [pr for pr in prs if pr.get("isInMergeQueue")]
-    mq_count, mq_has_wide = fetch_merge_queue(api)
-    queue_files = sum(file_count(pr) for pr in queued)
-    queue_header = (mq_has_wide if mq_has_wide is not None else any(has_header(pr) for pr in queued))
+    mq_count, mq_files, mq_has_wide = fetch_merge_queue(api)
+    enqueue_paused = mq_count is None
+    if not enqueue_paused:
+        queue_files = mq_files
+        queue_header = mq_has_wide
+    else:
+        queue_files = sum(file_count(pr) for pr in queued)
+        queue_header = any(has_header(pr) for pr in queued)
+        print("Merge queue occupancy unknown; pausing enqueue for this run.", file=sys.stderr)
 
     enqueue_candidates = []
     backfill_candidates = []
@@ -610,16 +672,19 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             else:
                 held_back += 1
     backfill_candidates.sort(key=_backfill_sort_key)
+    if now:
+        _reserve_starving_wide_slot(backfill_candidates, now)
 
     enqueued = []
     enqueue_errors = []
-    narrow_prs, wide_fallback = wave(enqueue_candidates, queued,
-                                     mq_count=mq_count, mq_has_wide=mq_has_wide, now=now)
+    narrow_prs, wide_fallback = ([], []) if enqueue_paused else wave(
+        enqueue_candidates, queued, mq_count=mq_count, mq_has_wide=mq_has_wide, now=now)
 
+    ambiguous_narrow_error = False
     for pr in narrow_prs:
         if len(enqueued) >= MAX_ENQUEUE:
             break
-        if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+        if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
             break
         count, header = file_count(pr), has_header(pr)
         if queue_files + count > MAX_FILES or queue_header:
@@ -632,13 +697,23 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             print(f"Enqueued PR #{num} ({pr['headRefOid'][:12]})")
         except ApiError as exc:
             enqueue_errors.append((num, str(exc)))
+            if not str(exc).startswith("GraphQL error:"):
+                ambiguous_narrow_error = True
             print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
 
-    if not enqueued and wide_fallback:
+    attempt_wide = True
+    if not enqueued and wide_fallback and ambiguous_narrow_error:
+        fresh_count, _, _ = fetch_merge_queue(api)
+        if fresh_count is None or fresh_count > 0:
+            attempt_wide = False
+            print("Ambiguous narrow mutation error; merge queue may not be empty; "
+                  "skipping wide fallback.", file=sys.stderr)
+
+    if not enqueued and wide_fallback and attempt_wide:
         for pr in wide_fallback:
             if len(enqueued) >= 1:
                 break
-            if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+            if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
                 break
             count = file_count(pr)
             if queue_files + count > MAX_FILES or queue_header:
@@ -654,6 +729,31 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
                 enqueue_errors.append((num, str(exc)))
                 print(f"Skipped enqueue for wide PR #{num}: {exc}", file=sys.stderr)
 
+    starvation_mode = (not narrow_prs and wide_fallback
+                       and any(not has_header(pr) for pr in enqueue_candidates))
+    if starvation_mode and not enqueued:
+        all_definite = all(err.startswith("GraphQL error:") for _, err in enqueue_errors)
+        if all_definite:
+            for pr in enqueue_candidates:
+                if has_header(pr):
+                    continue
+                if len(enqueued) >= MAX_ENQUEUE:
+                    break
+                if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+                    break
+                count = file_count(pr)
+                if queue_files + count > MAX_FILES or queue_header:
+                    continue
+                num = pr["number"]
+                try:
+                    api.graphql(ENQUEUE_MUTATION, {"id": pr["id"], "oid": pr["headRefOid"]})
+                    enqueued.append(num)
+                    queue_files += count
+                    print(f"Enqueued PR #{num} ({pr['headRefOid'][:12]})")
+                except ApiError as exc:
+                    enqueue_errors.append((num, str(exc)))
+                    print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
+
     backfilled = []
     budget = None
     active = None
@@ -661,7 +761,7 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     effective_budget = None
     inflight_breakdown = None
     if (backfill_candidates and main_sha and HEX40.fullmatch(main_sha)
-            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
+            and (api.graphql_ratelimit_remaining is None or api.graphql_ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
         try:
             budget = dispatch_api.core_remaining()
         except ApiError as exc:
@@ -690,7 +790,7 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
                 if CALLS_PER_BACKFILL[kind] > spare:
                     break
                 dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
-                if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
+                if ((api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
                         or (dispatch_rl is not None and dispatch_rl <= ACTIONS_TOKEN_RESERVE)):
                     break
                 is_wide_refresh = (kind == "refresh" and has_header(pr))
@@ -743,6 +843,8 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             f"- **Queue token rate limit (REST):** {ratelimit_text(api, 'rest')}",
             f"- **Actions token rate limit:** {ratelimit_text(dispatch_api, 'rest')}",
         ]
+        if enqueue_paused:
+            lines.append("- **Enqueue paused:** merge queue state uncertain")
         if enqueue_errors:
             lines.append(f"- **Enqueue rejections:** {len(enqueue_errors)}")
         with Path(summary_path).open("a", encoding="utf-8", newline="\n") as stream:
