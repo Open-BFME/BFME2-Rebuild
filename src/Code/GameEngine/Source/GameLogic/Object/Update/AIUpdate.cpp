@@ -805,6 +805,10 @@ int AIUpdateInterface::getCurrentStateID() const
 }
 
 // FUNCTION: BFME2 0x00262FEB size=13 name=?Set_Burst_Size@ParticleEmitterDefClass@@UAEXI@Z evidence=N:ledger tier=B hypothesis:name:invented
+void AIUpdateInterface::ignoreObstacleID(ObjectID id)
+{
+	m_ignoreObstacleID = id;
+}
 
 // FUNCTION: BFME2 0x00262FF8 size=7 name=?get@Rva262FF8PtrChaseField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:name:invented
 
