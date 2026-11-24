@@ -3,6 +3,7 @@
 #include "GameClient/AptMpClans.h"
 #include "GameClient/GameWindow.h"
 #include "GameClient/GadgetListBox.h"
+#include "GameClient/GadgetComboBox.h"
 #include "Common/UnicodeString.h"
 #include "GameClient/GameText.h"
 extern "C" __declspec(dllimport) void *__stdcall ShellExecuteW(void *, const wchar_t *, const wchar_t *, const wchar_t *, const wchar_t *, int);
@@ -28,6 +29,16 @@ void AptMpClans::WebSite(const char *)
 // FUNCTION: BFME2 0x0057F7AC size=372 name=?PopulateMyClans@AptMpClans@@QAEXABVUnicodeString@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0057F920 size=131 name=?Delete@AptMpClans@@QAEXPBD@Z evidence=N:ledger tier=A
+void AptMpClans::Delete(const char *)
+{
+	if (m_clanCombo)
+	{
+		AsciiString clan = GadgetComboBoxGetText(m_clanCombo);
+		m_preferences.deleteClan(m_loginName, clan);
+		m_preferences.write();
+		PopulateMyClans(UnicodeString::TheEmptyString);
+	}
+}
 
 // FUNCTION: BFME2 0x0057F9A3 size=121 name=?InitGadgets@AptMpClans@@QAEXPBDPAXPAVGameWindow@@@Z evidence=N:ledger tier=A
 void AptMpClans::InitGadgets(const char *name, void *argument, GameWindow *window)

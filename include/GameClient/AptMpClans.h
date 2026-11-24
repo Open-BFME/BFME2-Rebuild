@@ -23,6 +23,7 @@ public:
 	void WebSite(const char *name);
 	void OnGameInfoChange();
 	void PopulateMyClans(const UnicodeString &selected);
+	void Delete(const char *name);
 	void InitGadgets(const char *name, void *argument, GameWindow *window);
 	void rva0057FAB0();
 
