@@ -10,6 +10,7 @@
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:invented
 #include "GameLogic/Module/StrafeAreaUpdate.h"
 #include "Common/NameKeyGenerator.h"
+#include "Common/Xfer.h"
 // FUNCTION: BFME2 0x003A4CC7 size=6 name=?name@Rva003A4CC7Named@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *StrafeAreaUpdate::GetSnapshotName() const
 {
@@ -43,4 +44,26 @@ void StrafeAreaUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 
 
 // FUNCTION: BFME2 0x003A4DC0 size=154 name=?xfer@Rva003A4CAE@@MAEXPAVXfer@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
+void StrafeAreaUpdate::xfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 3);
+	*xfer == version;
+	UpdateModule::xfer(xfer);
+	if (!xfer->IsLightCRC())
+	{
+		if (version.m_minimum >= 2)
+		{
+			*xfer == m_target;
+			*xfer == m_start;
+			*xfer == m_sweepOffset;
+			Int strafeMode = m_strafeMode;
+			*xfer == strafeMode;
+			m_strafeMode = strafeMode;
+		}
+		if (version.m_minimum >= 3)
+			*xfer == m_strafing;
+		if (version.m_minimum >= 4)
+			*xfer == m_strafeCounter;
+	}
+}
 

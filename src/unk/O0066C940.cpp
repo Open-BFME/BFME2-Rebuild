@@ -6,3 +6,9 @@
 // Hypothesis rules: hypothesis:name:invented
 // FUNCTION: BFME2 0x0066C940 size=9 name=?SetFlavor@NodeCompressedMotionStruct@@QAEXH@Z evidence=N:ledger tier=B hypothesis:name:invented
 
+#include "WW3D2/hcanim.h"
+
+void NodeCompressedMotionStruct::SetFlavor(int flavor)
+{
+	Flavor = flavor;
+}

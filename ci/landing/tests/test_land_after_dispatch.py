@@ -1,9 +1,10 @@
-"""A compiler check started by repository_dispatch wakes the landing workflow after a passing verdict.
+"""A compiler check started by repository_dispatch wakes the landing and enqueue workflows after it reported.
 
 GitHub starts no workflow_run for a run whose trigger was sent with the Actions token, so landing.yml (which listens
 to workflow_run of the comparison) never heard of those checks. ci/managed-check/github_io.py now writes
-verdict=success to the step output after it posted a passing status for the current main, and managed-pr.yml's
-notify-landing job sends bfme-land-next on that output only.
+verdict=success to the step output after it posted a passing status for the current main. managed-pr.yml's
+notify-landing job sends bfme-land-next after any report, whatever the verdict: a refusal or an outage frees a slot
+for the merge queue backfill (ci/queue/enqueue.py), which never re-requests a head within its cooldown.
 """
 import io
 import json
@@ -102,7 +103,7 @@ class Workflow(unittest.TestCase):
     def test_notify_landing_is_guarded_and_holds_nothing_from_the_pull_request(self):
         block = job("notify-landing")
         for guard in ("needs: [report, fallback-report]",
-                      "needs.report.outputs.passed == 'yes' || needs.fallback-report.outputs.passed == 'yes'",
+                      "needs.report.result != 'skipped' || needs.fallback-report.result != 'skipped'",
                       "github.repository_id == '1464323350'", "github.ref == 'refs/heads/main'",
                       "github.event_name == 'repository_dispatch'", "github.actor_id == '41898282'",
                       '"bfme-land-next"', "client_payload: {}"):

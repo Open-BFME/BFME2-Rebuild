@@ -16,6 +16,21 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K
 // FUNCTION: BFME2 0x0037E18A size=115 name=?revivalEntryCalcCostToBuild@UnitRevivalEntry@@QAEHPBVPlayer@@PAVObject@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers+class
+Int UnitRevivalEntry::revivalEntryCalcCostToBuild(const Player *player, Object *object)
+{
+	Real factor = 1.0f;
+	if (object)
+	{
+		ProductionUpdateInterface *production = object->getProductionUpdateInterface();
+		if (production)
+			factor = production->pslot28(m_unk0xA0);
+	}
+	const ThingTemplate *tmpl = TheThingFactory->findTemplate(m_thingTemplateName);
+	if (tmpl)
+		return (Int)(tmpl->calcCostToBuild(player, 0, m_buildCost) * factor);
+	return 0;
+}
+
 // FUNCTION: BFME2 0x0037E1FD size=115 name=?revivalEntryCalcTimeToBuild@UnitRevivalEntry@@QAEHPBVPlayer@@PAVObject@@@Z evidence=N:ledger tier=A
 Int UnitRevivalEntry::revivalEntryCalcTimeToBuild(const Player *player, Object *object)
 {

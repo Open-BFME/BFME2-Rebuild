@@ -1,0 +1,92 @@
+name: BFME2 Discord progress
+
+# Post the live `progress` branch `card.json` metrics into #bfme2-progress via
+# secrets.DISCORD_PROGRESS_WEBHOOK once a day (and on manual workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '37 13 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Format and print the Discord payload without posting'
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: bfme-discord-progress
+  cancel-in-progress: false
+
+jobs:
+  post:
+    name: Post daily progress card to Discord
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Check out ci/progress from main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.sha }}'
+          sparse-checkout: ci/progress
+          persist-credentials: false
+      - name: Verify ci/progress bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd ci/progress && sha256sum -c --quiet bundle.sha256)
+      - name: Check out progress branch data
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: progress
+          path: progress-data
+          fetch-depth: 1
+          sparse-checkout: |
+            card.json
+            history.json
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Restore last posted progress snapshot
+        continue-on-error: true
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: last-post
+          key: discord-progress-last-v1-${{ github.run_id }}
+          restore-keys: |
+            discord-progress-last-v1-
+      - name: Post progress card to Discord
+        id: post
+        shell: bash
+        env:
+          DISCORD_PROGRESS_WEBHOOK: '${{ secrets.DISCORD_PROGRESS_WEBHOOK }}'
+          DRY_RUN: '${{ inputs.dry_run == true }}'
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = "true" ]; then
+            python3 -B ci/progress/discord.py \
+              --card progress-data/card.json \
+              --previous last-post/discord-last.json \
+              --dry-run
+            echo "posted=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -z "${DISCORD_PROGRESS_WEBHOOK:-}" ]; then
+            echo "::notice::DISCORD_PROGRESS_WEBHOOK is not configured; skipping Discord progress post."
+            echo "posted=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 -B ci/progress/discord.py \
+            --card progress-data/card.json \
+            --previous last-post/discord-last.json \
+            --save-state last-post/discord-last.json
+          echo "posted=true" >> "$GITHUB_OUTPUT"
+      - name: Save last posted progress snapshot
+        if: steps.post.outputs.posted == 'true'
+        continue-on-error: true
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: last-post
+          key: discord-progress-last-v1-${{ github.run_id }}

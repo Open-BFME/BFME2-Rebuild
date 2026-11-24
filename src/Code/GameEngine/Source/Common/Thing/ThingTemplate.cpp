@@ -32,6 +32,18 @@ const char *BuildableStatusNames[] = { "Yes", "Ignore_Prerequisites", "No", "Onl
 // FUNCTION: BFME2 0x0033A444 size=8 name=?get@Rva0033A444WordIntField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0033A44C size=7 name=?get@Rva0033A44CFloatField@@QBEMXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0033A453 size=66 name=?satisfies@UpgradeMaskType@@QBE_NPBU1@0@Z evidence=X:map request (link (from standalone link 0cf3e833)) tier=B hypothesis:mm1-contiguity-shared-data
+Bool UpgradeMaskType::satisfies(const UpgradeMaskType *required, const UpgradeMaskType *forbidden) const
+{
+	for (UnsignedInt i = 0; i < 0x20; ++i)
+	{
+		if ((forbidden->m_bits[i] & m_bits[i]) != 0)
+			return false;
+		if ((required->m_bits[i] & m_bits[i]) != required->m_bits[i])
+			return false;
+	}
+	return true;
+}
+
 // FUNCTION: BFME2 0x0033A495 size=6 name=?Rva0033A495Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x0033A49B size=102 name=?Rva0033A49B_ParseDecal@INI@@SAXPAV1@PAX1PBX@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0033A507 size=6 name=?Rva0033A507Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data

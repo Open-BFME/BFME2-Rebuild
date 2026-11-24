@@ -80,6 +80,13 @@ Keyboard *W3DGameClient::rva0004C6D4()
 // FUNCTION: BFME2 0x0004C709 size=58 name=?createMouse@Rva004C743@@UAEPAVWin32Mouse@@XZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0004C75F size=73 name=?friend_createDrawable@W3DGameClient@@UAEPAVDrawable@@PBVThingTemplate@@W4DrawableStatus@@H@Z evidence=N:ledger tier=B hypothesis:cohesion
+Drawable *W3DGameClient::friend_createDrawable(const ThingTemplate *thing, DrawableStatus statusBits, Int value)
+{
+	if (!thing)
+		return NULL;
+	return new Drawable(thing, statusBits, value);
+}
+
 // FUNCTION: BFME2 0x0004C7A8 size=72 name=?addScorch@W3DGameClient@@UAEXPBVCoord3D@@MW4Scorches@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0004C7F0 size=148 name=?createRayEffectByTemplate@W3DGameClient@@UAEXPBVCoord3D@@0PBVThingTemplate@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion

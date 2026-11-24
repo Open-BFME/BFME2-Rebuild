@@ -2927,6 +2927,24 @@ void AIAttackMeleeEngageState::onExit(StateExitType status)
 }
 
 // FUNCTION: BFME2 0x00349D92 size=131 name=?onExit@AIFollowPathState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
+void AIFollowPathState::onExit(StateExitType status)
+{
+	AIInternalMoveToState::onExit(status);
+	AIUpdateInterface *ai = getMachine()->getOwner()->getAI();
+	if (ai == NULL)
+		return;
+	ai->setCanPathThroughUnits(false);
+	ai->ignoreObstacleID(INVALID_ID);
+	Locomotor *locomotor = ai->m_curLocomotor;
+	if (locomotor != NULL)
+		locomotor->m_flags &= ~8;
+	ai->m_unk0x194 = -1;
+	Object *owner = getMachine()->getOwner();
+	if (!owner->getTemplate()->isKindOf0x115())
+		owner->setStatus((ObjectStatusTypes)0x5A, false);
+	if (owner->getCurrentLocomotor() != NULL)
+		owner->getCurrentLocomotor()->m_unk0x2C = -1.0f;
+}
 
 // FUNCTION: BFME2 0x00349E15 size=95 name=?onExit@AIFollowPathAsTeamState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
 void AIFollowPathAsTeamState::onExit(StateExitType status)
@@ -3968,6 +3986,17 @@ void AIExitState::onExit(StateExitType status)
 // FUNCTION: BFME2 0x003511E3 size=378 name=?onEnter@AIGuardState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0035135D size=108 name=?onExit@AIGuardState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
+void AIGuardState::onExit(StateExitType status)
+{
+	Object *owner = getMachine()->getOwner();
+	AIUpdateInterface *ai = owner->getAI();
+	ai->m_unk0x3CD = false;
+	Object *guarded = TheGameLogic->findObjectByID(ai->vslot119());
+	if (guarded != NULL && ai->vslot123() == 1)
+		owner->rva0028BBF3(guarded);
+	::delete m_guardMachine;
+	m_guardMachine = NULL;
+}
 
 // FUNCTION: BFME2 0x003513C9 size=214 name=?update@AIMoveToPositionAndDieState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 StateReturnType AIMoveToPositionAndDieState::update()

@@ -44,6 +44,8 @@ public:
 	void Set_Font(FontCharsClass *font);
 	void Set_Clipping_Rect(const RectClass &rect);
 	Vector2 Get_Formatted_Text_Extents(const unsigned short *text);
+	void Draw_Sentence(unsigned long color);									// 0x00104D97: all four colours the same
+	void Draw_Sentence(unsigned long color, unsigned long shadowColor, unsigned long hotKeyColor, unsigned long hotKeyShadowColor);	// 0x00155B00
 	void Set_Location(const Vector2 &location);
 
 	// The sentence builder the extents query calls (0x00159700): the Draw_Sentence helper that

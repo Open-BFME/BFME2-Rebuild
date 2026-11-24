@@ -17,6 +17,7 @@
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Object.h"
 #include "GameClient/TerrainRoadType.h"
+#include "GameLogic/AI.h"
 
 // The singleton (retail VA 0x00DFEC50).
 TerrainLogic *TheTerrainLogic = NULL;
@@ -436,6 +437,28 @@ Waypoint *TerrainLogic::getClosestWaypointOnPath(const Coord3D *pos, const Ascii
 }
 
 // FUNCTION: BFME2 0x002813EA size=261 name=?getWaypointByPath@TerrainLogic@@UAEPAVWaypoint@@ABVAsciiString@@@Z evidence=N:ledger tier=A
+Waypoint *TerrainLogic::getWaypointByPath(const AsciiString &label)
+{
+	if (label.isEmpty())
+		return NULL;
+
+	for (Waypoint *way = TheWaypointListHead; way; way = way->m_next)
+	{
+		Bool match = false;
+		if (label.compareNoCase(way->getPathLabel1()) == 0 ||
+			label.compareNoCase(way->getPathLabel2()) == 0 ||
+			label.compareNoCase(way->getPathLabel3()) == 0)
+			match = true;
+		if (match)
+		{
+			// the path's first waypoint is the one nothing links to
+			while (way->m_owner)
+				way = way->m_owner;
+			return way;
+		}
+	}
+	return NULL;
+}
 
 // FUNCTION: BFME2 0x002814EF size=543 name=?rva002814EF@TerrainLogic@@QAE_NPBVCoord3D@@0PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
@@ -499,6 +522,39 @@ void TerrainLogic::updateBridgeDamageStates()
 // FUNCTION: BFME2 0x00281ECA size=181 name=?pickBridge@TerrainLogic@@UAE_NABVVector3@@0PAV2@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00281F7F size=162 name=?deleteBridge@TerrainLogic@@UAEXPAVBridge@@@Z evidence=N:ledger tier=A
+void TerrainLogic::deleteBridge(Bridge *bridge)
+{
+	if (bridge == NULL)
+		return;
+
+	if (m_bridgeListHead == bridge)
+	{
+		m_bridgeListHead = bridge->getNext();
+	}
+	else
+	{
+		for (Bridge *otherBridge = getFirstBridge(); otherBridge; otherBridge = otherBridge->getNext())
+		{
+			// the bridge that points at the deleted one takes over its next pointer
+			if (otherBridge->getNext() == bridge)
+			{
+				otherBridge->setNext(bridge->getNext());
+				break;
+			}
+		}
+	}
+
+	BridgeInfo bridgeInfo;
+	bridgeInfo = *bridge->peekBridgeInfo();
+	TheAI->pathfinder()->SetBridgeStateRepaired(bridge->getLayer(), false);
+
+	GameLogic *logic = TheGameLogic;
+	Object *bridgeObj = logic->findObjectByID(bridgeInfo.bridgeObjectID);
+	if (bridgeObj)
+		logic->destroyObject(bridgeObj);
+
+	::delete bridge;
+}
 
 // FUNCTION: BFME2 0x002820A0 size=61 name=?loadPostProcess@TerrainLogic@@MAEXXZ evidence=N:ledger tier=A
 void TerrainLogic::loadPostProcess()

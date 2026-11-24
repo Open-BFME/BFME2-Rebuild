@@ -71,17 +71,28 @@ class PriorSourceGate(unittest.TestCase):
 
     def test_named_red_does_not_spin_and_never_debits(self):
         api = ProtectedProof()
-        api.statuses[HEAD][4]["state"] = "failure"
+        api.statuses[HEAD][0]["state"] = "failure"
         delays = []
         self.assertIn("source rules refused", handle(api, source_attempts=5, sleep=delays.append))
         self.assertEqual((api.store, dispatches(api), delays), ({},[],[]))
 
+    def test_an_older_runs_per_rule_statuses_cannot_outlive_a_newer_pass(self):
+        # Runs before the aggregate-only publisher also wrote BFME II / G1..G8. A newer run writes only the aggregate,
+        # so an older per-rule refusal on this main must not refuse the newer passing aggregate.
+        api = ProtectedProof()
+        older = f"https://github.com/{admit.REPO}/actions/runs/27"
+        for index, context in enumerate(("BFME II / source rules", *(f"BFME II / G{i}" for i in range(1, 9)))):
+            api.statuses[HEAD].append({"context": context, "state": "failure" if index in (0, 3) else "success",
+                                       "creator": {"id": 41898282}, "target_url": older,
+                                       "description": f"Fix needed in G3 (main {MAIN[:12]})", "id": 50 + index})
+        self.assertIn("admitted by rule", handle(api))
+
     def test_wrong_writer_or_different_run_is_held(self):
         api = ProtectedProof()
-        api.statuses[HEAD][1]["creator"]["id"] = 1234
+        api.statuses[HEAD][0]["creator"]["id"] = 1234
         self.assertIn("nothing reserved", handle(api))
-        api.statuses[HEAD][1]["creator"]["id"] = 41898282
-        api.statuses[HEAD][1]["target_url"] += "1"
+        api.statuses[HEAD][0]["creator"]["id"] = 41898282
+        api.statuses[HEAD][0]["target_url"] += "1"
         self.assertIn("nothing reserved", handle(api))
         self.assertEqual((api.store, dispatches(api)), ({},[]))
 
@@ -444,8 +455,8 @@ class MovedMain(unittest.TestCase):
         self.assertEqual([item["event_type"] for item in dispatches(api)], ["bfme-remeasure"])
 
     def test_a_dead_compiler_run_does_not_cost_the_commit_its_source_proof(self):
-        # Live case, pull 34 on main 9fa818c2b3: the refresh run (rules.yml, success) published the nine statuses and
-        # the receipt; the compiler check then re-published them with its own run, and its Boat job died (failure).
+        # Live case, pull 34 on main 9fa818c2b3: the refresh run (rules.yml, success) published the source status and
+        # the receipt; the compiler check then re-published it with its own run, and its Boat job died (failure).
         api = self.fresh()
         for row in api.statuses[HEAD]:
             row["description"] = f"Pass (main {NEWER[:12]})"        # the refresh run's statuses, older
@@ -473,8 +484,8 @@ class MovedMain(unittest.TestCase):
 
     def test_no_older_run_can_hide_a_newer_refusal_or_lend_another_mains_receipt(self):
         api = self.api()
-        for index, context in enumerate(CONTEXTS):                   # a newer run refused one rule on this main
-            api.statuses[HEAD].append({"context": context, "state": "failure" if index == 3 else "success",
+        for index, context in enumerate(CONTEXTS):                   # a newer run refused this commit on this main
+            api.statuses[HEAD].append({"context": context, "state": "failure",
                                        "creator": {"id": 41898282}, "id": 600 + index,
                                        "target_url": f"https://github.com/{admit.REPO}/actions/runs/31",
                                        "description": f"Pass (main {NEWER[:12]})"})
@@ -487,7 +498,7 @@ class MovedMain(unittest.TestCase):
 
     def test_a_refused_source_verdict_on_the_moved_main_is_final(self):
         api = self.api()
-        api.statuses[HEAD][2]["state"] = "failure"
+        api.statuses[HEAD][0]["state"] = "failure"
         self.assertIn("source rules refused", self.decide(api))
         self.assertEqual((dispatches(api), api.store), ([], {}))
 

@@ -65,13 +65,23 @@ jobs:
           (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
           python3 -B ci/managed-check/github_io.py start
 
+  # With automatic admission, an outside fork's own pull_request_target event can never start the compiler here
+  # (fork_admission.authority: only a bot dispatch carries a reservation), and rules.yml already checks its source
+  # rules and wakes admission, which dispatches bfme-remeasure. Skip that event instead of binding, fetching and
+  # re-reading GitHub for nothing; a boat-ok label event, maintainer and same-repository pull requests, and every
+  # dispatch still run.
   intake:
     if: >-
       github.repository_id == '1464323350' && github.ref == 'refs/heads/main' &&
       github.repository == 'Open-BFME/BFME2-Rebuild' &&
       (github.event.action != 'edited' || github.event.changes.base.ref.from != '') &&
       ((github.event.action != 'labeled' && github.event.action != 'unlabeled') ||
-        github.event.label.name == 'boat-ok')
+        github.event.label.name == 'boat-ok') &&
+      !(vars.BFME_AUTO_ADMISSION == 'yes' && vars.BFME_PR_COMPACT == 'yes' &&
+        github.event_name == 'pull_request_target' &&
+        github.event.action != 'labeled' && github.event.action != 'unlabeled' &&
+        github.event.pull_request.head.repo.id != 1464323350 &&
+        !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association))
     name: Protected source intake
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -592,11 +602,13 @@ jobs:
         id: plan
         env:
           MANAGED_WIDE_SHARDS: "${{ vars.BFME_WIDE_SHARDS || '16' }}"
+          MANAGED_WIDE_TUS_PER_SHARD: "${{ vars.BFME_WIDE_TUS_PER_SHARD || '10' }}"
         run: |
           set -Eeuo pipefail
           trap 'rc=$?; printf "Expected protected workflow step to finish. Found exit %s at shell line %s.\n" "$rc" "$LINENO" >&2' ERR
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C \
             TMPDIR="$RUNNER_TEMP" GITHUB_SHA="$GITHUB_SHA" GITHUB_OUTPUT="$GITHUB_OUTPUT" MANAGED_WIDE_SHARDS="$MANAGED_WIDE_SHARDS" \
+            MANAGED_WIDE_TUS_PER_SHARD="$MANAGED_WIDE_TUS_PER_SHARD" \
             python3 -B ci/managed-check/wide.py plan "$RUNNER_TEMP/bfme-plan" "$RUNNER_TEMP/bfme-matrix"
       - name: Save the protected paired plan
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -2281,14 +2293,15 @@ jobs:
             gh api --method POST "repos/$repo/dispatches" --input -
           printf 'Requested a fresh comparison of the admitted head on main %s.\n' "${base:0:12}" >> "$GITHUB_STEP_SUMMARY"
 
-  # GitHub starts no workflow_run event for a run whose trigger was sent with the Actions token, so the landing
-  # workflow never hears that a dispatch-started check finished. After this run published a passing verdict for the
-  # current main, ask it to look now (it decides what lands). No checkout, no pull request content, no payload.
+  # GitHub starts no workflow_run event for a run whose trigger was sent with the Actions token, so the landing and
+  # enqueue workflows never hear that a dispatch-started check finished. After this run reported, whatever the
+  # verdict, ask them to look now: a pass can land and a refusal or outage frees a backfill slot. It cannot loop, as
+  # enqueue never re-requests a head within its cooldown. No checkout, no pull request content, no payload.
   notify-landing:
     needs: [report, fallback-report]
     if: >-
       always() && !cancelled() &&
-      (needs.report.outputs.passed == 'yes' || needs.fallback-report.outputs.passed == 'yes') &&
+      (needs.report.result != 'skipped' || needs.fallback-report.result != 'skipped') &&
       github.repository_id == '1464323350' && github.ref == 'refs/heads/main' &&
       github.event_name == 'repository_dispatch' && github.actor_id == '41898282'
     name: Ask the landing workflow to look now

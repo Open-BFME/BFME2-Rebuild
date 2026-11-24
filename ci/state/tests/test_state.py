@@ -331,6 +331,32 @@ class ResolveTests(unittest.TestCase):
         self.assertEqual(resolve.from_main(FakeRuns(cancelled_then_ok), main, 60)["run_id"], "1")
 
 
+class ResolveStalenessTests(unittest.TestCase):
+    def test_recent_no_artifact_stays_wait(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 60)
+        self.assertEqual(found["action"], "publish")
+        no_artifact = resolve.require_artifact(FakeRuns([], []), found, age_seconds=60)
+        self.assertEqual(no_artifact["action"], "wait")
+        self.assertIn("without artifact", no_artifact["why"])
+
+    def test_old_no_artifact_raises_stale(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 60)
+        self.assertEqual(found["action"], "publish")
+        stale = resolve.require_artifact(FakeRuns([], []), found, age_seconds=4 * 3600)
+        self.assertEqual(stale["action"], "stale")
+        self.assertIn("no published measurement", stale["why"])
+
+    def test_old_with_artifact_publishes(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 4 * 3600)
+        self.assertEqual(found["action"], "publish")
+        with_artifact = FakeRuns([], [{"name": "bfme-numeric-main-state-1", "expired": False}])
+        result = resolve.require_artifact(with_artifact, found, age_seconds=4 * 3600)
+        self.assertEqual(result["action"], "publish")
+
+
 class Interface(unittest.TestCase):
     def test_measuring_workflow_name_and_artifact(self):
         """The publisher follows the measuring workflow by name and reads its artifact by name."""
@@ -463,6 +489,25 @@ class TuMoveMigrationTests(unittest.TestCase):
                 with mock.patch.object(state_delta, "TU_MOVE_MIGRATIONS", (bad,)):
                     self.assertIsNone(state_delta.source_changes(repo, parent, moved_sha))
 
+
+
+    def test_require_artifact_checks_published_state_age_even_when_main_is_fresh(self):
+        class StubApi:
+            def __init__(self, state_date):
+                self.state_date = state_date
+            def get(self, path):
+                if path.startswith("actions/runs/"):
+                    return {"artifacts": []}
+                if path == "commits/state":
+                    return {"commit": {"committer": {"date": self.state_date}}}
+                raise KeyError(path)
+        result = {"action": "publish", "run_id": "99", "attempt": "1", "sha": "a" * 40}
+        import datetime as _dt
+        now_ts = int(_dt.datetime(2027, 1, 15, 8, 0, 0, tzinfo=_dt.timezone.utc).timestamp())
+        out_stale = resolve.require_artifact(StubApi("2027-01-15T00:00:00Z"), result, age_seconds=60, now=now_ts)
+        self.assertEqual(out_stale["action"], "stale")
+        out_fresh = resolve.require_artifact(StubApi("2027-01-15T07:30:00Z"), result, age_seconds=60, now=now_ts)
+        self.assertEqual(out_fresh["action"], "wait")
 
 if __name__ == "__main__":
     unittest.main()

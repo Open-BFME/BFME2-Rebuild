@@ -1,0 +1,62 @@
+name: BFME II merge queue enqueue
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [bfme-land-next]
+  workflow_run:
+    workflows:
+      - BFME II Boat comparison
+      - BFME II header rules
+    types: [completed]
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  enqueue:
+    if: >-
+      github.repository_id == '1464323350' &&
+      github.ref == 'refs/heads/main' &&
+      vars.BFME_MERGE_QUEUE_ENABLED == 'yes' &&
+      (github.event_name != 'workflow_run' ||
+       github.event.workflow_run.conclusion == 'success' ||
+       (github.event.workflow_run.name == 'BFME II Boat comparison' &&
+        github.event.workflow_run.conclusion == 'failure'))
+    name: Enqueue ready pull requests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    concurrency:
+      group: bfme-enqueue
+      cancel-in-progress: false
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Check out trusted queue tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          sparse-checkout: |
+            ci/queue
+            ci/landing
+      - name: Verify queue tool bundle
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          (cd ci/queue && sha256sum -c --quiet bundle.sha256)
+          (cd ci/landing && sha256sum -c --quiet bundle.sha256)
+      - name: Enqueue ready PRs and backfill unmeasured PRs
+        shell: bash
+        env:
+          BFME_QUEUE_TOKEN: '${{ secrets.BFME_QUEUE_TOKEN || github.token }}'
+          BFME_DISPATCH_TOKEN: '${{ github.token }}'
+        run: |
+          set -Eeuo pipefail
+          python3 -B ci/queue/enqueue.py

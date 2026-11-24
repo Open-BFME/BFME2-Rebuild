@@ -745,6 +745,12 @@ LivingWorldPlayer *LivingWorldLogic::findPlayer(const AsciiString &name, unsigne
 // FUNCTION: BFME2 0x002B7B71 size=74 name=?rva002B7B71@Rva002B7B71@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B7BBB size=64 name=?processArmyDestroyList@LivingWorldLogic@@QAEXXZ evidence=N:ledger tier=A
+void LivingWorldLogic::processArmyDestroyList()
+{
+	for (unsigned int i = 0; i < m_armyDestroyList.size(); ++i)
+		destroyArmy(m_armyDestroyList[i]);
+	m_armyDestroyList.clear();
+}
 
 // FUNCTION: BFME2 0x002B7BFB size=121 name=?rva002B7BFB@Rva002B7BFB@@QAEXXZ evidence=?:placeholder tier=A
 

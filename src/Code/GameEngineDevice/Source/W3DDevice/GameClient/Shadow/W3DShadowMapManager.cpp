@@ -14,8 +14,16 @@
 // FUNCTION: BFME2 0x0007B734 size=47 name=?Rva0007B734Find@@YAPAURva0007B734Item@@PAU1@0P6A_NPBU1@1@Z@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0007B763 size=19 name=?Rva0007B763SelectFloatAddress@@YAPBMPBM0@Z evidence=?:placeholder tier=B hypothesis:K
+const float *Rva0007B763SelectFloatAddress(const float *a, const float *b)
+{
+	return *a < *b ? b : a;
+}
 
 // FUNCTION: BFME2 0x0007B776 size=19 name=?Rva0007B776SelectFloatAddress@@YAPBMPBM0@Z evidence=?:placeholder tier=B hypothesis:K
+const float *Rva0007B776SelectFloatAddress(const float *a, const float *b)
+{
+	return *b < *a ? b : a;
+}
 
 // FUNCTION: BFME2 0x0007B7DB size=68 name=?Set@PlaneClass@@QAEXABVVector3@@0@Z evidence=N:ledger tier=B hypothesis:K
 

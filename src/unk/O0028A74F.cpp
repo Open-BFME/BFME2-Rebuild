@@ -15,6 +15,16 @@ Bool Team::isInList_TeamMemberList(Object *object) const
 }
 
 // FUNCTION: BFME2 0x0028A75F size=32 name=?prependTo_TeamMemberList@Team@@QAEXPAVObject@@@Z evidence=N:ledger tier=B hypothesis:Z
+void Team::prependTo_TeamMemberList(Object *object)
+{
+	if (!object->dlink_isInList_TeamMemberList(&m_dlinkhead_TeamMemberList))
+		object->dlink_prependTo_TeamMemberList(&m_dlinkhead_TeamMemberList);
+}
 
 // FUNCTION: BFME2 0x0028A77F size=32 name=?removeFrom_TeamMemberList@Team@@QAEXPAVObject@@@Z evidence=N:ledger tier=B hypothesis:Z
+void Team::removeFrom_TeamMemberList(Object *object)
+{
+	if (object->dlink_isInList_TeamMemberList(&m_dlinkhead_TeamMemberList))
+		object->dlink_removeFrom_TeamMemberList(&m_dlinkhead_TeamMemberList);
+}
 

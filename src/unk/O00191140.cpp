@@ -36,6 +36,10 @@ SegLineRendererClass::~SegLineRendererClass()
 }
 
 // FUNCTION: BFME2 0x001911E0 size=48 name=?Set_Texture@SegLineRendererClass@@QAEXPAVTextureClass@@@Z evidence=N:ledger tier=B hypothesis:Z
+void SegLineRendererClass::Set_Texture(TextureClass *texture)
+{
+	Texture.Assign(*texture);
+}
 
 // FUNCTION: BFME2 0x00191210 size=29 name=?Get_Texture@BFMELineRendererTexture@@QBE?AVTextureHandleClass@ParticleBufferClass@@XZ evidence=N:ledger tier=B hypothesis:Z
 TextureAsset SegLineRendererClass::Get_Texture() const

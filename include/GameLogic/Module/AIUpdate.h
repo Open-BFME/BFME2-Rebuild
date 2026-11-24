@@ -309,6 +309,7 @@ public:
 	const Coord3D *getCurrentVictimPos() const;	// 0x00264E93 (Zero Hour's name; the map's placeholder is ?rva00264E93@Rva00264E93@@QAEPAXXZ): the goal position while attacking with no victim object
 	void rva0026DE3B(Int attitude);	// 0x0026DE3B stores m_attitude; at -3 drops the current victim (and idles if there was one)
 	void ignoreObstacle(const Object *);	// 0x00268d88 N:ledger
+	void ignoreObstacleID(ObjectID id);	// stores the id at +0x164 (out of line; defined with the other AIUpdateInterface rows)
 	void setCanPathThroughUnits(Bool canPath) { m_canPathThroughUnits = canPath; }
 	Bool isWaitingForPath() const { return m_waitingForPath; }
 	Bool hasDesiredAngle() const;	// 0x0033F8D4: m_unk0x1A0 != FLT_MAX (AIFaceDirectionState::onEnter 0x00342572; map ?rva0033F8D4@AIUpdateInterface@@QBE_NXZ, ?:placeholder)

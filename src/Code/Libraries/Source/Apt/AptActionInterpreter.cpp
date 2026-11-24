@@ -3484,20 +3484,84 @@ void AptActionInterpreter::_FunctionAptActionWith(AptActionInterpreter *const in
 // FUNCTION: BFME2 0x00708C40 size=877 name=?_FunctionAptActionGetUrl2@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x00708FB0 size=109 name=?_FunctionAptActionCallFuncAndPop@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionCallFuncAndPop(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    _FunctionAptActionCallFunction(interp, context);
+    interp->stack.Pop();
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x00709020 size=63 name=?_FunctionAptActionCallFuncSetVar@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionCallFuncSetVar(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    _FunctionAptActionCallFunction(interp, context);
+    _FunctionAptActionSetVariable(interp, context);
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x00709060 size=109 name=?_FunctionAptActionCallMethodPop@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionCallMethodPop(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    _FunctionAptActionCallMethod(interp, context);
+    interp->stack.Pop();
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x007090D0 size=63 name=?_FunctionAptActionCallMethodSetVar@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionCallMethodSetVar(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    _FunctionAptActionCallMethod(interp, context);
+    _FunctionAptActionSetVariable(interp, context);
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x00709110 size=138 name=?_FunctionAptActionDictCallFuncPop@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionDictCallFuncPop(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    unsigned char index = *context->pInstruction++;
+    interp->stack.Push(interp->constantPool.apItems[index]);
+    _FunctionAptActionCallFunction(interp, context);
+    interp->stack.Pop();
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x007091A0 size=87 name=?_FunctionAptActionDictCallFuncSetVar@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionDictCallFuncSetVar(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    unsigned char index = *context->pInstruction++;
+    interp->stack.Push(interp->constantPool.apItems[index]);
+    _FunctionAptActionCallFunction(interp, context);
+    _FunctionAptActionSetVariable(interp, context);
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x00709200 size=138 name=?_FunctionAptActionDictCallMethodPop@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionDictCallMethodPop(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    unsigned char index = *context->pInstruction++;
+    interp->stack.Push(interp->constantPool.apItems[index]);
+    _FunctionAptActionCallMethod(interp, context);
+    interp->stack.Pop();
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x00709290 size=87 name=?_FunctionAptActionDictCallMethodSetVar@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionDictCallMethodSetVar(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    unsigned char index = *context->pInstruction++;
+    interp->stack.Push(interp->constantPool.apItems[index]);
+    _FunctionAptActionCallMethod(interp, context);
+    _FunctionAptActionSetVariable(interp, context);
+    if (g_releaseVectorAtE17710->GetNumValues() && interp->stack.GetSize() == 0)
+        g_releaseVectorAtE17710->ReleaseValues();
+}
 
 // FUNCTION: BFME2 0x007092F0 size=491 name=?rva007092F0@AptActionInterpreter@@AAEXPAVAptCIH@@PAVAptValue@@11H1@Z evidence=?:placeholder
 

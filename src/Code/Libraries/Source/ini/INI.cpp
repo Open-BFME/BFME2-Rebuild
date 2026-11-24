@@ -740,7 +740,7 @@ void INI::initFromINIMultiProc(void *what, void (__cdecl *proc)(MultiIniFieldPar
 const char *INI::getNextTokenOrNull(const char *seps)
 {
 	if (seps == 0)
-		seps = m_seps;
+		seps = getSeps();
 	if (!m_unknownString86C.isEmpty()) {
 		AsciiString token;
 		if (m_unknownString86C.nextToken(&token, seps)) {
@@ -1304,7 +1304,7 @@ void INI::parseAsciiStringVector(INI *ini, void *, void *store, const void *)
 // FUNCTION: BFME2 0x0002F1BA size=34 name=?parsePercentToReal@INI@@SAXPAV1@PAX1PBX@Z evidence=N:ledger tier=A
 void INI::parsePercentToReal(INI *ini, void * /*instance*/, void *store, const void * /*userData*/)
 {
-	*(float *)store = ini->dup_002EE10(ini->getNextToken(ini->m_sepsPercent));
+	*(float *)store = ini->dup_002EE10(ini->getNextToken(ini->getSepsPercent()));
 }
 
 // FUNCTION: BFME2 0x0002F1DC size=62 name=?parseBitString8@INI@@SAXPAV1@PAX1PBX@Z evidence=N:ledger tier=A

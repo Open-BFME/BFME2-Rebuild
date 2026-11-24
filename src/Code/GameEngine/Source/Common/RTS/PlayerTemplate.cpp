@@ -178,6 +178,16 @@ Bool PlayerTemplateStore::rva001FD4E1(NameKeyType key, Int *outIndex)
 }
 
 // FUNCTION: BFME2 0x001FD57A size=56 name=?attemptReload@PlayerTemplateStore@@UAE_NH@Z evidence=N:ledger tier=A
+Bool PlayerTemplateStore::attemptReload(Bool *needsRestart)
+{
+	if (loadIniFilesFromLegend())
+	{
+		TheInGameUI->multiplayerMessage(UnicodeString(L"RIF: PlayerTemplate reloaded"));
+		g_playerTemplatesReloaded = true;
+	}
+	return g_playerTemplatesReloaded;
+}
+
 // FUNCTION: BFME2 0x001FD5B2 size=97 name=?attemptRefresh@PlayerTemplateStore@@UAE_NXZ evidence=N:ledger tier=A
 Bool PlayerTemplateStore::attemptRefresh()
 {

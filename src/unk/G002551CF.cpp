@@ -10,6 +10,10 @@
 // object=G002551CF name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x002551CF size=56 name=?friend_newModuleInstance@HordeNotifyTargetsOfImminentProbableCrushingUpdate@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Module *HordeNotifyTargetsOfImminentProbableCrushingUpdate::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new HordeNotifyTargetsOfImminentProbableCrushingUpdate(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00255207 size=56 name=?friend_newModuleInstance@NotifyTargetsOfImminentProbableCrushingUpdate@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 Module *NotifyTargetsOfImminentProbableCrushingUpdate::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
 {

@@ -8,6 +8,10 @@
 #include "WW3D2/Render2DSentenceClass.h"
 // FUNCTION: BFME2 0x00104D73 size=7 name=?apply@Rva00104D73DwordImmSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers+shared-data
 // FUNCTION: BFME2 0x00104D97 size=16 name=?Draw_Sentence@Render2DSentenceClass@@QAEXK@Z evidence=N:ledger tier=B hypothesis:Z
+void Render2DSentenceClass::Draw_Sentence(unsigned long color)
+{
+	Draw_Sentence(color, color, color, color);
+}
 
 // FUNCTION: BFME2 0x00104DE6 size=29 name=?setFont@Rva00104DB0@@UAEXPBURva00104DE6Font@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 

@@ -5,9 +5,11 @@ on:
     branches: [main]
     types: [opened, reopened, synchronize, ready_for_review, edited]
   repository_dispatch:
-    # bfme-source-refresh: admission asks for the source rules of a fork commit on a main that moved since its
-    # last event (ci/admission/admit.py); source rules only, then admission decides again.
-    types: [bfme-remeasure, bfme-source-refresh, bfme-source-recheck]
+    # bfme-source-refresh: admission or the merge queue backfill (ci/queue/enqueue.py) asks for the source rules of
+    # a commit on a main that moved since its last event; source rules only, then admission decides again.
+    # bfme-source-recheck: source rules only, then the landing and enqueue workflows look again.
+    # bfme-remeasure is not listed: with BFME_PR_COMPACT=yes managed-pr.yml publishes those source rules itself.
+    types: [bfme-source-refresh, bfme-source-recheck]
   merge_group:
     types: [checks_requested]
     branches: [main]
@@ -23,9 +25,6 @@ concurrency:
         github.event.client_payload.number, github.event.client_payload.head,
         github.event.client_payload.base)) || github.event.pull_request.number }}
   cancel-in-progress: true
-
-env:
-  SOURCE_TOOLS_SHA: ${{ github.event_name != 'merge_group' && github.sha || github.event.merge_group.base_sha }}
 
 jobs:
   source-rules:
@@ -50,17 +49,15 @@ jobs:
     timeout-minutes: 15
     outputs:
       decision: ${{ steps.evaluate.outputs.status }}
+      tools_sha: ${{ steps.tools.outputs.sha }}
     steps:
       - name: Verify the protected tools revision
+        id: tools
         env:
           QUEUE_READ_TOKEN: ${{ github.event_name == 'merge_group' && github.token || '' }}
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! "$SOURCE_TOOLS_SHA" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "Expected an exact protected commit. Found a missing or invalid revision." >&2
-            exit 1
-          fi
           if [[ "$GITHUB_EVENT_NAME" == merge_group ]]; then
             if [[ "${GITHUB_REPOSITORY,,}" != open-bfme/bfme2-rebuild ||
                   "$GITHUB_SERVER_URL" != https://github.com ||
@@ -68,20 +65,26 @@ jobs:
               echo "Expected the GitHub source repository. Found a different repository or service." >&2
               exit 1
             fi
-            if ! main=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
+            if ! tools_sha=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
                   --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/heads/main" \
-                  <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha') ||
-                [[ "$SOURCE_TOOLS_SHA" != "$main" ]]; then
-              echo "Expected the queued change's base to be current protected main. Found a moved or unavailable main." >&2
+                  <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha'); then
+              echo "Expected current protected main. Found an unavailable main." >&2
               exit 1
             fi
+          else
+            tools_sha="$GITHUB_SHA"
           fi
+          if [[ ! "$tools_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Expected an exact protected commit. Found a missing or invalid revision." >&2
+            exit 1
+          fi
+          echo "sha=$tools_sha" >> "$GITHUB_OUTPUT"
 
       - name: Load the source checks from protected main
         id: trusted
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ env.SOURCE_TOOLS_SHA }}
+          ref: ${{ steps.tools.outputs.sha }}
           persist-credentials: false
           fetch-depth: 1
           sparse-checkout: tools/gates
@@ -92,19 +95,22 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          SOURCE_TOOLS_SHA: ${{ steps.tools.outputs.sha }}
         run: python3 -I -S -B source-rule-tools/tools/gates/workflow.py authorize
 
       - name: Fetch public Git objects without credentials
         if: steps.authorize.outputs.transport == 'public'
         id: fetch-public
         shell: bash
+        env:
+          SOURCE_TOOLS_SHA: ${{ steps.tools.outputs.sha }}
         run: |
           env -i PATH=/usr/bin:/bin HOME="$HOME" RUNNER_TEMP="$RUNNER_TEMP" \
             GITHUB_REPOSITORY="$GITHUB_REPOSITORY" GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" \
             GITHUB_REF="$GITHUB_REF" GITHUB_SHA="$GITHUB_SHA" GITHUB_EVENT_NAME="$GITHUB_EVENT_NAME" \
             GITHUB_EVENT_PATH="$GITHUB_EVENT_PATH" GITHUB_API_URL="$GITHUB_API_URL" \
             GITHUB_SERVER_URL="$GITHUB_SERVER_URL" GITHUB_OUTPUT="$GITHUB_OUTPUT" \
-            SOURCE_TRANSPORT=public \
+            SOURCE_TOOLS_SHA="$SOURCE_TOOLS_SHA" SOURCE_TRANSPORT=public \
             python3 -I -S -B source-rule-tools/tools/gates/workflow.py fetch
 
       - name: Receive same-repository changes in the private repository
@@ -113,6 +119,7 @@ jobs:
         shell: bash
         env:
           SOURCE_TRANSPORT: private
+          SOURCE_TOOLS_SHA: ${{ steps.tools.outputs.sha }}
           GH_TOKEN: ${{ github.token }}
         run: python3 -I -S -B source-rule-tools/tools/gates/workflow.py fetch
 
@@ -123,6 +130,7 @@ jobs:
         env:
           SOURCE_OBJECTS: ${{ steps.fetch-public.outputs.scratch || steps.fetch-private.outputs.scratch }}
           FETCH_REASON: ${{ steps.authorize.outputs.reason || steps.fetch-public.outputs.reason || steps.fetch-private.outputs.reason }}
+          SOURCE_TOOLS_SHA: ${{ steps.tools.outputs.sha }}
         run: |
           env -i PATH=/usr/bin:/bin HOME="$HOME" \
             GITHUB_REPOSITORY="$GITHUB_REPOSITORY" GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" \
@@ -130,7 +138,7 @@ jobs:
             GITHUB_EVENT_PATH="$GITHUB_EVENT_PATH" GITHUB_API_URL="$GITHUB_API_URL" \
             GITHUB_SERVER_URL="$GITHUB_SERVER_URL" GITHUB_OUTPUT="$GITHUB_OUTPUT" \
             GITHUB_STEP_SUMMARY="$GITHUB_STEP_SUMMARY" SOURCE_OBJECTS="$SOURCE_OBJECTS" \
-            FETCH_REASON="$FETCH_REASON" \
+            FETCH_REASON="$FETCH_REASON" SOURCE_TOOLS_SHA="$SOURCE_TOOLS_SHA" \
             python3 -I -S -B source-rule-tools/tools/gates/workflow.py evaluate
 
       - name: Report unavailable protected tools
@@ -151,15 +159,13 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Verify the protected tools revision
+        id: tools
         env:
           QUEUE_READ_TOKEN: ${{ github.event_name == 'merge_group' && github.token || '' }}
+          EVALUATED_TOOLS_SHA: ${{ needs.source-rules.outputs.tools_sha }}
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! "$SOURCE_TOOLS_SHA" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "Expected an exact protected commit. Found a missing or invalid revision." >&2
-            exit 1
-          fi
           if [[ "$GITHUB_EVENT_NAME" == merge_group ]]; then
             if [[ "${GITHUB_REPOSITORY,,}" != open-bfme/bfme2-rebuild ||
                   "$GITHUB_SERVER_URL" != https://github.com ||
@@ -167,20 +173,41 @@ jobs:
               echo "Expected the GitHub source repository. Found a different repository or service." >&2
               exit 1
             fi
-            if ! main=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
+            if ! tools_sha=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
                   --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/heads/main" \
-                  <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha') ||
-                [[ "$SOURCE_TOOLS_SHA" != "$main" ]]; then
-              echo "Expected the queued change's base to be current protected main. Found a moved or unavailable main." >&2
+                  <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.object.sha'); then
+              echo "Expected current protected main. Found an unavailable main." >&2
+              exit 1
+            fi
+            if [[ ! "$tools_sha" =~ ^[0-9a-f]{40}$ ]] || [[ ! "$EVALUATED_TOOLS_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Expected protected main to match the evaluated revision. Found a moved or invalid main." >&2
+              exit 1
+            fi
+            if [[ "$tools_sha" != "$EVALUATED_TOOLS_SHA" ]]; then
+              if [[ ! "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]] ||
+                  ! compare_status=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
+                    --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/compare/$tools_sha...$GITHUB_SHA" \
+                    <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.status') ||
+                  [[ "$compare_status" != ahead && "$compare_status" != identical ]]; then
+                echo "Expected protected main to match the evaluated revision. Found a moved or invalid main." >&2
+                exit 1
+              fi
+              tools_sha="$EVALUATED_TOOLS_SHA"
+            fi
+          else
+            tools_sha="$GITHUB_SHA"
+            if [[ ! "$tools_sha" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Expected an exact protected commit. Found a missing or invalid revision." >&2
               exit 1
             fi
           fi
+          echo "sha=$tools_sha" >> "$GITHUB_OUTPUT"
 
       - name: Load the source checks from protected main
         id: trusted
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ env.SOURCE_TOOLS_SHA }}
+          ref: ${{ steps.tools.outputs.sha }}
           persist-credentials: false
           fetch-depth: 1
           sparse-checkout: tools/gates
@@ -192,16 +219,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RULE_STATUS: ${{ needs.source-rules.outputs.decision }}
+          SOURCE_TOOLS_SHA: ${{ steps.tools.outputs.sha }}
         run: python3 -I -S -B source-rule-tools/tools/gates/workflow.py publish
 
       - name: Retain the exact checked source-rules decision
-        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch' || github.event_name == 'merge_group')
+        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch')
         shell: bash
         env:
           SOURCE_RULE_RECEIPT: '${{ steps.publish.outputs.receipt }}'
         run: python3 -I -S -B source-rule-tools/tools/gates/landing_receipt.py "$RUNNER_TEMP/bfme-source-receipt"
       - name: Upload the exact source-rules decision
-        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch' || github.event_name == 'merge_group')
+        if: steps.publish.outcome == 'success' && (github.event_name == 'pull_request_target' || github.event_name == 'repository_dispatch')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: bfme-source-receipt-${{ github.run_attempt }}
@@ -248,6 +276,17 @@ jobs:
             exit 1
           fi
           jq -n --argjson number "$NUMBER" '{event_type: "bfme-admit-request", client_payload: {number: $number}}' |
+            gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" --input - >/dev/null
+      # A refresh that admission then holds starts no compiler check, so nothing else would tell the enqueue
+      # workflow that this backfill slot is free. It skips this head for its cooldown, so this cannot loop.
+      - name: Ask the enqueue workflow to look now
+        if: github.event_name == 'repository_dispatch'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jq -n '{event_type: "bfme-land-next", client_payload: {}}' |
             gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" --input - >/dev/null
 
   # After a landing-triggered hosted source recheck (bfme-source-recheck), wake landing immediately instead of

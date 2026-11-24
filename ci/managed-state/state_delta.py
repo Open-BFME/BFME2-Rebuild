@@ -11,7 +11,7 @@ from state_evidence import LIMIT, cached_pairs, header
 # across the reviewed producer-v2 to resume transport revision.
 REPORT_DIRS = ("docs/", "worklist/", "ci/state/", "ci/progress/", "ci/alarms/",
                "ci/nightly/", "ci/landing/", "ci/admission/", "ci/header/", "ci/public-text/", "ci/maint/",
-               "ci/managed-check/tests/", ".github/workflows/")
+               "ci/managed-check/tests/", "ci/queue/", "ci/control-plane/", ".github/workflows/")
 STATE_FLOW = ".github/workflows/state.yml"
 TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py",
              "ci/managed-state/state_workflow.py",
@@ -21,7 +21,8 @@ TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py
              "ci/README.md"}
 RESUME_MIGRATION = ("5df8abc2a97aef390b5a0256a15e163ae4a312566c0ea893187da4a254aea8fc", "14286c7910816519777d5a46c720605d142dff009f5751843d4e4c5263e2111f")
 HYDRATION_MIGRATION = ("c5495ba4c03861220f77ddc48cd6533617fde93b869d51a0accf479fcc760bcb", "ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61")
-STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION}
+OVERCAP_EXIT_MIGRATION = ("ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61", "ad0a65303832e04fc813d9a49d875b645f47e6d70b3422ba50d141914487e62d")
+STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION}
 # The one-shot PR orchestration change leaves every comparison input intact.
 COMPACT_GRAPH = {
     "ci/managed-check/landing_read.py": (
@@ -410,6 +411,19 @@ GRAPH_CHANGES += (CUT17_LOCALFILE_EH_GRAPH,) + tuple(
             for path in previous.keys() & CUT17_LOCALFILE_EH_GRAPH.keys())
 )
 GRAPH_PATHS |= set(CUT17_LOCALFILE_EH_GRAPH)
+
+TRUSTED_WIDE_ADMISSION_GRAPH = {
+    'ci/managed-check/fork_admission.py': ('25badb095dabc6c8a717145f3ea1e14342fbb5982fb10982608e9df7b8e01e34', 'f96323dad8d71a945b74b4eb33dec0ca860e3388d7af8a9d75ae78a53389e36e'),
+    'ci/managed-check/bundle.sha256': ('2ffd86ae19b71543207377ce0592a7b10c27c674546bdea71b26c26344af711e', 'c5d8fb205e785853cf3bfe36147852b17e750b20764fb5d5e2164f4b57aee4d0'),
+}
+GRAPH_CHANGES += (TRUSTED_WIDE_ADMISSION_GRAPH,) + tuple(
+    advance_graph(previous, TRUSTED_WIDE_ADMISSION_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == TRUSTED_WIDE_ADMISSION_GRAPH[BUNDLE][0]
+    and all(previous[path][1] == TRUSTED_WIDE_ADMISSION_GRAPH[path][0]
+            for path in previous.keys() & TRUSTED_WIDE_ADMISSION_GRAPH.keys())
+)
+GRAPH_PATHS |= set(TRUSTED_WIDE_ADMISSION_GRAPH)
 
 
 

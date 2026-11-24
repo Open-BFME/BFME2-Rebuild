@@ -7,7 +7,18 @@
 // Hypothesis rules: hypothesis:K
 #include "GameClient/Shell.h"
 #include "GameClient/WindowLayout.h"
+
+// Retail globals (data ledger): ?mapSelectIsShuttingDown@@3_NA and ?mapSelectStartGame@@3_NA, in that order in .bss.
+bool mapSelectIsShuttingDown;
+bool mapSelectStartGame;
+void doGameStart();
+
 // FUNCTION: BFME2 0x0050CE92 size=25 name=?shutdownCompleteMapSelectMenu@@YAXPAVWindowLayout@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers+shared-data
+void shutdownCompleteMapSelectMenu(WindowLayout *layout)
+{
+	mapSelectIsShuttingDown = false;
+	TheShell->shutdownComplete(layout);
+}
 // FUNCTION: BFME2 0x0050CEAB size=51 name=?MapSelectMenuShutdown@@YAXPAVWindowLayout@@PAX@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x0050CEDE size=94 name=?setupGameStartMapSelectMenu@@YAXVAsciiString@@@Z evidence=N:ledger tier=B hypothesis:K
 
@@ -17,11 +28,6 @@
 
 // FUNCTION: BFME2 0x0050D136 size=64 name=?MapSelectMenuUpdate@@YAXPAVWindowLayout@@PAX@Z evidence=N:ledger tier=B hypothesis:K
 
-// Retail globals (data ledger): ?mapSelectStartGame@@3_NA and ?mapSelectIsShuttingDown@@3_NA.
-bool mapSelectStartGame;
-bool mapSelectIsShuttingDown;
-void doGameStart();
-void shutdownCompleteMapSelectMenu(WindowLayout *layout);
 
 // Per-frame pump: a queued game start or shutdown runs once the shell's animation is done.
 void MapSelectMenuUpdate(WindowLayout *layout, void *userData)

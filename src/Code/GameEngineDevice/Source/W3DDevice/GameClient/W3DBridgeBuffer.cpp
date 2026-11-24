@@ -42,8 +42,36 @@ void W3DBridgeBuffer::clearAllBridges(void)
 }
 
 // FUNCTION: BFME2 0x000DD97F size=239 name=??0W3DBridge@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+W3DBridge::W3DBridge(void) :
+	m_scale(1.0f),
+	m_scaleUnk1C(1.0f),
+	m_bridgeType(FIXED_BRIDGE),
+	m_leftMesh(NULL),
+	m_minY(0.0f),
+	m_maxY(0.0f),
+	m_leftMinX(0.0f),
+	m_leftMaxX(0.0f),
+	m_sectionMesh(NULL),
+	m_sectionMinX(0.0f),
+	m_sectionMaxX(0.0f),
+	m_rightMesh(NULL),
+	m_rightMinX(0.0f),
+	m_rightMaxX(0.0f),
+	m_firstIndex(0),
+	m_numVertex(0),
+	m_firstVertex(0),
+	m_numPolygons(0),
+	m_visible(false),
+	m_curDamageState(BODY_PRISTINE),
+	m_enabled(false)
+{
+}
 
 // FUNCTION: BFME2 0x000DDA6E size=73 name=??1W3DBridge@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+W3DBridge::~W3DBridge(void)
+{
+	clearBridge();
+}
 
 // FUNCTION: BFME2 0x000DDAB7 size=96 name=?renderBridge@W3DBridge@@QAEXPAVRenderingMethod@FXShader@@@Z evidence=N:ledger tier=B hypothesis:K
 

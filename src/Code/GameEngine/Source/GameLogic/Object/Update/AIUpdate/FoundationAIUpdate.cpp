@@ -73,14 +73,17 @@ FoundationAIUpdate::FoundationAIUpdate(Thing *thing, const ModuleData *moduleDat
 // FUNCTION: BFME2 0x00455241 size=57 name=?isRemovableForConstruction@FoundationAIUpdate@@QAE_NPAVObject@@@Z evidence=N:ledger tier=A
 Bool FoundationAIUpdate::isRemovableForConstruction(Object *obj)
 {
-	if (!obj)
+	if (obj == NULL)
 		return false;
+
 	const ThingTemplate *tmpl = obj->getTemplate();
 	if (tmpl->isKindOf(KINDOF_INERT))
 		return false;
-	if (tmpl->isKindOf(KINDOF_SHRUBBERY) || tmpl->isKindOf(KINDOF_CLEARED_BY_BUILD))
+	if (tmpl->isKindOf(KINDOF_SHRUBBERY))
 		return true;
-	return obj->m_privateStatus & 1;
+	if (tmpl->isKindOf(KINDOF_CLEARED_BY_BUILD))
+		return true;
+	return obj->isEffectivelyDead();
 }
 
 // FUNCTION: BFME2 0x0045527A size=250 name=?rva0045527A@FoundationAIUpdate@@AAEXW4ObjectID@@@Z evidence=?:placeholder tier=A

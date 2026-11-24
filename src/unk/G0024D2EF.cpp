@@ -8,6 +8,7 @@
 #include "GameLogic/Module/LargeGroupBonusUpdateModuleData.h"
 #include "GameLogic/Module/LargeGroupBonusUpdate.h"
 #include "GameLogic/Module/GiantBirdAIUpdateModuleData.h"
+#include "GameLogic/Module/GiantBirdAIUpdate.h"
 #include "GameLogic/Module/LaserUpdateModuleData.h"
 #include "GameLogic/Module/LaserUpdate.h"
 #include "GameLogic/Module/HeightDieUpdateModuleData.h"
@@ -19,6 +20,10 @@
 // buildFieldParse declaration, or did not compile with its current header (the usual cause is a pure virtual that
 // the header does not override yet); its row stays unwritten.
 // FUNCTION: BFME2 0x0024D2EF size=59 name=?friend_newModuleInstance@GiantBirdAIUpdate@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Module *GiantBirdAIUpdate::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new GiantBirdAIUpdate(thing, moduleData);
+}
 // FUNCTION: BFME2 0x0024D32A size=84 name=?friend_newModuleData@GiantBirdAIUpdateModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 ModuleData *GiantBirdAIUpdateModuleData::friend_newModuleData(INI *ini)
 {

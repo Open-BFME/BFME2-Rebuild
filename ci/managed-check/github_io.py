@@ -33,8 +33,10 @@ def _allow_disjoint_publish(decision, record):
 
 def bind(work):
     api = GitHub()
-    binding = event(api)
-    pr = api.current(binding)
+    # The head must be exact. Main may have moved only on paths disjoint from a narrow change (current_or_disjoint);
+    # the check still measures the bound main, and the final report repeats this check before it publishes.
+    binding = _event_for_publish(api, allow_moved_main=True)
+    pr = _check_current(api, binding, allow_disjoint=True)
     binding.update(authority(pr, binding, os.environ))
     work.mkdir(mode=0o700)
     base = Git(Path.cwd() / ".git")
@@ -73,7 +75,12 @@ def receive_refs(git, remote, binding):
         reason = next((reason for fragment, reason in reasons if fragment in code),
                       "the Git transfer did not complete")
         raise GitFailure(f"Protected Git intake failed ({result.returncode}): {reason}.")
-    if git.rev("refs/ci/head") != binding["head"] or git.rev("refs/ci/actual-main") != binding["base"]:
+    if git.rev("refs/ci/head") != binding["head"]:
+        raise Superseded()
+    # Main may only have moved ahead of the bound main since bind checked it; the report re-checks disjointness.
+    actual_main = git.rev("refs/ci/actual-main")
+    if (actual_main != binding["base"]
+            and git.run("merge-base", "--is-ancestor", binding["base"], actual_main, check=False).returncode):
         raise Superseded()
 
 
@@ -100,13 +107,13 @@ def publish(phase, admission=None, result=None):
     from quality_format import quality_report
     api = GitHub()
     if phase == "start":
-        binding = event(api)
-        pr = api.current(binding)
+        binding = _event_for_publish(api, allow_moved_main=True)
+        pr = _check_current(api, binding, allow_disjoint=True)
         if enabled(os.environ) and authority(pr, binding, os.environ).get("automatic_pending"):
             return
+        # Only the Boat status starts pending: the landing workflow reads it as "measuring" and does not dispatch the
+        # same head twice. Inline virtual is report-only, and its report step writes the final status.
         api.status(binding, "pending", "Waiting for protected intake and Boat comparison")
-        from inline_status import CONTEXT as INLINE_CONTEXT
-        api.status(binding, "pending", "Waiting for admitted inline-virtual evidence", context=INLINE_CONTEXT)
         return
     binding = _event_for_publish(api, allow_moved_main=True)
     decision_path = admission / "decision.json"

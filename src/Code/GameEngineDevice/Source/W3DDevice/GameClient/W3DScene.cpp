@@ -11,6 +11,7 @@
 #include "GameLogic/Object.h"
 #include "WW3D2/RenderObjClass.h"
 #include "GameClient/W3DScene.h"
+#include "WWMath/wwmath.h"
 
 // Three reference bodies in this address range also serve network, object
 // and subsystem calls. They remain here pending evidence of the compiler
@@ -95,6 +96,13 @@ void SubsystemInterface::setName(AsciiString name)
 }
 
 // FUNCTION: BFME2 0x0006F400 size=112 name=?Re_Center@SphereClass@@QAEXABVVector3@@@Z evidence=N:ledger tier=A
+// Moves the centre and grows the radius by the distance moved, so the old sphere stays enclosed.
+void SphereClass::Re_Center(const Vector3 &center)
+{
+	float dist = (Center - center).Length();
+	Center = center;
+	Radius += dist;
+}
 
 // FUNCTION: BFME2 0x0006F470 size=806 name=??0RTS3DScene@@QAE@XZ evidence=N:ledger tier=A
 

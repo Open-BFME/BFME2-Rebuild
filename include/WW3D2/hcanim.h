@@ -30,6 +30,7 @@ struct NodeCompressedMotionStruct
 
 	NodeCompressedMotionStruct();			// 0x0018F680
 	~NodeCompressedMotionStruct();
+	void SetFlavor(int flavor);			// 0x0066C940
 	int Get_Channel_Memory_Usage();
 
 	int Flavor;					// +0x00

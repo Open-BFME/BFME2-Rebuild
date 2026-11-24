@@ -25,11 +25,11 @@ EXPECTED_SNAPSHOT_JOBS = {
         "wide-join",
         "wide-fallback",
     },
+    ".github/workflows/merge-queue-boat.yml": {"boat"},
     ".github/workflows/nightly-trial.yml": {"compile", "result"},
     ".github/workflows/nightly.yml": {"compile"},
     ".github/workflows/nt2-managed-match.yml": {"compare"},
     ".github/workflows/state-parity.yml": {"measure"},
-    ".github/workflows/state-seed-refresh.yml": {"refresh"},
     ".github/workflows/state.yml": {"measure", "recover"},
 }
 

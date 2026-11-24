@@ -16,54 +16,13 @@ jobs:
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.conclusion == 'success' &&
       startsWith(github.event.workflow_run.display_title, 'Seed protected main state ')
-    runs-on: boat-small/from=bfme2-compiler-v1
+    # Only reads GitHub and may request one state refresh: no compiler, so a hosted runner.
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read
       actions: write
     steps:
-      - name: Wait for runner filesystem hydration
-        shell: bash
-        run: |
-          set -euo pipefail
-          deadline=$((SECONDS + 90))
-          runner_grace=$((SECONDS + 15))
-          waited=0
-          while true; do
-            pending=$(awk '
-              {
-                for (i = 7; i <= NF - 2; i++) {
-                  if ($i == "-") {
-                    if ($(i + 1) ~ /^fuse(\.|$)/ && ($(i + 1) ~ /^fuse\.ascii-lazyfs(-|$)/ || $(i + 2) ~ /^ascii-lazyfs(-|$)/) && $5 !~ /^\/var\/lib\/ascii-lazy\/retired(\/|$)/) {
-                      print $5
-                    }
-                    break
-                  }
-                }
-              }
-            ' /proc/self/mountinfo)
-            if [ -z "$pending" ]; then
-              if [ "$waited" -eq 1 ]; then
-                printf 'Runner filesystem hydration finished after %ss.\n' "$SECONDS"
-              fi
-              exit 0
-            fi
-            home_dir="${HOME%/}"
-            if [ -n "$home_dir" ] && [ "$pending" = "$home_dir" ] \
-              && [ "${pending#/opt/boat-compiler}" = "$pending" ] \
-              && [ "${pending#/var/}" = "$pending" ] \
-              && [ "${pending#/usr}" = "$pending" ] \
-              && [ "$SECONDS" -ge "$runner_grace" ]; then
-              printf 'Proceeding after %ss with persistent lazy mount %s (all other mounts retired).\n' "$SECONDS" "$home_dir"
-              exit 0
-            fi
-            waited=1
-            if [ "$SECONDS" -ge "$deadline" ]; then
-              printf 'Expected lazy runner mounts to retire within 90s; still mounted:\n%s\n' "$pending" >&2
-              exit 1
-            fi
-            sleep 0.5
-          done
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: '${{ github.sha }}'

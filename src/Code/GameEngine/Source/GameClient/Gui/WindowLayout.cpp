@@ -10,8 +10,30 @@
 // Hypothesis rules: hypothesis:Z, hypothesis:name:Z
 #include "GameClient/WindowLayout.h"
 #include "GameClient/GameWindow.h"
+#include "GameClient/GameWindowManager.h"
 // FUNCTION: BFME2 0x00538AB0 size=44 name=?rva00538AB0@BfmeQuickMatchScreenBase@@UAEX_N@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-pointers-mixed
+void WindowLayout::hide(bool hide)
+{
+	GameWindow *window;
+
+	for (window = m_windowList; window; window = window->winGetNextInLayout())
+		window->winHide(hide);
+
+	m_hidden = hide;
+}
 // FUNCTION: BFME2 0x00538ADC size=43 name=?rva00538ADC@AptWindowLayout@@UAEXXZ evidence=S:strong (vtable+caller-this) tier=B hypothesis:mm1-neighbour-pointers-mixed
+void WindowLayout::destroyWindows()
+{
+	if (this == NULL)
+		return;
+
+	GameWindow *window;
+	while ((window = getFirstWindow()) != 0)
+	{
+		removeWindow(window);
+		TheWindowManager->winDestroy(window);
+	}
+}
 // FUNCTION: BFME2 0x00538B07 size=40 name=?bringForward@WindowLayout@@UAEXXZ evidence=N:ledger tier=B hypothesis:name:Z
 void WindowLayout::bringForward( void )
 {
@@ -30,6 +52,16 @@ void WindowLayout::bringForward( void )
 }
 
 // FUNCTION: BFME2 0x00538B2F size=25 name=?rva00538B2F@Rva00538B2F@@QAEPAURva0052A28EDwordField@@PAU2@@Z evidence=?:placeholder tier=B hypothesis:Z
+GameWindow *WindowLayout::findWindow(GameWindow *window)
+{
+	GameWindow *win;
+
+	for (win = m_windowList; win; win = win->winGetNextInLayout())
+		if (win == window)
+			return win;
+
+	return NULL;
+}
 
 // FUNCTION: BFME2 0x00538B48 size=77 name=?addWindow@WindowLayout@@UAEXPAVGameWindow@@@Z evidence=N:ledger tier=B hypothesis:Z
 void WindowLayout::addWindow(GameWindow *window)

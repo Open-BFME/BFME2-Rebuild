@@ -2,8 +2,8 @@
 // Target facts: Center (Vector3) +0, Radius +0xC: Init 0x00069146 copies the
 // centre's three words and stores the radius at +0xC; Null3DObjClass's
 // Get_Obj_Space_Bounding_Sphere 0x00180FE0 zeroes +0..+8 and sets +0xC.
-// Inline as in WWMath: Init, Re_Center 0x0006F400, Transform 0x0019AF20 and
-// Add_Sphere 0x0019BE00 exist in retail only as uncalled copies. Only the
+// Inline as in WWMath: Init, Transform 0x0019AF20 and Add_Sphere 0x0019BE00
+// exist in retail only as uncalled copies; Re_Center 0x0006F400 is out of line in W3DScene.cpp. Only the
 // members with a verified plain body are declared.
 #pragma once
 #ifndef BFME2_SPHERECLASS_H
@@ -21,6 +21,7 @@ public:
 	void Init(const Vector3 &pos, float radius) { Center = pos; Radius = radius; }
 	void Add_Sphere(const SphereClass &s);							// 0x0019BE00 (inline; retail's callers expand it)
 	void Transform(const Matrix3D &tm);							// 0x0019AF20
+	void Re_Center(const Vector3 &center);						// 0x0006F400
 
 	Vector3 Center;		// 0x0
 	float Radius;		// 0xC

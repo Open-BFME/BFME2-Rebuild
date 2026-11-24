@@ -20,6 +20,13 @@
 FontLibrary *TheFontLibrary = NULL;
 
 // FUNCTION: BFME2 0x002173E3 size=23 name=?linkFont@FontLibrary@@IAEXPAVGameFont@@@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-neighbour-callers
+void FontLibrary::linkFont(GameFont *font)
+{
+    if(!font) return;
+    font->next=m_fontList;
+    ++m_count;
+    m_fontList=font;
+}
 // FUNCTION: BFME2 0x002173FA size=79 name=?unlinkFont@FontLibrary@@IAEXPAVGameFont@@@Z evidence=N:ledger
 void FontLibrary::unlinkFont(GameFont *font)
 {

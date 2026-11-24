@@ -138,7 +138,7 @@ def read_statuses(api, head):
     latest, _ = read_statuses_all(api, head)
     return latest
 
-def classify(status, main):
+def classify(status, main, wall_clock=None):
     """fresh-* = measured on this main; stale-* = measured on another main."""
     if not status:
         return "missing"
@@ -147,6 +147,9 @@ def classify(status, main):
     if (status.get("creator") or {}).get("id") != lr.BOT_ID:
         return "untrusted"
     if state == "pending":
+        age = _status_age_seconds(status, wall_clock)
+        if (not bound and age >= MEASURE_WAIT_SECONDS) or age >= 2 * MEASURE_WAIT_SECONDS:
+            return "stale-pending"
         return "pending"
     if state not in {"success", "failure", "error"}:
         return "missing"
@@ -287,7 +290,7 @@ def resolve_disjoint_ancestor(api, prefix12, main, pr_files, compare_cache=None,
 
 def blob_sha_in_tree(api, tree_sha, rel_path, tree_cache=None):
     """Walk git/trees/{sha} path segments to find the exact blob SHA of rel_path in tree_sha."""
-    if not HEX40.fullmatch(tree_sha) or not rel_path or rel_path.startswith("/") or ".." in rel_path.split("/"):
+    if not isinstance(tree_sha, str) or not HEX40.fullmatch(tree_sha) or not rel_path or rel_path.startswith("/") or ".." in rel_path.split("/"):
         return None
     parts = rel_path.split("/")
     cur = tree_sha
@@ -295,7 +298,10 @@ def blob_sha_in_tree(api, tree_sha, rel_path, tree_cache=None):
         if tree_cache is not None and cur in tree_cache:
             entries = tree_cache[cur]
         else:
-            doc = api.call(f"git/trees/{cur}")
+            try:
+                doc = api.call(f"git/trees/{cur}")
+            except ApiError:
+                return None
             if not isinstance(doc, dict) or doc.get("truncated") is True or not isinstance(doc.get("tree"), list):
                 return None
             entries = {item.get("path"): item for item in doc["tree"] if isinstance(item, dict)}
@@ -493,7 +499,7 @@ def fetch_open_pulls_batch(api):
         return None
 
 
-def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, cache_lock=None):
+def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, cache_lock=None, wall_clock=None):
     """Return a decision dict: stage land | remeasure | hold, with every named reason found."""
     pr = prefetched["pr"] if prefetched is not None else api.call(f"pulls/{number}")
     head = (pr.get("head") or {}).get("sha", "")
@@ -538,6 +544,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     else:
         statuses, bot_statuses = read_statuses_all(api, head)
     adm_status = bot_statuses.get(ADMISSION_CONTEXT) or {}
+    decision["admission_status"] = adm_status
     if not head_repo:
         hold("head-repository-missing", "the pull request's source repository",
              "a deleted repository; open a new pull request from an existing fork", True)
@@ -571,7 +578,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     header_change = any(name.startswith("include/") for name in files)
     decision["header_change"] = header_change
     decision["boat_status"] = bot_statuses.get(BOAT)
-    boat_kind = classify(decision["boat_status"], main)
+    boat_kind = classify(decision["boat_status"], main, wall_clock)
     pf_reviews = prefetched.get("reviews") if prefetched is not None else None
     can_check_reviews_rest = not reasons and boat_kind in {"fresh-success", "stale-success"}
     if header_change and config.get("auto_headers"):
@@ -630,7 +637,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     # GitHub does not recompute "mergeable" when main moves. A compiler check that passed on this exact main composed
     # this head onto it (unique ancestor, three-way merge), so an older "false" does not hold it; the merge itself is
     # still GitHub's and refuses a real conflict.
-    if pr.get("mergeable") is False and classify(bot_statuses.get(BOAT), main) != "fresh-success":
+    if pr.get("mergeable") is False and boat_kind != "fresh-success":
         hold("merge-conflict", "a pull request that merges cleanly into main",
              "a conflict; merge or rebase main into the branch", True)
     decision["landing_status"] = bot_statuses.get(LANDING_CONTEXT)
@@ -642,7 +649,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
     stale = False
     required = REQUIRED + ((INLINE,) if INLINE_VIRTUAL_POLICY == "required" else ())
     for context in (BOAT, RULES, INLINE):
-        kind = classify(bot_statuses.get(context), main)
+        kind = classify(bot_statuses.get(context), main, wall_clock)
         decision["checks"][context] = kind
         if context == INLINE and context not in required:
             if kind == "fresh-failure":
@@ -652,7 +659,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
             continue
         if kind == "fresh-success":
             continue
-        if kind == "stale-success":
+        if kind in {"stale-success", "stale-pending"}:
             stale = True
         elif kind == "fresh-error":
             hold("infrastructure-error", f"{context} to complete on main {main[:12]}",
@@ -710,7 +717,7 @@ def evaluate(api, number, main, config, *, prefetched=None, compare_cache=None, 
                                      and marker(ancestor) in (inline_st.get("description") or ""))
                         decision["inline"] = "success" if inline_ok else "pending"
                         return decision
-                    if decision["checks"].get(RULES) in {"stale-success", "missing"}:
+                    if decision["checks"].get(RULES) in {"stale-success", "stale-pending", "missing"}:
                         # Refresh only hosted source rules on current main (0 Boat VMs) to prove G7.
                         reasons.clear()
                         decision["source_recheck_only"] = True
@@ -1002,9 +1009,7 @@ def active_header_measuring(decisions, main, wall_clock=None):
                         and (boat_st.get("creator") or {}).get("id") == lr.BOT_ID
                         and marker(main) in (boat_st.get("description") or "")
                         and _status_age_seconds(boat_st, wall_clock) < HEADER_PRIORITY_WAIT_SECONDS)
-        landing_active = (measuring_state(item, main, wall_clock) == "active"
-                          and _status_age_seconds(item.get("landing_status"), wall_clock) < HEADER_PRIORITY_WAIT_SECONDS)
-        if boat_pending or landing_active:
+        if boat_pending:
             active.append(item)
     return active
 
@@ -1165,6 +1170,7 @@ def select(api, env, config, directory, clock=time.monotonic, sleep=time.sleep):
             item for item in decisions
             if item.get("header_change") and item["stage"] == "remeasure" and not timed_out(item, main)
             and measuring_state(item, main) is None
+            and not ((item.get("admission_status") or {}).get("description") or "").startswith("Held:")
             and (config.get("auto_admission") or item.get("trusted"))
         ]
         current_active = sum(
@@ -1366,14 +1372,27 @@ def land_bound(api, env, config, directory, prior, sleep):
                 or rules.get("state") != "pass" or rules.get("policy_sha256") != rules_policy):
             raise Held("receipt", "source rules passed on current main", "mismatched or stale source rules receipt")
         tree = rules["tree"]
-        # Cryptographically prove every PR TU has the exact same blob SHA in target_tree as in measured_tree.
-        m_cache, t_cache = {}, {}
+        # base and target_main are real commits on main (measured_tree and rules["tree"] are unpushed local
+        # merge trees). Matching base blobs plus disjoint intervening commits plus identical head in both
+        # receipts proves the PR files merged identically, and post-merge verify() confirms rules["tree"] on main.
+        try:
+            base_doc = api.call(f"git/commits/{base}")
+            target_doc = api.call(f"git/commits/{target_main}")
+        except ApiError:
+            raise Held("receipt", "readable commit trees for ancestor and current main",
+                       f"missing commit metadata for {base[:12]} or {target_main[:12]}") from None
+        base_tree = ((base_doc or {}).get("tree") or {}).get("sha", "") if isinstance(base_doc, dict) else ""
+        target_tree = ((target_doc or {}).get("tree") or {}).get("sha", "") if isinstance(target_doc, dict) else ""
+        if not HEX40.fullmatch(base_tree) or not HEX40.fullmatch(target_tree):
+            raise Held("receipt", "valid commit trees for ancestor and current main",
+                       f"ancestor {str(base_tree)[:12]} vs current {str(target_tree)[:12]}")
+        b_cache, t_cache = {}, {}
         for fname in decision["pr_files"]:
-            m_blob = blob_sha_in_tree(api, measured_tree, fname, tree_cache=m_cache)
-            t_blob = blob_sha_in_tree(api, tree, fname, tree_cache=t_cache)
-            if not m_blob or m_blob != t_blob:
-                raise Held("receipt", f"identical blob for {fname} on ancestor and current main",
-                           f"ancestor {str(m_blob)[:12]} vs current {str(t_blob)[:12]}")
+            b_blob = blob_sha_in_tree(api, base_tree, fname, tree_cache=b_cache)
+            t_blob = blob_sha_in_tree(api, target_tree, fname, tree_cache=t_cache)
+            if not b_blob or b_blob != t_blob:
+                raise Held("receipt", f"identical base blob for {fname} on ancestor and current main",
+                           f"ancestor {str(b_blob)[:12]} vs current {str(t_blob)[:12]}")
     else:
         try:
             positions = lr.compare_receipts(match, inline, rules, binding, runs["match"][1], runs["match"][0],

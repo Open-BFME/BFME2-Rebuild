@@ -725,6 +725,8 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
         measured_tree = TREE
         new_tree = "d" * 40
         new_commit = "e" * 40
+        base_tree = "6" * 40
+        target_tree = "7" * 40
         blob_sha = "b" * 40
         src_tree_m, code_tree_m = "1" * 40, "2" * 40
         src_tree_t, code_tree_t = "3" * 40, "4" * 40
@@ -743,6 +745,18 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                 "merge_base_commit": {"sha": ancestor_main},
                 "files": intervening_files,
             }
+            fx[f"git/commits/{ancestor_main}"] = {
+                "sha": ancestor_main,
+                "parents": [],
+                "tree": {"sha": base_tree},
+                "message": "Ancestor main\n",
+            }
+            fx[f"git/commits/{new_main}"] = {
+                "sha": new_main,
+                "parents": [{"sha": ancestor_main}],
+                "tree": {"sha": target_tree},
+                "message": "Current main\n",
+            }
             fx[f"git/commits/{new_commit}"] = {
                 "sha": new_commit,
                 "parents": [{"sha": new_main}],
@@ -754,10 +768,11 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                             f"{lander.TRAILER}, run 99."),
             }
             leaf = pr_file.split("/")[-1]
-            fx[f"git/trees/{measured_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_m}]}
+            # Only real main commit trees exist on GitHub; synthetic unpushed measured_tree / new_tree must not be fetched.
+            fx[f"git/trees/{base_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_m}]}
             fx[f"git/trees/{src_tree_m}"] = {"truncated": False, "tree": [{"path": "Code", "type": "tree", "sha": code_tree_m}]}
             fx[f"git/trees/{code_tree_m}"] = {"truncated": False, "tree": [{"path": leaf, "type": "blob", "sha": blob_sha}]}
-            fx[f"git/trees/{new_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_t}]}
+            fx[f"git/trees/{target_tree}"] = {"truncated": False, "tree": [{"path": "src", "type": "tree", "sha": src_tree_t}]}
             fx[f"git/trees/{src_tree_t}"] = {"truncated": False, "tree": [{"path": "Code", "type": "tree", "sha": code_tree_t}]}
             fx[f"git/trees/{code_tree_t}"] = {"truncated": False, "tree": [{"path": leaf, "type": "blob", "sha": blob_sha}]}
             statuses = fx[f"commits/{head}/statuses?per_page=100&page=1"]
@@ -830,6 +845,30 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
                 idx_dispatch = write_ops.index(("dispatches", lander.LANDED_EVENT))
                 idx_status = write_ops.index((f"statuses/{ncommit}", "success"))
                 self.assertLess(idx_dispatch, idx_status)
+
+    def test_blob_sha_in_tree_handles_404_gracefully_and_holds_receipt(self):
+        api, new_main, anc, head, mtree, ntree, ncommit, _ = self._setup_ancestor_fixture(rules_on_current=True)
+        # Direct unit check: missing/unpushed tree SHA returns HTTP 404 -> None (never raises ApiError).
+        self.assertIsNone(lander.blob_sha_in_tree(api, mtree, "src/Code/A.cpp"))
+        self.assertIsNone(lander.blob_sha_in_tree(api, ntree, "src/Code/A.cpp"))
+
+        # End-to-end land check: if a commit tree returns 404, land holds with "receipt" (not unhandled ApiError).
+        del api.fx["git/trees/" + "7" * 40]
+        cfg = CONFIG | {"exceptions": set(), "auto_admission": True}
+        with tempfile.TemporaryDirectory() as tmp:
+            w = tmp + "/w"
+            code, _ = quiet(lander.run, ["select", w], env(main=new_main, mode="live", pr="2"), api=api, config=cfg)
+            self.assertEqual(code, 0)
+            put_receipts(w)
+            rp = Path(w, "rules/receipt.json")
+            rdoc = json.loads(rp.read_text())
+            rdoc.update({"base": new_main, "tools_commit": new_main, "tree": ntree, "run": "999002", "attempt": "1"})
+            rp.write_text(json.dumps(rdoc))
+            with self.assertRaises(lander.Held) as caught:
+                quiet(lander.run, ["land", w], env(main=new_main, mode="live", pr="2", run="99"),
+                      api=api, config=cfg, sleep=lambda _: None)
+        self.assertEqual(caught.exception.code, "receipt")
+        self.assertEqual([w for w in api.writes if w[0] == "PUT"], [])
 
     def test_disjoint_ancestor_refuses_overlapping_or_non_tu_or_spoofed_inline_failure(self):
         cfg = CONFIG | {"exceptions": set()}
@@ -1293,6 +1332,163 @@ class DisjointAncestorAndGraphQLTests(unittest.TestCase):
         dec_pend = check_zero_reviews(edit_pending_boat, auto_headers=True)
         self.assertEqual(dec_pend["reasons"][0].code, "measuring")
         self.assertEqual(rest_review_calls, [])
+
+
+class ThroughputStormAndDeadlockTests(unittest.TestCase):
+    def test_api_records_ratelimit_headers_on_success_and_403(self):
+        import urllib.error
+        from unittest.mock import MagicMock
+        from api import Api
+
+        api = Api("Open-BFME/BFME2-Rebuild", "ghp_" + "a" * 30, live=False)
+        resp = MagicMock()
+        resp.status = 200
+        resp.read.return_value = b'{"ok": true}'
+        resp.headers = {"X-RateLimit-Remaining": "4200", "X-RateLimit-Reset": "1795400000"}
+        resp.__enter__.return_value = resp
+        resp.__exit__.return_value = False
+        opener = MagicMock()
+        opener.open.return_value = resp
+        api._opener = lambda: opener
+
+        code, payload = api._send("GET", "pulls/2", None)
+        self.assertEqual((code, payload), (200, {"ok": True}))
+        self.assertEqual((api.ratelimit_remaining, api.ratelimit_reset), (4200, 1795400000))
+
+        err = urllib.error.HTTPError(
+            "https://api.github.com/repos/Open-BFME/BFME2-Rebuild/pulls/2",
+            403,
+            "Forbidden",
+            {"X-RateLimit-Remaining": "0", "X-RateLimit-Reset": "1795403600"},
+            io.BytesIO(b'{"message": "API rate limit exceeded"}'),
+        )
+        opener.open.side_effect = err
+        err_buf = io.StringIO()
+        from contextlib import redirect_stderr
+        with redirect_stderr(err_buf):
+            code2, _ = api._send("GET", "pulls/2", None)
+        self.assertEqual(code2, 403)
+        self.assertEqual((api.ratelimit_remaining, api.ratelimit_reset), (0, 1795403600))
+        self.assertIn("X-RateLimit-Remaining=0", err_buf.getvalue())
+        self.assertIn("X-RateLimit-Reset=1795403600", err_buf.getvalue())
+
+    def test_active_header_measuring_ignores_landing_only_measuring_status(self):
+        now = lander.datetime.datetime(2026, 11, 23, 12, 0, tzinfo=lander.datetime.timezone.utc)
+        recent_ts = "2026-11-23T11:55:00Z"
+        header_only_landing = {
+            "number": 317,
+            "header_change": True,
+            "reasons": [],
+            "boat_status": {
+                "state": "success",
+                "description": "BFME II comparison passed (main 000000000000)",
+                "created_at": recent_ts,
+                "creator": {"id": lander.lr.BOT_ID},
+            },
+            "landing_status": {
+                "state": "pending",
+                "description": f"Measuring on main {MEASURED[:12]} before landing",
+                "created_at": recent_ts,
+                "creator": {"id": lander.lr.BOT_ID},
+            },
+        }
+        self.assertEqual(lander.active_header_measuring([header_only_landing], MEASURED, wall_clock=lambda: now), [])
+
+        # Live Boat pending WITH marker(main) and age < 12 min DOES count as active.
+        header_live_boat = copy.deepcopy(header_only_landing)
+        header_live_boat["boat_status"] = {
+            "state": "pending",
+            "description": f"Measuring (main {MEASURED[:12]})",
+            "created_at": recent_ts,
+            "creator": {"id": lander.lr.BOT_ID},
+        }
+        self.assertEqual(
+            [d["number"] for d in lander.active_header_measuring([header_live_boat], MEASURED, wall_clock=lambda: now)],
+            [317],
+        )
+
+    def test_held_admission_stale_header_does_not_pause_ready_narrow_pr(self):
+        cfg = CONFIG | {"exceptions": set(), "auto_headers": True, "auto_admission": True}
+
+        def edit_held_header(fx):
+            pr2 = copy.deepcopy(fx["pulls/2"])
+            pr2["head"]["ref"] = "contrib/narrow"
+            fx["pulls/2"] = pr2
+            fx["pulls/2/files?per_page=100&page=1"] = [{"filename": "src/Code/A.cpp", "status": "modified"}]
+            pr5 = copy.deepcopy(pr2)
+            pr5["number"] = 5
+            pr5["head"]["ref"] = "contrib/header"
+            pr5["head"]["sha"] = "5" * 40
+            fx["pulls/5"] = pr5
+            fx["pulls/5/files?per_page=100&page=1"] = [{"filename": "include/Game/A.h", "status": "modified"}]
+            fx[f"commits/{'5'*40}/statuses?per_page=100&page=1"] = [
+                {"id": 1, "context": lander.BOAT, "state": "success",
+                 "description": "BFME II comparison passed (main 000000000000)", "creator": {"id": lander.lr.BOT_ID}},
+                {"id": 2, "context": lander.RULES, "state": "success",
+                 "description": "Source rules passed (main 000000000000)", "creator": {"id": lander.lr.BOT_ID}},
+                {"id": 3, "context": lander.HEADER_RULES_CONTEXT, "state": "success",
+                 "description": "Header rules passed (main 000000000000)", "creator": {"id": lander.lr.BOT_ID}},
+                {"id": 4, "context": lander.ADMISSION_CONTEXT, "state": "pending",
+                 "description": "Held: daily limit, retried automatically", "creator": {"id": lander.lr.BOT_ID}},
+            ]
+            fx["pulls?state=open&base=main&sort=created&direction=asc&per_page=100&page=1"] = [{"number": 2}, {"number": 5}]
+
+        api = FakeApi(live=False, main=MEASURED, edit=edit_held_header)
+        with tempfile.TemporaryDirectory() as tmp:
+            code, _ = quiet(lander.run, ["select", tmp + "/w"], env(main=MEASURED, mode="dry-run"), api=api, config=cfg)
+            self.assertEqual(code, 0)
+            self.assertTrue(Path(tmp, "w/binding.json").is_file())
+            self.assertEqual(json.loads(Path(tmp, "w/binding.json").read_text())["number"], 2)
+
+    def test_orphaned_pending_boat_status_recovers_to_remeasure_instead_of_measuring_hold(self):
+        now = lander.datetime.datetime(2026, 11, 23, 12, 0, tzinfo=lander.datetime.timezone.utc)
+        clock = lambda: now
+        # 1. >30 min old with no main marker -> stale-pending
+        orphan_no_marker = {
+            "state": "pending",
+            "description": "Waiting for protected intake and Boat comparison",
+            "created_at": "2026-11-23T11:25:00Z",
+            "creator": {"id": lander.lr.BOT_ID},
+        }
+        self.assertEqual(lander.classify(orphan_no_marker, MEASURED, wall_clock=clock), "stale-pending")
+        # 2. <30 min old with no main marker -> stays pending
+        fresh_no_marker = dict(orphan_no_marker, created_at="2026-11-23T11:45:00Z")
+        self.assertEqual(lander.classify(fresh_no_marker, MEASURED, wall_clock=clock), "pending")
+        # 3. 45 min old WITH main marker -> stays pending (<60 min)
+        mid_with_marker = {
+            "state": "pending",
+            "description": f"Measuring (main {MEASURED[:12]})",
+            "created_at": "2026-11-23T11:15:00Z",
+            "creator": {"id": lander.lr.BOT_ID},
+        }
+        self.assertEqual(lander.classify(mid_with_marker, MEASURED, wall_clock=clock), "pending")
+        # 4. >60 min old WITH main marker -> stale-pending
+        old_with_marker = dict(mid_with_marker, created_at="2026-11-23T10:55:00Z")
+        self.assertEqual(lander.classify(old_with_marker, MEASURED, wall_clock=clock), "stale-pending")
+        # 5. Synthetic pending without created_at -> stays pending
+        no_ts = {"state": "pending", "description": "Waiting", "creator": {"id": lander.lr.BOT_ID}}
+        self.assertEqual(lander.classify(no_ts, MEASURED, wall_clock=clock), "pending")
+
+        # End-to-end: trusted PR with orphaned pending Boat status becomes stage=remeasure and dispatches!
+        def edit_orphan_boat(fx):
+            fx["pulls/2"]["head"]["ref"] = "contrib/orphan"
+            for st in fx[f"commits/{PR2}/statuses?per_page=100&page=1"]:
+                if st["context"] == lander.BOAT:
+                    st["state"] = "pending"
+                    st["description"] = "Waiting for protected intake and Boat comparison"
+                    st["created_at"] = "2020-01-01T00:00:00Z"
+
+        api = FakeApi(live=True, main=MEASURED, edit=edit_orphan_boat)
+        cfg = CONFIG | {"exceptions": set(), "auto_admission": True}
+        dec = lander.evaluate(api, 2, MEASURED, cfg)
+        self.assertEqual(dec["checks"][lander.BOAT], "stale-pending")
+        self.assertEqual((dec["stage"], dec["reasons"]), ("remeasure", []))
+        with tempfile.TemporaryDirectory() as tmp:
+            code, _ = quiet(lander.run, ["select", tmp + "/w"], env(main=MEASURED, mode="live", pr="2"),
+                            api=api, config=cfg)
+        self.assertEqual(code, 0)
+        events = [b["event_type"] for _, path, b in api.writes if path == "dispatches"]
+        self.assertEqual(events, [lander.ADMIT_REQUEST_EVENT])
 
 
 if __name__ == "__main__":

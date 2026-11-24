@@ -13,4 +13,8 @@ bool operator==(const GameClientRandomVariable &a, const GameClientRandomVariabl
 }
 
 // FUNCTION: BFME2 0x0000559B size=21 name=??9@YA_NABVGameClientRandomVariable@@0@Z evidence=N:ledger tier=B hypothesis:K
+bool operator!=(const GameClientRandomVariable &a, const GameClientRandomVariable &b)
+{
+    return !(a == b);
+}
 

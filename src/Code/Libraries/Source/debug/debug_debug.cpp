@@ -10,6 +10,8 @@
 extern "C" __declspec(dllimport) int __stdcall wvsprintfA(char *out, const char *format, char *args);
 #include "debug/DebugIOInterface.h"
 #include "debug/DebugExceptionhandler.h"
+#include "debug/DebugCmdInterface.h"
+#include "Common/SystemTime.h"
 #include <new>
 #include <eh.h>
 void LocalSETranslator(unsigned int code, struct _EXCEPTION_POINTERS *exptr);
@@ -26,6 +28,8 @@ extern "C" __declspec(dllimport) int __stdcall DeleteFileA(const char *name);
 void *DebugReAllocMemory(void *oldPtr, unsigned int newSize);
 void DebugFreeMemory(void *ptr);
 void *DebugAllocMemory(unsigned int numBytes);
+// A typed view of the untyped allocator.
+#define DEBUG_ALLOC(type, numBytes) ((type *)DebugAllocMemory(numBytes))
 
 // The debug singleton (retail VA 0x00DE0880).
 Debug *theDebug = 0;
@@ -55,8 +59,16 @@ Debug::FrameHashEntry *Debug::LookupFrame(unsigned int addr)
 }
 
 // FUNCTION: BFME2 0x00038370 size=11 name=?rva00038370@@YAXXZ evidence=?:placeholder tier=B hypothesis:Z
+void DebugInstallExceptionHandler()
+{
+	theDebug->InstallExceptionHandler();
+}
 
 // FUNCTION: BFME2 0x00038380 size=11 name=?rva00038380@@YA_NXZ evidence=?:placeholder tier=B hypothesis:Z
+bool DebugSkipNext()
+{
+	return theDebug->SkipNext();
+}
 
 // FUNCTION: BFME2 0x00038390 size=27 name=?rva00038390@@YAXHHH@Z evidence=?:placeholder tier=B hypothesis:Z
 
@@ -148,6 +160,10 @@ void Debug::InstallExceptionHandler()
 }
 
 // FUNCTION: BFME2 0x00038780 size=13 name=?rva0038780@@YAXXZ evidence=?:placeholder tier=A
+void DebugDisableAssertDialog()
+{
+	theDebug->noAssertDialog = true;
+}
 
 // FUNCTION: BFME2 0x000387C0 size=12 name=?bfmeRva000387C0@@YA_NXZ evidence=N:ledger tier=A
 bool bfmeRva000387C0()
@@ -320,7 +336,7 @@ void Debug::AddHResultTranslator(unsigned int prio, HResultTranslator func, void
 				break;
 
 		hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators + 1) * sizeof(HResultTranslatorEntry));
-		memmove(hrTranslators + i + 1, hrTranslators + i, (numHrTranslators - i) * sizeof(HResultTranslatorEntry));
+		memmove(hrTranslators + i + 1, hrTranslators + i, (numHrTranslators - i) * sizeof(HResultTranslator));
 		numHrTranslators++;
 		hrTranslators[i].prio = prio;
 		hrTranslators[i].func = func;
@@ -337,9 +353,8 @@ void Debug::RemoveHResultTranslator(HResultTranslator func, void *user)
 		{
 			if (hrTranslators[i].func == func && hrTranslators[i].user == user)
 			{
-				memmove(hrTranslators + i, hrTranslators + i + 1, (numHrTranslators - i - 1) * sizeof(HResultTranslatorEntry));
-				hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(hrTranslators, (numHrTranslators - 1) * sizeof(HResultTranslatorEntry));
-				numHrTranslators--;
+				memmove(hrTranslators + i, hrTranslators + i + 1, (numHrTranslators - i - 1) * sizeof(HResultTranslator));
+				hrTranslators = (HResultTranslatorEntry *)DebugReAllocMemory(--hrTranslators, numHrTranslators * sizeof(HResultTranslatorEntry));
 			}
 		}
 	}
@@ -348,44 +363,52 @@ void Debug::RemoveHResultTranslator(HResultTranslator func, void *user)
 // FUNCTION: BFME2 0x00038DF0 size=78 name=?d_00889d20@Rva00889D20Class@@QAE_NPAX00@Z evidence=?:placeholder tier=A
 bool Debug::AddIOFactory(const char *ioID, const char *descr, DebugIOInterface *(*factory)())
 {
-	if (ioID && factory)
-	{
-		IOFactoryListEntry *e = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
-		e->next = firstIOFactory;
-		e->ioID = ioID;
-		e->descr = descr;
-		e->factory = factory;
-		e->io = NULL;
-		e->input = NULL;
-		e->inputAlloc = 0;
-		e->inputUsed = 0;
-		firstIOFactory = e;
-	}
+	// bail out if invalid parameters were passed in
+	if (!ioID || !factory)
+		return true;
+
+	// allocate and initialise a new list entry
+	IOFactoryListEntry *e = (IOFactoryListEntry *)DebugAllocMemory(sizeof(IOFactoryListEntry));
+	e->next = firstIOFactory;
+	e->ioID = ioID;
+	e->descr = descr;
+	e->factory = factory;
+	e->io = NULL;
+	e->input = NULL;
+	e->inputAlloc = 0;
+	e->inputUsed = 0;
+
+	// add to the list
+	firstIOFactory = e;
+
 	return true;
 }
 
 // FUNCTION: BFME2 0x00038E40 size=85 name=?d_00889d70@Rva00889D70Class@@QAE_NPAX0@Z evidence=?:placeholder tier=A
 bool Debug::AddCommands(const char *cmdgroup, DebugCmdInterface *cmdif)
 {
-	if (cmdgroup && cmdif)
+	// bail out if invalid parameters were passed in
+	if (!cmdgroup || !cmdif)
+		return true;
+
+	// walk to the end of the list, adding there (unless the interface is in the list already)
+	CmdInterfaceListEntry **listptr = &firstCmdGroup;
+	while (*listptr)
 	{
-		// is it known already? if not, append it
-		CmdInterfaceListEntry **link = &firstCmdGroup;
-		if (*link)
-		{
-			do
-			{
-				link = (CmdInterfaceListEntry **)*link;
-				if ((*link)->cmdif == cmdif)
-					return true;
-			} while ((*link)->next);
-		}
-		CmdInterfaceListEntry *e = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
-		e->next = NULL;
-		e->group = cmdgroup;
-		e->cmdif = cmdif;
-		*link = e;
+		if ((*listptr)->cmdif == cmdif)
+			return true;
+		listptr = &((*listptr)->next);
 	}
+
+	// allocate and initialise a new list entry
+	CmdInterfaceListEntry *e = (CmdInterfaceListEntry *)DebugAllocMemory(sizeof(CmdInterfaceListEntry));
+	e->next = NULL;
+	e->group = cmdgroup;
+	e->cmdif = cmdif;
+
+	// add to the list
+	*listptr = e;
+
 	return true;
 }
 
@@ -489,14 +512,16 @@ Debug::FrameHashEntry *Debug::AddFrameEntry(unsigned int addr, unsigned int type
 	else
 	{
 		// no, just add file name (without path though)
-		const char *name = fileOrGroup;
 		if (fileOrGroup)
 		{
+			const char *name = fileOrGroup;
 			for (const char *c = fileOrGroup; *c; ++c)
 				if (*c == '\\' || *c == '/')
 					name = c + 1;
+			e->fileOrGroup = name;
 		}
-		e->fileOrGroup = name;
+		else
+			e->fileOrGroup = NULL;
 	}
 
 	// add to hash
@@ -541,7 +566,7 @@ const char *Debug::AddLogGroup(const char *fileOrGroup, const char *descr)
 	// no, add new entry
 	cur = (KnownLogGroupList *)DebugAllocMemory(sizeof(KnownLogGroupList));
 	cur->next = firstLogGroup;
-	cur->nameGroup = (char *)DebugAllocMemory(strlen(help) + 1);
+	cur->nameGroup = DEBUG_ALLOC(char, strlen(help) + 1);
 	strcpy(cur->nameGroup, help);
 	if (descr)
 	{
@@ -726,6 +751,10 @@ unsigned int Debug::ScheduleFrameCommand(int frame, const char *command)
 // FUNCTION: BFME2 0x000397D0 size=169 name=?bfmeProbeAAS@BfmeHostAAS@@QAE_NXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00039880 size=25 name=?bfmeSetSign@Gen_0088A5D0@@QAEXE@Z evidence=N:ledger tier=A
+void Debug::SetWindowed(bool windowed)
+{
+	m_windowed = windowed ? 1 : -1;
+}
 
 // FUNCTION: BFME2 0x000398A0 size=80 name=__heap_abort evidence=N:ledger tier=A
 
@@ -750,6 +779,160 @@ void Debug::StartOutput(DebugIOInterface::StringType type, const char *fmt, ...)
 // FUNCTION: BFME2 0x00039B70 size=675 name=?AddOutput@Debug@@EAEXPBDI@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00039E20 size=904 name=?ExecCommand@Debug@@AAE_NPBD0@Z evidence=N:ledger tier=A
+bool Debug::ExecCommand(const char *cmdstart, const char *cmdend)
+{
+	// alloc & copy string
+	char *strbuf = DEBUG_ALLOC(char, cmdend - cmdstart + 1);
+	memcpy(strbuf, cmdstart, cmdend - cmdstart);
+	strbuf[cmdend - cmdstart] = 0;
+
+	// "<frame>:<command>" is kept for ExecuteFrameCommands
+	int frame = 0;
+	const char *digits = strbuf;
+	while (*digits && (*digits == ' ' || *digits == '\t' || (*digits >= '0' && *digits <= '9')))
+	{
+		if (*digits >= '0' && *digits <= '9')
+			frame = frame * 10 + (*digits - '0');
+		digits++;
+	}
+	if (*digits == ':')
+	{
+		ScheduleFrameCommand(frame, strbuf);
+		return false;
+	}
+
+	// for simplicity a fixed size argv array; excess arguments are dropped
+	char *parts[100];
+	int numParts = 0;
+	char *lastNonWhitespace = NULL;
+	char *cur = strbuf;
+	bool doneCommand = false;
+
+	// regular reply or structured reply?
+	DebugIOInterface::StringType reply;
+	DebugCmdInterface::CommandMode mode;
+	if (*cur == '!')
+	{
+		cur++;
+		reply = DebugIOInterface::StructuredCmdReply;
+		mode = DebugCmdInterface::Structured;
+	}
+	else
+	{
+		reply = DebugIOInterface::CmdReply;
+		mode = DebugCmdInterface::Normal;
+	}
+
+	for (;;)
+	{
+		if (!lastNonWhitespace && (*cur == '\'' || *cur == '"'))
+		{
+			char quote = *cur++;
+
+			if (numParts < sizeof(parts) / sizeof(*parts))
+				parts[numParts++] = cur;
+
+			while (*cur && *cur != quote)
+				++cur;
+			if (*cur)
+				*cur++ = 0;
+		}
+		else if (*cur == ' ' || *cur == '\t' || !*cur || *cur == ';')
+		{
+			if (*cur == ';')
+				*cur = 0;
+			if (lastNonWhitespace)
+			{
+				if (numParts < sizeof(parts) / sizeof(*parts))
+					parts[numParts++] = lastNonWhitespace;
+				lastNonWhitespace = NULL;
+				if (*cur)
+					*cur++ = 0;
+			}
+			else if (*cur)
+				++cur;
+			else
+				break;
+		}
+		else
+		{
+			if (!lastNonWhitespace)
+				lastNonWhitespace = cur;
+			++cur;
+		}
+	}
+
+	if (numParts)
+	{
+		// parts[0] is the command, parts[1..numParts] are arguments
+
+		// split off the command group (if any)
+		char *p = strchr(parts[0], '.');
+		if (p && p - parts[0] < sizeof(curCommandGroup))
+		{
+			memcpy(curCommandGroup, parts[0], p - parts[0]);
+			curCommandGroup[p - parts[0]] = 0;
+			++p;
+		}
+		else
+			p = parts[0];
+
+		// nested commands add to the output of the outermost one
+		static int nesting = 0;
+		if (nesting++ == 0)
+			StartOutput(reply, "%s.%s", curCommandGroup, p);
+
+		if (mode != DebugCmdInterface::Structured)
+			AddOutput("> ", 2);
+
+		// repeat the current command first
+		AddOutput(cmdstart, cmdend - cmdstart);
+		AddOutput("\n", 1);
+
+		// command group known?
+		CmdInterfaceListEntry *group;
+		for (group = firstCmdGroup; group; group = group->next)
+			if (!strcmp(curCommandGroup, group->group))
+				break;
+		if (!group)
+		{
+			// nope, show the error message
+			(*this) << "Unknown command group " << curCommandGroup;
+			*p = 0;
+		}
+
+		if (*p)
+		{
+			// search for a matching command handler
+			for (group = firstCmdGroup; group; group = group->next)
+			{
+				if (strcmp(curCommandGroup, group->group))
+					continue;
+
+				doneCommand = group->cmdif->Execute(*this, p, mode, numParts - 1, parts + 1);
+				if (doneCommand && (strcmp(p, "help") || numParts > 1))
+					break;
+			}
+
+			// display an error message if the command was not found
+			if (!group && mode == DebugCmdInterface::Normal)
+			{
+				if (strcmp(p, "help"))
+					operator<<("Unknown command");
+				else if (numParts > 1)
+					operator<<("Unknown command, help not available");
+			}
+		}
+
+		// flush the output only once the outermost command is done
+		if (--nesting == 0)
+			FlushOutput(false);
+	}
+
+	// cleanup
+	DebugFreeMemory(strbuf);
+	return doneCommand;
+}
 
 // FUNCTION: BFME2 0x0003A1B0 size=94 name=?GetFrameEntry@Debug@@AAEPAUFrameHashEntry@1@IIPBDH@Z evidence=N:ledger tier=A
 Debug::FrameHashEntry *Debug::GetFrameEntry(unsigned int addr, unsigned int type, const char *fileOrGroup, int line)

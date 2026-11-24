@@ -12,6 +12,7 @@ from github_status import admitted
 OWNER_ID = 1760627
 OWNER_LOGIN = "Ancalgonn"
 TRUSTED_KIND = "trusted-narrow"
+TRUSTED_WIDE_KIND = "trusted-wide"
 BOT_ID = 41898282
 BOT_LOGIN = "github-actions[bot]"
 WORKFLOW = ".github/workflows/admission.yml"
@@ -86,7 +87,7 @@ def authority(pr, binding, env):
             return {"approved": True}
     author = (pr.get("user") or {}).get("id")
     decision = {"approved": False, "automatic_pending": True}
-    if wide_enabled(env) and kind == "narrow":
+    if wide_enabled(env):
         decision["automatic_wide_allowed"] = True
     if pr.get("draft") is False and type(author) is int and author > 0 and bot_dispatch(env):
         decision["automatic_author"] = author
@@ -170,9 +171,16 @@ def claim_compiler(api, book, ledger, binding, decision, env):
     pr = api.current(binding)
     pr_kind = reservation_kind(pr)
     if decision.get("automatic_kind") == "wide":
-        if not (wide_enabled(env) and budget_configured(env, "wide") and pr_kind == "narrow"):
+        if not wide_enabled(env):
             return False
-        kind = "wide"
+        if pr_kind == "narrow":
+            if not budget_configured(env, "wide"):
+                return False
+            kind = "wide"
+        elif pr_kind == TRUSTED_KIND:
+            kind = TRUSTED_WIDE_KIND
+        else:
+            return False
     else:
         if pr_kind is None or (pr_kind == "narrow" and not budget_configured(env, "narrow")):
             return False

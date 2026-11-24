@@ -14,6 +14,7 @@
 #include "GameLogic/Module/ObjectSMCHelper.h"
 
 void XferModelConditionFlagType(Xfer *xfer, Int *value);	// 0x00305BD2
+template <class T> inline const T &larger(const T &a, const T &b) { return a > b ? a : b; }
 // FUNCTION: BFME2 0x004DE700 size=77 name=?framesUntilNext@ObjectSMCHelper@@AAEHXZ evidence=N:ledger tier=B hypothesis:name:Z
 Int ObjectSMCHelper::framesUntilNext()
 {
@@ -61,6 +62,31 @@ UpdateSleepTime ObjectSMCHelper::update()
 }
 
 // FUNCTION: BFME2 0x004DE85F size=167 name=?setModelConditionState@ObjectSMCHelper@@QAEXW4ModelConditionFlagType@@I@Z evidence=N:ledger tier=B hypothesis:Z
+void ObjectSMCHelper::setModelConditionState(ModelConditionFlagType flag, UnsignedInt frames)
+{
+	if (flag < 0 || flag >= 0x24F)
+		return;
+	UnsignedInt now = TheGameLogic->getFrame();
+	for (_STL::list<Entry>::iterator it = m_entries.begin(); it != m_entries.end(); ++it)
+	{
+		if (it->m_flag == flag)
+		{
+			UnsignedInt endFrame = now + frames;
+			it->m_frame = larger(it->m_frame, endFrame);
+			goto armWake;
+		}
+	}
+	{
+		Entry entry;
+		entry.m_flag = flag;
+		entry.m_frame = now + frames;
+		m_entries.push_back(entry);
+		getObject()->setModelConditionState(flag);
+	}
+armWake:
+	Int wake = framesUntilNext();
+	setWakeFrame(getObject(), (UpdateSleepTime)wake);
+}
 
 // FUNCTION: BFME2 0x004DE906 size=189 name=?xfer@ObjectSMCHelper@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:Z
 void ObjectSMCHelper::xfer(Xfer *xfer)

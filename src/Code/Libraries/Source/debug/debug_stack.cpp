@@ -1,4 +1,6 @@
 // cl: /O2 /Oy-
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include <string.h>
 #include "debug/Debug.h"
 #include "debug/DebugStackwalk.h"
 // Tier A; object=O0003B9E0 evidence=W flags=align=A
@@ -10,6 +12,16 @@
 // pointer getters (+0xA0, +0xA4).
 // FUNCTION: BFME2 0x0003B850 size=329 name=?InitDbghelp@@YAXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers+libfile
 // FUNCTION: BFME2 0x0003B9A0 size=32 name=??4Signature@DebugStackwalk@@QAEAAV01@ABV01@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+DebugStackwalk::Signature &DebugStackwalk::Signature::operator=(const Signature &src)
+{
+	if (&src != this)
+	{
+		m_numAddr = src.m_numAddr;
+		memcpy(m_addr, src.m_addr, m_numAddr * sizeof(*m_addr));
+	}
+	return *this;
+}
+
 // FUNCTION: BFME2 0x0003B9C0 size=31 name=?GetAddress@Signature@DebugStackwalk@@QBEIH@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 unsigned DebugStackwalk::Signature::GetAddress(int n) const
 {

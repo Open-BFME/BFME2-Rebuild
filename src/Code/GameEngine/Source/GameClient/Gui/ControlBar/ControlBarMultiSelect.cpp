@@ -13,6 +13,8 @@
 #include "GameClient/GameWindow.h"
 #include "GameClient/GadgetPushButton.h"
 #include "GameClient/InGameUI.h"
+#include "GameClient/CommandSet.h"
+#include "GameLogic/Module/HordeContainInterface.h"
 #include "GameLogic/Object.h"
 #include "Common/ThingTemplate.h"
 // FUNCTION: BFME2 0x0053DB02 size=43 name=?rva0053DB02@Rva0053DB02@@QAEXXZ evidence=?:placeholder tier=B hypothesis:K
@@ -27,6 +29,120 @@ void ControlBar::resetCommonCommandData()
 }
 
 // FUNCTION: BFME2 0x0053DB2D size=550 name=?addCommonCommands@ControlBar@@IAEXPAVDrawable@@_N@Z evidence=N:ledger tier=A
+void ControlBar::addCommonCommands(Drawable *draw, bool firstDrawable)
+{
+	int i;
+	const CommandButton *command;
+
+	// sanity
+	if (draw == 0)
+		return;
+
+	Object *obj = draw->getObject();
+	if (obj == 0)
+		return;
+
+	if (obj->getTemplate()->isKindOf(KINDOF_IGNORED_IN_GUI)) // ignore these guys
+		return;
+
+	// get the command set of this drawable
+	const CommandSet *commandSet = findCommandSet(*obj->rva00290E67());
+	if (commandSet == 0)
+	{
+		// without a command set none of the selected drawables can share commands, so drop them all
+		for (i = 0; i < 32; i++)
+		{
+			m_commonCommands[i] = 0;
+			if (m_commandWindows[i])
+				m_commandWindows[i]->winHide(true);
+		}
+		return;
+	}
+
+	// the first drawable contributes every command that is allowed in a multi select
+	if (firstDrawable == true)
+	{
+		for (i = 0; i < 32; i++)
+		{
+			command = commandSet->getCommandButton(i);
+
+			if (command && (command->getOptions() & 0x100) != 0)
+			{
+				m_commonCommands[i] = command;
+
+				if (m_commandWindows[i])
+				{
+					m_commandWindows[i]->winHide(false);
+					m_commandWindows[i]->winEnable(true);
+
+					if (command->getCommandType() == 0x24)
+					{
+						// the formation toggle shows the variant matching how many selected hordes are formed up
+						int formed = 0;
+						const _STL::list<Drawable *> *selectedDrawables = TheInGameUI->getAllSelectedDrawables();
+						for (_STL::list<Drawable *>::const_iterator it = selectedDrawables->begin(); it != selectedDrawables->end(); ++it)
+						{
+							Drawable *selected = *it;
+							if (selected == 0)
+								continue;
+							Object *selectedObj = selected->getObject();
+							if (selectedObj == 0 || selectedObj->getTemplate()->isKindOf(KINDOF_IGNORED_IN_GUI))
+								continue;
+							if (selectedObj->testStatus((ObjectStatusTypes)0x13))
+								continue;
+							Object *leader = selectedObj->rva002931F5(false);
+							if (leader == 0)
+								continue;
+							HordeContainInterface *horde = leader->rva0028C197();
+							if (horde == 0)
+								continue;
+							if (horde->rva0046F8A5())
+								formed--;
+							else
+								formed++;
+						}
+						const_cast<CommandButton *>(command)->selectVariant(formed >= 0);
+					}
+					else
+						const_cast<CommandButton *>(command)->rva0035B5C2(obj, false);
+
+					setControlCommand(m_commandWindows[i], command);
+				}
+			}
+		}
+	}
+	else
+	{
+		for (i = 0; i < 32; i++)
+		{
+			command = commandSet->getCommandButton(i);
+
+			bool attackMove = (command && command->getCommandType() == 10)
+				|| (m_commonCommands[i] && m_commonCommands[i]->getCommandType() == 10);
+
+			// every selected unit gets attack move as soon as one of them has it
+			if (attackMove && !m_commonCommands[i])
+			{
+				m_commonCommands[i] = command;
+
+				if (m_commandWindows[i])
+				{
+					m_commandWindows[i]->winHide(false);
+					m_commandWindows[i]->winEnable(true);
+
+					setControlCommand(m_commandWindows[i], command);
+				}
+			}
+			else if (command != m_commonCommands[i] && !attackMove)
+			{
+				// a mismatch makes neither command common, so drop the stored one and hide its window
+				m_commonCommands[i] = 0;
+				if (m_commandWindows[i])
+					m_commandWindows[i]->winHide(true);
+			}
+		}
+	}
+}
 
 
 // FUNCTION: BFME2 0x0053DD53 size=439 name=?populateMultiSelect@ControlBar@@IAEXXZ evidence=N:ledger tier=B hypothesis:K

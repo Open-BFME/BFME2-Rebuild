@@ -24,6 +24,7 @@ public:
 	virtual void xfer(Xfer *xfer);				// Snapshot slot 3: 0x00329AEA.
 
 	SidesInfo *getSideInfo(Int index);			// Null for an out-of-range index.
+	SidesInfo *getSkirmishSideInfo(Int index);	// 0x002A98D1: null for an out-of-range index.
 	Int getNumSides() const { return m_numSides; }
 	void emptySides();
 	void emptyTeams();

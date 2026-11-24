@@ -45,6 +45,7 @@ jobs:
       BFME_AUTO_HEADERS: ${{ vars.BFME_AUTO_HEADERS }}
       BFME_ADMISSION_WIDE_DAILY_TOTAL: ${{ vars.BFME_ADMISSION_WIDE_DAILY_TOTAL }}
       BFME_ADMISSION_WIDE_DAILY_PER_AUTHOR: ${{ vars.BFME_ADMISSION_WIDE_DAILY_PER_AUTHOR }}
+      BFME_ADMISSION_RETRY_MAX_DISPATCHES: ${{ vars.BFME_ADMISSION_RETRY_MAX_DISPATCHES }}
     steps:
       - name: Read the admission tools from main, never from the pull request
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683

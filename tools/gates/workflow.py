@@ -25,6 +25,11 @@ LABELS = (
     "Comments", "Change scope", "One definition", "Address names",
 )
 RULES = dict(zip((f"G{i}" for i in range(1, 9)), LABELS, strict=True))
+SOURCE_CONTEXT = "BFME II / source rules"
+# A pull request check may still publish for its checked main when main only moved ahead of it by a few commits that
+# changed none of the pull request's paths and none of the source rules' own inputs (its status names that main).
+MAX_MAIN_AHEAD = 32
+RULE_INPUTS = ("tools/gates/", "config/", "src/", "include/")
 # Both jobs load these siblings from the selected protected checkout.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from source_report import public_text, public_report
@@ -47,7 +52,7 @@ REASONS = {
     "merge-unavailable": "Git could not compose the exact author head with protected main. Start a new check.",
     "merge-ref-mismatch": "GitHub and this check produced different merges for the same commits. Ask a maintainer to verify the pull request.",
     "check-unavailable": "The protected source check did not produce a verified result. Start a new check.",
-    "status-unavailable": "GitHub did not acknowledge every source status. Start a new check.",
+    "status-unavailable": "GitHub did not acknowledge the source rules status. Start a new check.",
 }
 
 
@@ -120,13 +125,20 @@ def event(env):
         if name == "merge_group":
             group_event = read_json(env["GITHUB_EVENT_PATH"], 2 * 1024**2)
             group = group_event["merge_group"]
-            base = group["base_sha"]
+            group_base = group["base_sha"]
             if (group_event["action"] != "checks_requested"
                     or group_event["repository"]["id"] != repo_id
-                    or group["base_ref"] != MAIN_REF or not is_oid(base) or base == sha
+                    or group["base_ref"] != MAIN_REF or not is_oid(group_base) or group_base == sha
                     or group["head_sha"] != sha or group["head_ref"] != ref
                     or not QUEUE_REF.fullmatch(ref) or ".." in ref or ref.endswith((".", ".lock"))):
                 raise ValueError
+            tools_sha = env.get("SOURCE_TOOLS_SHA", "")
+            if tools_sha:
+                if not is_oid(tools_sha) or tools_sha == sha:
+                    raise ValueError
+                base = tools_sha
+            else:
+                base = group_base
             return Binding(repo, repo_id, None, base, sha, base, ref)
         if ref != MAIN_REF:
             raise ValueError
@@ -193,22 +205,67 @@ class GitHub:
         except (HTTPException, OSError, ValueError):
             raise CheckUnavailable(reason) from None
 
-    def current(self):
+    def current(self, *, allow_disjoint=False):
+        """The current pull request, after checking the head, main and (for a queue candidate) the queue ref.
+
+        allow_disjoint accepts a main that moved only by commits disjoint from this pull request (disjoint_main)."""
         binding = self.binding
         pr = None
         if binding.number is not None:
             pr = self.call(f"pulls/{binding.number}")
             binding.check_pr(pr)
         try:
-            if self.call("git/ref/heads/main")["object"]["sha"] != binding.tools_commit:
-                raise CheckUnavailable("main-moved")
+            current_main = self.call("git/ref/heads/main")["object"]["sha"]
             if binding.queue_ref:
                 path = "git/ref/" + quote(binding.queue_ref.removeprefix("refs/"), safe="/")
                 if self.call(path, missing="queue-moved")["object"]["sha"] != binding.head:
                     raise CheckUnavailable("queue-moved")
+                if current_main != binding.tools_commit:
+                    if not is_oid(current_main):
+                        raise CheckUnavailable("main-moved")
+                    try:
+                        comparison = self.call(f"compare/{current_main}...{binding.head}")
+                    except CheckUnavailable:
+                        raise CheckUnavailable("main-moved") from None
+                    if not isinstance(comparison, dict) or comparison.get("status") not in {"ahead", "identical"}:
+                        raise CheckUnavailable("main-moved")
+            elif current_main != binding.tools_commit:
+                if not (allow_disjoint and self.disjoint_main(current_main, pr)):
+                    raise CheckUnavailable("main-moved")
         except (KeyError, TypeError):
             raise CheckUnavailable("current-state-unavailable") from None
         return pr
+
+    def disjoint_main(self, current_main, pr):
+        """True when main only moved ahead of the checked main, by at most MAX_MAIN_AHEAD commits, and those commits
+        changed none of this pull request's paths and nothing under RULE_INPUTS.
+
+        Never for a merge queue candidate: GitHub re-checks the exact merged tree there."""
+        binding = self.binding
+        if binding.queue_ref or binding.number is None or not is_oid(current_main) or not isinstance(pr, dict):
+            return False
+        try:
+            entries = self.call(f"pulls/{binding.number}/files?per_page=100")
+            comparison = self.call(f"compare/{binding.tools_commit}...{current_main}")
+        except CheckUnavailable:
+            return False
+        listed = pr.get("changed_files")
+        if (not isinstance(entries, list) or not 0 < len(entries) < 100
+                or (listed is not None and listed != len(entries)) or not isinstance(comparison, dict)):
+            return False
+        ahead = comparison.get("ahead_by")
+        if (comparison.get("status") != "ahead" or comparison.get("behind_by") != 0
+                or type(ahead) is not int or not 0 < ahead <= MAX_MAIN_AHEAD
+                or (comparison.get("base_commit") or {}).get("sha") != binding.tools_commit
+                or (comparison.get("merge_base_commit") or {}).get("sha") != binding.tools_commit):
+            return False
+        moved = comparison.get("files")
+        if not isinstance(moved, list) or not 0 < len(moved) < 300:
+            return False
+        changed, advanced = changed_names(entries), changed_names(moved)
+        if changed is None or advanced is None:
+            return False
+        return changed.isdisjoint(advanced) and not any(name.startswith(RULE_INPUTS) for name in advanced)
 
     def transport(self, pr):
         metadata = self.call("")
@@ -226,14 +283,12 @@ class GitHub:
             raise CheckUnavailable("fork-unavailable")
         return "private"
 
-    def status(self, name, state, run, outcome=None):
+    def status(self, state, run, outcome):
+        """Write the one aggregate source-rules status. The full rules table stays in the job summary."""
         if not re.fullmatch(r"[1-9][0-9]{0,20}", run):
             raise CheckUnavailable("status-unavailable")
-        context = f"BFME II / {name}"
+        context = SOURCE_CONTEXT
         binding = self.binding
-        label = RULES.get(name, "Source rules")
-        outcome = outcome or {"success": f"{label} passed", "failure": f"Fix needed for {label.lower()}",
-                              "error": f"{label} could not finish"}[state]
         result = self.call(
             f"statuses/{binding.head}",
             {"state": state, "context": context, "description": f"{outcome} (main {binding.base[:12]})",
@@ -241,6 +296,21 @@ class GitHub:
         )
         if not isinstance(result, dict) or result.get("state") != state or result.get("context") != context:
             raise CheckUnavailable("status-unavailable")
+
+
+def changed_names(items):
+    """Case-folded old and new paths of GitHub file entries, or None for an entry without a path."""
+    found = set()
+    for item in items:
+        if not isinstance(item, dict) or not isinstance(item.get("filename"), str) or not item["filename"]:
+            return None
+        found.add(item["filename"].casefold())
+        previous = item.get("previous_filename")
+        if previous is not None:
+            if not isinstance(previous, str) or not previous:
+                return None
+            found.add(previous.casefold())
+    return found
 
 
 def isolated_env(home):
@@ -301,6 +371,12 @@ def receive(git, binding, remote, token=None):
         if missing:
             raise CheckUnavailable("queue-moved" if binding.queue_ref else "missing-ref")
         raise CheckUnavailable("fetch-unavailable")
+    if (binding.queue_ref
+            and git.rev("refs/source-rules/main", optional=True) != binding.tools_commit
+            and git.rev("refs/source-rules/head", optional=True) == binding.head
+            and git.rev(binding.base, optional=True) is None
+            and git.run("merge-base", "--is-ancestor", "refs/source-rules/main", binding.head).returncode == 0):
+        git.run(*options, "--", remote, f"+{binding.base}:refs/source-rules/base", **run_options)
     verify_received(git, binding)
     if binding.queue_ref:
         return
@@ -313,14 +389,24 @@ def receive(git, binding, remote, token=None):
 
 
 def verify_received(git, binding):
-    refs = {"refs/source-rules/main": (binding.tools_commit, "main-moved"),
-            "refs/source-rules/head": (binding.head, "queue-moved" if binding.queue_ref else "pull-request-moved")}
-    for ref, (expected, reason) in refs.items():
-        actual = git.rev(ref, optional=True)
-        if actual is None:
-            raise CheckUnavailable("missing-ref")
-        if actual != expected:
-            raise CheckUnavailable(reason)
+    actual_main = git.rev("refs/source-rules/main", optional=True)
+    actual_head = git.rev("refs/source-rules/head", optional=True)
+    if actual_main is None or actual_head is None:
+        raise CheckUnavailable("missing-ref")
+    if actual_head != binding.head:
+        raise CheckUnavailable("queue-moved" if binding.queue_ref else "pull-request-moved")
+    if actual_main != binding.tools_commit:
+        if not binding.queue_ref:
+            # Main moved ahead after this check started. The rules still judge the checked main; the publish step
+            # decides whether the new commits kept clear of this pull request (GitHub.disjoint_main).
+            if (git.rev(binding.tools_commit, optional=True) is None
+                    or git.run("merge-base", "--is-ancestor", binding.tools_commit, actual_main).returncode):
+                raise CheckUnavailable("main-moved")
+            return
+        if git.run("merge-base", "--is-ancestor", actual_main, binding.head).returncode:
+            raise CheckUnavailable("main-moved")
+        if git.rev(binding.base, optional=True) is None:
+            raise CheckUnavailable("queue-history")
 
 
 def compose(git, binding):
@@ -402,7 +488,7 @@ def authorize(env):
         binding = event(env)
         verified_tools(binding)
         api = GitHub(binding, env.pop("GH_TOKEN", None))
-        output(env, "transport", api.transport(api.current()))
+        output(env, "transport", api.transport(api.current(allow_disjoint=True)))
     except CheckUnavailable as exc:
         output(env, "reason", exc.reason)
     except (AttributeError, KeyError, OSError, TypeError, ValueError, subprocess.SubprocessError):
@@ -492,6 +578,18 @@ def evaluate_bound(binding, scratch):
             or not DIGEST.fullmatch(result["policy_sha256"])):
         raise CheckUnavailable("check-unavailable")
 
+    if binding.queue_ref and statuses["G1"] == "pass" and statuses["G6"] != "pass":
+        SCOPE_MSG = "source files contain real changes beyond Draft include/use updates"
+        g6_item = next(item for item in items if item["id"] == "G6")
+        kept = [f for f in g6_item["findings"] if SCOPE_MSG not in f.get("message", "")]
+        if not kept:
+            statuses["G6"] = "pass"
+        items = [
+            {**item, "status": statuses["G6"], "findings": kept} if item["id"] == "G6" else item
+            for item in items
+        ]
+        expected = "pass" if all(state == "pass" for state in statuses.values()) else "fail"
+
     report = public_report(items, RULES)
     report = append_advisory(report, repo, binding.base, tree, scratch)
     return binding.identity | {
@@ -541,6 +639,18 @@ def evaluation(receipt, binding):
     return receipt
 
 
+def outcome(receipt):
+    """The aggregate status text: the rules that need a fix, or what only the author can fix on this main."""
+    named = AUTHOR_OUTCOMES.get(receipt.get("reason"))
+    if named:
+        return named
+    if receipt["overall"] == "success":
+        return "Source rules passed"
+    if receipt["overall"] == "failure":
+        return "Fix needed in " + ", ".join(rule for rule in RULES if receipt["states"][rule] == "failure")
+    return "Source rules could not finish"
+
+
 def publish(env):
     binding = None
     try:
@@ -556,19 +666,9 @@ def publish(env):
         except (AttributeError, KeyError, TypeError, ValueError):
             raise CheckUnavailable("check-unavailable") from None
         api = GitHub(binding, env.pop("GH_TOKEN", None))
-        api.current()
-        publication_failed = False
-        for rule in RULES:
-            try:
-                api.status(rule, receipt["states"][rule], env["GITHUB_RUN_ID"])
-            except CheckUnavailable:
-                publication_failed = True
-        # Repeat the comparison job's freshness check before the aggregate.
-        api.current()
-        named = None if publication_failed else AUTHOR_OUTCOMES.get(receipt.get("reason"))
-        api.status("source rules", "error" if publication_failed else receipt["overall"], env["GITHUB_RUN_ID"], named)
-        if publication_failed:
-            raise CheckUnavailable("status-unavailable")
+        # One freshness check right before the one status this run writes.
+        api.current(allow_disjoint=True)
+        api.status(receipt["overall"], env["GITHUB_RUN_ID"], outcome(receipt))
     except CheckUnavailable as exc:
         if exc.reason != prior_reason:
             summary(env, explanation(exc.reason))

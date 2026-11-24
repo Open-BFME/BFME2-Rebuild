@@ -90,7 +90,7 @@ NameKeyType StealthDetectorUpdate::getModuleNameKey() const
 
 // Parks the module with a random wake over the data's update rate, or forever
 // when the data starts disabled. The roll is the rowed 0x00233FF4, whose file
-// argument is this class-name literal and whose line is 79.
+// argument is the source path (without its extension) and whose line is 79.
 Int __cdecl GetGameLogicRandomValue(Int low, Int high, const char *file, Int line);
 
 StealthDetectorUpdate::StealthDetectorUpdate(Thing *thing, const ModuleData *moduleData)
@@ -99,7 +99,7 @@ StealthDetectorUpdate::StealthDetectorUpdate(Thing *thing, const ModuleData *mod
 	const StealthDetectorUpdateModuleData *data = (const StealthDetectorUpdateModuleData *)getModuleData();
 	UnsignedInt wake;
 	if (data->m_initiallyDisabled == 0)
-		wake = GetGameLogicRandomValue(1, data->m_updateRate, "StealthDetectorUpdate", 79);
+		wake = GetGameLogicRandomValue(1, data->m_updateRate, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\StealthDetectorUpdate", 79);
 	else
 		wake = UPDATE_SLEEP_FOREVER;
 	setWakeFrame(getObject(), (UpdateSleepTime)wake);

@@ -64,6 +64,18 @@ void AptConnectionScreen::rva005DB630()
 }
 
 // FUNCTION: BFME2 0x005DB647 size=58 name=?RedrawGrid@AptConnectionScreen@@QAEXPBD@Z evidence=N:ledger tier=A
+void AptConnectionScreen::RedrawGrid(const char *)
+{
+	NAT *nat = TheNAT;
+	if (nat)
+	{
+		PortNegotiationSchema *schema = &nat->m_schema;
+		for (int row = 0; row < 8; ++row)
+			for (int column = 0; column < 8; ++column)
+				UpdateGrid(schema, row, column);
+		rva005DB630();
+	}
+}
 
 // FUNCTION: BFME2 0x005DB681 size=89 name=??1AptConnectionScreen@@UAE@XZ evidence=N:ledger tier=A
 

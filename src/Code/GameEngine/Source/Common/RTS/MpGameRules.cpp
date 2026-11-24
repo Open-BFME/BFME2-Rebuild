@@ -4,6 +4,29 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
+#include "Common/UnicodeString.h"
+#include "GameClient/GameText.h"
+#include "GameNetwork/GameInfo.h"
+
+static const char *const s_ruleNames[10] =
+{
+	"RULE:AllowCustomHeroes",
+	"RULE:ClanGame",
+	"RULE:AllowRingHeroes",
+	"RULE:CommandPointFactor",
+	"RULE:InitialResources",
+	"RULE:MapRevealMode",
+	"RULE:StrategicPhaseTimer",
+	"RULE:BattleType",
+	"RULE:BattleChoice",
+	"RULE:AutoResolveType"
+};
+
 // FUNCTION: BFME2 0x00559FAC size=160 name=?GetDefaults@MpGameRules@@SAXHPAX@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x0055A04C size=59 name=?GetRuleString@MpGameRules@@SA?AVUnicodeString@@H@Z evidence=N:ledger tier=A
-
+UnicodeString MpGameRules::GetRuleString(Int rule)
+{
+	if ((UnsignedInt)rule >= 10)
+		return UnicodeString(L"Invalid Rule");
+	return TheGameText->fetch(s_ruleNames[rule]);
+}

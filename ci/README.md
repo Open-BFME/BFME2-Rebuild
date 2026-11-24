@@ -5,7 +5,7 @@ virtual results. You do not need to install anything on your machine.
 
 | Status | What it checks | Where it runs |
 | --- | --- | --- |
-| **BFME II / source rules** | The text rules G1 to G8 in [RULES.md](../RULES.md): paths and sizes, annotations, constructs, stand-in types, comments, scope, definitions and names. | GitHub-hosted runner, within about a minute |
+| **BFME II / source rules** | The text rules G1 to G8 in [RULES.md](../RULES.md): paths and sizes, annotations, constructs, stand-in types, comments, scope, definitions and names. One status names any rule that needs a fix (`Fix needed in G1, G5`); its Details page has the full G1 to G8 table. | GitHub-hosted runner, within about a minute |
 | **BFME II / Boat** | Compiles the changed files with the original 2003 compiler and compares every function with the original program, byte for byte, with its references. | A Boat compiler job for a narrow change or a matrix of Boat jobs for a wider change. Intake and reporting run on GitHub-hosted runners. |
 | **BFME II / Inline virtual** | How the change affects inline virtual functions. | Reports on GitHub-hosted runners. Pending does not hold a landing; a fresh failure blocks landing, and a stale failure triggers remeasurement on current `main`. |
 

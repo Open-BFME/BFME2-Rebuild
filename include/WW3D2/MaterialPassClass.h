@@ -31,6 +31,7 @@ public:
 	virtual ~MaterialPassClass(void);					// 1: 0x0013EE40
 
 	void Set_Shader(ShaderClass shader);					// 0x0013EEF0
+	void Set_Material(VertexMaterialClass *mat);				// 0x0030D3AD
 
 	virtual void Install_Materials(void) const;				// 2: 0x0013EFA0
 	virtual void UnInstall_Materials(void) const {}				// 3: 0x0069E440 (empty)

@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for dir in ci/admission ci/alarms ci/header ci/header-witness ci/landing ci/managed-check ci/managed-nt2 ci/managed-state ci/progress ci/state; do
+          for dir in ci/admission ci/alarms ci/header ci/header-witness ci/landing ci/managed-check ci/managed-nt2 ci/managed-state ci/progress ci/queue ci/state; do
             test -f "$dir/bundle.sha256"
             (cd "$dir" && sha256sum -c --quiet bundle.sha256)
           done
@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for suite in tools/gates ci/control-plane/tests ci/landing/tests ci/admission/tests ci/managed-check/tests ci/state/tests ci/nightly/tests ci/header/tests ci/header-witness/tests ci/progress/tests ci/maint/tests; do
+          for suite in tools/gates ci/control-plane/tests ci/landing/tests ci/admission/tests ci/managed-check/tests ci/queue/tests ci/state/tests ci/nightly/tests ci/header/tests ci/header-witness/tests ci/progress/tests ci/maint/tests; do
             if [ -d "$suite" ]; then
               echo "=== $suite ==="
               python3 -m unittest discover -s "$suite"

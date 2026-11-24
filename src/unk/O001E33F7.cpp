@@ -4,5 +4,11 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameLogic/Object.h"
 // FUNCTION: BFME2 0x001E33F7 size=27 name=?setNextPosition@Object@@QAEXABVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:name:invented
 
+void Object::setNextPosition(const Coord3D &pos)
+{
+	m_hasNextPosition = true;
+	m_nextPosition = pos;
+}

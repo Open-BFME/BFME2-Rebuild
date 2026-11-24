@@ -51,17 +51,92 @@ def select_ancestor_artifact(api, shas):
         sha = row.get("head_sha")
         if sha in allowed and verified_run(row, sha):
             by_base.setdefault(sha, (row["id"], row["run_attempt"]))
-    nearest = [by_base[sha] for sha in shas if sha in by_base][:25]
+    nearest = [by_base[sha] for sha in shas if sha in by_base]
+    indexes = {}
     for run, attempt in nearest:
-        if artifact := select_artifact(api, run, attempt):
+        if attempt not in indexes:
+            indexes[attempt] = artifact_index(api, attempt)
+        by_run, complete = indexes[attempt]
+        if run in by_run:
+            artifact = checked_artifact(by_run[run], attempt)
+        elif complete:
+            artifact = None
+        else:
+            artifact = select_artifact(api, run, attempt)
+        if artifact:
             return artifact
+    covered_runs = {run for run, _ in nearest}
+    fallback_attempts = sorted({1} | set(indexes))
+    for attempt_key in fallback_attempts:
+        if attempt_key in indexes:
+            by_run, _ = indexes[attempt_key]
+        else:
+            by_run, _ = artifact_index(api, attempt_key)
+        unchecked = sorted(by_run.keys() - covered_runs)
+        if not unchecked:
+            continue
+        sha_order = {sha: i for i, sha in enumerate(shas)}
+        candidates = []
+        for run_id in unchecked:
+            try:
+                run_data = api.call(f"actions/runs/{run_id}")
+            except (LookupError, TypeError, ValueError):
+                continue
+            sha = run_data.get("head_sha")
+            if sha in allowed and verified_run(run_data, sha):
+                run_attempt = run_data.get("run_attempt")
+                if run_attempt != attempt_key:
+                    continue
+                candidates.append((sha_order.get(sha, len(shas)), run_id, by_run[run_id]))
+        for _, _, rows in sorted(candidates):
+            artifact = checked_artifact(rows, attempt_key)
+            if artifact:
+                return artifact
     return None
 
 
+def artifact_name(attempt):
+    return f"bfme-exact-main-state-{attempt}"
+
+
+MAX_ARTIFACT_PAGES = 5
+
+
+def artifact_index(api, attempt):
+    """Unexpired state artifacts of one attempt by run id, from bounded pagination, and whether that listing
+    holds every such artifact. If the listing cannot be read, nothing is known and each run is asked on its own."""
+    name = artifact_name(attempt)
+    by_run = {}
+    complete = True
+    for page in range(1, MAX_ARTIFACT_PAGES + 1):
+        filters = urllib.parse.urlencode({"name": name, "per_page": 100, "page": page})
+        try:
+            artifacts = api.call("actions/artifacts?" + filters)["artifacts"]
+        except (LookupError, TypeError, ValueError):
+            return {}, False
+        for item in artifacts:
+            wf_run = item.get("workflow_run") or {}
+            run = wf_run.get("id")
+            branch = wf_run.get("head_branch")
+            if (item.get("name") == name and item.get("expired") is False
+                    and RUN_ID.fullmatch(str(run))
+                    and branch in (None, "main")):
+                by_run.setdefault(int(run), []).append(item)
+        if len(artifacts) < 100:
+            break
+        if page == MAX_ARTIFACT_PAGES:
+            complete = False
+    return by_run, complete
+
+
 def select_artifact(api, run, attempt):
-    name = f"bfme-exact-main-state-{attempt}"
+    name = artifact_name(attempt)
     artifacts = api.call(f"actions/runs/{run}/artifacts?name={name}&per_page=5")["artifacts"]
-    rows = [item for item in artifacts if item.get("name") == name and not item.get("expired")]
+    return checked_artifact([item for item in artifacts
+                             if item.get("name") == name and item.get("expired") is False], attempt)
+
+
+def checked_artifact(rows, expected_attempt=None):
     if len(rows) != 1:
         return None
     row = rows[0]
@@ -70,6 +145,17 @@ def select_artifact(api, run, attempt):
     if (type(size) is not int or not 0 < size <= LIMIT or not HEX64.fullmatch(digest)
             or not RUN_ID.fullmatch(str(row.get("id", "")))):
         return None
+    if expected_attempt is not None:
+        name = row.get("name", "")
+        if not name.endswith(f"-{expected_attempt}"):
+            return None
+    wf_run = row.get("workflow_run") or {}
+    if wf_run:
+        if wf_run.get("head_branch") not in (None, "main"):
+            return None
+        repo_id = wf_run.get("repository_id")
+        if repo_id is not None and repo_id != REPO_ID:
+            return None
     return row["id"], size, digest
 
 
