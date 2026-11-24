@@ -3714,6 +3714,44 @@ StateReturnType AIWanderInPlaceState::onEnter()
 }
 
 // FUNCTION: BFME2 0x0034F3EB size=282 name=?update@AIWanderInPlaceState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
+StateReturnType AIWanderInPlaceState::update()
+{
+	// do movement
+	StateReturnType status = AIInternalMoveToState::update();
+
+	Object *obj = getMachineOwner();
+	AIUpdateInterface *ai = getMachineOwner()->getAI();
+	if (!ai)
+		return STATE_FAILURE;
+	if (obj->isKindOf(KINDOF_CAN_BE_REPULSED))
+	{
+		m_unk0x5C--;
+		if (m_unk0x5C < 0)
+		{
+			m_unk0x5C = m_unk0x58;
+			Object *enemy = TheAI->findClosestRepulsor(getMachineOwner(), obj->getVisionRange());
+			if (enemy)
+				return STATE_FAILURE;
+		}
+	}
+	// if move to has finished, pick the next point around the origin
+	if (status != STATE_CONTINUE)
+	{
+		Int delta = 3;
+		if (ai->m_curLocomotor)
+			delta = Float_To_Long(floor(ai->m_curLocomotor->m_template->m_wanderAboutPointRadius * 0.1f + 0.5f));
+		Coord3D offset;
+		offset.x = GetGameLogicRandomValue(-delta, delta, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIStates.cpp", 0x29F3) * 10;
+		offset.y = GetGameLogicRandomValue(-delta, delta, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIStates.cpp", 0x29F4) * 10;
+		m_goalPosition = m_origin;
+		m_goalPosition.x += offset.x;
+		m_goalPosition.y += offset.y;
+		AIInternalMoveToState::onEnter();
+		return STATE_CONTINUE;
+	}
+	// Never leave this state until told to.
+	return STATE_CONTINUE;
+}
 
 // FUNCTION: BFME2 0x0034F505 size=293 name=?onEnter@AIPanicState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 StateReturnType AIPanicState::onEnter()
