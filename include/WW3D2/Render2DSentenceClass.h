@@ -43,6 +43,7 @@ public:
 	bool Set_Target_Size(float width, float height);							// 0x00154370 ("name: inferred")
 	void Set_Font(FontCharsClass *font);
 	void Set_Clipping_Rect(const RectClass &rect);
+	Vector2 Get_Text_Extents(const unsigned short *text);
 	Vector2 Get_Formatted_Text_Extents(const unsigned short *text);
 	void Set_Location(const Vector2 &location);
 
