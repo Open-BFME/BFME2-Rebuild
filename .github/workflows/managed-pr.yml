@@ -65,13 +65,23 @@ jobs:
           (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
           python3 -B ci/managed-check/github_io.py start
 
+  # With automatic admission, an outside fork's own pull_request_target event can never start the compiler here
+  # (fork_admission.authority: only a bot dispatch carries a reservation), and rules.yml already checks its source
+  # rules and wakes admission, which dispatches bfme-remeasure. Skip that event instead of binding, fetching and
+  # re-reading GitHub for nothing; a boat-ok label event, maintainer and same-repository pull requests, and every
+  # dispatch still run.
   intake:
     if: >-
       github.repository_id == '1464323350' && github.ref == 'refs/heads/main' &&
       github.repository == 'Open-BFME/BFME2-Rebuild' &&
       (github.event.action != 'edited' || github.event.changes.base.ref.from != '') &&
       ((github.event.action != 'labeled' && github.event.action != 'unlabeled') ||
-        github.event.label.name == 'boat-ok')
+        github.event.label.name == 'boat-ok') &&
+      !(vars.BFME_AUTO_ADMISSION == 'yes' && vars.BFME_PR_COMPACT == 'yes' &&
+        github.event_name == 'pull_request_target' &&
+        github.event.action != 'labeled' && github.event.action != 'unlabeled' &&
+        github.event.pull_request.head.repo.id != 1464323350 &&
+        !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association))
     name: Protected source intake
     runs-on: ubuntu-24.04
     timeout-minutes: 5

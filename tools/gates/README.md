@@ -69,7 +69,7 @@ including the policy, code and informational baseline, are maintainer changes.
 - **G4b** screens direct, single-line declarations with the same name and
   lexical scope in a changed region. A pointer or recognized class type
   becoming a built-in integer can flag for review. G4b appears in the pull
-  request summary as an advisory and leaves all nine statuses unchanged.
+  request summary as an advisory and leaves the source rules status unchanged.
 - **G5** reads only added comment text. It permits hexadecimal addresses
   in evidence, and refuses standalone row-address labels that repeat the
   ledger. Vendored paths are listed in the configuration.

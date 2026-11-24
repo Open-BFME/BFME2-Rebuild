@@ -61,6 +61,10 @@ class FakeApi(source.GitHub):
             return self.case.metadata
         if path == f"pulls/{PR}":
             return self.case.pr
+        if path == f"pulls/{PR}/files?per_page=100":
+            return [{"filename": name, "status": "modified"}
+                    for name in git(self.case.origin, "diff", "--name-only", self.case.base,
+                                    self.case.pr["head"]["sha"]).splitlines()]
         if path == "git/ref/heads/main":
             return {"object": {"sha": self.case.main}}
         if path == "git/ref/" + QUEUE.removeprefix("refs/"):
@@ -73,7 +77,11 @@ class FakeApi(source.GitHub):
                 return {"status": "identical"}
             if RUN(["git", "-C", str(self.case.origin), "merge-base", "--is-ancestor", base, head],
                    env=GIT_ENV, capture_output=True).returncode == 0:
-                return {"status": "ahead"}
+                files = git(self.case.origin, "diff", "--name-only", base, head).splitlines()
+                return {"status": "ahead", "behind_by": 0,
+                        "ahead_by": int(git(self.case.origin, "rev-list", "--count", f"{base}..{head}")),
+                        "base_commit": {"sha": base}, "merge_base_commit": {"sha": base},
+                        "files": [{"filename": name, "status": "modified"} for name in files]}
             if RUN(["git", "-C", str(self.case.origin), "merge-base", "--is-ancestor", head, base],
                    env=GIT_ENV, capture_output=True).returncode == 0:
                 return {"status": "behind"}
@@ -222,13 +230,29 @@ class Delivery(unittest.TestCase):
         return source.publish(env | {"RULE_STATUS": json.dumps(receipt), "GH_TOKEN": TOKEN})
 
     def assert_statuses(self, head, failures=()):
-        self.assertEqual(len(self.api.posts), 9)
-        self.assertTrue(all(path == f"statuses/{head}" for path, _ in self.api.posts))
-        states = {row["context"].removeprefix("BFME II / "): row["state"] for _, row in self.api.posts}
-        self.assertEqual(states, dict.fromkeys(source.RULES.keys() | {"source rules"}, "success") |
-                         dict.fromkeys(failures, "failure"))
-        self.assertTrue(all(row["description"].endswith(f"(main {self.base[:12]})")
-                            for _, row in self.api.posts))
+        # One aggregate status per run; the failing rule IDs are folded into its description.
+        self.assertEqual(len(self.api.posts), 1)
+        path, row = self.api.posts[0]
+        self.assertEqual(path, f"statuses/{head}")
+        self.assertEqual(row["context"], "BFME II / source rules")
+        self.assertEqual(row["state"], "failure" if failures else "success")
+        text = f"Fix needed in {', '.join(failures)}" if failures else "Source rules passed"
+        self.assertEqual(row["description"], f"{text} (main {self.base[:12]})")
+        self.assertEqual(row["target_url"], f"https://github.com/{source.REPOSITORY}/actions/runs/102")
+
+    def advance_main(self, edits):
+        """A new main commit on top of the protected base, published to the fixture origin and the fake API."""
+        work = self.run_root / f"main-{len(tuple(self.run_root.iterdir()))}"
+        git(self.root, "clone", "-q", str(self.trusted), str(work))
+        for rel, content in edits.items():
+            (work / rel).parent.mkdir(parents=True, exist_ok=True)
+            (work / rel).write_text(content)
+            git(work, "add", rel)
+        git(work, "commit", "-q", "-m", "Main moved")
+        commit = git(work, "rev-parse", "HEAD")
+        git(self.origin, "fetch", "-q", str(work), f"{commit}:refs/heads/main")
+        self.main = commit
+        return commit
 
     def test_public_fork_passes_before_admission(self):
         env = self.environment()
@@ -295,7 +319,7 @@ class Delivery(unittest.TestCase):
         self.assertIn("Remove this path from your pull request", markdown)
         self.assertFalse(self.marker.exists())
         self.assertEqual(self.publish(env, result), 1)
-        self.assert_statuses(self.protected_head, {"G1", "source rules"})
+        self.assert_statuses(self.protected_head, ("G1",))
 
     def test_shadow_or_fork_tools_checkout_is_rejected(self):
         env = self.environment()
@@ -340,7 +364,7 @@ class Delivery(unittest.TestCase):
         self.assertEqual(rows["BFME II / source rules"]["state"], "error")
         self.assertEqual(rows["BFME II / source rules"]["description"],
                          f"{source.CONFLICT_OUTCOME} (main {self.base[:12]})")
-        self.assertTrue(rows["BFME II / G1"]["description"].startswith("Paths could not finish"))
+        self.assertEqual(list(rows), ["BFME II / source rules"])
         self.api.posts.clear()
         self.publish(env, source.pending(source.event(env), "merge-history"))
         rows = {row["context"]: row for _, row in self.api.posts}
@@ -370,6 +394,63 @@ class Delivery(unittest.TestCase):
         self.assertEqual(self.publish(env, result), 1)
         self.assertEqual(self.api.posts, [])
 
+    def test_publish_reads_main_once_and_writes_one_status(self):
+        env = self.environment()
+        result, markdown = self.evaluate(env)
+        self.api.reads.clear()
+        self.assertEqual(self.publish(env, result), 0)
+        self.assertEqual(self.api.reads, [f"pulls/{PR}", "git/ref/heads/main"])
+        self.assert_statuses(self.head)
+        # The full rules table stays in the job summary.
+        for rule in source.RULES:
+            self.assertRegex(markdown, rf"\n\| {rule} [^|\n]+ \| Pass \|\n")
+
+    def test_failing_rules_are_named_on_the_one_status(self):
+        env = self.environment()
+        result, _ = self.evaluate(env)
+        failed = result | {"state": "fail", "overall": "failure",
+                           "states": result["states"] | {"G1": "failure", "G5": "failure"}}
+        self.assertEqual(self.publish(env, failed), 1)
+        self.assert_statuses(self.head, ("G1", "G5"))
+
+    def test_pr_check_publishes_for_its_main_when_main_moved_on_other_paths(self):
+        env = self.environment()
+        result, _ = self.evaluate(env)
+        self.advance_main({"docs/Notes.md": "Unrelated notes\n"})
+        self.assertEqual(self.publish(env, result), 0)
+        self.assert_statuses(self.head)
+        receipt = json.loads(self.output(env)["receipt"])
+        self.assertEqual((receipt["base"], receipt["tools_commit"], receipt["state"]), (self.base, self.base, "pass"))
+
+    def test_pr_check_started_after_a_disjoint_main_move_still_judges_its_main(self):
+        self.advance_main({"docs/Notes.md": "Unrelated notes\n"})
+        env = self.environment()
+        result, _ = self.evaluate(env)
+        self.assertEqual((result["base"], result["tools_commit"], result["state"]), (self.base, self.base, "pass"))
+        self.assertEqual(self.publish(env, result), 0)
+        self.assert_statuses(self.head)
+
+    def test_pr_check_writes_nothing_when_main_moved_on_its_paths_or_rule_inputs(self):
+        for edits in ({"src/Size.cpp": "int Size() { return 3; }\n"}, {"SRC/size.cpp": "int Other();\n"},
+                      {"tools/gates/extra.py": "VALUE = 1\n"}, {"config/symbols.json": "{}\n"}):
+            with self.subTest(edits=edits):
+                self.main = self.base
+                git(self.origin, "update-ref", "refs/heads/main", self.base)
+                env = self.environment()
+                result, _ = self.evaluate(env)
+                self.advance_main(edits)
+                self.api.posts.clear()
+                self.assertEqual(self.publish(env, result), 1)
+                self.assertEqual(self.api.posts, [])
+                self.assertEqual(json.loads(self.output(env)["receipt"])["reason"], "main-moved")
+
+    def test_pr_check_writes_nothing_when_main_was_replaced(self):
+        env = self.environment()
+        result, _ = self.evaluate(env)
+        self.main = self.unrelated
+        self.assertEqual(self.publish(env, result), 1)
+        self.assertEqual(self.api.posts, [])
+
     def test_queue_uses_candidate_tree_and_writes_to_queue_sha(self):
         env = self.environment("merge_group", head=self.group)
         result, markdown = self.evaluate(env)
@@ -396,7 +477,7 @@ class Delivery(unittest.TestCase):
         self.assertIn("tools/gates/workflow.py:1", markdown)
         self.assertFalse(self.marker.exists())
         self.assertEqual(self.publish(env, result), 1)
-        self.assert_statuses(self.protected_group, {"G1", "source rules"})
+        self.assert_statuses(self.protected_group, ("G1",))
 
     def test_queue_event_binds_both_platform_fields_and_the_repository(self):
         for key, value in (("base_ref", "refs/heads/other"), ("head_ref", "refs/heads/main"),
@@ -585,7 +666,7 @@ class QueueMainMoved(unittest.TestCase):
     HEAD = "3" * 40
     OTHER = "4" * 40
 
-    def _api(self, binding, *, main_sha, queue_sha=HEAD, compare=None, pr=None):
+    def _api(self, binding, *, main_sha, queue_sha=HEAD, compare=None, pr=None, files=None):
         class StubGitHub(source.GitHub):
             def __init__(self):
                 self.binding = binding
@@ -595,6 +676,10 @@ class QueueMainMoved(unittest.TestCase):
                 self.calls.append(path)
                 if path == f"pulls/{PR}":
                     return pr
+                if path == f"pulls/{PR}/files?per_page=100" and files is not None:
+                    if isinstance(files, Exception):
+                        raise files
+                    return files
                 if path == "git/ref/heads/main":
                     return {"object": {"sha": main_sha}}
                 if path == "git/ref/" + QUEUE.removeprefix("refs/"):
@@ -651,6 +736,68 @@ class QueueMainMoved(unittest.TestCase):
             api.current()
         self.assertEqual(ctx.exception.reason, "main-moved")
         self.assertFalse(any(path.startswith("compare/") for path in api.calls))
+
+    def _moved(self, **changes):
+        compare = {"status": "ahead", "ahead_by": 2, "behind_by": 0,
+                   "base_commit": {"sha": self.OLD_MAIN}, "merge_base_commit": {"sha": self.OLD_MAIN},
+                   "files": [{"filename": "src/Other.cpp", "status": "modified"},
+                             {"filename": "docs/Notes.md", "status": "added"}]}
+        return compare | changes
+
+    def _disjoint(self, *, compare, files=None, pr=None, binding=None):
+        binding = binding or source.Binding(source.REPOSITORY, source.REPOSITORY_ID, PR,
+                                            self.OLD_MAIN, self.HEAD, self.OLD_MAIN)
+        files = [{"filename": "src/Size.cpp", "status": "modified"}] if files is None else files
+        api = self._api(binding, main_sha=self.NEW_MAIN, compare=compare, files=files,
+                        pr=pr or pull(self.OLD_MAIN, self.HEAD))
+        return api, api.current(allow_disjoint=True)
+
+    def test_pr_current_accepts_a_main_that_moved_on_other_paths(self):
+        api, pr = self._disjoint(compare=self._moved())
+        self.assertEqual(pr["head"]["sha"], self.HEAD)
+        self.assertIn(f"compare/{self.OLD_MAIN}...{self.NEW_MAIN}", api.calls)
+
+    def test_pr_current_refuses_every_main_move_it_cannot_prove_disjoint(self):
+        many = [{"filename": f"src/F{index}.cpp", "status": "modified"} for index in range(100)]
+        renamed = {"filename": "src/New.cpp", "previous_filename": "src/Size.cpp", "status": "renamed"}
+        cases = {
+            "touches the pull request path": dict(compare=self._moved(files=[{"filename": "src/size.CPP"}])),
+            "renames the pull request path": dict(compare=self._moved(files=[renamed])),
+            "touches the source rules": dict(compare=self._moved(files=[{"filename": "tools/gates/rules.py"}])),
+            "touches the rule configuration": dict(compare=self._moved(files=[{"filename": "config/map.json"}])),
+            "diverged": dict(compare=self._moved(status="diverged")),
+            "behind": dict(compare=self._moved(behind_by=1)),
+            "too far ahead": dict(compare=self._moved(ahead_by=source.MAX_MAIN_AHEAD + 1)),
+            "different merge base": dict(compare=self._moved(merge_base_commit={"sha": self.OTHER})),
+            "no listed main files": dict(compare=self._moved(files=[])),
+            "truncated main files": dict(compare=self._moved(files=many * 3)),
+            "unnamed main file": dict(compare=self._moved(files=[{"status": "modified"}])),
+            "compare unavailable": dict(compare=source.CheckUnavailable("current-state-unavailable")),
+            "pull request files unavailable": dict(compare=self._moved(),
+                                                   files=source.CheckUnavailable("current-state-unavailable")),
+            "too many pull request files": dict(compare=self._moved(), files=many),
+            "pull request file count differs": dict(compare=self._moved(),
+                                                    pr=pull(self.OLD_MAIN, self.HEAD) | {"changed_files": 2}),
+        }
+        for name, case in cases.items():
+            with self.subTest(name):
+                with self.assertRaises(source.CheckUnavailable) as ctx:
+                    self._disjoint(**case)
+                self.assertEqual(ctx.exception.reason, "main-moved")
+
+    def test_pr_current_still_refuses_a_moved_head_before_looking_at_main(self):
+        with self.assertRaises(source.CheckUnavailable) as ctx:
+            self._disjoint(compare=self._moved(), pr=pull(self.OLD_MAIN, self.OTHER))
+        self.assertEqual(ctx.exception.reason, "pull-request-moved")
+
+    def test_merge_group_never_uses_the_pull_request_tolerance(self):
+        binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                 self.OLD_MAIN, self.HEAD, self.OLD_MAIN, QUEUE)
+        api = self._api(binding, main_sha=self.NEW_MAIN, compare={"status": "diverged"}, files=[])
+        with self.assertRaises(source.CheckUnavailable) as ctx:
+            api.current(allow_disjoint=True)
+        self.assertEqual(ctx.exception.reason, "main-moved")
+        self.assertNotIn(f"pulls/{PR}/files?per_page=100", api.calls)
 
     def test_verify_received_and_receive_handle_merge_group_main_ancestor(self):
         with TemporaryDirectory(prefix="bfme-queue-verify-") as tmp:
@@ -726,12 +873,20 @@ class QueueMainMoved(unittest.TestCase):
                 source.verify_received(bare_ok, missing_base_binding)
             self.assertEqual(ctx.exception.reason, "queue-history")
 
-            # Non-merge_group strictly rejects moved main even when main is an ancestor of head.
+            # A pull request check still judges its own main when main only moved ahead of it; the publish step
+            # decides whether the new commits kept clear of the pull request.
             pr_binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, PR,
                                         old_main, q2, old_main)
-            with self.assertRaises(source.CheckUnavailable) as ctx:
-                source.verify_received(bare_ok, pr_binding)
-            self.assertEqual(ctx.exception.reason, "main-moved")
+            source.verify_received(bare_ok, pr_binding)
+
+            # A pull request check whose main is not behind the fetched main still raises main-moved.
+            for checked in (diverged_main, q2):
+                with self.subTest(checked=checked):
+                    pr_binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, PR,
+                                                checked, q2, checked)
+                    with self.assertRaises(source.CheckUnavailable) as ctx:
+                        source.verify_received(bare_ok, pr_binding)
+                    self.assertEqual(ctx.exception.reason, "main-moved")
 
 
 class Copy(unittest.TestCase):
