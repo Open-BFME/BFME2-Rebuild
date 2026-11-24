@@ -1,3 +1,4 @@
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // cl: /O1 /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /D_STLP_BFME_COPY_TRIVIAL_EXTERN /D_STLP_NO_EXCEPTIONS /EHs /EHc- /D_CRTIMP=
 // stlport46
 // bfmealloc_alloconly
@@ -15,6 +16,7 @@
 #include "GameClient/GadgetTextEntry.h"
 #include "GameClient/AptOptions.h"
 #include "GameNetwork/LANAPI.h"
+#include "GameNetwork/LANGameInfo.h"
 #include "GameClient/Shell.h"
 #include "GameClient/LanguageFilter.h"
 #include "GameClient/GameText.h"
@@ -303,6 +305,36 @@ int AptLanLobby::rva00444826(int message, unsigned int data1, unsigned int data2
 // FUNCTION: BFME2 0x00444AC3 size=205 name=?MpOwnerSelectHandicap@AptLanLobby@@QAE_NPAVGameSlot@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00444B90 size=276 name=?MpOwnerSelectPlayer@AptLanLobby@@QAE_NPAVGameSlot@@W4SlotState@@H@Z evidence=N:ledger tier=A
+bool AptLanLobby::MpOwnerSelectPlayer(GameSlot *slot, SlotState state, const UnicodeString &)
+{
+	if (TheLAN == 0)
+		return false;
+	LANGameInfo *game = TheLAN->GetMyGame();
+	if (game == 0)
+		return false;
+	GameSlotConnectInfo info;
+	if (slot->m_state == SLOT_PLAYER)
+	{
+		UnicodeString name(slot->m_name);
+		info.m_ip = 0;
+		info.m_port = 0;
+		slot->setState(state, UnicodeString::TheEmptyString, &info);
+		game->resetAccepted();
+		TheLAN->OnPlayerLeave(name);
+	}
+	else if (slot->m_state != state)
+	{
+		bool wasAI = slot->isAI();
+		info.m_ip = 0;
+		info.m_port = 0;
+		slot->setState(state, UnicodeString::TheEmptyString, &info);
+		if (slot->isAI() ^ wasAI)
+			game->resetAccepted();
+		BfmeNetAddress noAddress;
+		TheLAN->RequestGameOptionsPacked(true, &noAddress);
+	}
+	return true;
+}
 
 // FUNCTION: BFME2 0x00444CA4 size=215 name=?MpOwnerSelectStartPosition@AptLanLobby@@QAE_NPAVGameSlot@@H@Z evidence=N:ledger tier=A
 
