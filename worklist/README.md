@@ -121,8 +121,8 @@ slot, layout or call evidence. A plain clone provides the checked-in notes
 ledger and `baseline/game.dat`, and a local check is optional.
 
 For a Draft promotion, find the current shared type and every direct include,
-then follow headers to their users. Read the [promotion
-procedure](../docs/source-quality.md#promote-a-draft-header). If a legacy
+then follow headers to their users. Follow H5 and H7 in
+[RULES.md](../RULES.md#header-rules-h1h10): move every includer and delete the Draft in the same change. If a legacy
 comment mentions an unavailable investigation note or a rejected path,
 describe the intended path and ask a maintainer to confirm it before doing
 the move. Keep slot behavior and dependent translations in the same review.
@@ -138,12 +138,11 @@ base. Standalone link and runtime evidence come from separate checks.
 ## Claim an item
 
 Claims are a convention, not a lock. Before you start, search the open pull
-requests for the address, file or header. Then open a draft pull request
-whose description starts with your claim: `Claim: src/path/File.cpp` for a
-file, `Claim: include/Draft/X.h` for a Draft header, or one `Claim: 0x00ABCDEF`
-line per function. Nothing publishes claims yet; the open pull requests are
-the list. Close or finish a claimed pull request when you stop, so the item
-is free again. For a header, also say in an issue which files you will touch.
+requests for the address, file or header. The Ready pull request's description
+starts with the claim: `Claim: src/path/File.cpp` for a file,
+`Claim: include/Draft/X.h` for a Draft header, or one `Claim: 0x00ABCDEF`
+line per function. Do not open draft pull requests only to claim. Close or
+finish a pull request when you stop, so the item is free again.
 
 ## Worked examples
 

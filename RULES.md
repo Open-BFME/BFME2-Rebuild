@@ -1,27 +1,42 @@
 # Source rules
 
-These checks run on pull requests to main. A refusal gives a rule number,
-a file and line, and a way to fix the change.
+The checks enforce these rules. A refusal names the rule, the file, the line and what to change.
+G1–G8 run on every pull request (**BFME II / source rules**, and locally with `tools/gates/gate.py`).
+H1–H10 run when `include/` changes (**BFME II / Header rules**). Review rules the checks cannot see are in
+[docs/anti-patterns.md](docs/anti-patterns.md).
 
-| Rule | What to do | Bad example | Fix |
+## Source rules (G1–G8)
+
+| Rule | Do this | Bad | Good |
 | --- | --- | --- | --- |
-| **G1 Paths** | Edit existing C/C++ source files and eligible headers, add permanent headers or remove Draft headers, and stay within 60 paths, 1 MiB per file and 8 MiB of changed source. | Add a new source file for a recovered function. | Restore the original source arrangement and edit the existing owning file. |
-| **G2 Annotations** | Preserve the spelling, order, and associated definitions of generated annotations. | Move a `// FUNCTION:` record above another body. | Put the original record back above its own definition. |
-| **G3 Constructs** | Use typed C or C++ and declared symbols within the approved pragma and assembly exceptions. | Introduce `__asm nop`. | Express the operation in ordinary C or C++ and use the declared symbol. |
-| **G3 Workarounds** | Get runtime and SDK functions from their headers, and leave runtime and STLport settings to the library profile. Refused when added outside the vendored libraries: `__declspec(dllimport)`, `_CRTIMP` or `WINBASEAPI` on a declaration, an `__imp_` name, a declaration with C linkage, a calling convention or an import of a runtime or Windows function, a body with such a name, a `#define` or `#undef` of `_CRTIMP`, `_DLL`, `_MT`, a runtime header guard or the project's `_BFME_*` switches anywhere, of `_STLP_*` or a runtime function name in a source file, a header included twice on one branch path, and `__declspec(nothrow)`. | Add `namespace ArmorCRT { extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *); }`. | Include `<string.h>` and call `_strcmpi`. If the call still differs, the file's setting or the ledger is wrong: file a ledger request with the evidence. See [docs/anti-patterns.md](docs/anti-patterns.md). |
-| **G4 Types** | Keep each measured stand-in count at or below its previous total across the changed files. | Add a `void *` return for a known `File` pointer. | Declare `File *` and let callers use the typed pointer directly. |
-| **G4b Type swaps - advisory** | Keep the evidenced type when editing a declaration, especially a pointer or class field that could be replaced by an integer of the same size. | Change `File *m_file;` to `unsigned int m_file;`. | Keep `File *m_file;` unless the code and layout evidence establish a different type. |
-| **G5 Comments** | Use new comments to explain evidence or intent and put private work notes in the pull request description. | Leave a local path or an experiment score in a source comment. | Cite the useful evidence in the comment and move the work note to the description. |
-| **G6 Scope** | Keep substantive edits to at most three source files, with a narrow exception for updating includers and type uses during a Draft promotion. | Recover four unrelated units in one pull request. | Split the independent changes into separate pull requests. |
-| **G7 Definitions** | Put new class, struct and union definitions in shared headers and keep one definition per named type or externally linked object. | Add a second `struct FileInfo` to a private header. | Include the existing shared definition. |
-| **G8 Names** | Introduce address-shaped names only when the base ledger accepts that exact spelling. | Add `sub_00401234` with no accepted name. | Use an evidence-backed name or ask a maintainer to record the accepted spelling. |
+| **G1 Paths** | Edit existing `.c`/`.cpp` under `src/` (never `src/Code/Tools/`) and headers under `include/`; add headers only outside `include/Draft/`, delete headers only inside it; no new source files, no moving a body between files; at most 60 paths, 1 MiB per file, 8 MiB in all. | Add `src/Game/NewThing.cpp` for a recovered function. | Write the body under its `// FUNCTION:` line in the file that owns it. |
+| **G2 Annotations** | Never change, move or reorder `// FUNCTION:`, `// DATA:`, `// cl:`, `// stlport*` or `// psdk` lines; only a `// dxsdk` or `// platformsdk` line may be added at the top of a non-vendored `.c`/`.cpp`. | Edit `// cl: /O1` to `// cl: /O2`. | Leave the line; file a ledger request if the setting looks wrong. |
+| **G3 Constructs** | No inline assembly, emitted bytes, symbol aliases or pragmas other than `once`, `warning` (and `pack` in headers). | `__asm nop` or `#pragma optimize("", off)`. | Ordinary C or C++. |
+| **G3 Workarounds** | Outside vendored libraries, no hand-written runtime, SDK or STLport workaround: `dllimport`/`_CRTIMP`/`WINBASEAPI` declarations, `__imp_` names, C-linkage or calling-convention declarations of runtime/Windows functions, bodies with their names, `#define`/`#undef` of `_CRTIMP`, `_DLL`, `_MT`, runtime header guards, `_BFME_*` or (in sources) `_STLP_*`, a header included twice, `__declspec(nothrow)`. | `extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *);` | `#include <string.h>` and call `_strcmpi`. |
+| **G4 Types** | Do not raise the count of `void *`, `reinterpret_cast`, C-style pointer casts, `this` arithmetic or casts of call results in the files you change. | `void *getFile();` for a known `File`. | `File *getFile();` |
+| **G4b Type swaps** (advisory) | Keep an evidenced pointer or class type when editing a declaration. | `File *m_file;` → `unsigned int m_file;` | Keep `File *m_file;`. |
+| **G5 Comments** | New comments carry evidence or intent only; no dates, author or tool tags, local paths, attempt scores, or a bare label repeating the row's address. | `// 0x005DA563 size 75, tried 4 variants, 2026-11-20` | `// The resend walk is kept: the reference follows the next link.` |
+| **G6 Scope** | One logical item; substantive edits in at most three source files (a Draft promotion may also touch every includer). | Four unrelated units in one pull request. | One pull request per unit. |
+| **G7 One definition** | Define classes, structs and unions only in shared headers, once; never redefine a type or global that exists anywhere in the tree. | A second `struct FileInfo` in a `.cpp`. | `#include` the existing header. |
+| **G8 Names** | No new address-shaped names (`sub_…`, `rva…`, `g_Va…`, `Rva…`) unless the ledger accepts that exact spelling. | `void sub_00401234();` | An evidenced name, or the ledger's accepted placeholder. |
 
-Keep compiler directives such as `// cl:` and SDK markers unchanged.
-If a different setting is needed, file a ledger request with the file, the requested setting, and the evidence for it.
+## Header rules (H1–H10)
 
-G4b appears in the summary for review. It has no status and does not
-affect the source rules result.
+| Rule | Do this | Bad | Good |
+| --- | --- | --- | --- |
+| **H1 Wide parity** | Every unit that includes a changed header must still match as before. | A new inline body that changes code in 40 includers. | Declare it; define it out of line in its owning file. |
+| **H2 Ledger names** | Each added or changed declaration compiles to the exact symbol the ledger holds. | `int getCount();` where the ledger has `getCount() const`. | `int getCount() const;` |
+| **H3 Qualified identity** | Nothing defined twice under one qualified name. | `Foo::Bar` in two headers. | One header, included by both users. |
+| **H4 Removals** | Each removed or renamed declaration gets a `Removed-Declaration: Class::member` line in the last commit message, and nothing still uses it. | Rename `m_unk28` to `m_duration` with no trailer. | Add `Removed-Declaration: Foo::m_unk28`. |
+| **H5 Layout proof** | A changed size, offset, base or virtual order must be used by a newly matched function in the same pull request. | Insert a member nothing reads. | Add the member with the function that reads it. |
+| **H6 Inline bodies** | An inline body in a header stays trivial unless its behaviour is proven. | A 20-line inline helper with no owning row. | Declare it; define it under its `// FUNCTION:` line. |
+| **H7 Draft hygiene** | A Draft replaced by a real header is deleted, and every includer moved, in the same pull request. | Add `include/GameLogic/Foo.h` and keep `include/Draft/Foo.h`. | Move all includers, delete the Draft. |
+| **H8 Inlining and macros** | No forced inlining or macro tricks the original does not have. | `__forceinline` on a new accessor. | A plain declaration, or the Zero Hour inline it corresponds to. |
+| **H9 Ledger request** | A name or size the ledger lacks holds the pull request for a maintainer; it never fails. | Inventing a spelling to get past H2. | Say what the ledger needs in the description. |
+| **H10 Budget** | Header pull requests have a separate daily budget (`Held: daily limit` waits by itself). | Opening many small header PRs at once. | Batch related declarations for one class. |
 
-The source review uses evidence to decide naming, readability, type
-identity, and original module ownership. See
-[Source quality](docs/source-quality.md) for what to cite.
+## When a setting or the ledger looks wrong
+
+Leave `// cl:` lines and SDK markers as they are. Put a **Ledger change request** section in the pull request
+(or open an issue titled `Ledger: …`) with the RVA, current and requested name, owner or setting, and the
+evidence (slot, caller, string, extent).

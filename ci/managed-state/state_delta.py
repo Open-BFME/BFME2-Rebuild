@@ -715,6 +715,12 @@ GRAPH_CHANGES += (GATES_POLICY_DIGEST_TEST_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(GATES_POLICY_DIGEST_TEST_GRAPH)
 
+PR_TEMPLATE_CONFIDENCE_GRAPH = {
+    '.github/pull_request_template.md': ('2ca686519f66ffd27dbb5d4ac3a8262de1265d1ee5d805bd18146051ee5553b5', '321256c6d87b0ec5edd545610a06267516dab2d39680659e9db33c589e1fce82'),
+}
+GRAPH_CHANGES += (PR_TEMPLATE_CONFIDENCE_GRAPH,)
+GRAPH_PATHS |= set(PR_TEMPLATE_CONFIDENCE_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2

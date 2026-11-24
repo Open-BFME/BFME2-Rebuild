@@ -17,7 +17,7 @@ Every eligible Ready PR is verified in a sealed, network-isolated Visual C++ 7.1
 3. **Never burn Boat runs on local failures:**
    - Every agent MUST commit locally and run `python3 tools/gates/gate.py . <upstream-main-ref> HEAD --json /tmp/gate-<slug>.json` (using a unique `<slug>` per worker!) until it exits `0` with `"status": "pass"` BEFORE pushing or marking a PR Ready.
 4. **Never retry indefinitely:**
-   - Cap Boat iterations at **3 rounds per function**. If a function doesn't match after 3 informed iterations, record the compiler/ABI finding in an issue or `docs/hard_rows.md`, close the PR, and move on.
+   - Cap hosted Boat iterations at **3 rounds per function** (local `precheck.py` runs are unlimited). If a function doesn't match after 3 Boat rounds, record the compiler/ABI finding in an issue or `docs/hard_rows.md`, close the PR, and move on.
 5. **Handling `Held: merge-forbidden` (HTTP 403):**
    - If a PR passed Boat (and Header rules if applicable) but `BFME II / Landing` shows `Held: merge-forbidden`, a workflow file may have changed on `main` since the branch was created. Sync the fork branch with upstream `main` (`git merge upstream/main` or GitHub Update Branch) and push once.
 
@@ -31,7 +31,7 @@ Every eligible Ready PR is verified in a sealed, network-isolated Visual C++ 7.1
 You are contributing to https://github.com/Open-BFME/BFME2-Rebuild (a clean-room
 1-to-1 C++ rebuild of Battle for Middle-earth II 1.06 compiling under Visual C++ 7.1).
 
-First, read AGENTS.md, docs/agents.md, docs/swarm.md, and CONTRIBUTING.md in full.
+Read only AGENTS.md, RULES.md and docs/anti-patterns.md, and follow the AGENTS.md checklist.
 
 Your task: implement and auto-land ONE clean, byte-matching function (or one small
 cohesive set of functions in a single TU).
@@ -43,8 +43,8 @@ Workflow:
    `size_bytes <= 200`) — pick randomly or from a slice rather than row 1.
    Verify no open PR mentions its RVA or TU (`gh pr list -R Open-BFME/BFME2-Rebuild --state open --search "<RVA>"`)
    and that the owning `.cpp` still has an empty body below its `// FUNCTION:` line.
-3. Claim the target BEFORE writing code (open a Draft PR with `Claim: <RVA>` and
-   `Claim: <src/path/File.cpp>`, or ensure your swarm planner assigned an exclusive slice).
+3. Work only on the slice your swarm planner assigned; do not open Draft claim PRs.
+   Iterate locally with `tools/local_check/precheck.py` (unlimited) before any push.
 4. Disassemble the exact bytes in `baseline/game.dat` at `VA = RVA + 0x400000`,
    and read the Zero Hour counterpart under `reference/` if present. Where Zero Hour
    and `baseline/game.dat` disagree, follow `baseline/game.dat`.
@@ -73,7 +73,7 @@ Workflow:
    - If `Landing` says `Held: merge-forbidden` (HTTP 403) on a green PR, merge
      upstream `main` into your branch and push once.
    - If `Boat` refuses the patch, inspect the diff report, refine the C++, re-run
-     `gate.py`, and push — at most 3 Boat rounds total.
+     `gate.py`, re-run `precheck.py` locally as often as needed (no limit), and push — at most 3 hosted Boat rounds.
    - Eligible green PRs auto-merge without human approval. If still blocked after
      3 rounds, record the concrete blocker in an issue or `docs/hard_rows.md`,
      close the PR, and report the outcome.
@@ -88,7 +88,7 @@ You are the parent agent running a swarm of N parallel subagents contributing to
 https://github.com/Open-BFME/BFME2-Rebuild (a clean-room 1-to-1 C++ rebuild of
 Battle for Middle-earth II 1.06 compiling under Visual C++ 7.1).
 
-First, read AGENTS.md, docs/swarm.md, docs/agents.md, and tools/README.md in full.
+Read only AGENTS.md, RULES.md and docs/anti-patterns.md; each subagent follows the AGENTS.md checklist.
 Never run with the repository owner's GitHub token — always push from a non-owner
 contributor/bot fork.
 
@@ -111,7 +111,7 @@ Subagent instructions (pass one disjoint target + worktree path to each subagent
 - Work ONLY inside your assigned worktree (`../wt-<slug>`). Keep any scratch scripts,
   layout probes, or compile outputs in `/tmp/bfme-<slug>/` (never inside the repo).
 - Confirm the target RVA still has an empty body below its `// FUNCTION:` line and
-  claim it first (Draft PR with `Claim: <RVA>` and `Claim: <src/path/File.cpp>`).
+  work only on your assigned slice (no Draft claim PRs).
 - Use local tools on this machine freely to verify before pushing:
   * Disassemble `baseline/game.dat` at `VA = RVA + 0x400000` (`objdump`, Python, etc.)
     and verify offsets, constants, vtable slots, and calling conventions; where Zero Hour
@@ -155,12 +155,12 @@ Parent orchestration loop:
 You are promoting one `include/Draft/` header (or adding missing verified
 declarations to an existing shared header) on https://github.com/Open-BFME/BFME2-Rebuild.
 
-Read AGENTS.md, RULES.md, and docs/swarm.md first.
+Read only AGENTS.md, RULES.md and docs/anti-patterns.md.
 
 Rules for H1-H10 auto-landing:
 1. Pick one unclaimed entry from `worklist/draft_headers_in_use.tsv` (or a header
-   blocking an unwritten `.cpp` function). Confirm no open PR claims it and claim
-   it first in a Draft PR.
+   blocking an unwritten `.cpp` function). Confirm no open PR claims it
+   (no Draft claim PRs).
 2. Verify every class size, field offset, and vtable slot against `baseline/game.dat`
    (and Zero Hour `reference/` only where retail agrees).
 3. For Draft promotions: create the permanent header under `include/`, update every
@@ -180,5 +180,6 @@ Rules for H1-H10 auto-landing:
    - Never add forced inlining (`__forceinline` / `WWINLINE`) unless it corresponds
      to an existing Zero Hour inline declaration (H8).
 5. Run `python3 tools/gates/gate.py . <upstream-main-ref> HEAD --json /tmp/gate-<slug>.json`
-   until it passes, mark the PR Ready with full evidence, and iterate at most 3 rounds.
+   and `python3 tools/local_check/precheck.py --base upstream/main` until both pass (local retries are
+   unlimited), mark the PR Ready with full evidence, and use at most 3 hosted Boat rounds.
 ```

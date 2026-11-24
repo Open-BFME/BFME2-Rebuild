@@ -14,12 +14,12 @@ The maintainers recorded these progress counts at
 working repository (the tree of this snapshot's `src/`, `include/`,
 `config/` and `expected/` is that revision or a later one).
 
-Terms ([full definitions](ledger-and-checks.md#read-the-verdict)): an
+Terms ([full definitions](../ledger-and-checks.md#read-the-verdict)): an
 *owned function* is one the ledger assigns to a source file here; *credited
 MATCH* means it compiles to the original bytes; *proven* means its references
 (calls, data) were checked too; a *VERIFIED* object is a whole source file
 whose object code equals the original's; a *placeholder* name is a stand-in
-for an unknown real name ([naming](naming.md)).
+for an unknown real name ([placeholder names](../anti-patterns.md#facts-that-remove-the-need-for-a-workaround)).
 
 | Measure | At that snapshot |
 | --- | ---: |
@@ -41,9 +41,9 @@ In this snapshot's tree, **12 Draft headers are in use** (included by
 some file; these are the ones to retire). Another 2,057 Drafts are
 unused generated layout guesses: 2,047 are kept as leads for classes not
 written yet and 10 are dead copies of headers that now exist outside
-`include/Draft/`. See the [worklist](../worklist/README.md).
+`include/Draft/`. See the [worklist](../../worklist/README.md).
 
-See [the checker verdicts](ledger-and-checks.md#read-the-verdict) for how
+See [the checker verdicts](../ledger-and-checks.md#read-the-verdict) for how
 bytes, references, names and object verification are measured.
 
 The game does not yet build from this source alone. A link of the rebuilt

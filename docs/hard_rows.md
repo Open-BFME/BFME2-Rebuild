@@ -1,11 +1,8 @@
-# Hard rows and resolved examples
+# Hard rows
 
-This index preserves selected reproducible findings from the reconstruction
-notes. Recheck current source, ledger and verdict before retrying an older case.
-A previous test applies to its source, declarations and compiler profile.
-Record the exact relative virtual address (RVA), outcome and smallest unresolved
-question when adding a case. The dates below identify the recovery notes or the
-landing that supports each entry.
+The dead-end log. Read the entry for your RVA before retrying; an old result holds only for its source,
+headers and compiler profile. To add one, append a row or section with the RVA, what you tried, the outcome,
+and the smallest open question. No disassembly dumps.
 
 ## Evidence to carry into the next attempt
 

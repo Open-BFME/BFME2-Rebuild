@@ -1,92 +1,72 @@
-# Matching anti-patterns
+# Anti-patterns
 
-EA built the original from ordinary source with one compiler setting per
-library and the stock Visual C++ 7.1, Platform SDK, DirectX and STLport
-headers. Each construct below can make a function match for the wrong reason.
-The match then says nothing about the source, and the workaround spreads to
-every file that copies it.
+The checks match bytes; they cannot tell whether the source is honest. EA built the original from ordinary
+source, one compiler setting per library, and the stock Visual C++ 7.1, Platform SDK, DirectX and STLport
+headers. Each row below either makes a function match for the wrong reason or makes the source worse even when
+it matches. Reviewers refuse them. Enforced rules are in [RULES.md](../RULES.md).
 
-If a function only matches with one of them, the cause is elsewhere: a ledger
-name or owner, a shared header, a library setting or the checker. Record the
-case in [hard_rows.md](hard_rows.md), or file a ledger request with the
-evidence, and stop.
+If a function only matches with one of these, the cause is elsewhere (a ledger name or owner, a shared header,
+a library setting). Close the pull request with a dead-end comment (AGENTS.md step 15) and stop.
 
-| # | Do not | Instead |
-|---|---|---|
-| 1 | Change compiler settings in a source file: a `// cl:` line, or `#define`/`#undef` of `_CRTIMP`, `_STLP_*`, the project's `_BFME_*`/`_STLP_BFME_*` switches, `_DLL`, `_MT` or a runtime header guard such as `_INC_STDLIB`. | Leave settings to the library profile, so every unit in a library sees the same flags and the same STLport. A library-wide STLport setting belongs in the shared header that sets it, as Zero Hour's `PreRTS.h` sets `_STLP_USE_NEWALLOC`. |
-| 2 | Declare a runtime or Windows function yourself: `__declspec(dllimport)`, `_CRTIMP`, `WINBASEAPI`, an `__imp_` name, a `namespace XCRT { extern "C" ... }` wrapper, `#define _strdup ...`. | Include `<string.h>`, `<stdlib.h>`, `<math.h>` or `<windows.h>` and call the function by its own name. |
-| 3 | Write a stand-in SDK header (`windows.h`, `winsock.h`, a D3DX declaration). | Use the Platform SDK or DirectX SDK header. |
-| 4 | Use `extern "C"` on game code to reach a ledger spelling. | Use C++ linkage and ask for the ledger name to be corrected. `extern "C"` is for a definition in a `.c` file, for wrapping a C header, and for a runtime hook the game replaces, such as `_purecall`. |
-| 5 | Give a local body the name of a runtime or SDK function. | Name it from its evidence. A local `free` linked next to msvcr71's `free` fails with LNK2005, so it cannot be that function. |
-| 6 | Declare a game function or global inside a `.cpp` file. | Declare it once, in its header, and include that header. |
-| 7 | Include the same header twice in one file. | Include it once. Zero Hour has some repeated includes; they change nothing, and adding one never helps a match. |
-| 8 | Steer code generation: `volatile` on a local, a reference that aliases another variable, `__declspec(nothrow)` or `noinline`, `__forceinline`, `register`, `__assume`, a dummy statement. | Write what the original most plausibly said. If Zero Hour has the construct at that place, cite it. |
-| 9 | Explicitly instantiate a template (`template void X<T>::f();`) only to place a copy in an object. | Prefer the use that instantiated it in the original. An instantiation can stand in while that use is unwritten; say so next to it and remove it when the use lands. A template the original exports is evidenced by the export table. Zero Hour's game code has none. |
-| 10 | Rewrite a vendored library unit (STLport, zlib, Lua, GameSpy). | Compile upstream's file unchanged with the library's own flags. |
+## Forcing a match
 
-The source rules (G3) refuse rows 1, 2, 5 and 7 and `__declspec(nothrow)` when
-a pull request adds them. G2 already refuses changes to `// cl:` lines. The
-other rows are review rules; see [RULES.md](../RULES.md).
+| # | Do not | Bad | Good |
+| --- | --- | --- | --- |
+| 1 | Change compiler settings from a source file. | `#define _CRTIMP` or `#undef _STLP_USE_NEWALLOC` at the top of a `.cpp`. | Leave settings to the library profile; a library-wide STLport switch lives in the shared header that sets it. |
+| 2 | Declare a runtime or Windows function yourself. | `namespace XCRT { extern "C" __declspec(dllimport) char *_strdup(const char *); }` | `#include <string.h>` and call `_strdup`. |
+| 3 | Write a stand-in SDK header. | A local `winsock.h` with three declarations. | The Platform SDK or DirectX SDK header. |
+| 4 | Use `extern "C"` on game code to reach a ledger spelling. | `extern "C" void InitGame();` | C++ linkage; ask for the ledger name to be corrected. |
+| 5 | Give a local body a runtime or SDK name. | `void free(void *p) { ... }` in game code. | A name from its evidence; a local `free` cannot be msvcr71's `free`. |
+| 6 | Declare a game function or global inside a `.cpp`. | `extern int TheFrameCount;` in `Foo.cpp`. | Declare it once in its header and include that. |
+| 7 | Include a header twice. | `#include "Common/AsciiString.h"` on two lines. | Include it once. |
+| 8 | Steer code generation. | `volatile int i;`, `register`, `__assume`, `__forceinline`, a dead local kept for stack layout. | What the original most plausibly said; cite Zero Hour if it has the construct there. |
+| 9 | Instantiate a template only to place a copy. | `template void Vector<int>::grow();` | The use that instantiated it; if that use is unwritten, say so beside the instantiation. |
+| 10 | Rewrite a vendored library unit (STLport, zlib, Lua, GameSpy). | Hand-edit `src/stlport-4.6/...`. | Compile upstream's file unchanged. |
+| 11 | Edit row size or ledger metadata to hide a mismatch. | Shrink a row's size to drop a jump table. | Bring the extent evidence to a ledger request. |
 
-## What the compiler already does
+Workarounds already in the tree are not precedent; do not copy them. Remove one only where every function in
+the file still matches.
 
-Visual C++ 7.1 decides which calls go through the import table. Under `/MD`
-its headers declare most runtime functions `dllimport`, so a call is
-`call [import]`. They declare `memcpy`, `memset`, `memcmp`, `strcpy`,
-`strcat`, `strcmp`, `strlen` and the math intrinsics (`fabs`, `sin`, `cos`,
-`sqrt`, `atan2` and others) without it. When the compiler does not inline
-one of those, the call goes through a `jmp [import]` thunk even under `/MD`.
-A file never needs to choose the call shape by hand.
+## Source quality
 
-msvcr71 exports some functions under two names at one address, and the
-original's import table uses one spelling for each:
+| # | Do not | Bad | Good |
+| --- | --- | --- | --- |
+| 12 | Let `void *` or an integer stand in for a type the code shows. | `int getLANSlot(int i);` returning a pointer callers cast back. | `LANGameSlot *getLANSlot(int i);` |
+| 13 | Invent a name or borrow one from another class. | Calling slot 12 `update` because another class's slot 12 is `update`. | A name from a string, an export, this class's own vtable or corresponding Zero Hour code; otherwise keep the placeholder. |
+| 14 | Rename a field without a witnessing access. | `m_unk0x28` → `m_health` on a guess. | `m_duration` because the parser and the getter both use it as a duration; cite them. |
+| 15 | Hand-write a container or library copy. | A struct with `begin`/`end`/`cap` pointers next to code that uses `std::vector`. | The real STLport or engine template (`std::vector`, `MAKE_DLINK`). |
+| 16 | Define a type twice, under any name. | A flattened `RenderObjClass` Draft beside the real one. | One definition; a Draft promotion moves every includer and deletes the Draft. |
+| 17 | Give an inline virtual a default body without slot evidence. | `virtual bool Create() { return false; }` when the slot reaches a fold returning true. | Read the class's own slot in `baseline/game.dat` and write what it does. |
+| 18 | Write comments that are work notes. | `// matches retail now`, `// tried /O2`, `// size 0x4B`. | `// Index by input octet; the table has 256 entries.` |
+| 19 | Change lines outside the item. | Reformatting a neighbouring function. | Only the claimed functions or header. |
+| 20 | Follow Zero Hour where the bytes differ. | Copying Zero Hour's zero-length guard into `Coord2D::Normalize`. | Follow `baseline/game.dat`; note the difference in the pull request. |
+| 21 | Keep dead code. | A string declared in a branch that never runs. | Remove it; if the match then fails, it is a dead end (AGENTS.md step 15). |
+| 22 | Use a different type for one global in two places. | `int g_x;` in one file, `unsigned g_x;` declared in another. | One declaration in the header, matching the definition. |
 
-| Source spelling | Import name in the original |
-|---|---|
-| `strcpy` | `_mbscpy` |
-| `strcat` | `_mbscat` |
-| `_strdup` | `_mbsdup` |
-| `_stricmp` | `_strcmpi` |
-| `labs` | `abs` |
-| `getc` | `fgetc` |
-| `putc` | `fputc` |
+## When it does not match
 
-A thunk call labelled `_mbscpy` is a plain `strcpy` in the source. The checker
-treats the two spellings as one function (`import_aliases.py`).
+| # | Do not | Bad | Good |
+| --- | --- | --- | --- |
+| 23 | Shuffle statements when the vtable pointers differ. | Reordering stores in a constructor whose vtable store differs. | Compare each slot with the reference; fix the missing override or its signature (`const`, parameter types). |
+| 24 | Write a destructor the original left implicit. | `~FooModuleData() {}` that adds an early vtable store. | Leave it implicit when the implicit one accounts for the reference. |
+| 25 | Call a same-unit helper through a public declaration. | A helper declared in a header whose reference callers pass arguments in registers. | `static` file-local linkage, with its callers in the same unit. |
+| 26 | Rewrite floating-point maths into an equivalent form. | `x / len` where the reference multiplies by `1.0f / len`. | The reference's intermediate types and expression order. |
 
-A library whose `_CRTIMP` functions (`sprintf`, `atoi` and the like) are only
-ever reached through thunks was built without `/MD`. In the original that is
-true of Apt, FESL and DirtySock. Whether they used `/MT` or `/ML` is not yet
-shown. Everything else uses `/MD`.
+## Facts that remove the need for a workaround
 
-## Per-file settings
+Under `/MD` the headers already declare most runtime functions `dllimport`. `memcpy`, `memset`, `memcmp`,
+`strcpy`, `strcat`, `strcmp`, `strlen` and the math intrinsics are not; when not inlined they go through a
+`jmp [import]` thunk. Never choose the call shape by hand.
 
-EA set compiler flags per project. Zero Hour's `.dsp` files carry almost no
-per-file code-generation settings: one `/GX` on `w3d_dep.cpp` in WW3D2, the
-rest being warning and precompiled-header settings. Of GameEngine's 666 units
-on 2026-11-24, 49 ask for `/EHs`, 5 turn exceptions off, 3 ask for `/O2`, 3 for
-`/Ob2`, 3 for `/Oy-`, 2 for `/Oi` and 2 for `/G6`. Treat each as a hypothesis
-to test against the binary, not as a setting EA used.
+msvcr71 exports some functions under two names; the checker treats them as one. Write the left spelling:
+`strcpy`=`_mbscpy`, `strcat`=`_mbscat`, `_strdup`=`_mbsdup`, `_stricmp`=`_strcmpi`, `labs`=`abs`,
+`getc`=`fgetc`, `putc`=`fputc`.
 
-## Workarounds already in the tree
+Placeholder spellings say what is unknown: `Rva00261513Filter` (class), `rva0028C15E()` (function),
+`vfunc_0x58`/`slot27` (vtable entry), `m_unk0x28` (member at offset), `g_Va00E0333C` (global at VA),
+`src/unk/O<rva>.cpp` (file with unknown name), `include/Draft/` (provisional layout). Replacing one with an
+evidenced name is a contribution of its own.
 
-Counted on 2026-11-24, outside the vendored libraries. The source rules stop
-these from growing; removing them is tracked in issue #687.
-
-| Construct | Occurrences | Files |
-|---|---|---|
-| `/D_CRTIMP=` in a `// cl:` line | 249 | 247 |
-| STLport switches in a `// cl:` line | 257 | 255 |
-| `#define`/`#undef` of a library setting | 77 | 22 |
-| Hand import declaration (`dllimport`, `_CRTIMP`, `WINBASEAPI`) | 214 | 68 |
-| Hand declaration of a runtime or Windows function | 286 | 95 |
-| `__imp_` name in code | 17 | 5 |
-| Macro rename of a runtime function | 13 | 6 |
-| Local body with a runtime name (`free`, `strdup`) | 2 | 2 |
-| Header included more than once (every copy counted) | 516 | 107 |
-| Explicit template instantiation | 113 | 22 |
-| `__declspec(nothrow)` | 7 | 6 |
-
-Removing one of them can change what a function compiles to. Remove them with
-the check, file by file, and only where every function in the file still
-matches.
+Finished files to imitate: `src/Code/GameEngine/Source/GameNetwork/FrameDataManager.cpp`,
+`src/Code/GameEngine/Source/GameNetwork/FrameData.cpp`, `src/Code/Libraries/Source/WWVegas/WWLib/hash.cpp`,
+`src/Code/Libraries/Source/WWVegas/WWMath/cullsys.cpp`, `src/Code/GameEngine/Source/GameClient/DisplayString.cpp`.

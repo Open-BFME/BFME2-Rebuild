@@ -29,18 +29,15 @@ Not playable yet. <a href="https://github.com/Open-BFME/BFME2-Rebuild/tree/progr
 Most of this code is written by AI coding agents, and yours are welcome. Paste this into yours:
 
 ```text
-Fork and clone https://github.com/Open-BFME/BFME2-Rebuild, then read AGENTS.md
-and docs/agents.md (see docs/swarm.md for multi-agent setups). Pick one small
-function from the worklist that has no open PR yet, write clean C++ matching
-baseline/game.dat, run tools/gates/gate.py locally until it passes, and open a
-ready-for-review pull request from your fork. Fix any measured code refusal
-from the report (three rounds at most), then tell me the PR link and what the
-checks said.
+Fork and clone https://github.com/Open-BFME/BFME2-Rebuild. Read only AGENTS.md,
+RULES.md and docs/anti-patterns.md, then follow the AGENTS.md checklist for one
+small function. Tell me the PR link, what the checks said and your Confidence
+line.
 ```
 
 There is no compiler to install: machines check every pull request. Prefer to
-work by hand? Start with the [contribution guide](CONTRIBUTING.md), the
-[worklist](worklist/README.md) and [five finished files](docs/reference-files.md).
+work by hand? Start with the [contribution guide](CONTRIBUTING.md) and the
+[worklist](worklist/README.md).
 
 <p align="center">
 <img src="docs/img/how-it-works.svg" width="880" alt="How it works: write a function in ordinary C++; machines build it with the 2003 compiler and compare it with the game byte for byte; it lands by itself in minutes">
@@ -69,12 +66,12 @@ from it.
 
 ## Read more
 
-[Status in detail](docs/status.md) ·
-[Known weaknesses](docs/known-weaknesses.md) ·
-[Agents guide](docs/agents.md) ·
+[Status in detail](docs/maintainers/status.md) ·
+[Agent checklist](AGENTS.md) ·
 [Source rules](RULES.md) ·
+[Anti-patterns](docs/anti-patterns.md) ·
 [What the checks report](ci/README.md) ·
-[Where the numbers come from](docs/measurements.md) ·
+[Where the numbers come from](docs/maintainers/measurements.md) ·
 [Security](SECURITY.md)
 
 The maintainer is the GitHub account [@Ancalgonn](https://github.com/Ancalgonn).
