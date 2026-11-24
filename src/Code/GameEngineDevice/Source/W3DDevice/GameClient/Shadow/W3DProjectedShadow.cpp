@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:name:Z
 #include "GameClient/ProjectedShadowManager.h"
 #include "GameClient/W3DProjectedShadowManager.h"
+#include "GameClient/W3DProjectedShadow.h"
 #include "GameClient/W3DShadowTexture.h"
 
 // FUNCTION: BFME2 0x00108538 size=39 name=?setReferenced@Rva007AE5E0Owner@@QAEXPAVRva007AE5E0Referenced@@@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
@@ -78,6 +79,15 @@ UnsignedInt W3DProjectedShadowManager::forwardIf(UnsignedInt first, void *second
 // FUNCTION: BFME2 0x00108996 size=84 name=?updateOffsets@Rva007AED00Table@@QAEXHMM@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x001089EA size=33 name=?getDecalOffset@W3DDualProjectedShadow@@QBEXHPAM0@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DDualProjectedShadow::getDecalOffset(Int index, Real *offsetX, Real *offsetY) const
+{
+	W3DDualDecalShadow *shadow = m_shadows[index];
+	if (shadow)
+	{
+		*offsetX = shadow->m_decalOffsetX;
+		*offsetY = shadow->m_decalOffsetY;
+	}
+}
 
 // FUNCTION: BFME2 0x00108A79 size=95 name=?bfmeTail928F@BfmeSub928F@@QAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 
