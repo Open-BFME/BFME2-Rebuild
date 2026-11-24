@@ -54,7 +54,8 @@ MIN_RATELIMIT_ENQUEUE = 100
 # ACTIONS_TOKEN_RESERVE or fewer, so queue checks, Boat reports and admission never run out, and above that charges
 # each head what its runs spend downstream: a refresh runs rules, admission, Boat report and merge-queue checks
 # (about 100 calls with their G1-G8, source rules, Boat and inline statuses), a recheck runs the source rules only
-# (about 25).
+# (about 25). Already-active pipeline runs are deducted upfront at the refresh rate so rapid wakeups do not overshoot
+# the reserve before those runs spend their calls.
 ACTIONS_TOKEN_RESERVE = 400
 CALLS_PER_BACKFILL = {"refresh": 100, "recheck": 25}
 LIMIT = 4 * 1024**2
@@ -432,6 +433,9 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
 
     backfilled = []
     budget = None
+    active = None
+    inflight_cost = None
+    effective_budget = None
     if (backfill_candidates and main_sha and HEX40.fullmatch(main_sha)
             and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
         # Every backfilled head spends the Actions token downstream (rules, admission, Boat), and that token is
@@ -449,38 +453,57 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             active = active_pipeline_runs(api)
         except ApiError as exc:
             print(f"Skipping backfill; could not inspect active pipeline runs: {exc}", file=sys.stderr)
-            active = MAX_ACTIVE_BOAT
-        slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
-        for _, pr, kind in backfill_candidates[:slots]:
-            if CALLS_PER_BACKFILL[kind] > spare:
-                break
-            dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
-            if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
-                    or (dispatch_rl is not None and dispatch_rl <= ACTIONS_TOKEN_RESERVE)):
-                break
-            num = pr["number"]
-            oid = pr.get("headRefOid", "")
-            if not HEX40.fullmatch(oid):
-                continue
-            event = EVENTS[kind]
-            try:
-                # The marker starts the cooldown first; if it cannot be written, nothing is dispatched.
-                dispatch_api.post(f"statuses/{oid}", {
-                    "state": "success", "context": MARKER,
-                    "description": f"Requested {event} on main {main_sha[:12]}",
-                })
-                dispatch_api.post("dispatches", {
-                    "event_type": event,
-                    "client_payload": {"number": num, "head": oid, "base": main_sha},
-                })
-                backfilled.append(num)
-                spare -= CALLS_PER_BACKFILL[kind]
-                print(f"Dispatched {event} for PR #{num} ({oid[:12]})")
-            except ApiError as exc:
-                print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
+        if active is not None:
+            # Already-active pipeline runs have committed downstream spend not yet reflected in /rate_limit.
+            inflight_cost = active * CALLS_PER_BACKFILL["refresh"]
+            effective_budget = max(0, budget - inflight_cost)
+            spare = effective_budget - ACTIONS_TOKEN_RESERVE
+            slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
+            if spare < CALLS_PER_BACKFILL[backfill_candidates[0][2]]:
+                print(f"Backfill paused: the Actions token has {budget} REST calls left "
+                      f"(-{inflight_cost} in-flight for {active} active runs = {effective_budget} effective; "
+                      f"{ACTIONS_TOKEN_RESERVE} are kept for checks and landings).", file=sys.stderr)
+                slots = 0
+            for _, pr, kind in backfill_candidates[:slots]:
+                if CALLS_PER_BACKFILL[kind] > spare:
+                    break
+                dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
+                if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
+                        or (dispatch_rl is not None and dispatch_rl <= ACTIONS_TOKEN_RESERVE)):
+                    break
+                num = pr["number"]
+                oid = pr.get("headRefOid", "")
+                if not HEX40.fullmatch(oid):
+                    continue
+                event = EVENTS[kind]
+                try:
+                    # The marker starts the cooldown first; if it cannot be written, nothing is dispatched.
+                    dispatch_api.post(f"statuses/{oid}", {
+                        "state": "success", "context": MARKER,
+                        "description": f"Requested {event} on main {main_sha[:12]}",
+                    })
+                    dispatch_api.post("dispatches", {
+                        "event_type": event,
+                        "client_payload": {"number": num, "head": oid, "base": main_sha},
+                    })
+                    backfilled.append(num)
+                    spare -= CALLS_PER_BACKFILL[kind]
+                    print(f"Dispatched {event} for PR #{num} ({oid[:12]})")
+                except ApiError as exc:
+                    print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
 
     summary_path = env.get("GITHUB_STEP_SUMMARY")
     if summary_path:
+        if budget is None:
+            quota_line = f"- **Actions token REST calls left:** not read (reserve {ACTIONS_TOKEN_RESERVE})"
+        elif effective_budget is None:
+            quota_line = f"- **Actions token REST calls left:** {budget} (reserve {ACTIONS_TOKEN_RESERVE})"
+        else:
+            quota_line = (
+                f"- **Actions token REST calls left:** {budget} "
+                f"(-{inflight_cost} in-flight for {active} active runs = {effective_budget} effective; "
+                f"reserve {ACTIONS_TOKEN_RESERVE})"
+            )
         lines = [
             "### BFME II Merge Queue Enqueue",
             "",
@@ -488,8 +511,7 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             f"- **Enqueued:** {len(enqueued)} ({', '.join(f'#{n}' for n in enqueued) or 'none'})",
             f"- **Backfill waiting:** {len(backfill_candidates)}",
             f"- **Backfill dispatched:** {len(backfilled)} ({', '.join(f'#{n}' for n in backfilled) or 'none'})",
-            f"- **Actions token REST calls left:** {'not read' if budget is None else budget}"
-            f" (reserve {ACTIONS_TOKEN_RESERVE})",
+            quota_line,
         ]
         if enqueue_errors:
             lines.append(f"- **Enqueue rejections:** {len(enqueue_errors)}")

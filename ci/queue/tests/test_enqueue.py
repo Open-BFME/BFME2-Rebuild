@@ -452,6 +452,51 @@ class EnqueueTests(unittest.TestCase):
                 self.assertEqual((actions.dispatches, actions.statuses), ([], []))
                 self.assertEqual(queue_api.gets, [])
 
+    def test_in_flight_pipeline_runs_deduct_from_actions_token_budget(self):
+        boat = {"BFME II / Boat": "SUCCESS"}
+        refreshes = [make_pr(950 + i, statuses={}) for i in range(6)]
+        rechecks = [make_pr(960 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(4)]
+
+        # 5 active runs (5 * 100 = 500 committed) with 900 raw -> 400 effective == reserve -> 0 refreshes dispatched.
+        queue_api = FakeApi([refreshes], active_in_progress=3, active_queued=1, rules_in_progress=1, ratelimit=4900)
+        actions = FakeApi(ratelimit=900)
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            self.assertEqual(result["backfilled"], [])
+            self.assertEqual((actions.dispatches, actions.statuses), ([], []))
+            text = summary.read_text(encoding="utf-8")
+            self.assertIn("900 (-500 in-flight for 5 active runs = 400 effective; reserve 400)", text)
+
+        # 2 active runs (2 * 100 = 200 committed) with 900 raw -> 700 effective -> at most 3 refreshes (700 - 300 = 400).
+        queue_api = FakeApi([refreshes], active_in_progress=1, rules_queued=1, ratelimit=4900)
+        actions = FakeApi(ratelimit=900)
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            self.assertEqual(result["backfilled"], [950, 951, 952])
+            self.assertEqual(len(actions.dispatches), 3)
+            text = summary.read_text(encoding="utf-8")
+            self.assertIn("900 (-200 in-flight for 2 active runs = 700 effective; reserve 400)", text)
+
+        # In-flight spend exceeding raw remaining clamps effective budget at 0 and dispatches nothing.
+        queue_api = FakeApi([refreshes], active_in_progress=6, active_queued=6, ratelimit=4900)
+        actions = FakeApi(ratelimit=900)
+        with tempfile.TemporaryDirectory() as td:
+            summary = Path(td) / "summary.md"
+            result = run(queue_api, dispatch_api=actions, env={"GITHUB_STEP_SUMMARY": str(summary)})
+            self.assertEqual(result["backfilled"], [])
+            self.assertIn("900 (-1200 in-flight for 12 active runs = 0 effective; reserve 400)",
+                          summary.read_text(encoding="utf-8"))
+
+        # 4 active runs (400 committed) with 875 raw -> 475 effective -> 75 spare fits 3 rechecks (25 each), 0 refreshes.
+        queue_api = FakeApi([rechecks], active_in_progress=2, rules_in_progress=2, ratelimit=4900)
+        actions = FakeApi(ratelimit=875)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [960, 961, 962])
+        queue_api = FakeApi([refreshes], active_in_progress=2, rules_in_progress=2, ratelimit=4900)
+        actions = FakeApi(ratelimit=875)
+        self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [])
+
     def test_marker_and_dispatch_use_the_actions_token(self):
         queue_api, actions = FakeApi([[make_pr(920, statuses={})]], ratelimit=4900), FakeApi(ratelimit=900)
         self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [920])
