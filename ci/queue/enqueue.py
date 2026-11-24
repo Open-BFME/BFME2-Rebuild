@@ -623,7 +623,7 @@ def _reserve_starving_wide_slot(candidates, now):
     if starving_idx is None or starving_idx < MAX_BACKFILL:
         return
     last_narrow_idx = None
-    for i in range(starving_idx):
+    for i in range(min(starving_idx, MAX_BACKFILL)):
         _, pr, kind = candidates[i]
         if kind == "refresh" and not has_header(pr):
             last_narrow_idx = i

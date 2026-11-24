@@ -1031,6 +1031,16 @@ class R2bTests(unittest.TestCase):
         self.assertEqual(result["backfilled"], [1055])
 
 
+
+    def test_aged_wide_slot_promoted_inside_max_backfill_when_many_narrow(self):
+        narrow = [make_pr(1400 + i, statuses={}) for i in range(enqueue.MAX_BACKFILL + 5)]
+        aged_wide = make_pr(1499, files=("include/A.h",),
+                            statuses={"BFME II / Queue backfill": ("SUCCESS", "old", "2026-04-01T00:00:00Z")})
+        api = FakeApi([narrow + [aged_wide]])
+        result = run(api)
+        self.assertIn(1499, result["backfilled"])
+        self.assertEqual(len(result["backfilled"]), enqueue.MAX_BACKFILL)
+
 class FakeResponse:
     def __init__(self, code, body, headers):
         self.status, self._body, self.headers = code, body, headers
