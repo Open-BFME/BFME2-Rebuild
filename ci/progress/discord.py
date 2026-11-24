@@ -141,11 +141,10 @@ def build_description(card, previous=None):
     linking = card.get("linking")
     linking_pct = pct(linking)
     linking_delta = format_delta(linking_pct, pct(prev.get("linking")))
-    linking_unit = card.get("linking_unit") if card.get("linking_unit") in ("names", "functions") else "names"
     linking_date = str(card.get("linking_date") or "")[:10]
 
     lines = [
-        "*Clean C++ rebuild of game.dat (1.06) compiled with Visual C++ 7.1*",
+        "*Clean C++ rebuild of the original 2006 game*",
         "",
     ]
 
@@ -153,7 +152,7 @@ def build_description(card, previous=None):
         delta_suffix = f"  {matched_delta}" if matched_delta else ""
         lines.append(f"**Byte match: {matched_pct:.2f}%**{delta_suffix}")
         lines.append(emoji_bar(matched_pct, "🟩"))
-        lines.append(f"{matched[0]:,} / {matched[1]:,} bytes compiled byte-for-byte")
+        lines.append("Share of the original 2006 game rebuilt byte for byte")
     else:
         lines.append("**Byte match: —**")
         lines.append(emoji_bar(None, "🟩"))
@@ -166,7 +165,7 @@ def build_description(card, previous=None):
         date_suffix = f" (measured {linking_date})" if linking_date else ""
         lines.append(f"**Linking: {linking_pct:.2f}%**{delta_suffix}")
         lines.append(emoji_bar(linking_pct, "🟨"))
-        lines.append(f"{linking[0]:,} / {linking[1]:,} {linking_unit} provided{date_suffix}")
+        lines.append(f"Share of the game that connects into one buildable program{date_suffix}")
     else:
         lines.append("**Linking: —**")
         lines.append(emoji_bar(None, "🟨"))

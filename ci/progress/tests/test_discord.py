@@ -106,15 +106,15 @@ class FormattingTests(unittest.TestCase):
 
         desc = embed["description"]
         expected = "\n".join([
-            "*Clean C++ rebuild of game.dat (1.06) compiled with Visual C++ 7.1*",
+            "*Clean C++ rebuild of the original 2006 game*",
             "",
             "**Byte match: 27.65%**",
             "🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛",
-            "1,751,385 / 6,333,616 bytes compiled byte-for-byte",
+            "Share of the original 2006 game rebuilt byte for byte",
             "",
             "**Linking: 64.71%**",
             "🟨🟨🟨🟨🟨🟨⬛⬛⬛⬛",
-            "6,021 / 9,305 names provided (measured 2026-11-22)",
+            "Share of the game that connects into one buildable program (measured 2026-11-22)",
             "",
             "[View full progress card: README](https://github.com/Open-BFME/BFME2-Rebuild)",
         ])
@@ -127,6 +127,8 @@ class FormattingTests(unittest.TestCase):
             "Finished functions",
             "Draft headers",
             "Main `",
+            "names provided",
+            "bytes compiled",
             "`",
             "▲",
             "▼",
@@ -162,13 +164,13 @@ class FormattingTests(unittest.TestCase):
         self.assertNotIn("timestamp", embed)
         self.assertNotIn("footer", embed)
         desc = embed["description"]
-        self.assertIn("**Byte match: 10.00%**\n🟩⬛⬛⬛⬛⬛⬛⬛⬛⬛\n100 / 1,000 bytes compiled byte-for-byte", desc)
+        self.assertIn("**Byte match: 10.00%**\n🟩⬛⬛⬛⬛⬛⬛⬛⬛⬛\nShare of the original 2006 game rebuilt byte for byte", desc)
         self.assertIn("**Linking: —**\n⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛\nnot measured yet", desc)
         self.assertIn("[View full progress card: README](https://github.com/Open-BFME/BFME2-Rebuild)", desc)
         for forbidden in ("Daily build", "Clean progress", "Code proven", "Finished functions", "Draft headers", "Main `"):
             self.assertNotIn(forbidden, desc)
 
-    def test_linking_functions_unit_without_date(self):
+    def test_linking_without_date(self):
         custom = dict(
             SAMPLE_CARD,
             linking_unit="functions",
@@ -176,8 +178,9 @@ class FormattingTests(unittest.TestCase):
             nightly={"compiled": 3000, "files": 3250, "fully_matching": None},
         )
         desc = discord.build_description(custom)
-        self.assertIn("6,021 / 9,305 functions provided\n", desc)
+        self.assertIn("Share of the game that connects into one buildable program\n", desc)
         self.assertNotIn("(measured", desc)
+        self.assertNotIn("functions provided", desc)
         self.assertNotIn("Daily build", desc)
 
 
