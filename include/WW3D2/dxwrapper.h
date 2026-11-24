@@ -440,6 +440,7 @@ protected:
 	static void Set_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture);
 
 	friend class TextureFilterClass;
+	friend class Render2DClass;												// Set_Coordinate_Range 0x001188C0 reads ResolutionWidth/Height for the screen UV bias
 	friend class TextureAsset::Impl;
 	friend class DX8IndexBufferClass;
 	friend class DX8VertexBufferClass;
