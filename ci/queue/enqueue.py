@@ -63,14 +63,11 @@ OUTAGE_HOLD_SECONDS = 2 * 3600
 EVENTS = {"refresh": "bfme-source-refresh", "recheck": "bfme-source-recheck"}
 MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
-# The Actions token (GITHUB_TOKEN) has 1,000 REST calls an hour for the whole repository. Backfill stops while it has
-# ACTIONS_TOKEN_RESERVE or fewer, so queue checks, Boat reports and admission never run out, and above that charges
-# each head what its runs spend downstream: a refresh runs rules, admission, Boat report and merge-queue checks
-# (about 100 calls with their G1-G8, source rules, Boat and inline statuses), a recheck runs the source rules only
-# (about 25). Already-active pipeline runs are deducted upfront at the refresh rate so rapid wakeups do not overshoot
-# the reserve before those runs spend their calls.
 ACTIONS_TOKEN_RESERVE = 400
-CALLS_PER_BACKFILL = {"refresh": 100, "recheck": 25}
+CALLS_PER_BACKFILL = {"refresh": 75, "recheck": 15}
+MAX_WIDE_BACKFILL = 2
+WIDE_STARVATION_SECONDS = 2 * 3600
+INFLIGHT_COST = {"managed-pr.yml": 65, "rules.yml": 15, "admission.yml": 15}
 LIMIT = 4 * 1024**2
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 # Smaller pages keep the nested status/file/review query under GitHub's GraphQL timeout (502/504 at 50 a page);
@@ -143,6 +140,28 @@ query($owner: String!, $name: String!, $cursor: String) {
 }
 """ % PAGE_SIZE
 
+MERGE_QUEUE_QUERY = """
+query($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    mergeQueue(branch: "main") {
+      entries(first: 25) {
+        totalCount
+        pageInfo { hasNextPage }
+        nodes {
+          pullRequest {
+            number
+            files(first: 65) {
+              totalCount
+              nodes { path }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
 ENQUEUE_MUTATION = """
 mutation($id: ID!, $oid: GitObjectID!) {
   enqueuePullRequest(input: {pullRequestId: $id, expectedHeadOid: $oid}) {
@@ -174,21 +193,30 @@ class GitHubApi:
         self.ratelimit_remaining = None
         self.ratelimit_limit = None
         self.ratelimit_reset = None
+        self.graphql_ratelimit_remaining = None
+        self.graphql_ratelimit_limit = None
+        self.rest_ratelimit_remaining = None
+        self.rest_ratelimit_limit = None
 
-    def _record_ratelimit(self, headers):
+    def _record_ratelimit(self, headers, *, kind=None):
         if not headers:
             return
-        for header, attr in (("X-RateLimit-Remaining", "ratelimit_remaining"),
+        for header, base in (("X-RateLimit-Remaining", "ratelimit_remaining"),
                              ("X-RateLimit-Limit", "ratelimit_limit"),
                              ("X-RateLimit-Reset", "ratelimit_reset")):
             value = headers.get(header)
             if value is not None:
                 try:
-                    setattr(self, attr, int(value))
+                    v = int(value)
                 except (TypeError, ValueError):
-                    pass
+                    continue
+                setattr(self, base, v)
+                if kind == "graphql" and base != "ratelimit_reset":
+                    setattr(self, f"graphql_{base}", v)
+                elif kind == "rest" and base != "ratelimit_reset":
+                    setattr(self, f"rest_{base}", v)
 
-    def _request(self, method, url, data):
+    def _request(self, method, url, data, *, kind=None):
         req = urllib.request.Request(url, data=data, method=method, headers={
             "Authorization": "Bearer " + self._token,
             "Accept": "application/vnd.github+json",
@@ -198,22 +226,22 @@ class GitHubApi:
         try:
             with self._opener.open(req, timeout=30) as resp:
                 code, raw = resp.status, resp.read(LIMIT + 1)
-                self._record_ratelimit(resp.headers)
+                self._record_ratelimit(resp.headers, kind=kind)
         except urllib.error.HTTPError as exc:
             code, raw = exc.code, exc.read(LIMIT + 1)
-            self._record_ratelimit(exc.headers)
+            self._record_ratelimit(exc.headers, kind=kind)
         except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
             raise ApiError(f"Connection failure on {method} {url}: {type(exc).__name__}") from None
         return code, raw
 
-    def _send(self, method, url, body=None, *, retries=0, expect_json=False):
+    def _send(self, method, url, body=None, *, retries=0, expect_json=False, kind=None):
         """Return (HTTP code, decoded JSON or None). A 5xx, a dropped connection, a body that is not JSON, or (with
         expect_json) a 200 without a JSON object is transient: it is tried again up to `retries` times."""
         data = json.dumps(body, sort_keys=True).encode("utf-8") if body is not None else None
         for attempt in range(retries + 1):
             last = attempt == retries
             try:
-                code, raw = self._request(method, url, data)
+                code, raw = self._request(method, url, data, kind=kind)
             except ApiError:
                 if last:
                     raise
@@ -237,10 +265,10 @@ class GitHubApi:
         raise AssertionError("unreachable")
 
     def graphql(self, query, variables):
-        # A query is safe to repeat; a mutation is sent once (a repeat could act twice).
         retries = 0 if query.lstrip().startswith("mutation") else len(RETRY_PAUSES)
         code, payload = self._send("POST", "https://api.github.com/graphql",
-                                   {"query": query, "variables": variables}, retries=retries, expect_json=True)
+                                   {"query": query, "variables": variables}, retries=retries, expect_json=True,
+                                   kind="graphql")
         if code != 200 or not isinstance(payload, dict):
             raise ApiError(f"GraphQL HTTP {code}")
         if payload.get("errors"):
@@ -250,7 +278,7 @@ class GitHubApi:
 
     def get(self, path):
         code, payload = self._send("GET", f"https://api.github.com/repos/{REPO}/{path}",
-                                   retries=len(RETRY_PAUSES), expect_json=True)
+                                   retries=len(RETRY_PAUSES), expect_json=True, kind="rest")
         if code != 200:
             raise ApiError(f"GET {path} returned HTTP {code}")
         return payload
@@ -258,7 +286,7 @@ class GitHubApi:
     def core_remaining(self):
         """REST calls this token has left this hour (GET /rate_limit itself costs none)."""
         code, payload = self._send("GET", "https://api.github.com/rate_limit",
-                                   retries=len(RETRY_PAUSES), expect_json=True)
+                                   retries=len(RETRY_PAUSES), expect_json=True, kind="rest")
         try:
             core = payload["resources"]["core"]
             remaining = int(core["remaining"])
@@ -274,7 +302,7 @@ class GitHubApi:
         return remaining
 
     def post(self, path, body):
-        code, payload = self._send("POST", f"https://api.github.com/repos/{REPO}/{path}", body)
+        code, payload = self._send("POST", f"https://api.github.com/repos/{REPO}/{path}", body, kind="rest")
         if code not in (200, 201, 204):
             raise ApiError(f"POST {path} returned HTTP {code}")
         return payload
@@ -392,7 +420,7 @@ def backoff(statuses):
     """Return (seconds, daily): how long a head waits after it was last touched, and whether a new UTC day (the
     daily budgets' reset) ends the wait early. Quota and outage holds only clear on admission's hourly sweep or a new
     day, so refreshing them every COOLDOWN_SECONDS spends the Actions token and changes nothing."""
-    if _held(statuses, HEADER, WIDE_HOLDS) or _held(statuses, ADMISSION, QUOTA_HOLDS):
+    if _held(statuses, HEADER, ("Held: H10 ",)) or _held(statuses, ADMISSION, QUOTA_HOLDS):
         return QUOTA_HOLD_SECONDS, True
     if _held(statuses, ADMISSION, OUTAGE_HOLDS):
         return OUTAGE_HOLD_SECONDS, False
@@ -442,37 +470,167 @@ def list_open_prs(api):
     return main_sha, prs
 
 
-def wave(candidates, queued):
-    """The ready pull requests this run may enqueue, narrow (src/ only) before wide (include/).
+def fetch_merge_queue(api):
+    """Return (count, queue_files, has_wide) from the native merge queue.
+    Returns (0, 0, False) if the repository has no merge queue configured.
+    Returns (None, None, None) on API error or incomplete/truncated data (fail-closed)."""
+    try:
+        data = api.graphql(MERGE_QUEUE_QUERY, {"owner": OWNER, "name": NAME})
+    except ApiError:
+        return None, None, None
+    repo = data.get("repository") or {}
+    mq = repo.get("mergeQueue")
+    if mq is None:
+        return 0, 0, False
+    entries = mq.get("entries")
+    if entries is None:
+        return None, None, None
+    total = entries.get("totalCount", 0)
+    nodes = entries.get("nodes") or []
+    page_info = entries.get("pageInfo") or {}
+    if total > len(nodes) or page_info.get("hasNextPage"):
+        return None, None, None
+    queue_files = 0
+    has_wide = False
+    for node in nodes:
+        pr = (node or {}).get("pullRequest")
+        if pr is None:
+            return None, None, None
+        files_obj = pr.get("files") or {}
+        file_nodes = files_obj.get("nodes") or []
+        file_total = files_obj.get("totalCount", len(file_nodes))
+        queue_files += file_total
+        pr_has_include = any(isinstance(f, dict) and (f.get("path") or "").startswith("include/")
+                             for f in file_nodes)
+        if pr_has_include:
+            has_wide = True
+        elif file_total > len(file_nodes):
+            return None, None, None
+    return total, queue_files, has_wide
 
-    Every merge group behind a header change recompiles that change's wide shards, so a header change in a five-entry
-    queue costs five wide comparisons instead of one. Nothing is stacked behind a header change already in the queue;
-    a header change is enqueued alone, into an empty queue, and only when no narrow change is ready to go first."""
-    if any(has_header(pr) for pr in queued):
-        return []
+
+def _oldest_boat_stamp(pr):
+    """Return the Boat SUCCESS createdAt for a PR, or empty string if none."""
+    statuses = status_map(pr)
+    boat = statuses.get(BOAT) or {}
+    if boat.get("state") == "SUCCESS":
+        return boat.get("createdAt") or ""
+    return ""
+
+
+def wave(candidates, queued, *, mq_count=None, mq_has_wide=None, now=None):
+    """Return (narrow, wide_fallback): narrow PRs to try first, then wide PRs to fall back to.
+
+    A wide PR enters the queue only when the queue is empty and no narrow enqueue succeeds. The wide_fallback list
+    contains at most 1 wide PR. Anti-starvation: if the oldest ready wide PR's Boat pass is older than
+    WIDE_STARVATION_SECONDS and the queue is empty, it gets a solo slot even if narrow PRs exist."""
+    queue_count = mq_count if mq_count is not None else len(queued)
+    queue_has_wide = mq_has_wide if mq_has_wide is not None else any(has_header(pr) for pr in queued)
+    if queue_has_wide:
+        return [], []
     narrow = [pr for pr in candidates if not has_header(pr)]
-    if narrow or queued:
-        return narrow
-    return [pr for pr in candidates if has_header(pr)]
+    wide = [pr for pr in candidates if has_header(pr)]
+    if queue_count > 0:
+        if wide and now:
+            wide_by_age = sorted(wide, key=lambda pr: _oldest_boat_stamp(pr) or "9")
+            oldest_stamp = _oldest_boat_stamp(wide_by_age[0])
+            if oldest_stamp:
+                try:
+                    when = datetime.datetime.fromisoformat(oldest_stamp.replace("Z", "+00:00"))
+                    if (now - when).total_seconds() > WIDE_STARVATION_SECONDS:
+                        return [], []
+                except ValueError:
+                    pass
+        return narrow, []
+    if not wide:
+        return narrow, []
+    wide_by_age = sorted(wide, key=lambda pr: _oldest_boat_stamp(pr) or "9")
+    oldest_wide = wide_by_age[0]
+    oldest_stamp = _oldest_boat_stamp(oldest_wide)
+    if narrow and now and oldest_stamp:
+        try:
+            when = datetime.datetime.fromisoformat(oldest_stamp.replace("Z", "+00:00"))
+            if (now - when).total_seconds() > WIDE_STARVATION_SECONDS:
+                return [], wide_by_age
+        except ValueError:
+            pass
+    if narrow:
+        return narrow, wide_by_age
+    return [], wide_by_age
 
 
 def active_pipeline_runs(api):
+    """Return (total_runs, weighted_cost, breakdown_str) with per-workflow REST cost weights."""
     total = 0
+    cost = 0
+    parts = []
     for workflow in PIPELINE_WORKFLOWS:
+        wf_count = 0
         for status in ("in_progress", "queued"):
             data = api.get(f"actions/workflows/{workflow}/runs?status={status}&per_page=1")
-            total += int((data or {}).get("total_count", 0))
-    return total
+            wf_count += int((data or {}).get("total_count", 0))
+        total += wf_count
+        wf_cost = wf_count * INFLIGHT_COST[workflow]
+        cost += wf_cost
+        if wf_count:
+            parts.append(f"{workflow}={wf_count}×{INFLIGHT_COST[workflow]}")
+    breakdown = ", ".join(parts) if parts else "none"
+    return total, cost, breakdown
 
 
 
-def ratelimit_text(api):
-    """remaining/limit from the last X-RateLimit-Remaining and X-RateLimit-Limit headers this token saw."""
-    remaining = getattr(api, "ratelimit_remaining", None)
-    limit = getattr(api, "ratelimit_limit", None)
+def ratelimit_text(api, kind=None):
+    """remaining/limit from the last rate-limit headers this token saw, optionally filtered by kind."""
+    if kind == "graphql":
+        remaining = getattr(api, "graphql_ratelimit_remaining", None)
+        limit = getattr(api, "graphql_ratelimit_limit", None)
+    elif kind == "rest":
+        remaining = getattr(api, "rest_ratelimit_remaining", None)
+        limit = getattr(api, "rest_ratelimit_limit", None)
+    else:
+        remaining = getattr(api, "ratelimit_remaining", None)
+        limit = getattr(api, "ratelimit_limit", None)
     if remaining is None:
         return "not read"
     return f"{remaining}/{limit}" if limit is not None else f"{remaining}/unknown"
+
+
+def _backfill_sort_key(item):
+    """Sort backfill candidates: recheck first, then narrow refresh, then wide refresh, oldest-touched within each."""
+    stamp, pr, kind = item
+    if kind == "recheck":
+        tier = 0
+    elif kind == "refresh" and not has_header(pr):
+        tier = 1
+    else:
+        tier = 2
+    return (tier, stamp)
+
+
+def _reserve_starving_wide_slot(candidates, now):
+    """Promote the oldest starving wide refresh ahead of the last narrow refresh when narrow
+    refreshes would otherwise take all MAX_BACKFILL slots."""
+    starving_idx = None
+    for i, (stamp, pr, kind) in enumerate(candidates):
+        if kind == "refresh" and has_header(pr) and starving_idx is None:
+            if stamp:
+                try:
+                    when = datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+                    if (now - when).total_seconds() > WIDE_STARVATION_SECONDS:
+                        starving_idx = i
+                except ValueError:
+                    pass
+    if starving_idx is None or starving_idx < MAX_BACKFILL:
+        return
+    last_narrow_idx = None
+    for i in range(min(starving_idx, MAX_BACKFILL)):
+        _, pr, kind = candidates[i]
+        if kind == "refresh" and not has_header(pr):
+            last_narrow_idx = i
+    if last_narrow_idx is None:
+        return
+    item = candidates.pop(starving_idx)
+    candidates.insert(last_narrow_idx, item)
 
 
 def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
@@ -485,12 +643,16 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
     approvers, refused_prefixes = load_config(config_path)
     main_sha, prs = list_open_prs(api)
 
-    # A merge group stacks up to five queued changes; keep the whole queue inside the group planner's file limit
-    # (ci/managed-check/merge_queue_plan.py). Every group stacked behind a header change recompiles its wide shards,
-    # so a header change only ever lands alone (see wave()).
     queued = [pr for pr in prs if pr.get("isInMergeQueue")]
-    queue_files = sum(file_count(pr) for pr in queued)
-    queue_header = any(has_header(pr) for pr in queued)
+    mq_count, mq_files, mq_has_wide = fetch_merge_queue(api)
+    enqueue_paused = mq_count is None
+    if not enqueue_paused:
+        queue_files = mq_files
+        queue_header = mq_has_wide
+    else:
+        queue_files = sum(file_count(pr) for pr in queued)
+        queue_header = any(has_header(pr) for pr in queued)
+        print("Merge queue occupancy unknown; pausing enqueue for this run.", file=sys.stderr)
 
     enqueue_candidates = []
     backfill_candidates = []
@@ -509,39 +671,97 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
                 backfill_candidates.append((stamp, pr, kind))
             else:
                 held_back += 1
-    # Least recently touched first: never-measured heads before retries, so every head gets its turn.
-    backfill_candidates.sort(key=lambda item: item[0])
+    backfill_candidates.sort(key=_backfill_sort_key)
+    if now:
+        _reserve_starving_wide_slot(backfill_candidates, now)
 
     enqueued = []
     enqueue_errors = []
-    for pr in wave(enqueue_candidates, queued):
+    narrow_prs, wide_fallback = ([], []) if enqueue_paused else wave(
+        enqueue_candidates, queued, mq_count=mq_count, mq_has_wide=mq_has_wide, now=now)
+
+    ambiguous_narrow_error = False
+    for pr in narrow_prs:
         if len(enqueued) >= MAX_ENQUEUE:
             break
-        if api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+        if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
             break
         count, header = file_count(pr), has_header(pr)
-        if queue_files + count > MAX_FILES or queue_header or (header and enqueued):
+        if queue_files + count > MAX_FILES or queue_header:
             continue
         num = pr["number"]
         try:
             api.graphql(ENQUEUE_MUTATION, {"id": pr["id"], "oid": pr["headRefOid"]})
             enqueued.append(num)
             queue_files += count
-            queue_header = queue_header or header
             print(f"Enqueued PR #{num} ({pr['headRefOid'][:12]})")
         except ApiError as exc:
             enqueue_errors.append((num, str(exc)))
+            if not str(exc).startswith("GraphQL error:"):
+                ambiguous_narrow_error = True
             print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
+
+    attempt_wide = True
+    if not enqueued and wide_fallback and ambiguous_narrow_error:
+        fresh_count, _, _ = fetch_merge_queue(api)
+        if fresh_count is None or fresh_count > 0:
+            attempt_wide = False
+            print("Ambiguous narrow mutation error; merge queue may not be empty; "
+                  "skipping wide fallback.", file=sys.stderr)
+
+    if not enqueued and wide_fallback and attempt_wide:
+        for pr in wide_fallback:
+            if len(enqueued) >= 1:
+                break
+            if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+                break
+            count = file_count(pr)
+            if queue_files + count > MAX_FILES or queue_header:
+                continue
+            num = pr["number"]
+            try:
+                api.graphql(ENQUEUE_MUTATION, {"id": pr["id"], "oid": pr["headRefOid"]})
+                enqueued.append(num)
+                queue_files += count
+                queue_header = True
+                print(f"Enqueued wide PR #{num} ({pr['headRefOid'][:12]})")
+            except ApiError as exc:
+                enqueue_errors.append((num, str(exc)))
+                print(f"Skipped enqueue for wide PR #{num}: {exc}", file=sys.stderr)
+
+    starvation_mode = (not narrow_prs and wide_fallback
+                       and any(not has_header(pr) for pr in enqueue_candidates))
+    if starvation_mode and not enqueued:
+        all_definite = all(err.startswith("GraphQL error:") for _, err in enqueue_errors)
+        if all_definite:
+            for pr in enqueue_candidates:
+                if has_header(pr):
+                    continue
+                if len(enqueued) >= MAX_ENQUEUE:
+                    break
+                if api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_ENQUEUE:
+                    break
+                count = file_count(pr)
+                if queue_files + count > MAX_FILES or queue_header:
+                    continue
+                num = pr["number"]
+                try:
+                    api.graphql(ENQUEUE_MUTATION, {"id": pr["id"], "oid": pr["headRefOid"]})
+                    enqueued.append(num)
+                    queue_files += count
+                    print(f"Enqueued PR #{num} ({pr['headRefOid'][:12]})")
+                except ApiError as exc:
+                    enqueue_errors.append((num, str(exc)))
+                    print(f"Skipped enqueue for PR #{num}: {exc}", file=sys.stderr)
 
     backfilled = []
     budget = None
     active = None
     inflight_cost = None
     effective_budget = None
+    inflight_breakdown = None
     if (backfill_candidates and main_sha and HEX40.fullmatch(main_sha)
-            and (api.ratelimit_remaining is None or api.ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
-        # Every backfilled head spends the Actions token downstream (rules, admission, Boat), and that token is
-        # shared by every workflow in the repository: pace by what it has left, never by the queue token's quota.
+            and (api.graphql_ratelimit_remaining is None or api.graphql_ratelimit_remaining > MIN_RATELIMIT_BACKFILL)):
         try:
             budget = dispatch_api.core_remaining()
         except ApiError as exc:
@@ -552,34 +772,36 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
               f"({ACTIONS_TOKEN_RESERVE} are kept for checks and landings).", file=sys.stderr)
     elif budget is not None:
         try:
-            active = active_pipeline_runs(api)
+            active, inflight_cost, inflight_breakdown = active_pipeline_runs(api)
         except ApiError as exc:
             print(f"Skipping backfill; could not inspect active pipeline runs: {exc}", file=sys.stderr)
         if active is not None:
-            # Already-active pipeline runs have committed downstream spend not yet reflected in /rate_limit.
-            inflight_cost = active * CALLS_PER_BACKFILL["refresh"]
             effective_budget = max(0, budget - inflight_cost)
             spare = effective_budget - ACTIONS_TOKEN_RESERVE
             slots = min(MAX_BACKFILL, max(0, MAX_ACTIVE_BOAT - active))
             if spare < CALLS_PER_BACKFILL[backfill_candidates[0][2]]:
                 print(f"Backfill paused: the Actions token has {budget} REST calls left "
-                      f"(-{inflight_cost} in-flight for {active} active runs = {effective_budget} effective; "
+                      f"(-{inflight_cost} in-flight for {active} active runs [{inflight_breakdown}] "
+                      f"= {effective_budget} effective; "
                       f"{ACTIONS_TOKEN_RESERVE} are kept for checks and landings).", file=sys.stderr)
                 slots = 0
+            wide_dispatched = 0
             for _, pr, kind in backfill_candidates[:slots]:
                 if CALLS_PER_BACKFILL[kind] > spare:
                     break
                 dispatch_rl = getattr(dispatch_api, "ratelimit_remaining", None)
-                if ((api.ratelimit_remaining is not None and api.ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
+                if ((api.graphql_ratelimit_remaining is not None and api.graphql_ratelimit_remaining <= MIN_RATELIMIT_BACKFILL)
                         or (dispatch_rl is not None and dispatch_rl <= ACTIONS_TOKEN_RESERVE)):
                     break
+                is_wide_refresh = (kind == "refresh" and has_header(pr))
+                if is_wide_refresh and wide_dispatched >= MAX_WIDE_BACKFILL:
+                    continue
                 num = pr["number"]
                 oid = pr.get("headRefOid", "")
                 if not HEX40.fullmatch(oid):
                     continue
                 event = EVENTS[kind]
                 try:
-                    # The marker starts the cooldown first; if it cannot be written, nothing is dispatched.
                     dispatch_api.post(f"statuses/{oid}", {
                         "state": "success", "context": MARKER,
                         "description": f"Requested {event} on main {main_sha[:12]}",
@@ -590,6 +812,8 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
                     })
                     backfilled.append(num)
                     spare -= CALLS_PER_BACKFILL[kind]
+                    if is_wide_refresh:
+                        wide_dispatched += 1
                     print(f"Dispatched {event} for PR #{num} ({oid[:12]})")
                 except ApiError as exc:
                     print(f"Skipped backfill for PR #{num}: {exc}", file=sys.stderr)
@@ -603,8 +827,8 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
         else:
             quota_line = (
                 f"- **Actions token REST calls left:** {budget} "
-                f"(-{inflight_cost} in-flight for {active} active runs = {effective_budget} effective; "
-                f"reserve {ACTIONS_TOKEN_RESERVE})"
+                f"(-{inflight_cost} in-flight for {active} active runs [{inflight_breakdown}] "
+                f"= {effective_budget} effective; reserve {ACTIONS_TOKEN_RESERVE})"
             )
         lines = [
             "### BFME II Merge Queue Enqueue",
@@ -615,9 +839,12 @@ def run(api=None, *, dispatch_api=None, config_path=None, env=None, now=None):
             f"- **Backfill cooling down:** {held_back}",
             f"- **Backfill dispatched:** {len(backfilled)} ({', '.join(f'#{n}' for n in backfilled) or 'none'})",
             quota_line,
-            f"- **Queue token rate limit:** {ratelimit_text(api)}",
-            f"- **Actions token rate limit:** {ratelimit_text(dispatch_api)}",
+            f"- **Queue token rate limit (GraphQL):** {ratelimit_text(api, 'graphql')}",
+            f"- **Queue token rate limit (REST):** {ratelimit_text(api, 'rest')}",
+            f"- **Actions token rate limit:** {ratelimit_text(dispatch_api, 'rest')}",
         ]
+        if enqueue_paused:
+            lines.append("- **Enqueue paused:** merge queue state uncertain")
         if enqueue_errors:
             lines.append(f"- **Enqueue rejections:** {len(enqueue_errors)}")
         with Path(summary_path).open("a", encoding="utf-8", newline="\n") as stream:

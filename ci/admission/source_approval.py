@@ -11,7 +11,9 @@ import zipfile
 from common import REPO, REPO_ID
 
 BOT_ID = 41898282
-CONTEXTS = ("BFME II / source rules", *(f"BFME II / G{i}" for i in range(1, 9)))
+# tools/gates/workflow.py publishes one aggregate status that names any failing G1-G8 rule. Older runs also wrote
+# one status per rule; their aggregate status carried the same decision, so only the aggregate is read.
+CONTEXTS = ("BFME II / source rules",)
 RUN_URL = re.compile(r"https://github\.com/" + re.escape(REPO) + r"/actions/runs/([1-9][0-9]{0,19})")
 RUN_ID = re.compile(r"[1-9][0-9]{0,19}")
 WORKFLOWS = {".github/workflows/rules.yml", ".github/workflows/managed-pr.yml"}
@@ -30,12 +32,12 @@ MAX_CANDIDATES = 4
 
 
 def candidate_runs(api, head, base):
-    """Protected runs that published all nine passing source statuses for this head and main, newest first.
+    """Protected runs that published a passing source-rules status for this head and main, newest first.
 
-    Only the Actions bot's statuses for this main count. The newest such status of each rule decides a refusal: a
-    failure there refuses. Otherwise every run that published a passing status for all nine is a candidate, so a
-    later run that re-published them and then died (a compiler run whose machine failed) does not hide an earlier
-    run's receipt. The caller authenticates each candidate run and its receipt."""
+    Only the Actions bot's statuses for this main count. The newest such status decides a refusal: a failure there
+    refuses. Otherwise every run that published a passing status is a candidate, so a later run that re-published it
+    and then died (a compiler run whose machine failed) does not hide an earlier run's receipt. The caller
+    authenticates each candidate run and its receipt."""
     newest, passing = {}, {}
     suffix = f"(main {base[:12]})"
     for page in range(1, 5):
@@ -62,7 +64,7 @@ def candidate_runs(api, head, base):
 
 
 def statuses(api, head, base):
-    """The newest protected run that published all nine passing source statuses for this head and main."""
+    """The newest protected run that published a passing source-rules status for this head and main."""
     return candidate_runs(api, head, base)[0]
 
 
