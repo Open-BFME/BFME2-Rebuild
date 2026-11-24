@@ -70,6 +70,17 @@ Bool Object::testModelConditionState(ModelConditionFlagType t) const
 }
 
 // FUNCTION: BFME2 0x0006F05E size=93 name=?Spheres_Intersect@@YA_NABVSphereClass@@0@Z evidence=N:ledger tier=A
+bool Spheres_Intersect(const SphereClass &s0, const SphereClass &s1)
+{
+	Vector3 delta = s0.Center - s1.Center;
+	float dist2 = Vector3::Dot_Product(delta, delta);
+
+	if (dist2 < (s0.Radius + s1.Radius) * (s0.Radius + s1.Radius)) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 // FUNCTION: BFME2 0x0006F0BB size=235 name=?rva0006F0BB@@YAX_NABVVector3@@MM@Z evidence=?:placeholder tier=A
 
