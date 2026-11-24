@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import URLError
 from zipfile import BadZipFile
 
-from common import HEX40, HEX64, PIN, REPO_ID, policy, read, write
+from common import APPROVED_IMAGE_PROFILES, HEX40, HEX64, PIN, REPO_ID, policy, read, write
 from fork_admission import read_source_receipt, source_receipt_matches
 from gitrepo import Git
 from measure import COMPILER
@@ -49,16 +49,20 @@ def receipt_binding(decision, run):
             | {name: decision[name] for name in ("number", "base", "head", "tree", "plan")})
 
 
-def verified_receipt(record, decision, run):
+def verified_receipt(record, decision, run, approved_images=None):
     expected = receipt_binding(decision, run)
+    flexible = {"image", "profile"} if approved_images is not None else frozenset()
     if (set(record) != set(expected) | {"base_tree", "probe_count", "status", "findings", "layout_only"}
-            or any(record.get(key) != value for key, value in expected.items())
+            or any(record.get(key) != value for key, value in expected.items() if key not in flexible)
             or not isinstance(record["base_tree"], str) or not HEX40.fullmatch(record["base_tree"])
             or record["status"] not in {"pass", "held", "refuse"}
             or type(record["probe_count"]) is not int or record["probe_count"] < 0
             or (record["probe_count"] > 8 and record["status"] == "pass")
             or not isinstance(record["findings"], list) or not isinstance(record["layout_only"], list)):
         raise ValueError("The H2 receipt does not bind the current protected attempt.")
+    if approved_images is not None:
+        if (record.get("image"), record.get("profile")) not in approved_images:
+            raise ValueError("The H2 receipt does not bind the current protected attempt.")
     return record
 
 
@@ -93,10 +97,11 @@ def same_artifact(row, api, run, name, ident, checksum, started, limit):
     return ident, checksum
 
 
-def read_result(api, decision, run, artifact):
+def read_result(api, decision, run, artifact, approved_images=None):
     with TemporaryDirectory(prefix="bfme-header-evidence-") as scratch:
         api.extract(artifact, {"header-h2.json"}, MAX_H2_BYTES, scratch)
-        result = verified_receipt(read(Path(scratch) / "header-h2.json", MAX_H2_BYTES), decision, run)
+        result = verified_receipt(read(Path(scratch) / "header-h2.json", MAX_H2_BYTES), decision, run,
+                                  approved_images=approved_images)
     base_tree = Git(Path.cwd() / ".git").value("rev-parse", decision["base"] + "^{tree}")
     if result["base_tree"] != base_tree or not current(api, decision):
         raise ValueError("The H2 baseline or current binding changed during readback.")
@@ -178,7 +183,7 @@ def read_published(binding):
     if any(decision[key] != binding[key] for key in ("number", "base", "head", "tree")):
         raise ValueError("The H2 producer admitted a different pull request.")
     artifact = named_artifact(api, run, "bfme-header-h2-" + run["attempt"], started, MAX_H2_BYTES)
-    result = read_result(api, decision, run, artifact)
+    result = read_result(api, decision, run, artifact, approved_images=APPROVED_IMAGE_PROFILES)
     if published_issuer(api, binding) != run:
         raise ValueError("A newer protected attempt superseded the H2 evidence.")
     return result

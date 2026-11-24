@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+    env:
+      BFME_PR_RUNNER: "${{ vars.BFME_PR_RUNNER || '' }}"
     outputs:
       shards: '${{ steps.plan.outputs.shards }}'
       has_shards: '${{ steps.plan.outputs.has_shards }}'
@@ -67,6 +69,7 @@ jobs:
             GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_REPOSITORY="$GITHUB_REPOSITORY" \
             GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" GITHUB_REF="$GITHUB_REF" \
             GITHUB_SHA="$GITHUB_SHA" BFME_MQ_MAIN_SHA="$BFME_MQ_MAIN_SHA" \
+            BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
             python3 -B ci/managed-check/merge_queue_plan.py "$RUNNER_TEMP/bfme-mq-plans"
       - name: Upload merge group plans
         if: always()
@@ -81,8 +84,10 @@ jobs:
     needs: plan
     if: needs.plan.result == 'success' && needs.plan.outputs.has_shards == 'yes'
     name: Boat shard ${{ matrix.shard }}
-    runs-on: boat-small/from=bfme2-compiler-v1
+    runs-on: ${{ vars.BFME_PR_RUNNER || 'boat-small/from=bfme2-compiler-v1' }}
     timeout-minutes: 20
+    env:
+      BFME_PR_RUNNER: "${{ vars.BFME_PR_RUNNER || '' }}"
     strategy:
       fail-fast: false
       max-parallel: 16
@@ -178,6 +183,7 @@ jobs:
             GITHUB_OUTPUT="$GITHUB_OUTPUT" GITHUB_RUN_ID="$GITHUB_RUN_ID" \
             GITHUB_RUN_ATTEMPT="$GITHUB_RUN_ATTEMPT" \
             BFME_BASE_CACHE="$RUNNER_TEMP/bfme-base-cache" \
+            BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
             python3 -B ci/managed-check/compare.py \
             "$RUNNER_TEMP/bfme-mq-plans/shard-${{ matrix.shard }}" \
             "$RUNNER_TEMP/bfme-mq-verdict"
@@ -200,6 +206,8 @@ jobs:
     name: Report merge group Boat verdict
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    env:
+      BFME_PR_RUNNER: "${{ vars.BFME_PR_RUNNER || '' }}"
     permissions:
       contents: read
       statuses: write
