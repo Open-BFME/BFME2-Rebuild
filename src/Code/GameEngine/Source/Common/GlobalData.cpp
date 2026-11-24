@@ -51,6 +51,11 @@ GlobalData *GlobalData::s_theOriginal = NULL;
 // FUNCTION: BFME2 0x002343AB size=24 name=?convertToWideBuffer@Rva000B3F84Pair@@QAEHPAG@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x002343C3 size=28 name=?convertToWideBufferWithExtra@Rva002343C3TitleSegment@@QAEHPAG@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x002343DF size=24 name=?makeAsciiString@@YA?AVAsciiString@@PBD@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+AsciiString makeAsciiString(const char *s)
+{
+	return AsciiString(s);
+}
+
 // FUNCTION: BFME2 0x002343F7 size=32 name=?makeStringRef@@YA?AVRva000B3F84Pair@@PBD@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00234417 size=190 name=?getStringFromRegistry@@YA_NPAUHKEY__@@VUnicodeString@@1AAV2@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 Bool getStringFromRegistry(HKEY root, UnicodeString path, UnicodeString key, UnicodeString &value)
