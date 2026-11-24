@@ -396,9 +396,9 @@ StateReturnType AIGuardReturnState::onEnter()
 		getMachine()->setGoalPosition(&m_goalPosition, m_unk0x2C);
 		if (g_bfmeCritterDesyncLog)
 		{
-			void *log = theLogicRandomLogFile;
+			Rva002CEC0A *log = theLogicRandomLogFile;
 			if (log)
-				fprintf(log, "CritterDesync: setAdjustDestination(TRUE) 3");
+				log->addLine("CritterDesync: setAdjustDestination(TRUE) 3");
 		}
 		m_adjustDestinations = true;
 		return AIInternalMoveToState::onEnter();

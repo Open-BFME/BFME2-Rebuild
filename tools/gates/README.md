@@ -121,3 +121,23 @@ landing and can reproduce the informational baseline from a pinned tip.
     python3 -B replay.py replay /path/to/development.git TIP result.json --count 500
     python3 -B replay.py inventory /path/to/development.git TIP inventory.json
 
+
+## Ledger runtime names
+
+`ledger_runtime_names.py` checks the ledger rather than a change. Retail
+imports the C runtime from `msvcr71.dll`, so a name the program imports
+cannot also name a body linked into `game.dat`. The check refuses a row of
+`config/map.json` whose name or accepted alias is a `msvcr71.dll` import or
+another export of the same import entry (`strcpy` and `_mbscpy`, `_strdup`
+and `_mbsdup`, `_stricmp` and `_strcmpi`, `abs` and `labs`, `getc` and
+`fgetc`, `putc` and `fputc`), also as a C symbol (`_free` for `free`). The
+exceptions are the linker's one import thunk per entry, bodies from a
+`msvcrt.lib` object, and the reviewed entries in its `ALLOWED` table. The
+import names come from `baseline/game.dat` and
+`ci/managed-nt2/engine/gen/import_aliases.py`.
+
+    python3 -B ledger_runtime_names.py ../.. --json runtime-names.json
+
+Exit 0 means no refused row, 1 lists the refused rows, and 2 means an input
+could not be read. `test_ledger_runtime_names.py` also runs it on the
+committed ledger.

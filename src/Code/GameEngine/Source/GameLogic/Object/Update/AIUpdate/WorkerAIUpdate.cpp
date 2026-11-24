@@ -418,7 +418,7 @@ void WorkerAIUpdate::xfer(Xfer *xfer)
 Bool WorkerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Object *target, Coord3D &positionOut)
 {
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    WorkerAIUpdate::findGoodBuildOrRepairPosition() BEGIN: Object %s(%d) with target %s(%d)",
+		theLogicRandomLogFile->addLine("    WorkerAIUpdate::findGoodBuildOrRepairPosition() BEGIN: Object %s(%d) with target %s(%d)",
 			me->getTemplate()->getName().str(), me->getID(),
 			target != 0 ? target->getTemplate()->getName().str() : "NULL", target != 0 ? target->getID() : 0);
 
@@ -428,7 +428,7 @@ Bool WorkerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Objec
 	theirPosition.set(target->getPosition());
 
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    ourPosition=%g,%g,%g, theirPosition=%g,%g,%g",
+		theLogicRandomLogFile->addLine("    ourPosition=%g,%g,%g, theirPosition=%g,%g,%g",
 			ourPosition.x, ourPosition.y, ourPosition.z, theirPosition.x, theirPosition.y, theirPosition.z);
 
 	Coord3D bestPosition;
@@ -443,14 +443,14 @@ Bool WorkerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Objec
 	offset = offset * 0.5f;
 
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    offset=%g,%g,%g, radius=%g", offset.X, offset.Y, offset.Z, radius);
+		theLogicRandomLogFile->addLine("    offset=%g,%g,%g, radius=%g", offset.X, offset.Y, offset.Z, radius);
 
 	workingPosition.x += offset.X;
 	workingPosition.y += offset.Y;
 	workingPosition.z += offset.Z;
 
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    workingPosition=%g,%g,%g", workingPosition.x, workingPosition.y, workingPosition.z);
+		theLogicRandomLogFile->addLine("    workingPosition=%g,%g,%g", workingPosition.x, workingPosition.y, workingPosition.z);
 
 	const Real MAX_Z_DELTA = 10.0f;
 
@@ -466,7 +466,7 @@ Bool WorkerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Objec
 	Bool spotFound = findNearestLabeledContactPointOnTarget(const_cast<Object *>(target), &bestPosition, &workingPosition, true);
 
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    spotFound=%s, bestPosition=%g,%g,%g, workingPosition=%g,%g,%g",
+		theLogicRandomLogFile->addLine("    spotFound=%s, bestPosition=%g,%g,%g, workingPosition=%g,%g,%g",
 			spotFound ? "TRUE" : "FALSE", bestPosition.x, bestPosition.y, bestPosition.z,
 			workingPosition.x, workingPosition.y, workingPosition.z);
 
@@ -475,14 +475,14 @@ Bool WorkerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Objec
 		ThePartitionManager->findPositionAround(&workingPosition, &fpOptions, &bestPosition);
 
 		if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-			fprintf(theLogicRandomLogFile, "    TerrainLogic::FindPositionAround() workingPosition=%g,%g,%g, bestPosition=%g,%g,%g",
+			theLogicRandomLogFile->addLine("    TerrainLogic::FindPositionAround() workingPosition=%g,%g,%g, bestPosition=%g,%g,%g",
 				workingPosition.x, workingPosition.y, workingPosition.z, bestPosition.x, bestPosition.y, bestPosition.z);
 	}
 
 	positionOut = spotFound ? bestPosition : workingPosition;
 
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "    positionOut=%g,%g,%g", positionOut.x, positionOut.y, positionOut.z);
+		theLogicRandomLogFile->addLine("    positionOut=%g,%g,%g", positionOut.x, positionOut.y, positionOut.z);
 
 	return spotFound;
 }
@@ -616,19 +616,19 @@ void DozerAIUpdate::createBridgeScaffolding(Object *bridgeTower)
 Object *WorkerAIUpdate::findGoodBuildOrRepairPositionAndTarget(Object *me, Object *target, Coord3D &pos)
 {
 	if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "  WorkerAIUpdate::findGoodBuildOrRepairPositionAndTarget() BEGIN: Object %s(%d) with target %s(%d)",
+		theLogicRandomLogFile->addLine("  WorkerAIUpdate::findGoodBuildOrRepairPositionAndTarget() BEGIN: Object %s(%d) with target %s(%d)",
 			me->getTemplate()->getName().str(), me->getID(),
 			target != 0 ? target->getTemplate()->getName().str() : "NULL", target != 0 ? target->getID() : 0);
 
 	if (target->getTemplate()->isKindOf(KINDOF_BRIDGE))
 	{
 		if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-			fprintf(theLogicRandomLogFile, "  target is a bridge case");
+			theLogicRandomLogFile->addLine("  target is a bridge case");
 		BridgeBehaviorInterface *bridge = BridgeBehavior::getBridgeBehaviorInterfaceFromObject(target);
 		if (bridge != 0)
 		{
 			if (g_bfmeDockingTraceActive && theLogicRandomLogFile != 0)
-				fprintf(theLogicRandomLogFile, "  target has a bridge behavior");
+				theLogicRandomLogFile->addLine("  target has a bridge behavior");
 			AIUpdateInterface *ai = me->getAI();
 			Real bestDistance = 1.0e10f;
 			Object *bestTower = 0;
@@ -679,7 +679,7 @@ void WorkerAIUpdate::newTask(DozerTask task, Object *target)
 		if (g_bfmeDockingDesyncLog)
 		{
 			if (theLogicRandomLogFile != 0)
-				fprintf(theLogicRandomLogFile, "DockingDesync(WORKER) BEGIN: Object %s(%d) with target %s(%d) at %g,%g,%g",
+				theLogicRandomLogFile->addLine("DockingDesync(WORKER) BEGIN: Object %s(%d) with target %s(%d) at %g,%g,%g",
 					me->getTemplate()->getName().str(), me->getID(), target->getTemplate()->getName().str(), target->getID(),
 					me->getPosition()->x, me->getPosition()->y, me->getPosition()->z);
 			g_bfmeDockingTraceActive = true;
@@ -692,7 +692,7 @@ void WorkerAIUpdate::newTask(DozerTask task, Object *target)
 			if (g_bfmeDockingDesyncLog)
 			{
 				if (theLogicRandomLogFile != 0)
-					fprintf(theLogicRandomLogFile, "DockingDesync(WORKER) END: Object %s(%d) with no target found docking position %g,%g,%g",
+					theLogicRandomLogFile->addLine("DockingDesync(WORKER) END: Object %s(%d) with no target found docking position %g,%g,%g",
 						me->getTemplate()->getName().str(), me->getID(), position.x, position.y, position.z);
 				g_bfmeDockingTraceActive = false;
 			}
@@ -702,7 +702,7 @@ void WorkerAIUpdate::newTask(DozerTask task, Object *target)
 		if (g_bfmeDockingDesyncLog)
 		{
 			if (theLogicRandomLogFile != 0)
-				fprintf(theLogicRandomLogFile, "DockingDesync(WORKER) END: Object %s(%d) with target %s(%d) found docking position %g,%g,%g",
+				theLogicRandomLogFile->addLine("DockingDesync(WORKER) END: Object %s(%d) with target %s(%d) found docking position %g,%g,%g",
 					me->getTemplate()->getName().str(), me->getID(), target->getTemplate()->getName().str(), target->getID(),
 					position.x, position.y, position.z);
 			g_bfmeDockingTraceActive = false;

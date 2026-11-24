@@ -282,11 +282,13 @@ void MemoryPool::InitFunctionPointers()
 	__gameMemGetHeapAllocatorByIndexPtr = (EA::Allocator::GeneralAllocator *(__cdecl *)(unsigned int))GetProcAddress(module, "?_GetHeapAllocatorByIndex@MemoryPool@@YAPAVGeneralAllocator@Allocator@EA@@I@Z");
 }
 
-// The byte allocator every STLport container in the game funnels through (declared by the
-// allocator shim): the memory front end's allocate with the CRT allocation type.
-char *_STL::allocator<char>::allocate(size_type size, const void *hint)
+// The C runtime's malloc replaced (0x000307F0, an expected row of this object): a block of the CRT
+// allocation type from the given heap. Its callers are STLport's containers, the string copies and
+// C code such as the VP6 decoder's duck_malloc, so it is no allocator member; the STLport allocator
+// overlay still names the containers' reference allocator<char>::allocate.
+void *allocateBlock(unsigned int size, unsigned int heap)
 {
-	return (char *)__gameMemAllocatePtr(size, ALLOC_TYPE_CRT, (unsigned int)hint);
+	return __gameMemAllocatePtr(size, ALLOC_TYPE_CRT, heap);
 }
 
 // FUNCTION: BFME2 0x00030810 size=27 name=?rva00030810@@YAHPAXPBDH@Z evidence=?:placeholder
@@ -298,10 +300,11 @@ void *reallocateBlock(void *block, unsigned int size, unsigned int heap)
 }
 
 // The CRT's free replaced (0x00030830, an expected row of this object): blocks from the CRT
-// replacements go back through the memorypool with AllocType 3.
-extern "C" void __cdecl free(void *p)
+// replacements go back through the memorypool with AllocType 3. It cannot be the runtime's free:
+// msvcr71.dll supplies that name to the same program.
+void freeBlock(void *block)
 {
-	__gameMemFreePtr(p, ALLOC_TYPE_CRT);
+	__gameMemFreePtr(block, ALLOC_TYPE_CRT);
 }
 
 // FUNCTION: BFME2 0x00030850 size=6 name=?isValidBlock@@YA_NPAXI@Z evidence=N:ledger

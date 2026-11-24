@@ -25,8 +25,9 @@
 //
 // AllocType values (from the callers): 1 operator new, 2 operator new[];
 // 0 and 3 are the two C-runtime replacement families (0x0002FC60/0x0002FC10 pass
-// 0; the CRT free 0x00030830 and realloc 0x00030810 pass 3). Enumerator names are
-// structural; retail only fixes the type name MemoryPool::AllocType.
+// 0; allocateBlock 0x000307F0, reallocateBlock 0x00030810 and freeBlock
+// 0x00030830 pass 3). Enumerator names are structural; retail only fixes the type
+// name MemoryPool::AllocType.
 #pragma once
 #ifndef BFME2_GAMEMEMORY_H
 #define BFME2_GAMEMEMORY_H
@@ -257,5 +258,14 @@ extern void (__cdecl *__gameMemVerifyIntegrityPtr)();
 extern void (__cdecl *__gameMemAddHeapPtr)(unsigned int, unsigned int);	// 0x009E03E8
 extern EA::Allocator::GeneralAllocator *(__cdecl *__gameMemGetHeapAllocatorPtr)(unsigned int);		// 0x009E03E4
 extern EA::Allocator::GeneralAllocator *(__cdecl *__gameMemGetHeapAllocatorByIndexPtr)(unsigned int);	// 0x009E03E0
+
+// The C runtime's malloc, realloc and free replaced (GameMemory.cpp): blocks of the CRT allocation
+// type, from the given heap (0 is the default heap). They are ordinary game functions, not the
+// runtime's, so they carry their own names; msvcr71.dll still supplies malloc and free themselves.
+void *allocateBlock(unsigned int size, unsigned int heap);
+void *reallocateBlock(void *block, unsigned int size, unsigned int heap);
+void freeBlock(void *block);
+// The C runtime's strdup replaced (no null test): the copy comes from allocateBlock.
+char *duplicateString(const char *string);
 
 #endif

@@ -38,6 +38,7 @@
 #undef _strdup
 #include <stdlib.h>
 #include <string.h>
+#include "Common/GameMemory.h"
 #include "GameNetwork/GameSpy/StagingRoomGameInfo.h"
 #include "GameNetwork/NetCommandWrapperList.h"
 #include "Common/FileSystem.h"
@@ -1635,7 +1636,7 @@ void ConnectionManager::update(Bool isInGame, Int frameAdvanced)
 		{
 			if (strcmp(GetChallenge(TheGameSpyGame->m_statsGame), "NULLGAME") != 0)
 			{
-				char *challenge = strdup(GetChallenge(TheGameSpyGame->m_statsGame));
+				char *challenge = duplicateString(GetChallenge(TheGameSpyGame->m_statsGame));
 				NetRequestGameSpyStatsAuthKeyCommandMsg *msg = new NetRequestGameSpyStatsAuthKeyCommandMsg;
 				msg->setPlayerID(m_localSlot);
 				msg->setTimestamp(TheGameLogic->m_unk0x38);
@@ -1646,7 +1647,7 @@ void ConnectionManager::update(Bool isInGame, Int frameAdvanced)
 				sendLocalCommandDirect(msg, (UnsignedByte)~(1 << m_localSlot));
 				msg->detach();
 
-				char *secret = strdup(TheGameSpyBuddyMessageQueue->get());
+				char *secret = duplicateString(TheGameSpyBuddyMessageQueue->get());
 				char response[64];
 				GenerateAuthA(challenge, secret, response);
 				GameSpyGameSlot *slot = TheGameSpyGame->getGameSpySlot(TheGameSpyGame->getLocalSlotNum());
@@ -1655,8 +1656,8 @@ void ConnectionManager::update(Bool isInGame, Int frameAdvanced)
 					slot->setAuthKey(AsciiString(response));
 					slot->setLastString(AsciiString(TheGameSpyBuddyMessageQueue->vslot2C()));
 				}
-				free(challenge);
-				free(secret);
+				freeBlock(challenge);
+				freeBlock(secret);
 				m_unk0x12135 = false;
 			}
 		}

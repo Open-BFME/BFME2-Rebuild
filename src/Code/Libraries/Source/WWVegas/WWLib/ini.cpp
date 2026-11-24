@@ -42,11 +42,9 @@ int Read_Line(Straw &straw, char *buffer, int length, bool &eof);
 #include <malloc.h>
 #include "WWLib/wwstring.h"
 #include "WWLib/widestring.h"
-// The CRT's <string.h> declares strdup as a dllimport pointer, but retail calls
-// the pool build's own strdup directly (0x000AD9B0, a five-byte call). Rename the
-// header's declaration out of the way and declare the direct spelling here.
-#define strdup __bfme_strdup_dllimport
-#define _strdup __bfme_strdup_crt_dllimport
+// Retail copies and frees the entry, value and section strings with the game's own
+// duplicateString and freeBlock (direct five-byte calls), not the CRT imports.
+#include "Common/GameMemory.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -54,26 +52,13 @@ extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char *)
 extern "C" __declspec(dllimport) int __stdcall MessageBoxA(void *, const char *, const char *, unsigned int);
 #include <ctype.h>
 #include <wchar.h>
-#undef strdup
-#undef _strdup
-extern "C" char * __cdecl strdup(const char *);
-extern "C" char * __cdecl _strdup(const char *);
-
-// Retail frees the entry, value and section buffers with a direct five-byte call
-// to the C++-linkage free the memory-pool build provides (0x00030830), not through
-// the CRT import pointer the headers declare; the qualified spelling keeps the two
-// distinct so only these calls take the direct form.
-namespace _STL
-{
-extern "C" void __cdecl free(void *block);
-}
 
 
 INIEntry::~INIEntry()
 {
-	_STL::free(Entry);
+	freeBlock(Entry);
 	Entry = 0;
-	_STL::free(Value);
+	freeBlock(Value);
 	Value = 0;
 }
 
@@ -204,7 +189,7 @@ INISection::INISection(char * section) : Section(section)
 // FUNCTION: BFME2 0x00616830 size=189 name=??1INISection@@UAE@XZ evidence=N:ledger
 INISection::~INISection()
 {
-	_STL::free(Section);
+	freeBlock(Section);
 	Section = 0;
 	EntryList.Delete();
 }
@@ -412,7 +397,7 @@ bool INIClass::Put_String(const char * section, const char * entry, const char *
 	INISection * sec = Find_Section(section);
 
 	if (sec == 0) {
-		sec = new INISection(strdup(section));
+		sec = new INISection(duplicateString(section));
 		if (sec == 0) return(false);
 		SectionList->GenericList::Add_Tail(sec);
 		SectionIndex->Add_Index(sec->Index_ID(), sec);
@@ -428,7 +413,7 @@ bool INIClass::Put_String(const char * section, const char * entry, const char *
 	}
 
 	if (string != 0 && strlen(string) > 0) {
-		ent = new INIEntry(strdup(entry), strdup(string));
+		ent = new INIEntry(duplicateString(entry), duplicateString(string));
 		if (ent == 0) {
 			return false;
 		}
@@ -494,7 +479,7 @@ char *INIClass::Get_Alloc_String(const char * section, const char * entry, const
 	}
 
 	if (fallback == 0) return 0;
-	return strdup(fallback);
+	return duplicateString(fallback);
 }
 
 
@@ -529,7 +514,7 @@ int INIClass::Get_Int_Bitfield(const char *section, const char *entry, int defva
 		if (found != 0 && found->Value != 0) {
 			// Each delimited token names a flag by its position in the caller's list; the flags are OR-ed together.
 			int flags = 0;
-			char *scratch = _strdup(found->Value);
+			char *scratch = duplicateString(found->Value);
 			char *token = strtok(scratch, "|+");
 			while (token != 0) {
 				int position = 0;
@@ -544,7 +529,7 @@ int INIClass::Get_Int_Bitfield(const char *section, const char *entry, int defva
 				}
 				token = strtok(0, "|+");
 			}
-			_STL::free(scratch);
+			freeBlock(scratch);
 			return flags;
 		}
 	}
@@ -560,17 +545,17 @@ int *INIClass::Get_Alloc_Int_Array(const char *section, const char *entry, int l
 		if (found != 0 && found->Value != 0) {
 			// Count the space-separated fields on a scratch copy, then convert them on a second copy.
 			int count = 0;
-			char *scratch = _strdup(found->Value);
+			char *scratch = duplicateString(found->Value);
 			for (char *token = strtok(scratch, " "); token != 0; token = strtok(0, " "))
 				count++;
-			_STL::free(scratch);
+			freeBlock(scratch);
 
 			int *values = (int *)::operator new(count * 4 + 4);
 			int filled = 0;
-			scratch = _strdup(found->Value);
+			scratch = duplicateString(found->Value);
 			for (char *token = strtok(scratch, " "); token != 0; token = strtok(0, " "))
 				values[filled++] = atoi(token);
-			_STL::free(scratch);
+			freeBlock(scratch);
 			values[filled] = listend;
 			return values;
 		}

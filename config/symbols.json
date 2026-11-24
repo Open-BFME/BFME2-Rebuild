@@ -111040,7 +111040,7 @@
         }
       ]
     },
-    "_theLogicRandomLogFile": {
+    "?theLogicRandomLogFile@@3PAVRva002CEC0A@@A": {
       "candidates": [
         {
           "rva": "0x009FEFF0",

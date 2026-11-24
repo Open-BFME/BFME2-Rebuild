@@ -1,14 +1,8 @@
 // cl: /O2
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <new>
-#define _strdup __bfme_strdup_crt_dllimport
 #include <string.h>
-#undef _strdup
-extern "C" char * __cdecl _strdup(const char *);
-namespace pool_free
-{
-extern "C" void __cdecl free(void *block);
-}
+#include "Common/GameMemory.h"
 #include "WW3D2/ParticleEmitterClass.h"
 #include "WW3D2/ParticleBufferClass.h"
 #include "WW3D2/ParticleEmitterDefClass.h"
@@ -80,8 +74,8 @@ ParticleEmitterClass::ParticleEmitterClass(const ParticleEmitterClass &src) :
 	ParticlesLeft(src.ParticlesLeft),
 	MaxParticles(src.MaxParticles),
 	IsComplete(false),
-	NameString(_strdup(src.NameString)),
-	UserString(_strdup(src.UserString)),
+	NameString(duplicateString(src.NameString)),
+	UserString(duplicateString(src.UserString)),
 	RemoveOnComplete(src.RemoveOnComplete),
 	IsInScene(false),
 	GroupID(0),
@@ -108,12 +102,12 @@ ParticleEmitterClass::~ParticleEmitterClass(void)
 	}
 
 	if (NameString != NULL) {
-		pool_free::free(NameString);
+		freeBlock(NameString);
 		NameString = NULL;
 	}
 
 	if (UserString != NULL) {
-		pool_free::free(UserString);
+		freeBlock(UserString);
 		UserString = NULL;
 	}
 }
@@ -368,10 +362,10 @@ void ParticleEmitterClass::Initialize_Particle(NewParticleStruct *newpart, unsig
 void ParticleEmitterClass::Set_Name(const char *pname)
 {
 	if (NameString != NULL) {
-		pool_free::free (NameString);
+		freeBlock (NameString);
 		NameString = NULL;
 	}
-	NameString = ::_strdup (pname);
+	NameString = duplicateString (pname);
 }
 
 // FUNCTION: BFME2 0x001A2260 size=91 name=?Update_On_Visibilty@ParticleEmitterClass@@MAEXXZ evidence=N:ledger tier=B hypothesis:cohesion

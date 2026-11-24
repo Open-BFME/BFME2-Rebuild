@@ -5,16 +5,18 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
-// The logic-random / desync log file (.bss 0x00DFEFF0, before RayEffect.cpp's TheRayEffects 0x00DFEFF4);
-// RandomValue, GameEngine, GameLogic and the AI dock-desync traces read it (callers declare it extern "C").
-extern "C" void *theLogicRandomLogFile = 0;
+#include "Common/CRCDebug.h"
+
+// The logic random log (.bss 0x00DFEFF0, before RayEffect.cpp's TheRayEffects 0x00DFEFF4): GameEngine::init
+// stores the log object here; RandomValue, ThingFactory and the AI desync traces write through it.
+Rva002CEC0A *theLogicRandomLogFile = 0;
 
 // FUNCTION: BFME2 0x002CEA22 size=51 name=??0BFMEDesyncCheck@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x002CEA55 size=409 name=?writeReportIfMismatched@BFMEDesyncCheck@@QAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002CEC34 size=14 name=?rva002CEC34@Rva002CEC0A@@QAEXXZ evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002CEC42 size=108 name=_fprintf evidence=?:contested(N:ledger) tier=A
+// FUNCTION: BFME2 0x002CEC42 size=108 name=?addLine@Rva002CEC0A@@QAAXPBDZZ evidence=?:placeholder tier=A
 
 
 // FUNCTION: BFME2 0x002CECAE size=120 name=?AppendInLogicUpdateOnly@@YAXPAURva002CECAETarget@@PBDZZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data

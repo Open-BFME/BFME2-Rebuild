@@ -94,14 +94,14 @@ void __cdecl operator delete[](void *p, unsigned int)
 	__gameMemFreePtr(p, MemoryPool::ALLOC_TYPE_NEW_ARRAY);
 }
 
-// FUNCTION: BFME2 0x006C4C70 size=60 name=_strdup evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x006C4C70 size=60 name=?duplicateString@@YAPADPBD@Z evidence=?:placeholder tier=B hypothesis:K
 // The CRT's strdup replaced: the copy comes from the game's allocator (no NULL test in retail).
-char *__cdecl strdup(const char *string)
+char *duplicateString(const char *string)
 {
 	size_t length = strlen(string) + 1;
-	char *copy = _STL::allocator<char>::allocate(length, 0);
+	void *copy = allocateBlock(length, 0);
 	memcpy(copy, string, length);
-	return copy;
+	return static_cast<char *>(copy);
 }
 
 

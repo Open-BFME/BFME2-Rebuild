@@ -715,6 +715,20 @@ GRAPH_CHANGES += (GATES_POLICY_DIGEST_TEST_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(GATES_POLICY_DIGEST_TEST_GRAPH)
 
+GATES_LEDGER_RUNTIME_NAMES_GRAPH = {
+    'tools/gates/README.md': ('97a53c1d9e3437293ee52088beab184eea19f151c97f7b8023fcc420e7bea4f8', '96b1d3d3bbad05f12f115b79f23e935c84b16dfcd15d43994877fdc7b832df50'),
+    'tools/gates/ledger_runtime_names.py': (None, 'a6072aa277b6ab65eca533eb0b93d07a107f6a1cf84a831abdc75b04fefa3445'),
+    'tools/gates/test_ledger_runtime_names.py': (None, 'ad9ad1dcfd805a4fb481ece2d2088cbb6a7c9de00c697d191a655e54b0094894'),
+}
+GRAPH_CHANGES += (GATES_LEDGER_RUNTIME_NAMES_GRAPH,) + tuple(
+    advance_graph(previous, GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+    and all(previous[path][1] == GATES_LEDGER_RUNTIME_NAMES_GRAPH[path][0]
+            for path in previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2

@@ -3,15 +3,13 @@
 // bfmealloc_alloconly
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // Normalize_Filename uses the CRT import, while the string setters use
-// the game's own _strdup and allocator.
+// the game's own duplicateString and freeBlock (Common/GameMemory.h).
 #pragma push_macro("_CRTIMP")
 #undef _CRTIMP
 #define _CRTIMP __declspec(dllimport)
-#define _strdup __bfme_strdup_crt_dllimport
 #include <string.h>
-#undef _strdup
 #pragma pop_macro("_CRTIMP")
-extern "C" char * __cdecl _strdup(const char *);
+#include "Common/GameMemory.h"
 
 #include <memory>
 #include "WW3D2/ParticleEmitterDefClass.h"
@@ -24,7 +22,7 @@ extern "C" __declspec(dllimport) char * __stdcall lstrcpy(char *, const char *);
 extern "C" __declspec(dllimport) char * __stdcall lstrcpyn(char *, const char *, int);	// IAT 0x00BBA308
 extern "C" __declspec(dllimport) int __stdcall lstrlen(const char *);
 
-#define SAFE_FREE(pointer)	{ 	if (pointer) {			_STL::free (pointer); 		pointer = 0; 	} }
+#define SAFE_FREE(pointer)	{ 	if (pointer) {			freeBlock (pointer); 		pointer = 0; 	} }
 
 #define SAFE_DELETE(pointer) { if (pointer) { ::delete pointer; pointer = 0; } }
 
@@ -93,7 +91,7 @@ void ParticleEmitterDefClass::Set_Creation_Volume(Vector3Randomizer *randomizer)
 void ParticleEmitterDefClass::Set_User_String(const char *pstring)
 {
 	SAFE_FREE (m_pUserString);
-	m_pUserString = ::_strdup (pstring);
+	m_pUserString = duplicateString (pstring);
 	return;
 }
 
@@ -101,7 +99,7 @@ void ParticleEmitterDefClass::Set_User_String(const char *pstring)
 void ParticleEmitterDefClass::Set_Name(const char *pname)
 {
 	SAFE_FREE (m_pName);
-	m_pName = ::_strdup (pname);
+	m_pName = duplicateString (pname);
 	return;
 }
 
@@ -240,7 +238,7 @@ bool ParticleEmitterDefClass::Read_Header(ChunkLoadClass &chunk_load)
 		if (chunk_load.Read (&header, sizeof (header)) == sizeof (header)) {
 
 			// Copy the name from the header structure
-			m_pName = ::_strdup (header.Name);
+			m_pName = duplicateString (header.Name);
 			m_Version = header.Version;
 
 			// Success!
@@ -266,7 +264,7 @@ bool ParticleEmitterDefClass::Read_User_Data(ChunkLoadClass &chunk_load)
 			success = true;
 			m_iUserType = user_info.Type;
 			if (user_info.SizeofStringParam > 0) {
-				m_pUserString = _STL::allocator<char>::allocate(user_info.SizeofStringParam + 1, 0);
+				m_pUserString = static_cast<char *>(allocateBlock(user_info.SizeofStringParam + 1, 0));
 				m_pUserString[0] = 0;
 				if (chunk_load.Read(m_pUserString, user_info.SizeofStringParam) != user_info.SizeofStringParam)
 					success = false;
@@ -1278,16 +1276,16 @@ ParticleEmitterDefClass::~ParticleEmitterDefClass()
 	// Free the name buffer if necessary
 	if (m_pName != NULL) {
 
-		// free() is used because the buffer was allocated with ::_strdup().
-		_STL::free (m_pName);
+		// freeBlock() is used because the buffer was allocated with duplicateString().
+		freeBlock (m_pName);
 		m_pName = NULL;
 	}
 
 	// Free the user-string buffer if necessary
 	if (m_pUserString != NULL) {
 
-		// free() is used because the buffer was allocated with ::malloc() or ::_strdup().
-		_STL::free (m_pUserString);
+		// freeBlock() is used because the buffer was allocated with allocateBlock() or duplicateString().
+		freeBlock (m_pUserString);
 		m_pUserString = NULL;
 	}
 

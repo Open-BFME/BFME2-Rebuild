@@ -2,6 +2,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/RandomValue.h"
 #include "Common/GlobalData.h"
+#include "Common/CRCDebug.h"
 
 // Six-word state blocks, one per random stream, and the seed last given to the logic stream.
 // Retail data: the three stream states start from the same six words (VA 0x00DBA3A0, 0x00DBA3B8, 0x00DBA3D0).
@@ -17,12 +18,7 @@ const char *GameClientRandomVariable::DistributionTypeNames[] = {
 static UnsignedInt theGameLogicBaseSeed = 0;	// explicit zeros keep .bss in definition order
 // Scale from raw 32-bit draws to [0,1): 1 / (2^32 - 1).
 static Real theMultFactor = 0.0f;
-// Log file for logic draws; null unless logging is on. Defined in CRCDebug.cpp (.bss 0x00DFEFF0, the
-// object before RayEffect.cpp's TheRayEffects 0x00DFEFF4); the AI and dock files read the same C-linkage name.
-extern "C" void *theLogicRandomLogFile;
-
-// The game's stdio-style logging sink and the CRT string search, which retail imports.
-extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
+// The CRT string search, which retail imports.
 extern "C" __declspec(dllimport) char *__cdecl strrchr(const char *str, int ch);
 // CRC over a byte range, seeded with crc.
 unsigned int ComputeCRC(const unsigned char *data, unsigned int length, unsigned int crc);
@@ -137,7 +133,7 @@ Int GetGameLogicRandomValue(Int lo, Int hi, char *file, int line)
 		return hi;
 	Int value = (Int)(randomValue(theGameLogicSeed) % span) + lo;
 	if (theLogicRandomLogFile)
-		fprintf(theLogicRandomLogFile, "logicrandom = %i (%s, %i)\n", value, strrchr(file, '\\') + 1, line);
+		theLogicRandomLogFile->addLine("logicrandom = %i (%s, %i)\n", value, strrchr(file, '\\') + 1, line);
 	return value;
 }
 
@@ -167,7 +163,7 @@ Real GetGameLogicRandomValueReal(Real lo, Real hi, char *file, int line)
 		return hi;
 	Real value = ((Real)randomValue(theGameLogicSeed) * theMultFactor) * delta + lo;
 	if (theLogicRandomLogFile)
-		fprintf(theLogicRandomLogFile, "logicrandom = %f (%s, %i)\n", value, strrchr(file, '\\') + 1, line);
+		theLogicRandomLogFile->addLine("logicrandom = %f (%s, %i)\n", value, strrchr(file, '\\') + 1, line);
 	return value;
 }
 

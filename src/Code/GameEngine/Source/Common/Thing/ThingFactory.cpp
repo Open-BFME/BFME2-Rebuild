@@ -15,10 +15,10 @@
 #include "GameLogic/Module/BehaviorModule.h"
 #include "GameLogic/Module/CreateModule.h"
 #include <stdio.h>
+#include "Common/CRCDebug.h"
 
 extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long milliseconds);
 extern unsigned char g_00E01EA8;	// the override-copy guard byte (see SpecialPower.cpp)
-extern "C" FILE *theLogicRandomLogFile;	// VA 0x00DFEFF0
 
 // This unit's .bss in retail order (all zero-initialised, so the definitions keep their order).
 // Set by addTemplate when a reload replaces a template; attemptReload reports it through needsRestart.
@@ -197,7 +197,7 @@ Object *ThingFactory::newObject(const ThingTemplate *thingTemplate, Team *team, 
 		Sleep(0);
 
 	if (theLogicRandomLogFile)
-		fprintf(theLogicRandomLogFile, "newObj %s id %i", thingTemplate->getName().str(), obj->getID());
+		theLogicRandomLogFile->addLine("newObj %s id %i", thingTemplate->getName().str(), obj->getID());
 
 	return obj;
 }

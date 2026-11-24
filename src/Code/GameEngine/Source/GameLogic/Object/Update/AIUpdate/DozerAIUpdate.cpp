@@ -818,7 +818,7 @@ void DozerAIUpdate::newTask(DozerTask task, Object *target)
 		if (g_bfmeDockingDesyncLog)
 		{
 			if (theLogicRandomLogFile != 0)
-				fprintf(theLogicRandomLogFile, "DockingDesync(DOZER) BEGIN: Object %s(%d) with target %s(%d) at %g,%g,%g",
+				theLogicRandomLogFile->addLine("DockingDesync(DOZER) BEGIN: Object %s(%d) with target %s(%d) at %g,%g,%g",
 					me->getTemplate()->getName().str(), me->getID(), target->getTemplate()->getName().str(), target->getID(),
 					me->getPosition()->x, me->getPosition()->y, me->getPosition()->z);
 			g_bfmeDockingTraceActive = true;
@@ -831,7 +831,7 @@ void DozerAIUpdate::newTask(DozerTask task, Object *target)
 			if (g_bfmeDockingDesyncLog)
 			{
 				if (theLogicRandomLogFile != 0)
-					fprintf(theLogicRandomLogFile, "DockingDesync(DOZER) END: Object %s(%d) with no target found docking position %g,%g,%g",
+					theLogicRandomLogFile->addLine("DockingDesync(DOZER) END: Object %s(%d) with no target found docking position %g,%g,%g",
 						me->getTemplate()->getName().str(), me->getID(), position.x, position.y, position.z);
 				g_bfmeDockingTraceActive = false;
 			}
@@ -841,7 +841,7 @@ void DozerAIUpdate::newTask(DozerTask task, Object *target)
 		if (g_bfmeDockingDesyncLog)
 		{
 			if (theLogicRandomLogFile != 0)
-				fprintf(theLogicRandomLogFile, "DockingDesync(DOZER) END: Object %s(%d) with target %s(%d) found docking position %g,%g,%g",
+				theLogicRandomLogFile->addLine("DockingDesync(DOZER) END: Object %s(%d) with target %s(%d) found docking position %g,%g,%g",
 					me->getTemplate()->getName().str(), me->getID(), target->getTemplate()->getName().str(), target->getID(),
 					position.x, position.y, position.z);
 			g_bfmeDockingTraceActive = false;
@@ -1014,11 +1014,11 @@ StateReturnType DozerActionPickActionPosState::update()
 		if (ThePartitionManager->findPositionAround(goalObject->getPosition(), &options, &goalPos) == FALSE)
 			goalPos = *goalObject->getPosition();
 		else if (g_bfmeCritterDesyncLog && theLogicRandomLogFile != 0)
-			fprintf(theLogicRandomLogFile, "\t\t  DozerActionPickActionPosState::update() goalPos is uninitialized");
+			theLogicRandomLogFile->addLine("\t\t  DozerActionPickActionPosState::update() goalPos is uninitialized");
 		ai->ignoreObstacle(goalObject);
 	}
 	if (g_bfmeCritterDesyncLog && theLogicRandomLogFile != 0)
-		fprintf(theLogicRandomLogFile, "\t\t  DozerActionPickActionPosState::update(), moving to goalPos %.03f, %.03f", goalPos.x, goalPos.y);
+		theLogicRandomLogFile->addLine("\t\t  DozerActionPickActionPosState::update(), moving to goalPos %.03f, %.03f", goalPos.x, goalPos.y);
 	machine->setGoalObject(goalObject);
 	machine->setGoalPosition(&goalPos, 3.4028235e+38f);
 	ai->ignoreObstacle(goalObject);

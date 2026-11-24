@@ -3,11 +3,13 @@
 // "DockingDesync(...)" lines to the logic random log when g_bfmeDockingDesyncLog is set).
 // Target facts: the bool at VA 0x00DCBF44 (map ?g_bfmeDockingDesyncLog@@3_NA), the bool at VA 0x00E03CA8
 // (map ?g_bfmeDockingTraceActive@@3_NA, set before and cleared after the task's dock position is chosen) and the
-// log file pointer at VA 0x00DFEFF0 (map _theLogicRandomLogFile). RandomValue.cpp still holds the file pointer as a
-// file static: the data owner exports it.
+// logic random log at VA 0x00DFEFF0 (theLogicRandomLogFile, Common/CRCDebug.h): each trace line goes through
+// the log object's addLine.
 #pragma once
 #ifndef BFME2_DOCKINGDESYNCLOG_H
 #define BFME2_DOCKINGDESYNCLOG_H
+
+#include "Common/CRCDebug.h"
 
 extern bool g_bfmeDockingDesyncLog;
 extern bool g_bfmeDockingTraceActive;
@@ -15,7 +17,5 @@ extern bool g_bfmeDockingTraceActive;
 // AIStates.cpp rows (the move states' computePath/onEnter/update, AIInternalMoveToState::getAdjustsDestination
 // 0x00344138) test it before writing "CritterDesync: ..." lines to the logic random log.
 extern bool g_bfmeCritterDesyncLog;
-extern "C" void *theLogicRandomLogFile;
-extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
 
 #endif

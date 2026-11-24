@@ -20,11 +20,9 @@
 
 extern "C" __declspec(dllimport) char * __stdcall lstrcpyn(char *, const char *, int);	// IAT 0x00BBA308
 
-// Retail's free (0x00030830) and strdup (0x00525F90) are the game's statically linked allocator: direct calls,
-// where the rest of the C runtime (strncpy in ProxyRecordClass::Init) goes through the import table.
-#undef strdup
-extern "C" void __cdecl free(void *block);
-extern "C" char * __cdecl strdup(const char *string);
+// The name copies come from the game's own allocator (duplicateString and freeBlock, direct calls), while the
+// rest of the C runtime (strncpy in ProxyRecordClass::Init) goes through the import table.
+#include "Common/GameMemory.h"
 
 // The limit a level without one reports (Get_Max_Screen_Size 0x0019B6A0; the constructor uses 0x007BB8E0).
 #define NO_MAX_SCREEN_SIZE FLT_MAX
@@ -87,7 +85,7 @@ void HLodDefClass::SubObjectArrayClass::Reset(void)
 
 	if (ModelName != NULL) {
 		for (int imodel = 0; imodel < ModelCount; imodel++) {
-			free(ModelName[imodel]);
+			freeBlock(ModelName[imodel]);
 		}
 		delete[] ModelName;
 		ModelName = NULL;
@@ -127,7 +125,7 @@ bool HLodDefClass::SubObjectArrayClass::Load_W3D(ChunkLoadClass &cload)
 
 		if (!cload.Close_Chunk()) return false;
 
-		ModelName[imodel] = strdup(subobjdef.Name);
+		ModelName[imodel] = duplicateString(subobjdef.Name);
 		BoneIndex[imodel] = subobjdef.BoneIndex;
 	}
 	return true;
@@ -1100,10 +1098,10 @@ bool HLodDefClass::read_header(ChunkLoadClass &cload)
 
 	// Copy the name into our internal variable
 	if (Name != NULL) {
-		free(Name);
+		freeBlock(Name);
 	}
-	Name = strdup(header.Name);
-	HierarchyTreeName = strdup(header.HierarchyName);
+	Name = duplicateString(header.Name);
+	HierarchyTreeName = duplicateString(header.HierarchyName);
 	LodCount = header.LodCount;
 	Lod = new SubObjectArrayClass[LodCount];
 	return true;
@@ -1250,12 +1248,12 @@ int HLodClass::Add_Sub_Object_To_Bone(RenderObjClass * subobj,int boneindex,cons
 void HLodDefClass::Free(void)
 {
 	if (Name) {
-		free(Name);
+		freeBlock(Name);
 		Name = NULL;
 	}
 
 	if (HierarchyTreeName) {
-		free(HierarchyTreeName);
+		freeBlock(HierarchyTreeName);
 		HierarchyTreeName = NULL;
 	}
 
@@ -1280,10 +1278,10 @@ void HLodDefClass::Initialize(HLodClass &src_lod)
 	Free();
 
 	// Copy the name and hierarcy name from the source object
-	Name = strdup(src_lod.Get_Name());
+	Name = duplicateString(src_lod.Get_Name());
 	const HTreeClass *phtree = src_lod.Get_HTree();
 	if (phtree != NULL) {
-		HierarchyTreeName = strdup(phtree->Get_Name());
+		HierarchyTreeName = duplicateString(phtree->Get_Name());
 	}
 
 	// Determine the number of LODs in the src object
@@ -1307,7 +1305,7 @@ void HLodDefClass::Initialize(HLodClass &src_lod)
 				// Record information about this model (if possible)
 				RenderObjClass *prender_obj = src_lod.Peek_Lod_Model(index, model_index);
 				if (prender_obj != NULL) {
-					model_names[model_index] = strdup(prender_obj->Get_Name());
+					model_names[model_index] = duplicateString(prender_obj->Get_Name());
 					bone_indicies[model_index] = src_lod.Get_Lod_Model_Bone(index, model_index);
 				} else {
 					model_names[model_index] = NULL;

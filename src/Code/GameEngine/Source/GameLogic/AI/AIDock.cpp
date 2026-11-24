@@ -236,9 +236,9 @@ StateReturnType AIDockMoveToDockState::onEnter()
 			ownerAI->ignoreObstacle(getMachine()->getGoalObject());
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log != 0)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 1");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 1");
 			}
 			m_adjustDestinations = false;
 		}
@@ -337,9 +337,9 @@ StateReturnType AIDockMoveToExitState::onEnter()
 			ownerAI->ignoreObstacle(getMachine()->getGoalObject());
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log != 0)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 2");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 2");
 			}
 			m_adjustDestinations = false;
 		}
