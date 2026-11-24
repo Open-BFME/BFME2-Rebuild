@@ -3265,6 +3265,54 @@ AIAttackState::~AIAttackState()
 // FUNCTION: BFME2 0x0034B1E9 size=471 name=?createAttackMachine@AIAttackState@@IAEXPAVObject@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0034B3C0 size=322 name=?xfer@AIAttackState@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void AIAttackState::xfer(Xfer *xfer)
+{
+	if (xfer->IsLightCRC())
+		return;
+	Xfer::Version version(1, 3);
+	*xfer == version;
+	Bool hasMachine = m_attackMachine != NULL;
+	*xfer == hasMachine;
+	*xfer == m_originalVictimPos;
+	xfer->XferRawBytes(&m_unk0x4C, sizeof(m_unk0x4C));
+	if (hasMachine && m_attackMachine == NULL)
+		createAttackMachine(getMachine()->getOwner());
+	if (hasMachine)
+	{
+		if (version.m_minimum >= 3)
+		{
+			if (xfer->IsStoring())
+			{
+				xfer->BeginBlock("AIAttackState_attackMachine");
+				*xfer == *m_attackMachine;
+				xfer->EndBlock();
+			}
+			else
+			{
+				Int blockSize;
+				try
+				{
+					blockSize = xfer->BeginBlock("AIAttackState_attackMachine");
+					*xfer == *m_attackMachine;
+					xfer->EndBlock();
+				}
+				catch (...)
+				{
+					// A machine that fails to load is skipped and rebuilt fresh.
+					xfer->SkipBadBlock(*m_attackMachine, blockSize);
+					m_attackMachine = NULL;
+					createAttackMachine(getMachine()->getOwner());
+				}
+			}
+		}
+		else
+			*xfer == *m_attackMachine;
+	}
+	XferObjectID(xfer, &m_unk0x44);
+	*xfer == m_unk0x48;
+	if (version.m_minimum > 1)
+		*xfer == m_unk0x49;
+}
 // FUNCTION: BFME2 0x0034B502 size=903 name=?onEnter@AIAttackState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0034B889 size=201 name=?onExit@AIAttackState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
