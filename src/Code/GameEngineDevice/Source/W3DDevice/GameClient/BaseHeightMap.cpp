@@ -7,6 +7,8 @@
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
+#include "GameClient/BaseHeightMapRenderObjClass.h"
+#include "WW3D2/SceneClass.h"
 // FUNCTION: BFME2 0x000664BE size=49 name=?Rva006C5BE0@@YANNH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000664EF size=5 name=?enable@Rva000664EFOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x000664F4 size=21 name=?rva000664F4@BaseHeightMap@@QAEXPBUGapQuad@@@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-callers
@@ -142,6 +144,12 @@
 // FUNCTION: BFME2 0x0006846A size=13 name=?rva0006846A@BaseHeightMapRenderObjClass@@QAEXH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00068477 size=29 name=?Notify_Added@BaseHeightMapRenderObjClass@@UAEXPAVSceneClass@@@Z evidence=N:ledger tier=A
+void BaseHeightMapRenderObjClass::Notify_Added(SceneClass *scene)
+{
+	// Join the scene's frame-update list so On_Frame_Update is called.
+	RenderObjClass::Notify_Added(scene);
+	scene->Register(this, SceneClass::ON_FRAME_UPDATE);
+}
 
 // FUNCTION: BFME2 0x00068494 size=114 name=?writeEnvironmentData@BaseHeightMapRenderObjClass@@QAEXPAVDataChunkOutput@@@Z evidence=N:ledger tier=A
 
