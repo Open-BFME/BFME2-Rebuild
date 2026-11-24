@@ -56,6 +56,7 @@ public:
 	Bool isPointOnBridge(const Coord3D *pos);
 	Drawable *getDrawable();
 	void updateDamageState();
+	Bool pickBridge(const Vector3 &from, const Vector3 &to, Vector3 *pos);
 
 	Bridge *getNext() const { return m_next; }
 	void setNext(Bridge *next) { m_next = next; }

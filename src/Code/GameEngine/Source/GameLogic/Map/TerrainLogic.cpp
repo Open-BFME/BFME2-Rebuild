@@ -13,6 +13,7 @@
 #include "GameLogic/Bridge.h"
 #include "GameLogic/Map/PolygonTrigger.h"
 #include "WWMath/Vector3.h"
+#include "WWMath/PlaneClass.h"
 #include "GameLogic/AIPathfind.h"
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Object.h"
@@ -340,6 +341,34 @@ AsciiString Waypoint::getPathLabel3() const
 // FUNCTION: BFME2 0x0027FBAC size=82 name=??1Bridge@@UAE@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0027FBFE size=300 name=?pickBridge@Bridge@@QAE_NABVVector3@@0PAV2@@Z evidence=N:ledger tier=A
+Bool Bridge::pickBridge(const Vector3 &from, const Vector3 &to, Vector3 *pos)
+{
+	// intersect the ray with the plane of the bridge deck
+	Vector3 intersectPos;
+	{
+		Vector3 left1(m_bridgeInfo.fromLeft.x, m_bridgeInfo.fromLeft.y, m_bridgeInfo.fromLeft.z);
+		Vector3 right1(m_bridgeInfo.fromRight.x, m_bridgeInfo.fromRight.y, m_bridgeInfo.fromRight.z);
+		Vector3 left2(m_bridgeInfo.toLeft.x, m_bridgeInfo.toLeft.y, m_bridgeInfo.toLeft.z);
+		PlaneClass plane(left1, right1, left2);
+		{
+			Real t;
+			plane.Compute_Intersection(from, to, &t);
+			intersectPos = from + (to - from) * t;
+		}
+	}
+
+	Coord3D loc;
+	loc.x = intersectPos.X;
+	loc.y = intersectPos.Y;
+	loc.z = intersectPos.Z;
+
+	if (isPointOnBridge(&loc))
+	{
+		*pos = intersectPos;
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x0027FD2A size=713 name=?getBridgeHeight@Bridge@@QAEMPBVCoord3D@@PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
