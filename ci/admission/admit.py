@@ -64,6 +64,7 @@ ADMITTED_TRUSTED = "Admitted by rule: trusted source files only"
 ADMITTED_WIDE = "Admitted by rule: header change, wide check"
 ADMITTED_TRUSTED_WIDE = "Admitted by rule: trusted header change, wide check"
 DAILY_LIMIT = "Held: daily limit, retried automatically"
+LEDGER_BUSY = "Held: admission ledger busy; retried automatically"
 SOURCE_HOLD = "Held: current source rules have not passed, retried automatically"
 UNMEASURED = "Held: the compiler check failed to run five times; a maintainer will look"
 OUTAGE = "Held: compiler runners unavailable; retried automatically"
@@ -815,7 +816,7 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
         result = ledger.reserve(api, budget, author_id, number, head, base,
                                 getattr(api, "run_id", ""), getattr(api, "run_attempt", ""), clock, tree, kind)
     except (ledger.LedgerError, ApiError) as exc:
-        post(api, head, "pending", DAILY_LIMIT)
+        post(api, head, "pending", LEDGER_BUSY)
         return f"#{number}: held, the daily ledger could not be used ({printable(exc, 120)})"
     if result == "over-budget":
         post(api, head, "pending", DAILY_LIMIT)
@@ -838,7 +839,7 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
             issued = ledger.refresh_issuer(api, number, head, base, getattr(api, "run_id", ""),
                                            getattr(api, "run_attempt", ""))
         except (ledger.LedgerError, ApiError) as exc:
-            post(api, head, "pending", DAILY_LIMIT)
+            post(api, head, "pending", LEDGER_BUSY)
             return f"#{number}: held, the daily ledger could not be used ({printable(exc, 120)})"
         if issued == "claimed":
             claimed = unmeasured_claim(api, number, head, base, clock)
@@ -850,7 +851,7 @@ def handle(api, number, config, base, budget, clock=None, sleep=time.sleep,
                 again = ledger.reissue_unmeasured(api, budget, number, head, base, claimed, getattr(api, "run_id", ""),
                                                   getattr(api, "run_attempt", ""), clock)
             except (ledger.LedgerError, ApiError) as exc:
-                post(api, head, "pending", DAILY_LIMIT)
+                post(api, head, "pending", LEDGER_BUSY)
                 return f"#{number}: held, the daily ledger could not be used ({printable(exc, 120)})"
             if again == "over-budget":
                 post(api, head, "pending", DAILY_LIMIT)

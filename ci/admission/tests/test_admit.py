@@ -294,7 +294,7 @@ class Handle(unittest.TestCase):
     def test_unreadable_ledger_fails_closed(self):
         api = LedgerApi(True, [fork_pr()], {21: ["src/a.cpp"]}, ledger_failure=500)
         self.assertIn("held", handle(api))
-        self.assertEqual(latest(api)["description"], admit.DAILY_LIMIT)
+        self.assertEqual(latest(api)["description"], admit.LEDGER_BUSY)
         self.assertEqual(dispatches(api), [])
 
     def test_wait_status_is_written_once(self):

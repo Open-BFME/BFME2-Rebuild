@@ -86,7 +86,7 @@ def _read(api):
 
 def _write(api, data, sha, message):
     body = {"message": message, "branch": LEDGER_BRANCH,
-            "content": base64.b64encode((json.dumps(data, sort_keys=True, indent=1) + "\n").encode()).decode()}
+            "content": base64.b64encode((json.dumps(data, sort_keys=True, separators=(",", ":")) + "\n").encode()).decode()}
     if sha:
         body["sha"] = sha
     code, _ = api.write("PUT", f"contents/{LEDGER_FILE}", body)
@@ -106,8 +106,28 @@ def _match(data, number, head, base):
 
 def _prune(data, yesterday, base):
     data["days"] = {day: counts for day, counts in data["days"].items() if day >= yesterday}
-    data["reservations"] = [item for item in data["reservations"]
-                            if item.get("day", "") >= yesterday or item.get("base") == base]
+    kept = []
+    for item in data["reservations"]:
+        day = item.get("day", "")
+        if item.get("base") == base:
+            kept.append(item)
+        elif day >= yesterday:
+            _record_paid(data, item)
+            if item.get("claimed_by") is None and day >= yesterday:
+                kept.append(item)
+        # else: older than yesterday and wrong base — drop entirely (paid credit already recorded above if day >= yesterday)
+    data["reservations"] = kept
+
+
+def _record_paid(data, item):
+    day = item.get("day", "")
+    if not day:
+        return
+    entry = [item.get("number"), item.get("head"), item.get("kind"), item.get("author")]
+    day_data = data["days"].setdefault(day, {"total": 0, "authors": {}, "wide_total": 0, "wide_authors": {}})
+    paid = day_data.setdefault("paid", [])
+    if entry not in paid:
+        paid.append(entry)
 
 
 def reserve(api, limits, author, number, head, base, run, attempt, clock=None, tree=None, kind="narrow"):
@@ -129,6 +149,9 @@ def reserve(api, limits, author, number, head, base, run, attempt, clock=None, t
             and r.get("author") == author
             for r in data["reservations"]
         )
+        if not already_paid_today:
+            paid = data["days"].get(today, {}).get("paid", [])
+            already_paid_today = [number, head, kind, author] in paid
         if kind not in ("trusted-narrow", "trusted-wide") and not already_paid_today:
             counts = data["days"].setdefault(today, {"total": 0, "authors": {}, "wide_total": 0, "wide_authors": {}})
             key = str(author)

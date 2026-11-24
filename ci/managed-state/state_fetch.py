@@ -51,9 +51,7 @@ def select_ancestor_artifact(api, shas):
         sha = row.get("head_sha")
         if sha in allowed and verified_run(row, sha):
             by_base.setdefault(sha, (row["id"], row["run_attempt"]))
-    nearest = [by_base[sha] for sha in shas if sha in by_base][:25]
-    # Most successful state runs measured nothing (only reports changed) and retain no state, so asking each run in
-    # turn costs up to 25 calls; one repository-wide listing of the artifact name answers for every listed run.
+    nearest = [by_base[sha] for sha in shas if sha in by_base]
     indexes = {}
     for run, attempt in nearest:
         if attempt not in indexes:
@@ -67,6 +65,33 @@ def select_ancestor_artifact(api, shas):
             artifact = select_artifact(api, run, attempt)
         if artifact:
             return artifact
+    # Artifact-first fallback: when the run listing missed ancestors with artifacts (e.g. 100+ green
+    # no-artifact runs pushed the last artifacted run out of the per_page=100 window), scan the
+    # artifact index for runs not covered above and correlate them back to ancestor SHAs.
+    covered_runs = {run for run, _ in nearest}
+    fallback_attempts = sorted({1} | set(indexes))
+    for attempt_key in fallback_attempts:
+        if attempt_key in indexes:
+            by_run, _ = indexes[attempt_key]
+        else:
+            by_run, _ = artifact_index(api, attempt_key)
+        unchecked = sorted(by_run.keys() - covered_runs)
+        if not unchecked:
+            continue
+        sha_order = {sha: i for i, sha in enumerate(shas)}
+        candidates = []
+        for run_id in unchecked:
+            try:
+                run_data = api.call(f"actions/runs/{run_id}")
+            except (LookupError, TypeError, ValueError):
+                continue
+            sha = run_data.get("head_sha")
+            if sha in allowed and verified_run(run_data, sha):
+                candidates.append((sha_order.get(sha, len(shas)), run_id, by_run[run_id]))
+        for _, _, rows in sorted(candidates):
+            artifact = checked_artifact(rows)
+            if artifact:
+                return artifact
     return None
 
 

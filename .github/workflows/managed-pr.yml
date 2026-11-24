@@ -602,11 +602,13 @@ jobs:
         id: plan
         env:
           MANAGED_WIDE_SHARDS: "${{ vars.BFME_WIDE_SHARDS || '16' }}"
+          MANAGED_WIDE_TUS_PER_SHARD: "${{ vars.BFME_WIDE_TUS_PER_SHARD || '24' }}"
         run: |
           set -Eeuo pipefail
           trap 'rc=$?; printf "Expected protected workflow step to finish. Found exit %s at shell line %s.\n" "$rc" "$LINENO" >&2' ERR
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C \
             TMPDIR="$RUNNER_TEMP" GITHUB_SHA="$GITHUB_SHA" GITHUB_OUTPUT="$GITHUB_OUTPUT" MANAGED_WIDE_SHARDS="$MANAGED_WIDE_SHARDS" \
+            MANAGED_WIDE_TUS_PER_SHARD="$MANAGED_WIDE_TUS_PER_SHARD" \
             python3 -B ci/managed-check/wide.py plan "$RUNNER_TEMP/bfme-plan" "$RUNNER_TEMP/bfme-matrix"
       - name: Save the protected paired plan
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

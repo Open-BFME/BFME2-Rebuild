@@ -11,7 +11,7 @@ from state_evidence import LIMIT, cached_pairs, header
 # across the reviewed producer-v2 to resume transport revision.
 REPORT_DIRS = ("docs/", "worklist/", "ci/state/", "ci/progress/", "ci/alarms/",
                "ci/nightly/", "ci/landing/", "ci/admission/", "ci/header/", "ci/public-text/", "ci/maint/",
-               "ci/managed-check/tests/", ".github/workflows/")
+               "ci/managed-check/tests/", "ci/queue/", "ci/control-plane/", ".github/workflows/")
 STATE_FLOW = ".github/workflows/state.yml"
 TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py",
              "ci/managed-state/state_workflow.py",
@@ -21,7 +21,8 @@ TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py
              "ci/README.md"}
 RESUME_MIGRATION = ("5df8abc2a97aef390b5a0256a15e163ae4a312566c0ea893187da4a254aea8fc", "14286c7910816519777d5a46c720605d142dff009f5751843d4e4c5263e2111f")
 HYDRATION_MIGRATION = ("c5495ba4c03861220f77ddc48cd6533617fde93b869d51a0accf479fcc760bcb", "ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61")
-STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION}
+OVERCAP_EXIT_MIGRATION = ("ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61", "ad0a65303832e04fc813d9a49d875b645f47e6d70b3422ba50d141914487e62d")
+STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION}
 # The one-shot PR orchestration change leaves every comparison input intact.
 COMPACT_GRAPH = {
     "ci/managed-check/landing_read.py": (
