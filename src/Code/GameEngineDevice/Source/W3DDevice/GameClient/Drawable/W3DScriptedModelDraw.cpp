@@ -19,6 +19,8 @@ void rva000C48DB(void*,void*,void*,void*);
 #include "GameLogic/LuaScriptEngine.h"
 #include "Common/ModelConditionFlags.h"
 #include "Common/BitFlagsIO.h"
+#include "WW3D2/MaterialInfoClass.h"
+#include "WW3D2/VertexMaterialClass.h"
 // FUNCTION: BFME2 0x000B2B3B size=7 name=?get@LivingWorldBuildPlotIconSubObject@@UBEHXZ evidence=X:proven (vtable) tier=B hypothesis:mm1-neighbour-pointers-mixed
 // FUNCTION: BFME2 0x000B2B42 size=58 name=?Rva000B2B42Clamp@@YAXPAH0H@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000B2B7C size=11 name=?millisecondsToSeconds@@YAMM@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
@@ -195,6 +197,13 @@ Bool ModelConditionFlags::rva000B3EB3() const
 // FUNCTION: BFME2 0x000B498C size=21 name=?bfmeValue@Gen_006D7C80@@QBEHE@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000B49A8 size=29 name=?Get_Vertex_Material@MaterialInfoClass@@QAEPAVVertexMaterialClass@@H@Z evidence=N:ledger tier=A
+VertexMaterialClass *MaterialInfoClass::Get_Vertex_Material(int index)
+{
+	if (VertexMaterials[index]) {
+		VertexMaterials[index]->Add_Ref();
+	}
+	return VertexMaterials[index];
+}
 
 // FUNCTION: BFME2 0x000B49C5 size=52 name=??H@YA?AUAsciiStringPlusText@@ABVAsciiString@@PBD@Z evidence=N:ledger tier=A
 
