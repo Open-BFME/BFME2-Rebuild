@@ -1,3 +1,4 @@
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // cl: /O2 /G7 /arch:SSE
 // dxsdk
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
@@ -359,6 +360,39 @@ bool DX8Caps::Is_Valid_Display_Format(int width, int height, WW3DFormat format)
 // FUNCTION: BFME2 0x0012B360 size=36 name=?rva0091B6A0@DX8Caps@@QAE_NH@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0012B3A0 size=146 name=?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCAPS8 &caps)
+{
+	if (display_format == WW3D_FORMAT_UNKNOWN) {
+		for (unsigned i = 0; i < 118; ++i) {
+			SupportDepthStencilFormat[i] = false;
+		}
+		return;
+	}
+	for (unsigned i = D3DFMT_D16_LOCKABLE; i < D3DFMT_D16 + 1; ++i) {
+		D3DFORMAT format = (D3DFORMAT)i;
+		switch (format) {
+		case D3DFMT_D16_LOCKABLE:
+		case D3DFMT_D32:
+		case D3DFMT_D15S1:
+		case D3DFMT_D24S8:
+		case D3DFMT_D24X8:
+		case D3DFMT_D24X4S4:
+		case D3DFMT_D16:
+		// Direct3D 9's D3DFMT_D32F_LOCKABLE and D3DFMT_D24FS8, which the Direct3D 8 headers do not name.
+		case 82:
+		case 83:
+			SupportDepthStencilFormat[i] = SUCCEEDED(
+				Direct3D->CheckDeviceFormat(
+					caps.AdapterOrdinal,
+					caps.DeviceType,
+					(D3DFORMAT)display_format,
+					D3DUSAGE_DEPTHSTENCIL,
+					D3DRTYPE_SURFACE,
+					format));
+			break;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0012B440 size=150 name=?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
 void DX8Caps::Check_Bumpmap_Support(const D3DCAPS8 &caps)
