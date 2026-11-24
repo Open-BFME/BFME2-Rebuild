@@ -52,10 +52,11 @@ MIN_RATELIMIT_BACKFILL = 500
 MIN_RATELIMIT_ENQUEUE = 100
 # The Actions token (GITHUB_TOKEN) has 1,000 REST calls an hour for the whole repository. Backfill stops while it has
 # ACTIONS_TOKEN_RESERVE or fewer, so queue checks, Boat reports and admission never run out, and above that charges
-# each head what its runs spend downstream: a refresh runs rules, admission and a Boat report (about 60 calls with
-# their G1-G8, source rules, Boat and inline statuses), a recheck runs the source rules only (about 20).
-ACTIONS_TOKEN_RESERVE = 250
-CALLS_PER_BACKFILL = {"refresh": 60, "recheck": 20}
+# each head what its runs spend downstream: a refresh runs rules, admission, Boat report and merge-queue checks
+# (about 100 calls with their G1-G8, source rules, Boat and inline statuses), a recheck runs the source rules only
+# (about 25).
+ACTIONS_TOKEN_RESERVE = 400
+CALLS_PER_BACKFILL = {"refresh": 100, "recheck": 25}
 LIMIT = 4 * 1024**2
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 

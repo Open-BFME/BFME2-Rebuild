@@ -196,7 +196,7 @@ class EnqueueTests(unittest.TestCase):
         prs.insert(0, make_pr(298, files=("docs/x.md",), statuses={}))
 
         # With 0 active runs, fills up to MAX_BACKFILL (18), including ERROR Boat PRs; never-touched heads first.
-        idle = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=1500)
+        idle = FakeApi([prs], active_in_progress=0, active_queued=0, ratelimit=2500)
         idle_result = run(idle)
         self.assertEqual(idle_result["enqueued"], [])
         self.assertEqual(len(idle_result["backfilled"]), 18)
@@ -207,7 +207,7 @@ class EnqueueTests(unittest.TestCase):
         self.assertEqual(idle.dispatches[0][1]["client_payload"]["base"], MAIN_SHA)
 
         # With 12 active runs (6 in_progress + 6 queued), only fills remaining 6 slots (18 - 12).
-        partial = FakeApi([prs], active_in_progress=6, active_queued=6, ratelimit=1500)
+        partial = FakeApi([prs], active_in_progress=6, active_queued=6, ratelimit=2500)
         partial_result = run(partial)
         self.assertEqual(partial_result["enqueued"], [])
         self.assertEqual(len(partial_result["backfilled"]), 6)
@@ -435,17 +435,17 @@ class EnqueueTests(unittest.TestCase):
                + [make_pr(910 + i, statuses=boat | {"BFME II / source rules": ("ERROR", "", OLD)}) for i in range(3)])
         queue_api = FakeApi([prs], ratelimit=4900)
 
-        # 250 kept in reserve; 370 left pays for two refreshes (60 each), not a third.
-        actions = FakeApi(ratelimit=370)
+        # 400 kept in reserve; 600 left pays for two refreshes (100 each), not a third.
+        actions = FakeApi(ratelimit=600)
         self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [900, 901])
         self.assertEqual(actions.quota_reads, 1)
 
-        # Rechecks (20 each) fit where a refresh would not: all three heads are rechecks, 310 left pays for three.
+        # Rechecks (25 each) fit where a refresh would not: all three heads are rechecks, 475 left pays for three.
         rechecks = FakeApi([prs[5:]], ratelimit=4900)
-        self.assertEqual(run(rechecks, dispatch_api=FakeApi(ratelimit=310))["backfilled"], [910, 911, 912])
+        self.assertEqual(run(rechecks, dispatch_api=FakeApi(ratelimit=475))["backfilled"], [910, 911, 912])
 
         # At or under the reserve, or when the quota cannot be read, nothing is dispatched and no runs are listed.
-        for actions in (FakeApi(ratelimit=250), FakeApi(ratelimit=0), FakeApi(ratelimit=4000, fail_quota=True)):
+        for actions in (FakeApi(ratelimit=400), FakeApi(ratelimit=0), FakeApi(ratelimit=4000, fail_quota=True)):
             with self.subTest(remaining=actions.ratelimit_remaining, fail=actions.fail_quota):
                 queue_api = FakeApi([prs], ratelimit=4900)
                 self.assertEqual(run(queue_api, dispatch_api=actions)["backfilled"], [])
