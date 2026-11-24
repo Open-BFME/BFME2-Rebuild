@@ -9,7 +9,7 @@ from state_evidence import LIMIT, cached_pairs, header
 # These are orchestration and publication paths. The comparison inputs and
 # implementation retain full-refresh semantics. state.yml can be carried only
 # across the reviewed producer-v2 to resume transport revision.
-REPORT_DIRS = ("docs/", "worklist/", "ci/state/", "ci/progress/", "ci/alarms/",
+REPORT_DIRS = ("docs/", "worklist/", "tools/local_check/", "tools/README.md", "ci/state/", "ci/progress/", "ci/alarms/",
                "ci/nightly/", "ci/landing/", "ci/admission/", "ci/header/", "ci/public-text/", "ci/maint/",
                "ci/managed-check/tests/", "ci/queue/", "ci/control-plane/", ".github/workflows/")
 STATE_FLOW = ".github/workflows/state.yml"

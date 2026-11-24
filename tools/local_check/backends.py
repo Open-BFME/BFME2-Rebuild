@@ -83,55 +83,115 @@ def judge_environment(config, *, repo_git_dir, retail, state=None, convert=str):
     return env
 
 
-def judge_arguments(revision, tus):
-    return ["--json", revision, *tus]
+def judge_arguments(revision, tus, extra=()):
+    """judge.py's arguments: the --json document by default, or EXTRA (such as --diff 0xRVA) instead."""
+    return [*extra, revision, *tus] if extra else ["--json", revision, *tus]
 
 
-def host_judge_command(revision, tus, *, python=None, repo_root=REPO_ROOT):
-    return [python or sys.executable, str(Path(repo_root) / JUDGE_RELATIVE), *judge_arguments(revision, tus)]
+def host_judge_command(revision, tus, *, python=None, repo_root=REPO_ROOT, extra=()):
+    return [python or sys.executable, str(Path(repo_root) / JUDGE_RELATIVE), *judge_arguments(revision, tus, extra)]
 
 
-# Initialize the judge's Wine prefix (Z: -> /) on first use, then run judge.py.
+# Wine 9.0 (the Boat pin) aborts at start-up whenever TMPDIR is set (observed in the image under the WSL2
+# 6.6 kernel of a Podman machine; WSL itself runs the same kernel). judge.py sets TMPDIR for its own scratch
+# files, and cl.exe writes its temporary files to the prefix's %TEMP%, so a `wine` wrapper that drops
+# TMPDIR changes no compiled byte. The Dockerfile installs the same wrapper as /usr/local/bin/wine.
+
+# Initialize the judge's Wine prefix (Z: -> /) on first use, put the TMPDIR-free wine first on PATH,
+# then run judge.py.
 _WSL_SCRIPT = ('p="${BFME_JUDGE_WINEPREFIX:-$HOME/.cache/bfme2-judge/wine}"; '
                '[ -e "$p/dosdevices/z:" ] || { mkdir -p "$p" && WINEPREFIX="$p" WINEDEBUG=-all wineboot -i '
-               '>/dev/null 2>&1 && WINEPREFIX="$p" wineserver -w; }; exec python3 "$@"')
+               '>/dev/null 2>&1 && WINEPREFIX="$p" wineserver -w; }; '
+               'w="$(command -v wine)" && d="$(dirname "$p")/bin" && mkdir -p "$d" && '
+               'printf \'%s\\n\' \'#!/bin/sh\' \'unset TMPDIR\' "exec \\"$w\\" \\"\\$@\\"" > "$d/wine" && '
+               'chmod 0755 "$d/wine" && PATH="$d:$PATH"; exec python3 "$@"')
 
 
-def wsl_judge_command(revision, tus, env, *, repo_root=REPO_ROOT, wsl="wsl.exe"):
+def wsl_judge_command(revision, tus, env, *, repo_root=REPO_ROOT, wsl="wsl.exe", extra=()):
     assignments = [f"{key}={value}" for key, value in sorted(env.items())]
     return [wsl, "-e", "env", *assignments, "sh", "-c", _WSL_SCRIPT, "sh",
-            wsl_path(Path(repo_root) / JUDGE_RELATIVE), *judge_arguments(revision, tus)]
+            wsl_path(Path(repo_root) / JUDGE_RELATIVE), *judge_arguments(revision, tus, extra)]
+
+
+# Where the image sees the toolchain. judge.py's environment finds msvcp71.dll two levels above
+# VC71_ROOT (the vs2003/ layout of the Boat inputs), so the runtime DLLs sit at /opt/toolchain.
+VC71_MOUNT = "/opt/toolchain/vs/vc71"
+VCRUNTIME_MOUNT = "/opt/toolchain"
+RUNTIME_DLLS = ("msvcp71.dll", "msvcr71.dll")
 
 
 def docker_judge_command(revision, tus, config, *, repo_root, git_common_dir, image=DEFAULT_IMAGE,
-                         docker="docker", state_volume=STATE_VOLUME):
-    """Read-only mounts of the checkout, its Git objects, VC7.1 and the support tree; no network."""
+                         docker="docker", state_volume=STATE_VOLUME, extra=(), mounts=()):
+    """Read-only mounts of the checkout, its Git objects, VC7.1 and the support tree; no network.
+
+    MOUNTS adds (source, target) read-only binds, such as the objects an alternates file names."""
     roots = config["roots"]
 
     def bind(source, target):
         return ["--mount", f"type=bind,source={source},target={target},readonly"]
 
-    command = [docker, "run", "--rm", "--network", "none",
-               *bind(repo_root, "/work"), *bind(git_common_dir, "/git"), *bind(roots["vc71"], "/opt/vc71"),
+    command = [docker, "run", "--rm", "--network", "none", "-e", f"VC71_ROOT={VC71_MOUNT}",
+               *bind(repo_root, "/work"), *bind(git_common_dir, "/git"), *bind(roots["vc71"], VC71_MOUNT),
                "--mount", f"type=volume,source={state_volume},target=/state"]
+    if roots.get("vcruntime"):
+        for name in RUNTIME_DLLS:
+            command += bind(Path(roots["vcruntime"]) / name, f"{VCRUNTIME_MOUNT}/{name}")
     if roots.get("runner"):
         command += bind(roots["runner"], "/opt/runner")
-    command += [image, *judge_arguments(revision, tus)]
+    for source, target in mounts:
+        command += bind(source, target)
+    command += [image, *judge_arguments(revision, tus, extra)]
     return command
+
+
+IMAGE_INPUTS = ("local_check/Dockerfile", "local_check/docker-entrypoint.sh", "judge/demangle.cpp")
+IMAGE_LABEL = "org.open-bfme.local-check.inputs"
+
+
+def image_digest(repo_root=REPO_ROOT):
+    """SHA-256 over the files the image is built from; a changed input means a stale image."""
+    import hashlib
+    digest = hashlib.sha256()
+    for name in IMAGE_INPUTS:
+        digest.update(name.encode() + b"\0" + (Path(repo_root) / "tools" / name).read_bytes() + b"\0")
+    return digest.hexdigest()
 
 
 def docker_build_command(*, image=DEFAULT_IMAGE, docker="docker", repo_root=REPO_ROOT):
     """The build context is tools/: the image needs only judge/demangle.cpp and the entry script."""
     tools = Path(repo_root) / "tools"
-    return [docker, "build", "-f", str(tools / "local_check" / "Dockerfile"), "-t", image, str(tools)]
+    return [docker, "build", "-f", str(tools / "local_check" / "Dockerfile"), "-t", image,
+            "--label", f"{IMAGE_LABEL}={image_digest(repo_root)}", str(tools)]
 
 
-def default_backend(*, compile_only, os_name=None, which=shutil.which):
+def container_engine(environ=None, which=shutil.which):
+    """docker, or podman when only Podman is installed; BFME_CONTAINER_ENGINE overrides both."""
+    environ = os.environ if environ is None else environ
+    if environ.get("BFME_CONTAINER_ENGINE"):
+        return environ["BFME_CONTAINER_ENGINE"]
+    for name in ("docker", "podman"):
+        if which(name):
+            return name
+    return "docker"
+
+
+def wsl_has_wine(run=subprocess.run):
+    try:
+        return run(["wsl.exe", "-e", "sh", "-c", "command -v wine"], capture_output=True,
+                   timeout=60).returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+def default_backend(*, compile_only, os_name=None, which=shutil.which, wsl_wine=None):
+    """compile-only: native (Windows) or wine. Judge: host Wine, else WSL with Wine, else a container."""
     os_name = os.name if os_name is None else os_name
     if os_name == "nt":
         if compile_only:
             return "native"
-        if which("wsl.exe") or which("wsl"):
+        has_wsl = bool(which("wsl.exe") or which("wsl"))
+        has_container = bool(which("docker") or which("podman"))
+        if has_wsl and (wsl_wine() if wsl_wine else not has_container or wsl_has_wine()):
             return "wsl"
         return "docker"
     if compile_only:

@@ -118,65 +118,26 @@ output, compiled objects and raw logs local.
 
 ## Fast local pre-check (`tools/local_check/`)
 
-`tools/local_check/` repeats the hosted pull-request check on your machine
-before you spend a Boat run. It brings no compiler: you supply your own
-licensed copy of Visual Studio .NET 2003, kept outside the checkout, and it
-must match the image byte for byte.
+Repeat the hosted **BFME II / Boat** check on your machine, as often as you like.
 
-1. **Verify the toolchain once.** Every digest comes from
-   [docs/compiler-image.md](../docs/compiler-image.md). `cl.exe`, `c1.dll`,
-   `c1xx.dll`, `c2.dll`, `mspdb71.dll`, `msvcr71.dll` and `msvcp71.dll`
-   must match. Header trees you name (`--psdk-root`, `--dxsdk-root`,
-   `--stlport-root`, `--overlay-root`, or a whole `--tools-root` laid out like
-   `build.sh --inputs`) are checked too. Add `--strict` to fail on any header
-   difference. The verified paths are saved to
-   `%LOCALAPPDATA%\bfme2-rebuild\toolchain.json` or
-   `~/.config/bfme2-rebuild/toolchain.json`, never to the checkout.
+1. **Install** Python 3, Git, and one judge host: Wine on Linux, WSL with Wine, or Docker/Podman (any OS).
+2. **Fetch and verify the toolchain once:** `python tools/local_check/bootstrap.py`. It sparse-fetches
+   the pinned compiler (Open-BFME-1) and support tree (Open-BFME-2) into your user cache without
+   credentials, checks every digest of the hosted image manifest and writes `toolchain.json`.
+3. **Sync the ledger:** `git fetch origin && git branch -f main origin/main` (the judge reads local `main`).
+4. **Check a branch like Boat:** `python tools/local_check/precheck.py --bootstrap --base origin/main`.
+   It runs `tools/gates/gate.py`, finds affected units, judges base and `HEAD` and reports each
+   function as `PASS`, `MISMATCH` or `COMPILE ERROR`. Exit `0` means no regression.
+5. **Iterate on one unit:** `precheck.py --unit src/<path>.cpp [--worktree]` judges `HEAD`, or with
+   `--worktree` your uncommitted edits, without a base. It also writes an objdiff project
+   (`objdiff.json` plus retail and compiled objects) and prints its path.
+6. **Watch it live:** add `--view` and open <http://localhost:8080> to see the step, the unit, each
+   verdict and a side-by-side retail/compiled disassembly. `viewer.py` reopens the last run.
+7. **Check parity** with hosted verdicts: `git fetch origin state && python tools/local_check/parity.py`.
 
-   ```sh
-   python tools/local_check/verify_toolchain.py \
-     --vc71-root "/path/to/Microsoft Visual Studio .NET 2003" \
-     --runner-root /path/to/open-bfme-2 --demangler "$HOME/.cache/bfme2-judge/demangle"
-   ```
-
-2. **Pre-check a committed branch.** This runs `tools/gates/gate.py` first and
-   stops on any source-rule failure. It then finds the changed and affected
-   units with `ci/managed-check/intake.py`, including its refusals such as
-   `new_tu`, `deletion`, `no-includers` and `wide-cap`. The judge runs on the
-   merge base and on `HEAD`, and `ci/managed-check/compare.py` reduces the two
-   results. Each function prints as `PASS`, `MISMATCH` or `COMPILE ERROR`.
-   Exit status `0` means no regression, `1` means a gate failure, refusal or
-   regression, and `2` means a setup problem.
-
-   ```sh
-   git fetch origin && git branch -f main origin/main   # the judge reads the ledger on local main
-   python tools/local_check/precheck.py --base origin/main
-   ```
-
-| Host | Backend | What runs |
-| --- | --- | --- |
-| Linux with Wine | `host` (default when `wine` is on `PATH`) | `judge.py` with the setup above |
-| Windows | `wsl` (default when WSL is installed) | the same judge inside WSL, with Wine installed there |
-| Linux, macOS, Windows | `docker` | [Dockerfile](local_check/Dockerfile): Ubuntu 24.04, Wine `9.0~repack-4build3`, Python 3 and the demangler, no network |
-| Windows | `native` (`--compile-only`) | `cl.exe` directly, no Wine; compile errors only |
-| Linux | `wine` (`--compile-only`) | `wine cl.exe`; compile errors only |
-
-The Docker image holds no Microsoft file. `precheck.py --backend docker` builds
-it from `tools/` on first use and mounts the checkout, its Git directory, the
-verified VC7.1 root and the support checkout read-only. Judge state stays in
-the `bfme2-judge-state` volume.
-
-`--compile-only` builds each `cl.exe` command from the rule functions in
-`tools/judge/bin/judge.py`: base flags, `// cl:` allowlist, default STLport
-4.6 and SDK markers. It finds compile errors in seconds but cannot prove a
-`MATCH`. Units that use `// stlport46` need `--overlay-root`. The judge
-itself stays POSIX-only because it relies on `fcntl` locks, `/proc/meminfo`
-and forked workers, so a Windows judge runs in WSL or Docker.
-
-A local pass is a forecast, not a status. The hosted check still decides
-admission and landing.
-
-Run the offline tests with `python -m unittest discover -s tools/local_check -v`.
+`--backend host|wsl|docker|native|wine` overrides the automatic choice. `native` and `wine` only compile.
+Set `CONTAINER_CONNECTION` for a non-default Podman machine. A local pass is a forecast: the hosted
+check still decides admission. Tests: `python -m unittest discover -s tools/local_check`.
 
 ## Copy comparison
 

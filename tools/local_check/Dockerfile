@@ -12,7 +12,9 @@
 #   docker run --rm --network none \
 #     --mount type=bind,source="$PWD",target=/work,readonly \
 #     --mount type=bind,source="$(git rev-parse --path-format=absolute --git-common-dir)",target=/git,readonly \
-#     --mount type=bind,source=/path/to/vc71,target=/opt/vc71,readonly \
+#     --mount type=bind,source=/path/to/vc71,target=/opt/toolchain/vs/vc71,readonly \
+#     --mount type=bind,source=/path/to/vcruntime/msvcp71.dll,target=/opt/toolchain/msvcp71.dll,readonly \
+#     --mount type=bind,source=/path/to/vcruntime/msvcr71.dll,target=/opt/toolchain/msvcr71.dll,readonly \
 #     --mount type=bind,source=/path/to/open-bfme-2,target=/opt/runner,readonly \
 #     --mount type=volume,source=bfme2-judge-state,target=/state \
 #     bfme2-local-check --json <revision> src/<unit>.cpp
@@ -47,7 +49,12 @@ RUN c++ -std=c++17 -O2 /usr/local/src/bfme2/demangle.cpp \
 COPY local_check/docker-entrypoint.sh /usr/local/bin/bfme2-local-check
 RUN chmod 0755 /usr/local/bin/bfme2-local-check
 
-ENV VC71_ROOT=/opt/vc71 \
+# Wine 9.0 aborts at start-up when TMPDIR is set (seen under the WSL2 kernel); judge.py sets TMPDIR for
+# its own scratch files and cl.exe uses the prefix's %TEMP%, so this wrapper changes no compiled byte.
+RUN printf '%s\n' '#!/bin/sh' 'unset TMPDIR' 'exec /usr/bin/wine "$@"' > /usr/local/bin/wine \
+ && chmod 0755 /usr/local/bin/wine
+
+ENV VC71_ROOT=/opt/toolchain/vs/vc71 \
     BFME_JUDGE_RUNNER=/opt/runner \
     BFME_JUDGE_REPO=/git \
     BFME_JUDGE_RETAIL=/work/baseline/game.dat \

@@ -9,6 +9,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -141,11 +142,21 @@ class VerifyTests(unittest.TestCase):
 
     def test_listing_digest_matches_sha256sum_format(self):
         include = self.root / "vc/Vc7/include"
-        write(include / "b.h", b"b")
-        write(include / "sub/a.h", b"a")
-        lines = sorted([f"{sha(b'b')}  tools/vc/Vc7/include/b.h\n".encode(),
-                        f"{sha(b'a')}  tools/vc/Vc7/include/sub/a.h\n".encode()])
+        write(include / "a.h", b"a")
+        write(include / "sub/b.h", b"b")
+        # Ordered by path (find | LC_ALL=C sort -z | xargs -0 sha256sum), never by digest:
+        # sha256(b"a") = ca97... sorts after sha256(b"b") = 3e23..., so a line sort would swap these two.
+        lines = [f"{sha(b'a')}  tools/vc/Vc7/include/a.h\n".encode(),
+                 f"{sha(b'b')}  tools/vc/Vc7/include/sub/b.h\n".encode()]
+        self.assertGreater(lines[0], lines[1])
         self.assertEqual(vt.listing_digest(include, "tools/vc/Vc7/include"), (2, sha(b"".join(lines))))
+
+    def test_real_compiler_bin_listing(self):
+        """The four pinned binaries alone reproduce the manifest's tools/vc/Vc7/bin listing digest."""
+        manifest = vt.load_manifest()
+        names = sorted(path for path in manifest.binaries if path.startswith("tools/vc/Vc7/bin/"))
+        listing = "".join(f"{manifest.binaries[path]}  {path}\n" for path in names).encode()
+        self.assertEqual(manifest.subtrees["tools/vc/Vc7/bin"], (4, sha(listing)))
 
     def test_subtree_difference_warns_or_fails_when_strict(self):
         include = self.root / "vc/Vc7/include"
@@ -258,7 +269,8 @@ class BackendCommandTests(unittest.TestCase):
                                                 git_common_dir=r"C:\repo\.git")
         text = " ".join(command)
         self.assertEqual(command[:5], ["docker", "run", "--rm", "--network", "none"])
-        self.assertIn(r"type=bind,source=C:\VS2003,target=/opt/vc71,readonly", text)
+        self.assertEqual(command[5:7], ["-e", "VC71_ROOT=/opt/toolchain/vs/vc71"])
+        self.assertIn(r"type=bind,source=C:\VS2003,target=/opt/toolchain/vs/vc71,readonly", text)
         self.assertIn(r"type=bind,source=C:\repo,target=/work,readonly", text)
         self.assertIn(r"type=bind,source=C:\repo\.git,target=/git,readonly", text)
         self.assertIn(r"type=bind,source=D:\open-bfme-2,target=/opt/runner,readonly", text)
@@ -266,16 +278,59 @@ class BackendCommandTests(unittest.TestCase):
         self.assertEqual(command[command.index("bfme2-local-check"):], ["bfme2-local-check", "--json", "abc",
                                                                        "src/a.cpp"])
 
+    def test_docker_command_mounts_runtime_dlls_where_judge_looks(self):
+        """judge.py's environment adds VC71_ROOT.parents[1] to WINEPATH; msvcp71.dll must be there."""
+        config = {"roots": {**self.CONFIG["roots"], "vcruntime": r"C:\vs2003"}}
+        command = backends.docker_judge_command("abc", ["src/a.cpp"], config, repo_root=r"C:\repo",
+                                                git_common_dir=r"C:\repo\.git", docker="podman",
+                                                mounts=[(r"C:\objects", "/objects")])
+        text = " ".join(command)
+        self.assertEqual(command[0], "podman")
+        self.assertEqual(Path(backends.VC71_MOUNT).parents[1].as_posix(), backends.VCRUNTIME_MOUNT)
+        for name in ("msvcp71.dll", "msvcr71.dll"):
+            self.assertIn(f"source={Path(r'C:\vs2003') / name},target=/opt/toolchain/{name},readonly", text)
+        self.assertIn(r"type=bind,source=C:\objects,target=/objects,readonly", text)
+
+    def test_diff_arguments_replace_json(self):
+        self.assertEqual(backends.judge_arguments("abc", ["src/a.cpp"], ("--diff", "0x10")),
+                         ["--diff", "0x10", "abc", "src/a.cpp"])
+        command = backends.host_judge_command("abc", ["src/a.cpp"], python="python3", repo_root="/r",
+                                              extra=("--diff", "0x10"))
+        self.assertNotIn("--json", command)
+
     def test_docker_build_uses_tools_context(self):
-        command = backends.docker_build_command(repo_root="/r")
-        self.assertEqual(command[-1], str(Path("/r/tools")))
-        self.assertEqual(command[command.index("-f") + 1], str(Path("/r/tools/local_check/Dockerfile")))
+        command = backends.docker_build_command(repo_root=backends.REPO_ROOT)
+        self.assertEqual(command[-1], str(backends.REPO_ROOT / "tools"))
+        self.assertEqual(command[command.index("-f") + 1], str(backends.REPO_ROOT / "tools/local_check/Dockerfile"))
+        self.assertEqual(command[command.index("--label") + 1],
+                         f"{backends.IMAGE_LABEL}={backends.image_digest()}")
+
+    def test_wsl_script_drops_tmpdir_for_wine(self):
+        script = backends._WSL_SCRIPT
+        self.assertIn("unset TMPDIR", script)
+        self.assertLess(script.index('PATH="$d:$PATH"'), script.index('exec python3'))
+        dockerfile = (backends.REPO_ROOT / "tools/local_check/Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("unset TMPDIR", dockerfile)
+        self.assertIn("ENV VC71_ROOT=" + backends.VC71_MOUNT, dockerfile)
+
+    def test_container_engine(self):
+        self.assertEqual(backends.container_engine({}, which=lambda n: "/x" if n == "podman" else None), "podman")
+        self.assertEqual(backends.container_engine({}, which=lambda n: "/x"), "docker")
+        self.assertEqual(backends.container_engine({"BFME_CONTAINER_ENGINE": "nerdctl"}, which=lambda n: None),
+                         "nerdctl")
 
     def test_default_backend(self):
         none = lambda name: None  # noqa: E731
         has = lambda name: "/usr/bin/" + name  # noqa: E731
         self.assertEqual(backends.default_backend(compile_only=True, os_name="nt", which=none), "native")
-        self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=has), "wsl")
+        self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=has,
+                                                  wsl_wine=lambda: True), "wsl")
+        self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=has,
+                                                  wsl_wine=lambda: False), "docker")
+        wsl_only = lambda name: "/w" if name.startswith("wsl") else None  # noqa: E731
+        self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=wsl_only,
+                                                  wsl_wine=lambda: False), "docker")
+        self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=wsl_only), "wsl")
         self.assertEqual(backends.default_backend(compile_only=False, os_name="nt", which=none), "docker")
         self.assertEqual(backends.default_backend(compile_only=False, os_name="posix", which=has), "host")
         self.assertEqual(backends.default_backend(compile_only=False, os_name="posix", which=none), "docker")
@@ -541,6 +596,395 @@ class PlanTests(unittest.TestCase):
         write(self.repo / "docs/note.md", b"x\n")
         plan = precheck.plan_changes(self.repo, self.base, self.commit("head"))
         self.assertEqual((plan.changed, plan.affected), ([], []))
+
+
+class GitRepoCase(unittest.TestCase):
+    """A scratch Git repository with one unit, its expected record and a minimal retail image."""
+
+    def setUp(self):
+        self.scratch = tempfile.TemporaryDirectory()
+        self.repo = Path(self.scratch.name) / "repo"
+        self.repo.mkdir()
+        self.git("init", "-q", "-b", "main")
+        write(self.repo / "src/a.cpp", b"// FUNCTION: BFME2 0x1000\nint f() { return 1; }\n")
+        write(self.repo / "expected/a.cpp.json", json.dumps({"rows": [
+            {"rva": "0x00001000", "size": 4, "section": ".text", "role": "owned", "name": "?f@@YAHXZ"},
+            {"rva": "0x00001004", "size": 2, "section": ".text", "role": "comdat", "name": "_g"},
+            {"rva": "0x00002000", "size": 4, "section": ".data", "role": "data", "name": "_d"}]}).encode())
+        write(self.repo / "config/map.json", json.dumps({
+            "objects": [{"object_id": "O1", "tu": "src/a.cpp"}, {"object_id": "O2", "tu": "src/b.cpp"}],
+            "rows": [{"rva": "0x00001006", "size": 2, "section": ".text", "object": "O1", "name": "_owned"},
+                     {"rva": "0x00001000", "size": 4, "section": ".text", "object": "O1", "name": "?f@@YAHXZ"},
+                     {"rva": "0x00001008", "size": 2, "section": ".text", "object": "O2", "name": "_other"}]}).encode())
+        write(self.repo / "baseline/game.dat", make_pe(b"\xb8\x01\x00\x00\x00\xc3\x90\x90" + bytes(0x1F8)))
+        self.head = self.commit("base")
+
+    def tearDown(self):
+        self.scratch.cleanup()
+
+    def git(self, *args):
+        return subprocess.run(["git", "-C", str(self.repo), "-c", "user.name=t", "-c", "user.email=t@t",
+                               *args], capture_output=True, text=True, check=True).stdout.strip()
+
+    def commit(self, message):
+        self.git("add", "-A")
+        self.git("commit", "-q", "-m", message)
+        return self.git("rev-parse", "HEAD")
+
+
+def make_pe(code, rva=0x1000):
+    """A minimal PE32 image with one .text section at RVA, enough for binary_model.PE."""
+    import struct
+    pe, optional_size, raw = 0x40, 224, 0x200
+    data = bytearray(raw + len(code))
+    struct.pack_into("<I", data, 0x3C, pe)
+    data[pe:pe + 4] = b"PE\0\0"
+    struct.pack_into("<HHIIIHH", data, pe + 4, 0x14C, 1, 0, 0, 0, optional_size, 0x102)
+    struct.pack_into("<H", data, pe + 24, 0x10B)
+    struct.pack_into("<I", data, pe + 24 + 28, 0x400000)
+    section = pe + 24 + optional_size
+    struct.pack_into("<8sIIIIIIHHI", data, section, b".text", len(code), rva, len(code), raw, 0, 0, 0, 0,
+                     0x60000020)
+    data[raw:] = code
+    return bytes(data)
+
+
+import bootstrap  # noqa: E402
+import objdiff_project  # noqa: E402
+import parity  # noqa: E402
+import viewer  # noqa: E402
+
+
+class BootstrapTests(unittest.TestCase):
+    def test_sources_are_pinned_public_commits(self):
+        for source in bootstrap.SOURCES:
+            self.assertRegex(source.commit, r"^[0-9a-f]{40}$")
+            self.assertTrue(source.url.startswith("https://github.com/Open-BFME/"))
+            self.assertTrue(all(pattern.startswith("/") for pattern in source.patterns))
+        self.assertEqual(bootstrap.SUPPORT.commit, vt.runner_revision())
+
+    def test_sparse_patterns_cover_every_pinned_binary(self):
+        manifest = vt.load_manifest()
+        layout = bootstrap.Layout(Path("/cache"))
+        roots = vt.Roots(vc71=layout.vc71, vcruntime=layout.vcruntime)
+        for path in manifest.binaries:
+            local = vt.local_path(roots, path).as_posix()
+            relative = local[len(layout.compiler_checkout.as_posix()):]
+            self.assertTrue(any(relative == p or (p.endswith("/") and relative.startswith(p))
+                                for p in bootstrap.COMPILER.patterns), path)
+
+    def test_layout_puts_the_runtime_where_the_judge_looks(self):
+        """judge.py's compiler environment adds VC71_ROOT.parents[1] to the DLL path (msvcp71.dll)."""
+        layout = bootstrap.Layout(Path("/cache"))
+        self.assertEqual(layout.vc71.parents[1], layout.vcruntime)
+
+    def test_cache_root(self):
+        self.assertEqual(bootstrap.cache_root({bootstrap.CACHE_ENV: "/x"}), Path("/x"))
+        self.assertEqual(bootstrap.cache_root({"LOCALAPPDATA": r"C:\L"}, os_name="nt"),
+                         Path(r"C:\L") / "bfme2-rebuild" / "cache")
+        self.assertEqual(bootstrap.cache_root({}, os_name="posix", platform="darwin", home="/h"),
+                         Path("/h/Library/Caches/bfme2-rebuild"))
+        self.assertEqual(bootstrap.cache_root({"XDG_CACHE_HOME": "/xdg"}, os_name="posix", platform="linux"),
+                         Path("/xdg/bfme2-rebuild"))
+
+    def test_fetch_is_sparse_shallow_and_idempotent(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            destination = Path(scratch) / "open-bfme-1"
+            seen = []
+
+            def run(argv, **kwargs):
+                seen.append((argv, kwargs.get("input")))
+                out = bootstrap.COMPILER.commit + "\n" if "rev-parse" in argv else ""
+                return subprocess.CompletedProcess(argv, 0, out, "")
+
+            self.assertTrue(bootstrap.fetch(bootstrap.COMPILER, destination, run=run, log=lambda *a: None))
+            fetch = next(argv for argv, _ in seen if "fetch" in argv)
+            self.assertIn("--depth", fetch)
+            self.assertIn("--filter=blob:none", fetch)
+            self.assertEqual(fetch[-1], bootstrap.COMPILER.commit)
+            self.assertIn("core.autocrlf=false", " ".join(fetch))
+            sparse = next(text for argv, text in seen if "sparse-checkout" in argv)
+            self.assertEqual(sparse.split(), [p for p in " ".join(bootstrap.COMPILER.patterns).split()])
+            seen.clear()
+            self.assertFalse(bootstrap.fetch(bootstrap.COMPILER, destination, run=run, log=lambda *a: None))
+            self.assertEqual(len(seen), 1)
+
+    def test_fetch_failure_is_a_setup_error(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            def run(argv, **kwargs):
+                code = 128 if "fetch" in argv else 0
+                return subprocess.CompletedProcess(argv, code, "", "fatal: unable to access")
+
+            with self.assertRaises(bootstrap.BootstrapError):
+                bootstrap.fetch(bootstrap.SUPPORT, Path(scratch) / "x", run=run, log=lambda *a: None)
+
+    def test_run_bootstrap_verifies_and_writes_the_configuration(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            cache = Path(scratch) / "cache"
+            layout = bootstrap.Layout(cache.resolve())
+            placed = {"vc/": layout.vc71, "vcruntime/": layout.vcruntime}
+
+            def fetcher(source, destination, **kwargs):
+                if source is bootstrap.COMPILER:
+                    for path, data in FAKE_FILES.items():
+                        prefix = next(p for p in placed if path.startswith(p))
+                        write(placed[prefix] / path[len(prefix):], data)
+                else:
+                    (destination / "tools").mkdir(parents=True, exist_ok=True)
+
+            overlay = Path(scratch) / "overlay"
+            overlay.mkdir()
+            with mock.patch.object(vt, "load_manifest", return_value=vt.parse_manifest(fake_manifest_text())), \
+                    mock.patch.object(vt, "check_runner"):
+                result = bootstrap.run_bootstrap(cache=cache, backend="host", config_file=Path(scratch) / "t.json",
+                                                 fetcher=fetcher, overlay=lambda runner, run: overlay,
+                                                 demangler_builder=lambda backend, layout, run: ("/d", "built"),
+                                                 log=lambda *a: None)
+            self.assertTrue(result.ok, result.report.errors)
+            config = vt.load_config(Path(scratch) / "t.json")
+            self.assertEqual(Path(config["roots"]["vc71"]), layout.vc71)
+            self.assertEqual(Path(config["roots"]["vcruntime"]), layout.vcruntime)
+            self.assertEqual(config["demangler"], "/d")
+            self.assertEqual(config["bootstrap"]["sources"]["open-bfme-2"]["commit"], bootstrap.SUPPORT_REVISION)
+
+    def test_cache_inside_the_checkout_is_refused(self):
+        with self.assertRaises(bootstrap.BootstrapError):
+            bootstrap.run_bootstrap(cache=bootstrap.REPO_ROOT / "cache", fetcher=None)
+
+    def test_demangler_per_backend(self):
+        layout = bootstrap.Layout(Path("/cache"))
+        self.assertIsNone(bootstrap.build_demangler("docker", layout)[0])
+        ok = lambda argv, **kw: subprocess.CompletedProcess(argv, 0, "/cache/bin/demangle\n", "")  # noqa: E731
+        self.assertEqual(bootstrap.build_demangler("host", layout, run=ok), ("/cache/bin/demangle", "built"))
+        bad = lambda argv, **kw: subprocess.CompletedProcess(argv, 3, "", "no llvm-config-18\n")  # noqa: E731
+        path, note = bootstrap.build_demangler("wsl", layout, run=bad)
+        self.assertIsNone(path)
+        self.assertIn("llvm-18-dev", note)
+
+
+class ObjdiffTests(GitRepoCase):
+    def test_coff_round_trip(self):
+        long_name = "?f@@YAHXZ_with_a_name_longer_than_eight"
+        data = objdiff_project.coff_object([(long_name, b"\x55\x8b\xec\xc3"), ("_g", b"\xc3")])
+        bodies = objdiff_project.function_bodies(data)
+        self.assertEqual(bodies[long_name], (b"\x55\x8b\xec\xc3", []))
+        self.assertEqual(bodies["_g"], (b"\xc3", []))
+
+    def test_project_holds_retail_bytes_and_objdiff_config(self):
+        directory = Path(self.scratch.name) / "objdiff"
+        path = objdiff_project.write_project(directory, "src/a.cpp", repo=self.repo, revision=self.head)
+        config = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(config["$schema"], objdiff_project.SCHEMA_URL)
+        unit = config["units"][0]
+        self.assertEqual(unit["name"], "src/a.cpp")
+        self.assertTrue(config["build_base"])
+        self.assertFalse(config["build_target"])
+        self.assertIn("build", config["custom_args"])
+        bodies = objdiff_project.function_bodies((directory / unit["target_path"]).read_bytes())
+        self.assertEqual(sorted(bodies), ["?f@@YAHXZ", "_g", "_owned"])   # ledger rows plus expected/ rows
+        self.assertEqual(bodies["?f@@YAHXZ"][0], b"\xb8\x01\x00\x00")
+        self.assertEqual(bodies["_g"][0], b"\x00\xc3")
+        self.assertNotIn("_d", bodies)   # data rows stay out of the code comparison
+
+    def test_masked_zeroes_relocated_operands(self):
+        self.assertEqual(objdiff_project.masked(b"\xe8\x01\x02\x03\x04\xc3", [1]), b"\xe8\x00\x00\x00\x00\xc3")
+
+
+class ViewerTests(unittest.TestCase):
+    def test_side_by_side(self):
+        rows = viewer.side_by_side(["0: a 1 push ebp", "1: b mov", "2: c ret"], ["0: a 1 push ebp", "1: x xor",
+                                                                                  "2: c ret", "3: d nop"])
+        self.assertEqual([r["kind"] for r in rows], ["same", "change", "same", "right"])
+
+    def test_unified_to_rows(self):
+        header, rows = viewer.unified_to_rows("--- retail 0x10\n+++ compiled f\n@@ -1,3 +1,3 @@\n a\n-b\n+c\n d\n")
+        self.assertEqual(len(header), 2)
+        self.assertEqual([r["kind"] for r in rows], ["gap", "same", "change", "same"])
+        self.assertEqual((rows[2]["left"], rows[2]["right"]), ("b", "c"))
+
+    def test_status_and_server(self):
+        import urllib.request
+        with tempfile.TemporaryDirectory() as scratch:
+            status = viewer.Status(scratch, mode="unit")
+            status.step("judge")
+            status.unit("src/a.cpp", state="done", functions=[{"rva": "0x10", "label": "PASS", "name": "f"}])
+            calls = []
+
+            def provider(tu, rva):
+                calls.append((tu, rva))
+                return {"state": "ready", "rows": [], "source": "test"}
+
+            server, url = viewer.serve(scratch, port=0, provider=provider)
+            try:
+                page = urllib.request.urlopen(url + "/").read().decode()
+                self.assertIn("status.json", page)
+                self.assertNotIn("http://", page.replace("http://localhost", ""))   # no CDN
+                data = json.loads(urllib.request.urlopen(url + "/status.json").read())
+                self.assertEqual(data["units"]["src/a.cpp"]["functions"][0]["label"], "PASS")
+                self.assertEqual(data["steps"][0]["state"], "running")
+                for _ in range(50):
+                    diff = json.loads(urllib.request.urlopen(url + "/diff?tu=src/a.cpp&rva=0x10").read())
+                    if diff["state"] != "pending":
+                        break
+                    time.sleep(0.05)
+                self.assertEqual(diff["state"], "ready")
+                self.assertEqual(calls, [("src/a.cpp", "0x10")])   # computed once, then cached
+                self.assertEqual(server.server_address[0], "127.0.0.1")
+            finally:
+                server.shutdown()
+                server.server_close()
+            status.finish("done", "1/1 PASS")
+            self.assertEqual(json.loads((Path(scratch) / "status.json").read_text())["state"], "done")
+
+    def test_provisional_diffs_are_not_cached(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            answers = [{"state": "ready", "rows": [], "provisional": True}, {"state": "ready", "rows": [1]}]
+            diffs = viewer.Diffs(scratch, lambda tu, rva: answers.pop(0))
+
+            def settle():
+                for _ in range(100):
+                    result = diffs.get("src/a.cpp", "0x10")
+                    if result["state"] != "pending":
+                        return result
+                    time.sleep(0.02)
+
+            self.assertEqual(settle()["rows"], [])     # the stand-in is served once ...
+            self.assertEqual(settle()["rows"], [1])    # ... then recomputed and cached
+            self.assertEqual(settle()["rows"], [1])
+            self.assertEqual(answers, [])
+
+    def test_object_diff_without_objdump_shows_bytes(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            retail, base = Path(scratch) / "game.dat", Path(scratch) / "b.obj"
+            retail.write_bytes(make_pe(b"\x55\x8b\xec\x5d\xc3" + bytes(11)))
+            base.write_bytes(objdiff_project.coff_object([("_f", b"\x55\x8b\xec\x5d\xc3\xcc\xcc")]))
+            with mock.patch.object(viewer, "objdump", return_value=None):
+                diff = viewer.object_diff(retail, "0x1000", 5, base, "_f")
+                unit = {"functions": [{"rva": "0x1000", "size": 5, "symbol": "_f"}], "base_obj": str(base)}
+                self.assertEqual(viewer.row_diff(retail, unit, "0x1000")["rows"], diff["rows"])
+                missing = viewer.object_diff(retail, "0x1000", 5, base, None)
+            self.assertTrue(diff["equal"])
+            self.assertEqual(diff["sizes"], [5, 5])
+            self.assertEqual({row["kind"] for row in diff["rows"]}, {"same"})
+            self.assertEqual(missing["source"], "retail only")
+
+
+class ParityTests(GitRepoCase):
+    def test_library_and_sample(self):
+        self.assertEqual(parity.library("src/zlib-1.1.4/Compression/ZLib/trees.c"), "src/zlib-1.1.4")
+        self.assertEqual(parity.library("src/Code/GameEngine/Source/Common/A.cpp"), "src/Code/GameEngine/Source")
+        units = [f"src/lib{i % 4}/f{i}.c" for i in range(40)]
+        picked = parity.sample(units, 8, seed=1)
+        self.assertEqual(len(picked), 8)
+        self.assertEqual({parity.library(tu) for tu in picked}, {f"src/lib{i}" for i in range(4)})
+        self.assertEqual(picked, parity.sample(units, 8, seed=1))
+
+    def test_agreement_through_compare_index(self):
+        _intake, compare, *_ = precheck.ci_modules()
+        item = {"tu": "src/a.cpp", "gates": [], "object_verified": False,
+                "rows": [{"rva": "0x1000", "status": "MATCH", "proof": "proven"},
+                         {"rva": "0x1004", "status": "PARTIAL", "pct": 87.5}]}
+        hosted = {"src/a.cpp": {"functions": {"0x00001000": ["MATCH", 100, True], "0x00001004": ["PARTIAL", 87.5, False]},
+                                "verified": False, "error": False}}
+        result, total, agreed = parity.agreement(hosted, {"src/a.cpp": item}, compare)
+        self.assertEqual((result["src/a.cpp"], total, agreed), ([], 2, 2))
+        hosted["src/a.cpp"]["functions"]["0x00001000"] = ["MATCH", 100, False]
+        result, total, agreed = parity.agreement(hosted, {"src/a.cpp": item}, compare)
+        self.assertEqual((total, agreed), (2, 1))
+        self.assertIn("0x00001000", result["src/a.cpp"][0])
+
+    def test_prepare_scratch_git_with_main_at_the_measured_commit(self):
+        write(self.repo / "tools/judge/bin/judge.py", b"# judge\n")
+        head = self.commit("judge")
+        workspace = Path(self.scratch.name) / "ws"
+        work, gitdir, mounts = parity.prepare(self.repo, head, workspace, "docker")
+        self.assertTrue((work / "tools/judge/bin/judge.py").is_file())
+        self.assertTrue((work / "baseline/game.dat").is_file())
+        self.assertEqual((gitdir / "refs/heads/main").read_text().strip(), head)
+        self.assertEqual((gitdir / "objects/info/alternates").read_text().strip(), "/objects")
+        self.assertEqual(mounts[0][1], "/objects")
+        parity.prepare(self.repo, head, workspace, "host")
+        alternate = (gitdir / "objects/info/alternates").read_text().strip()
+        self.assertEqual(subprocess.run(["git", "--git-dir", str(gitdir), "cat-file", "-t", "main"],
+                                        capture_output=True, text=True).stdout.strip(), "commit", alternate)
+
+
+class UnitModeTests(GitRepoCase):
+    def run_unit(self, *extra, rows=None, error=None):
+        calls = []
+
+        def judge_factory(backend, config, repo, image):
+            def judge(revision, tus):
+                calls.append((revision, tuple(tus)))
+                return judge_doc(rows or [{"rva": "0x1000", "status": "MATCH", "symbol": "?f@@YAHXZ",
+                                           "proof": "proven"}], error=error)
+            return judge
+
+        out = io.StringIO()
+        with mock.patch.object(precheck, "check_local_main"), mock.patch("sys.stdout", out):
+            code = precheck.main(["--unit", "src/a.cpp", "--backend", "host", "--no-objdiff", *extra],
+                                 repo=self.repo, judge_factory=judge_factory,
+                                 toolchain=lambda path: {"roots": {"vc71": "/vc"}})
+        return code, calls, out.getvalue()
+
+    def test_judges_head_only_and_says_rounds_are_unlimited(self):
+        code, calls, out = self.run_unit()
+        self.assertEqual(code, 0)
+        self.assertEqual(calls, [(self.head, ("src/a.cpp",))])
+        self.assertIn("PASS", out)
+        self.assertIn("Local rounds are unlimited", out)
+        self.assertIn("1/1 functions PASS", out)
+
+    def test_mismatch_and_compile_error(self):
+        code, _calls, out = self.run_unit(rows=[{"rva": "0x1000", "status": "PARTIAL", "pct": 50.0}])
+        self.assertEqual(code, 0)
+        self.assertIn("MISMATCH 50%", out)
+        code, _calls, out = self.run_unit(rows=[{"rva": "0x1000", "status": "COMPILE_ERROR"}], error="C2065")
+        self.assertEqual(code, 1)
+        self.assertIn("COMPILE ERROR", out)
+
+    def test_worktree_snapshot_leaves_refs_and_index_alone(self):
+        write(self.repo / "src/a.cpp", b"// FUNCTION: BFME2 0x1000\nint f() { return 2; }\n")
+        commit, dirty = precheck.snapshot_worktree(self.repo)
+        self.assertTrue(dirty)
+        self.assertNotEqual(commit, self.head)
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertIn("return 2", self.git("show", f"{commit}:src/a.cpp"))
+        self.assertEqual(self.git("status", "--porcelain"), "M src/a.cpp")
+        code, calls, _out = self.run_unit("--worktree")
+        self.assertEqual(self.git("rev-parse", calls[0][0] + "^{tree}"), self.git("rev-parse", commit + "^{tree}"))
+
+    def test_clean_worktree_uses_head(self):
+        self.assertEqual(precheck.snapshot_worktree(self.repo), (self.head, False))
+
+    def test_unit_must_be_a_translation_unit(self):
+        with mock.patch("sys.stderr", new_callable=io.StringIO):
+            code = precheck.main(["--unit", "include/x.h", "--backend", "host"], repo=self.repo)
+        self.assertEqual(code, 2)
+
+    def test_view_writes_live_status(self):
+        with tempfile.TemporaryDirectory() as cache, mock.patch.dict(os.environ, {bootstrap.CACHE_ENV: cache}), \
+                mock.patch.object(precheck, "hold") as hold:
+            code, _calls, out = self.run_unit("--view", "--port", "0")
+            self.assertEqual(code, 0)
+            self.assertIn("Live view: http://localhost:", out)
+            server = hold.call_args[0][0]
+            server.shutdown()
+            server.server_close()
+            status = json.loads(next(Path(cache, "runs").glob("*/status.json")).read_text())
+            self.assertEqual(status["state"], "done")
+            self.assertEqual(status["units"]["src/a.cpp"]["functions"][0]["label"], "PASS")
+            self.assertTrue(all(step["state"] == "done" for step in status["steps"]))
+
+    def test_bootstrap_flag_runs_the_bootstrap_first(self):
+        result = bootstrap.Result(True, Path("t.json"), vt.Report(vt.Roots(vc71=Path("/vc"))), None, ["note"])
+        seen = []
+        with mock.patch.object(precheck, "check_local_main"), mock.patch("sys.stdout", new_callable=io.StringIO):
+            precheck.main(["--unit", "src/a.cpp", "--backend", "host", "--no-objdiff", "--bootstrap"],
+                          repo=self.repo, toolchain=lambda path: {"roots": {"vc71": "/vc"}},
+                          judge_factory=lambda *a, **k: (lambda rev, tus: judge_doc([])),
+                          bootstrapper=lambda **kwargs: seen.append(kwargs) or result)
+        self.assertEqual(seen[0]["backend"], "host")
 
 
 if __name__ == "__main__":

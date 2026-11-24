@@ -115,18 +115,16 @@ def sha256_file(path):
 
 
 def listing_digest(local_dir, manifest_prefix):
-    """SHA-256 of the LC_ALL=C-sorted `sha256sum` listing the manifest uses.
+    """SHA-256 of the `sha256sum` listing the manifest uses.
 
-    Each line is `<sha256>  <manifest_prefix>/<relative path>\\n`, so a local
-    directory hashes exactly as its counterpart under /opt/boat-compiler does.
-    Returns (file count, digest)."""
+    tools/compiler-image/fresh-install.sh lists `find | LC_ALL=C sort -z | xargs -0 sha256sum`:
+    one `<sha256>  <manifest_prefix>/<relative path>\\n` line per file, ordered by the path's
+    bytes (not by the whole line), so a local directory hashes exactly as its counterpart under
+    /opt/boat-compiler does. Returns (file count, digest)."""
     local_dir = Path(local_dir)
-    lines = []
-    for path in local_dir.rglob("*"):
-        if path.is_file():
-            relative = path.relative_to(local_dir).as_posix()
-            lines.append(f"{sha256_file(path)}  {manifest_prefix}/{relative}\n".encode("utf-8"))
-    lines.sort()
+    names = sorted((f"{manifest_prefix}/{path.relative_to(local_dir).as_posix()}".encode("utf-8"), path)
+                   for path in local_dir.rglob("*") if path.is_file())
+    lines = [sha256_file(path).encode("ascii") + b"  " + name + b"\n" for name, path in names]
     return len(lines), hashlib.sha256(b"".join(lines)).hexdigest()
 
 
@@ -307,14 +305,14 @@ def config_path(environ=None, os_name=None, home=None):
     return base / "bfme2-rebuild" / "toolchain.json"
 
 
-def save_config(report, path, *, demangler=None, manifest=None):
+def save_config(report, path, *, demangler=None, manifest=None, extra=None):
     path = Path(path)
     if _inside(path, REPO_ROOT):
         raise ValueError(f"refusing to write machine configuration inside the checkout: {path}")
     data = {"version": CONFIG_VERSION, "roots": report.roots.as_json(), "cl_sha256": report.cl_sha256,
             "manifest_sha256": manifest.digest if manifest else "", "demangler": demangler,
             "checked": report.checked, "warnings": report.warnings,
-            "verified_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+            "verified_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **(extra or {})}
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")

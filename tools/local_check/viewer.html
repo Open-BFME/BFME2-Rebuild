@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BFME II local check</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --line: #e2e1dc;
+  --pass: #1f7a3d; --pass-bg: #e3f3e8; --fail: #a3261b; --fail-bg: #fbe5e2;
+  --error: #8a5a00; --error-bg: #fbf0d6; --pending: #6b6b66; --pending-bg: #ecebe6;
+  --sel: #e8eefb; --left: #fde8e6; --right: #e6f4ea; --change: #fff4d6;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --panel: #1f1f1d; --text: #e9e8e3; --muted: #9b9a94; --line: #34332f;
+    --pass: #6fd18f; --pass-bg: #1d3325; --fail: #ff8f80; --fail-bg: #3b211e;
+    --error: #f2c062; --error-bg: #3a2f17; --pending: #9b9a94; --pending-bg: #2a2a27;
+    --sel: #243049; --left: #3b2422; --right: #1f3326; --change: #3a3218;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel); display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; }
+header h1 { font-size: 16px; margin: 0; }
+header .meta { color: var(--muted); font-size: 13px; }
+main { display: grid; grid-template-columns: minmax(280px, 420px) 1fr; min-height: calc(100vh - 52px); }
+@media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+aside { border-right: 1px solid var(--line); background: var(--panel); overflow: auto; max-height: calc(100vh - 52px); }
+section { overflow: auto; max-height: calc(100vh - 52px); padding: 12px 16px; }
+.steps { padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.steps span { margin-right: 10px; white-space: nowrap; }
+.steps .running { font-weight: 600; }
+.filters { padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 6px; flex-wrap: wrap; }
+.filters button { font: inherit; font-size: 12px; border: 1px solid var(--line); background: transparent; color: var(--text); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
+.filters button.on { background: var(--sel); border-color: transparent; }
+.unit { border-bottom: 1px solid var(--line); }
+.unit h2 { font-size: 13px; margin: 0; padding: 8px 16px; font-weight: 600; word-break: break-all; display: flex; gap: 8px; align-items: center; }
+.fn { display: grid; grid-template-columns: 118px 1fr; gap: 8px; padding: 3px 16px; cursor: pointer; font-size: 12px; align-items: center; }
+.fn:hover { background: var(--sel); }
+.fn.selected { background: var(--sel); }
+.fn .name { font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 4px; white-space: nowrap; }
+.PASS { color: var(--pass); background: var(--pass-bg); }
+.MISMATCH { color: var(--fail); background: var(--fail-bg); }
+.ERROR { color: var(--error); background: var(--error-bg); }
+.PENDING { color: var(--pending); background: var(--pending-bg); }
+table.diff { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 12px; table-layout: fixed; }
+table.diff th { text-align: left; font-family: system-ui, sans-serif; font-weight: 600; padding: 4px 8px; border-bottom: 1px solid var(--line); }
+table.diff td { padding: 0 8px; white-space: pre; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+tr.left td:first-child, tr.change td:first-child { background: var(--left); }
+tr.right td:last-child, tr.change td:last-child { background: var(--right); }
+tr.gap td { color: var(--muted); padding-top: 6px; }
+.note { color: var(--muted); margin: 8px 0; }
+.empty { color: var(--muted); padding: 24px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BFME II local check</h1>
+  <span class="meta" id="state">waiting for the run…</span>
+  <span class="meta" id="unit"></span>
+  <span class="meta">Local rounds are unlimited; this page is a forecast, the hosted check decides.</span>
+</header>
+<main>
+  <aside>
+    <div class="steps" id="steps"></div>
+    <div class="filters" id="filters"></div>
+    <div id="units"></div>
+  </aside>
+  <section id="detail"><p class="empty">Select a function to compare the retail bytes with the compiled object.</p></section>
+</main>
+<script>
+"use strict";
+const FILTERS = ["all", "MISMATCH", "ERROR", "PASS"];
+let filter = "all", selected = null, lastStatus = null, diffTimer = null;
+
+function kind(label) {
+  if (!label) return "PENDING";
+  if (label.startsWith("PASS")) return "PASS";
+  if (label.startsWith("COMPILE")) return "ERROR";
+  if (label.startsWith("MISMATCH")) return "MISMATCH";
+  return "PENDING";
+}
+function el(tag, attrs, text) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) node.setAttribute(k, v);
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function renderFilters() {
+  const box = document.getElementById("filters");
+  box.replaceChildren(...FILTERS.map(f => {
+    const b = el("button", {class: f === filter ? "on" : ""}, f === "all" ? "All" : f === "ERROR" ? "Compile error" : f[0] + f.slice(1).toLowerCase());
+    b.onclick = () => { filter = f; renderFilters(); render(lastStatus); };
+    return b;
+  }));
+}
+function render(status) {
+  if (!status) return;
+  lastStatus = status;
+  const elapsed = status.started ? Math.round(((status.updated || Date.now() / 1000) - status.started)) : 0;
+  document.getElementById("state").textContent =
+    (status.state === "running" ? "Running: " + (status.step || "starting") : status.state === "done" ? "Done" : status.state) +
+    (elapsed ? " · " + elapsed + " s" : "") + (status.summary ? " · " + status.summary : "");
+  document.getElementById("unit").textContent = status.unit ? "Unit: " + status.unit : "";
+  document.getElementById("steps").replaceChildren(...(status.steps || []).map(s =>
+    el("span", {class: s.state}, (s.state === "running" ? "▶ " : s.state === "done" ? "✓ " : "✗ ") + s.name)));
+  const box = document.getElementById("units");
+  const nodes = [];
+  for (const [tu, unit] of Object.entries(status.units || {})) {
+    const section = el("div", {class: "unit"});
+    const head = el("h2");
+    const counts = {PASS: 0, MISMATCH: 0, ERROR: 0};
+    for (const f of unit.functions || []) counts[kind(f.label)] = (counts[kind(f.label)] || 0) + 1;
+    head.append(el("span", {class: "badge " + (unit.state === "done" ? (counts.ERROR ? "ERROR" : counts.MISMATCH ? "MISMATCH" : "PASS") : "PENDING")},
+      unit.state === "done" ? `${counts.PASS}/${(unit.functions || []).length}` : unit.state), el("span", {}, tu));
+    section.append(head);
+    for (const f of unit.functions || []) {
+      if (filter !== "all" && kind(f.label) !== filter) continue;
+      const row = el("div", {class: "fn" + (selected && selected.tu === tu && selected.rva === f.rva ? " selected" : "")});
+      row.append(el("span", {class: "badge " + kind(f.label)}, f.label), el("span", {class: "name", title: f.name || f.rva}, f.rva + " " + (f.name || "")));
+      row.onclick = () => { selected = {tu, rva: f.rva, fn: f}; render(lastStatus); loadDiff(); };
+      section.append(row);
+    }
+    if (unit.error) section.append(el("pre", {class: "note", style: "padding:0 16px;white-space:pre-wrap"}, unit.error));
+    nodes.push(section);
+  }
+  box.replaceChildren(...nodes);
+}
+async function poll() {
+  try {
+    const status = await (await fetch("status.json", {cache: "no-store"})).json();
+    render(status);
+  } catch (e) { document.getElementById("state").textContent = "viewer server stopped"; }
+  setTimeout(poll, lastStatus && lastStatus.state !== "running" ? 5000 : 1000);
+}
+async function loadDiff() {
+  clearTimeout(diffTimer);
+  if (!selected) return;
+  const {tu, rva, fn} = selected;
+  const detail = document.getElementById("detail");
+  const data = await (await fetch(`diff?tu=${encodeURIComponent(tu)}&rva=${encodeURIComponent(rva)}`, {cache: "no-store"})).json();
+  if (!selected || selected.rva !== rva || selected.tu !== tu) return;
+  const title = el("h2", {style: "font-size:15px;margin:0 0 4px"}, `${rva} ${fn.name || ""}`);
+  const info = el("p", {class: "note"}, `${fn.label} · ${tu}` + (fn.before ? ` · base ${fn.before} → head ${fn.after}` : ""));
+  if (data.state === "pending") {
+    detail.replaceChildren(title, info, el("p", {class: "empty"}, "Disassembling…"));
+    diffTimer = setTimeout(loadDiff, 1000);
+    return;
+  }
+  if (data.state !== "ready") {
+    detail.replaceChildren(title, info, el("p", {class: "note"}, data.note || "No diff available."));
+    return;
+  }
+  const table = el("table", {class: "diff"});
+  const head = el("tr");
+  head.append(el("th", {}, "Retail (baseline/game.dat)"), el("th", {}, "Compiled object"));
+  table.append(head);
+  for (const row of data.rows || []) {
+    const tr = el("tr", {class: row.kind});
+    tr.append(el("td", {}, row.left), el("td", {}, row.right));
+    table.append(tr);
+  }
+  const notes = [`Source: ${data.source || "?"}`, "relocated operands zeroed"];
+  if (data.sizes) notes.push(`retail ${data.sizes[0]} bytes, compiled ${data.sizes[1]} bytes`);
+  if (data.equal !== undefined) notes.push(data.equal ? "bytes equal" : "bytes differ");
+  if (data.note) notes.push(data.note);
+  detail.replaceChildren(title, info, el("p", {class: "note"}, notes.join(" · ")), table);
+}
+renderFilters();
+poll();
+</script>
+</body>
+</html>

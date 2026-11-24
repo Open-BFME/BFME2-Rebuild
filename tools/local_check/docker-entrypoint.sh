@@ -5,7 +5,7 @@ set -eu
 
 if [ ! -f "$VC71_ROOT/Vc7/bin/cl.exe" ]; then
     echo "Mount your verified Visual C++ 7.1 root read-only at $VC71_ROOT" >&2
-    echo "(python tools/local_check/verify_toolchain.py checks it against docs/compiler-image.md)." >&2
+    echo "(python tools/local_check/bootstrap.py fetches and verifies it; precheck.py mounts it)." >&2
     exit 2
 fi
 if [ ! -d "$BFME_JUDGE_RUNNER/tools" ]; then
