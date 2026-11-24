@@ -12,6 +12,7 @@
 #include "GameNetwork/GameSpy/GameSpyConfig.h"
 #include <string.h>
 #include "GameClient/AptPlayer.h"
+#include "GameClient/AptMessenger.h"
 #include "GameNetwork/GameSpy/GameSpyInfo.h"
 #include "GameNetwork/GameSpy/PeerThread.h"
 #include "GameClient/GameText.h"
@@ -27,6 +28,7 @@ void _bfme_closeAptScreen(const AsciiString &);
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
 enum GSOverlayType { GSOVERLAY_PLAYERINFO, GSOVERLAY_MAPSELECT, GSOVERLAY_BUDDY, GSOVERLAY_PAGE, GSOVERLAY_GAMEOPTIONS, GSOVERLAY_GAMEPASSWORD, GSOVERLAY_LADDERSELECT, GSOVERLAY_OPTIONS, GSOVERLAY_MAX };
 void GSMessageBoxOk(UnicodeString title, UnicodeString message, void (*okFunc)());
+void MessageBoxOk(UnicodeString title, UnicodeString message, void (*okFunc)());
 void GameSpyCloseOverlay(GSOverlayType overlay);
 extern int g_009C075C;
 extern int GameSpyColor[29];
@@ -213,6 +215,26 @@ void AptOnlineCustomMatch::InitGadgets()
 }
 
 // FUNCTION: BFME2 0x0059F043 size=180 name=?MpOwnerPrintMessage@AptOnlineCustomMatch@@UAEXABVUnicodeString@@H@Z evidence=N:ledger tier=A
+void AptOnlineCustomMatch::MpOwnerPrintMessage(const UnicodeString &message, int type)
+{
+	if (!TheGameSpyInfo)
+		return;
+	switch (type)
+	{
+	case 0:
+		TheGameSpyInfo->addText(message, GameSpyColor[0]);
+		break;
+	case 1:
+		// without the messenger screen the message also needs a box of its own
+		if (!g_aptMessenger)
+			MessageBoxOk(UnicodeString(L""), message, 0);
+		TheGameSpyInfo->addText(message, GameSpyColor[24]);
+		break;
+	case 2:
+		TheGameSpyInfo->vslot104(message);
+		break;
+	}
+}
 
 // FUNCTION: BFME2 0x0059F108 size=34 name=?rva0059F108@Rva0059F108@@QAE_NPAX@Z evidence=?:placeholder tier=A
 
