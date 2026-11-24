@@ -86,8 +86,8 @@ class FormattingTests(unittest.TestCase):
         self.assertEqual(len(discord.emoji_bar(50.0, "🟦")), 10)
 
     def test_format_delta(self):
-        self.assertEqual(discord.format_delta(27.65, 27.53), "▲ +0.12")
-        self.assertEqual(discord.format_delta(64.66, 64.71), "▼ -0.05")
+        self.assertEqual(discord.format_delta(27.65, 27.53), "▲ 0.12")
+        self.assertEqual(discord.format_delta(64.66, 64.71), "▼ 0.05")
         self.assertEqual(discord.format_delta(19.41, 19.41), "")
         self.assertEqual(discord.format_delta(19.412, 19.411), "")
         self.assertEqual(discord.format_delta(None, 10.0), "")
@@ -99,39 +99,56 @@ class FormattingTests(unittest.TestCase):
         self.assertEqual(len(payload["embeds"]), 1)
         embed = payload["embeds"][0]
         self.assertEqual(embed["title"], "BFME 2 Rebuild · Progress")
+        self.assertEqual(embed["url"], "https://github.com/Open-BFME/BFME2-Rebuild")
         self.assertEqual(embed["color"], 0x2EA043)
         self.assertEqual(embed["timestamp"], "2026-11-23T14:20:36Z")
         self.assertEqual(embed["footer"], {"text": "Measured 2026-11-23"})
 
         desc = embed["description"]
-        self.assertIn("*Clean C++ rebuild of game.dat (1.06) compiled with Visual C++ 7.1*", desc)
-        self.assertIn("**Does it work?**", desc)
-        self.assertIn("**Byte match:** `27.65%`\n🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛\n1,751,385 / 6,333,616 bytes compiled byte-for-byte", desc)
-        self.assertIn("**Linking:** `64.71%`\n🟨🟨🟨🟨🟨🟨⬛⬛⬛⬛\n6,021 / 9,305 names provided; measured 2026-11-22", desc)
-        self.assertIn("> Daily build: 3,250 of 3,250 source files compile, 526 match completely", desc)
-        self.assertIn("**Clean progress**", desc)
-        self.assertIn("🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛ **19.41%** Code proven (matched + all references verified)", desc)
-        self.assertIn("🟪🟪🟪⬛⬛⬛⬛⬛⬛⬛ **26.55%** Finished functions (11,037 / 41,565, named file + final header)", desc)
-        self.assertIn("Draft headers still in use: 12", desc)
-        self.assertIn("Main `cca4fc12cfe8` · [Live progress card & repo](https://github.com/Open-BFME/BFME2-Rebuild)", desc)
-        self.assertNotIn("▲", desc)
-        self.assertNotIn("▼", desc)
+        expected = "\n".join([
+            "*Clean C++ rebuild of game.dat (1.06) compiled with Visual C++ 7.1*",
+            "",
+            "**Byte match: 27.65%**",
+            "🟩🟩🟩⬛⬛⬛⬛⬛⬛⬛",
+            "1,751,385 / 6,333,616 bytes compiled byte-for-byte",
+            "",
+            "**Linking: 64.71%**",
+            "🟨🟨🟨🟨🟨🟨⬛⬛⬛⬛",
+            "6,021 / 9,305 names provided (measured 2026-11-22)",
+            "",
+            "[View full progress card: README](https://github.com/Open-BFME/BFME2-Rebuild)",
+        ])
+        self.assertEqual(desc, expected)
+        for forbidden in (
+            "Daily build",
+            "Clean progress",
+            "Does it work?",
+            "Code proven",
+            "Finished functions",
+            "Draft headers",
+            "Main `",
+            "`",
+            "▲",
+            "▼",
+        ):
+            self.assertNotIn(forbidden, desc)
 
     def test_payload_with_previous_deltas(self):
         payload = discord.build_payload(SAMPLE_CARD, PREVIOUS_CARD)
         desc = payload["embeds"][0]["description"]
-        # matched: 27.65% - 27.53% = +0.12
-        self.assertIn("**Byte match:** `27.65%` `▲ +0.12`", desc)
-        # linking: 64.71% - 64.76% = -0.05
-        self.assertIn("**Linking:** `64.71%` `▼ -0.05`", desc)
-        # proven unchanged -> no delta marker on proven line
-        proven_line = [line for line in desc.splitlines() if "Code proven" in line][0]
-        self.assertNotIn("▲", proven_line)
-        self.assertNotIn("▼", proven_line)
-        # finished: 26.55% - 26.46% = +0.09
-        self.assertIn("Finished functions (11,037 / 41,565, named file + final header) `▲ +0.09`", desc)
+        # matched: 27.65% - 27.53% = +0.12 -> plain "▲ 0.12"
+        self.assertIn("**Byte match: 27.65%**  ▲ 0.12", desc)
+        # linking: 64.71% - 64.76% = -0.05 -> plain "▼ 0.05"
+        self.assertIn("**Linking: 64.71%**  ▼ 0.05", desc)
+        self.assertNotIn("`", desc)
+        self.assertNotIn("▲ +", desc)
+        self.assertNotIn("▼ -", desc)
 
-    def test_missing_linking_nightly_and_drafts(self):
+        unchanged = discord.build_description(SAMPLE_CARD, SAMPLE_CARD)
+        self.assertNotIn("▲", unchanged)
+        self.assertNotIn("▼", unchanged)
+
+    def test_missing_linking_and_optional_fields(self):
         minimal = {
             "main": "1234567890abcdef1234567890abcdef12345678",
             "matched": [100, 1000],
@@ -145,12 +162,13 @@ class FormattingTests(unittest.TestCase):
         self.assertNotIn("timestamp", embed)
         self.assertNotIn("footer", embed)
         desc = embed["description"]
-        self.assertIn("**Linking:** —\n⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛\nnot measured yet", desc)
-        self.assertNotIn("Daily build:", desc)
-        self.assertNotIn("Draft headers still in use", desc)
-        self.assertIn("Main `1234567890ab` · [Live progress card & repo]", desc)
+        self.assertIn("**Byte match: 10.00%**\n🟩⬛⬛⬛⬛⬛⬛⬛⬛⬛\n100 / 1,000 bytes compiled byte-for-byte", desc)
+        self.assertIn("**Linking: —**\n⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛\nnot measured yet", desc)
+        self.assertIn("[View full progress card: README](https://github.com/Open-BFME/BFME2-Rebuild)", desc)
+        for forbidden in ("Daily build", "Clean progress", "Code proven", "Finished functions", "Draft headers", "Main `"):
+            self.assertNotIn(forbidden, desc)
 
-    def test_nightly_without_fully_matching_and_functions_linking_unit(self):
+    def test_linking_functions_unit_without_date(self):
         custom = dict(
             SAMPLE_CARD,
             linking_unit="functions",
@@ -159,7 +177,8 @@ class FormattingTests(unittest.TestCase):
         )
         desc = discord.build_description(custom)
         self.assertIn("6,021 / 9,305 functions provided\n", desc)
-        self.assertIn("> Daily build: 3,000 of 3,250 source files compile\n", desc)
+        self.assertNotIn("(measured", desc)
+        self.assertNotIn("Daily build", desc)
 
 
 class WebhookValidationTests(unittest.TestCase):
@@ -240,7 +259,8 @@ class PreviousLoaderAndCliTests(unittest.TestCase):
         self.assertEqual(rc, 0)
         parsed = json.loads(buf.getvalue())
         self.assertEqual(parsed["embeds"][0]["title"], "BFME 2 Rebuild · Progress")
-        self.assertIn("`▲ +0.12`", parsed["embeds"][0]["description"])
+        self.assertIn("**Byte match: 27.65%**  ▲ 0.12", parsed["embeds"][0]["description"])
+        self.assertNotIn("`", parsed["embeds"][0]["description"])
         self.assertFalse(state_path.exists())
 
     def test_mocked_post_and_state_saving(self):

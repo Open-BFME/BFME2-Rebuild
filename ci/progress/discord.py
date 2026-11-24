@@ -61,9 +61,9 @@ def format_delta(current_pct, previous_pct):
         return ""
     diff = round(current_pct - previous_pct, 2)
     if diff > 0:
-        return f"▲ +{diff:.2f}"
+        return f"▲ {abs(diff):.2f}"
     if diff < 0:
-        return f"▼ {diff:.2f}"
+        return f"▼ {abs(diff):.2f}"
     return ""
 
 
@@ -130,20 +130,6 @@ def load_previous_card(path, current_main=None):
     return None
 
 
-def _nightly_line(card):
-    nightly = card.get("nightly")
-    if not isinstance(nightly, dict):
-        return None
-    compiled = nightly.get("compiled")
-    files = nightly.get("files")
-    if type(compiled) is not int or type(files) is not int or compiled < 0 or files <= 0:
-        return None
-    fully = nightly.get("fully_matching")
-    if type(fully) is int and fully >= 0:
-        return f"> Daily build: {compiled:,} of {files:,} source files compile, {fully:,} match completely"
-    return f"> Daily build: {compiled:,} of {files:,} source files compile"
-
-
 def build_description(card, previous=None):
     """Format the Discord embed description markdown for one card snapshot."""
     prev = previous if isinstance(previous, dict) else {}
@@ -158,79 +144,36 @@ def build_description(card, previous=None):
     linking_unit = card.get("linking_unit") if card.get("linking_unit") in ("names", "functions") else "names"
     linking_date = str(card.get("linking_date") or "")[:10]
 
-    proven = card.get("proven")
-    proven_pct = pct(proven)
-    proven_delta = format_delta(proven_pct, pct(prev.get("proven")))
-
-    finished = card.get("finished")
-    finished_pct = pct(finished)
-    finished_delta = format_delta(finished_pct, pct(prev.get("finished")))
-
     lines = [
         "*Clean C++ rebuild of game.dat (1.06) compiled with Visual C++ 7.1*",
         "",
-        "**Does it work?**",
     ]
 
     if matched_pct is not None:
-        delta_suffix = f" `{matched_delta}`" if matched_delta else ""
-        lines.append(f"**Byte match:** `{matched_pct:.2f}%`{delta_suffix}")
+        delta_suffix = f"  {matched_delta}" if matched_delta else ""
+        lines.append(f"**Byte match: {matched_pct:.2f}%**{delta_suffix}")
         lines.append(emoji_bar(matched_pct, "🟩"))
         lines.append(f"{matched[0]:,} / {matched[1]:,} bytes compiled byte-for-byte")
     else:
-        lines.append("**Byte match:** —")
+        lines.append("**Byte match: —**")
         lines.append(emoji_bar(None, "🟩"))
         lines.append("not measured yet")
 
     lines.append("")
 
     if linking_pct is not None:
-        delta_suffix = f" `{linking_delta}`" if linking_delta else ""
-        date_suffix = f"; measured {linking_date}" if linking_date else ""
-        lines.append(f"**Linking:** `{linking_pct:.2f}%`{delta_suffix}")
+        delta_suffix = f"  {linking_delta}" if linking_delta else ""
+        date_suffix = f" (measured {linking_date})" if linking_date else ""
+        lines.append(f"**Linking: {linking_pct:.2f}%**{delta_suffix}")
         lines.append(emoji_bar(linking_pct, "🟨"))
         lines.append(f"{linking[0]:,} / {linking[1]:,} {linking_unit} provided{date_suffix}")
     else:
-        lines.append("**Linking:** —")
+        lines.append("**Linking: —**")
         lines.append(emoji_bar(None, "🟨"))
         lines.append("not measured yet")
 
-    nightly_quote = _nightly_line(card)
-    if nightly_quote:
-        lines.append("")
-        lines.append(nightly_quote)
-
     lines.append("")
-    lines.append("**Clean progress**")
-
-    if proven_pct is not None:
-        delta_suffix = f" `{proven_delta}`" if proven_delta else ""
-        lines.append(
-            f"{emoji_bar(proven_pct, '🟦')} **{proven_pct:.2f}%** Code proven "
-            f"(matched + all references verified){delta_suffix}"
-        )
-    else:
-        lines.append(f"{emoji_bar(None, '🟦')} **—** Code proven (matched + all references verified)")
-
-    if finished_pct is not None:
-        delta_suffix = f" `{finished_delta}`" if finished_delta else ""
-        lines.append(
-            f"{emoji_bar(finished_pct, '🟪')} **{finished_pct:.2f}%** Finished functions "
-            f"({finished[0]:,} / {finished[1]:,}, named file + final header){delta_suffix}"
-        )
-    else:
-        lines.append(f"{emoji_bar(None, '🟪')} **—** Finished functions (named file + final header)")
-
-    drafts = card.get("drafts_in_use")
-    if type(drafts) is int and drafts >= 0:
-        lines.append(f"Draft headers still in use: {drafts:,}")
-
-    lines.append("")
-    main_sha = str(card.get("main") or "")
-    if main_sha:
-        lines.append(f"Main `{main_sha[:12]}` · [Live progress card & repo]({REPO_URL})")
-    else:
-        lines.append(f"[Live progress card & repo]({REPO_URL})")
+    lines.append(f"[View full progress card: README]({REPO_URL})")
 
     return "\n".join(lines)
 
