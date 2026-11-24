@@ -2,6 +2,8 @@
 // dxsdk
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <stddef.h>
+#include "Common/AsciiString.h"
+#include "Common/FileSystem.h"
 #include "GameClient/W3DShaderManager.h"
 #include "WW3D2/dxwrapper.h"
 
@@ -102,6 +104,10 @@ void DXWrapper::Get_Transform(D3DTRANSFORMSTATETYPE transform, Matrix4x4 &m)
 // FUNCTION: BFME2 0x00077392 size=2150 name=?performGlow@W3DShaderManager@@SAXMPBUGlowSampleVector@@HPAUIDirect3DTexture8@@PAUIDirect3DSurface8@@12@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00077BF8 size=33 name=?getFileInfo@FileSystem@@QBE_NABVAsciiString@@PAUFileInfo@@@Z evidence=N:ledger tier=A
+bool FileSystem::getFileInfo(const AsciiString &filename, FileInfo *fileInfo) const
+{
+	return getFileInfo(filename.str(), fileInfo);
+}
 
 // FUNCTION: BFME2 0x00077C19 size=246 name=?Rva00077C19Load@@YAJPBDPAI@Z evidence=?:placeholder tier=A
 
