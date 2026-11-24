@@ -2,6 +2,7 @@
 import re,subprocess,struct
 from pathlib import Path
 from functools import lru_cache
+from collections import Counter
 PLACEHOLDER=re.compile(r"[Rr]va[0-9A-Fa-f]{6,8}|Bfme|Gen_t_|_0x[0-9A-Fa-f]{6}")
 ANON=re.compile(r"\?A0x[0-9A-Fa-f]{8}")
 # VC7.1 names a dynamic initializer or atexit terminator _$E<n>, numbered afresh in every object: the name identifies
@@ -134,6 +135,88 @@ def selectable_copy(obj,sym,root,selection):
  positions={x['value'] for x in obj.symbols if x.get('section')==root and x.get('type',0)&32}
  return sym['section']==root and sym['value']==0 and positions=={0} and bool(obj.sections[root-1]['characteristics']&0x1000) and selection in (2,3,4,6)
 
+def select_any_key(checker, index, target):
+    """Evidence for a select-any definition and its unique mapped provider."""
+    obj = checker.obj
+    sym = obj.symbols[index]
+    section = sym['section']
+    if sym.get('storage') != 2 or obj.comdat.get(section) != 2:
+        return None
+    name = sym['name']
+    row = checker.rows[target]
+    owner = row.get('object')
+    if (not owner or owner == 'unknown' or row.get('object_id', owner) != owner
+            or row.get('membership_hypothesis') or row.get('role') not in ('owned', 'comdat')
+            or row.get('name') != name or checker.names.get(name) != {target}
+            or compiler_local(name) or ANON.search(name) or PLACEHOLDER.search(name)):
+        return None
+    if (obj.root(section) != section or not selectable_copy(obj, sym, section, 2)
+            or sum(x.get('storage') == 2 and x.get('section') == section for x in obj.symbols) != 1):
+        return None
+
+    # LINK's first direct input wins. Archive extraction and unknown order give no evidence.
+    unit = checker.unit or {}
+    order = str(unit.get('link_index', ''))
+    oid = unit.get('object_id')
+    if (not oid or oid == 'unknown' or not order.isascii() or not order.isdecimal()
+            or unit.get('library') or unit.get('contradictions')):
+        return None
+    if not hasattr(checker, '_select_any_object_ids'):
+        checker._select_any_object_ids = Counter(o.get('object_id') for o in checker.map['objects'])
+    if checker._select_any_object_ids[oid] != 1 or checker._select_any_object_ids[owner] != 1:
+        return None
+    return {'object': oid, 'owner': owner, 'link_index': int(order), 'rva': target, 'symbol': name}
+
+
+def extra_blocker(records):
+    return 'unexpected compiled code symbols: ' + ', '.join(
+        r['symbol'] + ' (' + r['why'] + ')' for r in records)
+
+
+def resolve_batch_extras(results, state_providers=()):
+    """Join independent verdicts from one revision after cache lookup, without changing row credit."""
+    providers = {}
+    for result in results.values():
+        if result.get('object_verified'):
+            for key in result.get('select_any_providers', ()):
+                identity = (key['owner'], key['rva'], key['symbol'])
+                providers.setdefault(identity, []).append((result['tu'], key))
+
+    for tu, key in state_providers:
+        if tu not in results:
+            identity = (key['owner'], key['rva'], key['symbol'])
+            providers.setdefault(identity, []).append((tu, key))
+
+    for result in results.values():
+        rejected = result.get('rejected_extras', [])
+        remaining = []
+        for extra in rejected:
+            candidate = extra.get('select_any_candidate')
+            if candidate:
+                identity = (candidate['owner'], candidate['rva'], candidate['symbol'])
+                matches = providers.get(identity, [])
+                if len(matches) == 1:
+                    tu, witness = matches[0]
+                    if witness['link_index'] < candidate['link_index']:
+                        accepted = {k: v for k, v in extra.items()
+                                    if k not in ('why', 'relocation_check', 'select_any_candidate')}
+                        accepted.update(classification='extra_discarded_select_any', provider_tu=tu,
+                                        provider=witness, discarded_link_index=candidate['link_index'], credited=False)
+                        result['accepted_extras'].append(accepted)
+                        continue
+            remaining.append(extra)
+        if len(remaining) == len(rejected):
+            continue
+        blockers = result['verification_blockers']
+        blockers.remove(extra_blocker(rejected))
+        if remaining:
+            blockers.append(extra_blocker(remaining))
+        blockers.sort()
+        result['rejected_extras'] = remaining
+        result['unexpected_symbols'] = [r['symbol'] for r in remaining]
+        result['object_verified'] = result['source_completeness']['object_verified'] = not blockers
+
+
 def fold_member(checker,index,name):
  """An extra that the verified walk bound, through retail's own operand (a vtable slot, a call), to an address where
  the linker folded identical bodies (map role icf_fold), and whose body and relocations equal retail's there: one more
@@ -233,7 +316,11 @@ def _classify_extras_once(checker,kept,extras):
     if len(candidates)!=1:raise ValueError('retail duplicate identity has multiple/contradictory locations')
     target=next(iter(candidates));check=checker.verify(index,target)
     record.update(retail_rva='0x%08X'%target,retail_names=checker.rows[target]['accepted_names'],relocation_check=check)
-    if check['status']!='MATCH':raise ValueError('retail duplicate '+check['status']+': '+check.get('why',''))
+    if check['status']!='MATCH':
+     key=select_any_key(checker,index,target)
+     if key and key['owner']!=key['object'] and checker.kept_elsewhere(index,target):
+      record['select_any_candidate']=key
+     raise ValueError('retail duplicate '+check['status']+': '+check.get('why',''))
     record['classification']='extra_duplicate';accepted.append(record);continue
    member=fold_member(checker,index,name)
    if member is not None:

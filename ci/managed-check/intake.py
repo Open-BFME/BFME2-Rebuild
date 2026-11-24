@@ -197,8 +197,9 @@ def main(work, out):
     work, out = Path(work), Path(out)
     out.mkdir(mode=0o700, exist_ok=True)
     event = read(work / "event.json", 4096)
+    git = Git(work / "source.git")
     try:
-        plan = candidate(Git(work / "source.git"), event)
+        plan = candidate(git, event)
     except Refused as rejected:
         write(out / "decision.json", {key: event[key] for key in ("number", "head", "base")}
               | {"version": 1, "repo": REPO_ID, "kind": "gate", "rules": [rejected.rule]}
@@ -214,6 +215,8 @@ def main(work, out):
               | {"version": 1, "repo": REPO_ID, "kind": kind})
         return
     route = "compile" if len(plan["request_paths"]) <= 8 else "wide"
+    from provider_state import for_plan
+    plan.update(for_plan(git, plan["base"], plan["request_paths"], plan["changed_paths"]))
     write(out / "plan.json", plan)
     extra_auto = {}
     if automatic is not None:

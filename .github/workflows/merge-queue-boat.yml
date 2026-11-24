@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+      actions: read
     env:
       BFME_PR_RUNNER: "${{ vars.BFME_PR_RUNNER || '' }}"
     outputs:
@@ -57,6 +58,17 @@ jobs:
           set -Eeuo pipefail
           (cd ci/managed-check && sha256sum -c --quiet bundle.sha256)
           (cd ci/managed-nt2 && sha256sum -c --quiet bundle.sha256)
+      - name: Fetch provider evidence for the protected checkout
+        shell: bash
+        env:
+          BFME_READ_TOKEN: ${{ github.token }}
+          BFME_MQ_MAIN_SHA: ${{ steps.main.outputs.sha }}
+        run: |
+          set -euo pipefail
+          folder=$(mktemp -d "$RUNNER_TEMP/providers.XXXXXXXX")
+          (cd ci/managed-state && sha256sum -c --quiet bundle.sha256)
+          python3 -B ci/managed-state/state_fetch.py "$folder/base-state.json" --merge-base
+          echo "BFME_PROVIDER_STATE=$folder/base-state.json" >> "$GITHUB_ENV"
       - name: Build sharded Boat comparison plans
         id: plan
         shell: bash
@@ -70,6 +82,7 @@ jobs:
             GITHUB_REPOSITORY_ID="$GITHUB_REPOSITORY_ID" GITHUB_REF="$GITHUB_REF" \
             GITHUB_SHA="$GITHUB_SHA" BFME_MQ_MAIN_SHA="$BFME_MQ_MAIN_SHA" \
             BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
+            BFME_PROVIDER_STATE="$BFME_PROVIDER_STATE" \
             python3 -B ci/managed-check/merge_queue_plan.py "$RUNNER_TEMP/bfme-mq-plans"
       - name: Upload merge group plans
         if: always()

@@ -70,16 +70,26 @@ def native_record(outcome):
         "gates": sorted({gate_fingerprint(value) for value in outcome["gates"]}),
         "object_verified": bool(outcome["object_verified"]),
     }
+    # Persist the COFF and relocation witness; a MATCH alone does not prove selection 2.
+    providers = {key["rva"] for key in outcome.get("select_any_providers", ())}
+    matched = sorted({int(row["rva"], 16) for row in outcome["rows"] + outcome.get("expected", [])
+                      if row["status"] == "MATCH" and int(row["rva"], 16) in providers})
+    if record["object_verified"] and matched:
+        record["select_any_matches"] = matched
     if outcome.get("error"):
         record["error"] = "Compilation failed in an affected translation unit."
     return record
 
 
 def validate_native(native, compiler):
-    if (set(native) - {"rows", "gates", "object_verified", "error"}
+    if (set(native) - {"rows", "gates", "object_verified", "error", "select_any_matches"}
             or bool(native.get("error")) != (compiler["status"] == "error")):
         raise ValueError("Cached comparison contains private or unsupported fields.")
     check_native(native)
+    matches = native.get("select_any_matches", [])
+    if (not isinstance(matches, list) or any(type(rva) is not int or not 0 < rva < 2**32 for rva in matches)
+            or matches != sorted(set(matches)) or (matches and not native["object_verified"])):
+        raise ValueError("Invalid select-any provider matches.")
     if any(set(item) - ROW_KEYS or ("pct" in item and
            (type(item["pct"]) not in {float, int} or not math.isfinite(item["pct"])
             or not 0 <= item["pct"] <= 100)) for item in native["rows"]):

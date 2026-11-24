@@ -1,12 +1,16 @@
+import copy
 import hashlib
 import importlib.util
 import json
 import os
+import re
+import subprocess
 import struct
 import sys
 import tempfile
 import types
 import unittest
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -231,6 +235,8 @@ def load_judge_module(tmp_root, variant):
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         mod.record_replay = lambda *_args, **_kwargs: None
+        # The temporary HOME holding the reference helpers is restored after import.
+        mod.checker_hash = lambda: mod.IMPORTED_CHECKER
         return mod
     finally:
         os.environ.clear()
@@ -244,7 +250,7 @@ def load_judge_module(tmp_root, variant):
         sys.modules.update(saved_mods)
 
 
-def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, source_text):
+def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, source_text, objects=None):
     """Stage a minimal job directory and run judge.judge_tu against prebuilt COFF + PE bytes."""
     job = tmpdir / f"job_{hashlib.sha256(obj_bytes + source_text.encode()).hexdigest()[:10]}"
     (job / "obj").mkdir(parents=True, exist_ok=True)
@@ -258,7 +264,7 @@ def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, s
 
     map_doc = {
         "snapshot": "test-snapshot-1",
-        "objects": [{"object_id": object_id, "tu": tu}],
+        "objects": objects or [{"object_id": object_id, "tu": tu}],
         "rows": rows,
     }
     sym_doc = {
@@ -337,6 +343,190 @@ class ComdatPairingTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls._tmp.cleanup()
+
+    def test_state_records_emitted_provider_only_on_match(self):
+        from state_evidence import native_record, validate_native
+        outcome = {"object_verified": True, "gates": [], "rows": [],
+                   "expected": [{"rva": "0x1000", "status": "MATCH"}],
+                   "select_any_providers": [{"rva": 0x1000}]}
+        saved = native_record(outcome)
+        self.assertEqual(saved["rows"], [])
+        self.assertEqual(saved["select_any_matches"], [0x1000])
+        validate_native(saved, {"status": "compiled"})
+        outcome["expected"][0]["status"] = "PARTIAL"
+        self.assertNotIn("select_any_matches", native_record(outcome))
+
+    def test_exact_state_provider_in_single_unit_pr(self):
+        from provider_state import for_plan
+        from state_evidence import header, native_record
+        owner, loser = "src/a.cpp", "src/b.cpp"
+        rows = [make_row(0x1000, 1, "owned", "_shared", "first"),
+                make_row(0x1010, 1, "owned", "_other", "second")]
+        pe = make_pe_layout(0x1000, [(0x1000, b"\xc3"), (0x1010, b"\xc3")])
+        objects = [dict(tu=owner, object_id="first", link_index="1"),
+                   dict(tu=loser, object_id="second", link_index="2")]
+        base, tree = "a" * 40, "b" * 40
+        git = Mock()
+        git.value.return_value = tree
+        for variant, judge in self.judges.items():
+            def measure(tu, specs):
+                i = int(tu == loser)
+                return run_judge_case(judge, self.tmp, tu=tu, object_id=objects[i]["object_id"],
+                                      rows=rows, pe_bytes=pe, obj_bytes=build_coff_obj(specs),
+                                      objects=objects, source_text=f"// FUNCTION: BFME2 {rows[i]['rva']}\n")[0]
+            keeper = measure(owner, [dict(symbol="_shared", data=b"\xc3", selection=2)])
+            extra = measure(loser, [dict(symbol="_other", data=b"\xc3", selection=1),
+                                    dict(symbol="_shared", data=b"\x90\xc3", selection=2)])
+            native = native_record(keeper)
+            identity = header(base, tree)
+            artifact = self.tmp / "base-state.json"
+            entry = {"native": native, "compiler": {"tu": owner, "status": "compiled",
+                                                     "dependencies": [["include/a.h", "digest"]]}}
+            def verdict(affected=(loser,), changed=(loser,), batch=None, **binding):
+                artifact.write_text(json.dumps(identity | binding | {"evidence": {owner: entry}}))
+                with patch.dict(os.environ, BFME_PROVIDER_STATE=str(artifact)):
+                    plan = for_plan(git, base, affected, changed)
+                    git.value.assert_called_with("rev-parse", base + "^{tree}")
+                result = copy.deepcopy(extra)
+                measured = {loser: result, **(batch or {})}
+                with patch.object(compare, "_measure_pair", return_value=({}, measured)):
+                    compare.measure_pair(None, judge, plan, None, None, None)
+                self.assertEqual(result["rows"], extra["rows"])
+                return result
+
+            with self.subTest(variant=variant):
+                accepted = verdict()
+                self.assertTrue(accepted["object_verified"])
+                self.assertIs(accepted["accepted_extras"][-1]["credited"], False)
+                self.assertFalse(verdict(sha="0" * 40)["object_verified"])
+                self.assertFalse(verdict(affected=(owner, loser))["object_verified"])
+                self.assertFalse(verdict(batch={owner: {"object_verified": False}})["object_verified"])
+                self.assertFalse(verdict(changed=("include/a.h",))["object_verified"])
+                native["object_verified"] = False
+                self.assertFalse(verdict()["object_verified"])
+                native["object_verified"] = True
+                native["rows"][0]["status"] = "PARTIAL"
+                self.assertFalse(verdict()["object_verified"])
+                native["rows"][0]["status"] = "MATCH"
+                del native["select_any_matches"]
+                self.assertFalse(verdict()["object_verified"])
+
+    def test_verified_select_any_provider(self):
+        owner, loser = "first", "second"
+        a, b = "src/a.cpp", "src/b.cpp"
+        key = "_shared"
+        rows = [make_row(0x1000, 1, "owned", key, owner),
+                make_row(0x1010, 1, "owned", "_other", loser)]
+        pe = make_pe_layout(0x1000, [(0x1000, b"\xc3"), (0x1010, b"\xc3")])
+        for variant, judge in self.judges.items():
+            def run(objects, i, specs):
+                path, oid, addr = [(a, owner, 0x1000), (b, loser, 0x1010)][i]
+                return run_judge_case(judge, self.tmp, tu=path, object_id=oid, rows=rows,
+                                      pe_bytes=pe, obj_bytes=build_coff_obj(specs), objects=objects,
+                                      source_text=f"// FUNCTION: BFME2 0x{addr:08X}\n")[0]
+
+            for selection, storage, order, data, present, expected in (
+                    (2, 2, "1", b"\xc3", True, True),
+                    (2, 2, "2", b"\xc3", True, False),
+                    (2, 2, "3", b"\xc3", True, False),
+                    (2, 2, "", b"\xc3", True, False),
+                    (2, 2, "1", b"\xcc", True, False),
+                    (2, 2, "1", b"\xc3", False, False),
+                    (2, 3, "1", b"\xc3", True, False),
+                    *((sel, 2, "1", b"\xc3", True, False) for sel in (1, 3, 4, 6))):
+                with self.subTest(variant=variant, selection=selection, storage=storage,
+                                  order=order, data=data, present=present):
+                    objects = [dict(tu=a, object_id=owner, link_index=order),
+                               dict(tu=b, object_id=loser, link_index="2")]
+                    provider = run(objects, 0, [dict(symbol=key, data=data, selection=2)])
+                    emitted = run(objects, 1, [dict(symbol="_other", data=b"\xc3", selection=1),
+                                               dict(symbol=key, data=b"\x90\xc3", selection=selection,
+                                                    storage=storage)])
+                    self.assertEqual(emitted["unexpected_symbols"], [key])
+                    results = {b: emitted}
+                    if present:
+                        results[a] = provider
+                    rows_before = copy.deepcopy(emitted["rows"])
+                    judge.resolve_batch_extras(results)
+                    self.assertEqual(emitted["rows"], rows_before)
+                    self.assertEqual(emitted["unexpected_symbols"], [] if expected else [key])
+                    self.assertEqual(emitted["function_match"], 1)
+                    self.assertEqual(emitted["object_verified"], expected)
+                    if expected:
+                        self.assertEqual(emitted["accepted_extras"][0]["provider_tu"], a)
+                        self.assertFalse(emitted["accepted_extras"][0]["credited"])
+
+    def test_wrong_provider_relocation_cannot_certify_extra(self):
+        a, b = "src/keeper.cpp", "src/extra.cpp"
+        objects = [dict(tu=a, object_id="keeper", link_index="1"),
+                   dict(tu=b, object_id="extra", link_index="2")]
+        rows = [make_row(0x1000, 6, "owned", "_shared", "keeper"),
+                make_row(0x1010, 1, "owned", "_other", "extra"),
+                make_row(0x1020, 1, "owned", "_right", "unknown"),
+                make_row(0x1030, 1, "owned", "_wrong", "unknown")]
+        call = b"\xe8" + struct.pack("<i", 0x1020 - 0x1005) + b"\xc3"
+        pe = make_pe_layout(0x1000, [(0x1000, call), (0x1010, b"\xc3"),
+                                     (0x1020, b"\xc3"), (0x1030, b"\xc3")])
+        for variant, judge in self.judges.items():
+            with self.subTest(variant=variant):
+                a_obj = build_coff_obj([dict(symbol="_shared", data=b"\xe8\0\0\0\0\xc3", selection=2,
+                                             relocs=[(1, 20, "_wrong")])], externs=["_wrong"])
+                b_obj = build_coff_obj([dict(symbol="_other", data=b"\xc3", selection=1),
+                                        dict(symbol="_shared", data=b"\x90\xc3", selection=2)])
+                results = {}
+                for tu, oid, code, addr in [(a, "keeper", a_obj, 0x1000), (b, "extra", b_obj, 0x1010)]:
+                    results[tu], _ = run_judge_case(judge, self.tmp, tu=tu, object_id=oid, rows=rows,
+                                                    pe_bytes=pe, obj_bytes=code, objects=objects,
+                                                    source_text=f"// FUNCTION: BFME2 0x{addr:08X}\n")
+                self.assertEqual(results[a]["rows"][0]["status"], "WRONG_REFERENCE")
+                judge.resolve_batch_extras(results)
+                self.assertEqual(results[b]["unexpected_symbols"], ["_shared"])
+
+    @unittest.skipUnless(os.environ.get("VC71_CL") and os.environ.get("VC71_LINK"),
+                         "set VC71_CL and VC71_LINK to the VC 7.1 executable paths")
+    def test_vc71_link_select_any_order(self):
+        cl, link = os.environ["VC71_CL"], os.environ["VC71_LINK"]
+        judge = self.judges["nt2"]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            def tool(exe, *args):
+                return subprocess.run([exe, *args], cwd=root, capture_output=True,
+                                      text=True, check=True).stdout
+            for tag, constant in (("a", 7), ("b", 13)):
+                (root / (tag + ".cpp")).write_text(
+                    'extern "C" {\n'
+                    f'int data_{tag} = {constant};\n'
+                    f'inline int shared() {{ return data_{tag} + {constant}; }}\n'
+                    f'int call_{tag}() {{ return shared(); }}\n}}\n')
+                tool(cl, "/nologo", "/c", "/O1", "/Ob0", "/Gy", "/Zl", tag + ".cpp")
+            for first, second in (("a", "b"), ("b", "a")):
+                banner = tool(link, "/dll", "/noentry", "/nodefaultlib", "/incremental:no",
+                     "/opt:noref", "/opt:noicf", "/map:out.map", "/out:out.dll",
+                     first + ".obj", second + ".obj")
+                self.assertRegex(banner, r"Version 7\.10\.")
+                symbols = {n: (int(va, 16), obj) for n, va, obj in re.findall(
+                    r"^\s*\w+:\w+\s+(\S+)\s+([0-9a-fA-F]+)\s+(?:f\s+)?(?:i\s+)?(\w+\.obj)\s*$",
+                    (root / "out.map").read_text(), re.M)}
+                address, kept = symbols["_shared"]
+                self.assertEqual(kept, first + ".obj")
+                pe = judge.PE(root / "out.dll")
+                obj = judge.coff(root / kept)
+                sec = obj.symbols[obj.index("_shared")]["section"]
+                self.assertEqual(obj.comdat[sec], 2)
+                body, relocs = obj.body("_shared")
+                self.assertEqual(len(relocs), 1)
+                off, kind, target = relocs[0]
+                self.assertEqual((kind, target), (6, "_data_" + first))
+                expected = bytearray(body)
+                struct.pack_into("<I", expected, off, symbols[target][0] + struct.unpack_from("<I", body, off)[0])
+                self.assertEqual(pe.read(address - pe.base, len(body)), expected)
+                for tag in (first, second):
+                    code, refs = judge.coff(root / (tag + ".obj")).body("_call_" + tag)
+                    [(off, kind, target)] = refs
+                    self.assertEqual((kind, target), (20, "_shared"))
+                    caller = symbols["_call_" + tag][0]
+                    displacement, = struct.unpack("<i", pe.read(caller - pe.base + off, 4))
+                    self.assertEqual(caller + off + 4 + displacement, address)
 
     def _issue_42_fixture(self):
         tu = "src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp"

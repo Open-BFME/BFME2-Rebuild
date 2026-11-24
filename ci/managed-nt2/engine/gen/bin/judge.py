@@ -34,7 +34,7 @@ IMPORTED_FULL=checker_digest(CODE_ROOT)
 from result_cache import GitInputs,ResultCache,namespace,digest_file,forget_namespaces,remembered_namespace
 from binary_model import COFF,PE
 from relocation_proof import Resolver
-from emission_policy import folded_identity,classify_extras,compiler_local,GENERATED_DESCRIPTIONS,retained_sections
+from emission_policy import folded_identity,classify_extras,compiler_local,GENERATED_DESCRIPTIONS,retained_sections,select_any_key,extra_blocker,resolve_batch_extras
 from identity_index import map_index,symbol_index,function_span
 import compiler_support
 from upstream_proof import pristine_c
@@ -835,8 +835,13 @@ def judge_tu(job,tu,led):
         span=function_span(MAP,rva);row['code_size']=span['code_size'];row['comparison_size']=span['size'];row['jump_tables']=[r['rva'] for r in span['inline_tables']]
         if row['status']=='MATCH' and checker:
             parent=int(m['parent'],16) if m.get('parent') else None
-            check=checker.verify(coff(obj).index(row['symbol']),rva,parent)
+            index=checker.obj.index(row['symbol'])
+            check=checker.verify(index,rva,parent)
             row['relocation_check']=check
+            if check['status']=='MATCH':
+                key=select_any_key(checker,index,rva)
+                if key and key['object']==key['owner']:
+                    res.setdefault('select_any_providers',[]).append(key)
             candidate=folded_identity(row['symbol'],m['accepted_names']) if m['role'] in ('comdat','icf_fold') else None
             if candidate:row['folded_identity_candidate']={**candidate,'rva':'0x%08X'%rva}
             if check['status']=='MATCH':
@@ -871,7 +876,7 @@ def judge_tu(job,tu,led):
         paired_symbols={r['symbol'] for r in owned_out+expected if r.get('symbol')}
         extras=sorted(set(code_symbols(obj))-paired_symbols)
         accepted_extras,rejected_extras=classify_extras(checker,paired_symbols,extras)
-        if rejected_extras:blockers.append('unexpected compiled code symbols: '+', '.join(x['symbol']+' ('+x['why']+')' for x in rejected_extras))
+        if rejected_extras:blockers.append(extra_blocker(rejected_extras))
     else:
         extras=[];accepted_extras=[];rejected_extras=[];blockers.append('no compiled object for order verification')
     manifest=job/'config/header_manifest.json'
@@ -1131,6 +1136,7 @@ def main(argv):
     lookup_s=time.perf_counter()-lookup_start
     if cache_only:
         if checker_hash()!=IMPORTED_CHECKER:raise RuntimeError('CHECKER_CHANGED: re-run judge')
+        resolve_batch_extras(found)
         print(json.dumps({'summary':{'rev':rev,'sha':view.sha,'tus':len(tus),'cache_hits':len(found),'wall_s':round(time.perf_counter()-start,4)},'results':[found[t] for t in tus if t in found],'cache_misses':misses}));return 0
     remote_rc=remote_judge(argv,misses,cache_only,keep_job,diff)
     if remote_rc is not None:return remote_rc
@@ -1152,6 +1158,7 @@ def main(argv):
             if keep_job:
                 for tu in tus:
                     if found[tu].get('cache_hit'):cache.materialize(found[tu],job,tu)
+        resolve_batch_extras(found)
         results=[found[tu] for tu in tus]
         if checker_hash()!=IMPORTED_CHECKER:raise RuntimeError('CHECKER_CHANGED: re-run judge')
         if diff:show_diff(job,results,diff,led);return 0

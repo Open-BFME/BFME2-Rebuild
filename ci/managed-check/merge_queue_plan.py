@@ -216,6 +216,8 @@ def plan_merge_group(out_dir, *, env=None, repo_dir=None, remote=None):
                 if git.run("cat-file", "-e", f"{rev}:{name}", check=False).returncode != 0:
                     return _refuse(out_dir, env, base_sha, head_sha, head_tree, label, total_tus=len(affected_tus))
 
+        from provider_state import for_plan
+        providers = for_plan(git, base_sha, affected_tus, changed_paths)
         cur_policy = policy()
         chunks = [affected_tus[i:i + SHARD_SIZE] for i in range(0, len(affected_tus), SHARD_SIZE)]
         shard_ids = list(range(len(chunks)))
@@ -234,6 +236,7 @@ def plan_merge_group(out_dir, *, env=None, repo_dir=None, remote=None):
                 "policy": cur_policy,
                 "changed_paths": changed_paths,
                 "request_paths": shard_tus,
+                **providers,
                 "changes": changes_payload,
             }
             plan_path = shard_dir / "plan.json"

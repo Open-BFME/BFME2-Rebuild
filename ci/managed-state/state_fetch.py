@@ -222,10 +222,15 @@ def download(api, artifact, archive_size, digest, output, *, members=None):
 
 
 
-def main(output, *, parent=False):
-    sha = os.environ["GITHUB_SHA"]
+def main(output, *, parent=False, merge_base=False):
+    sha = os.environ["BFME_MQ_MAIN_SHA" if merge_base else "GITHUB_SHA"]
+    ref = os.environ["GITHUB_REF"]
+    protected = ref == "refs/heads/main"
+    if merge_base:
+        protected = (not parent and os.environ.get("GITHUB_EVENT_NAME") == "merge_group"
+                     and ref.startswith("refs/heads/gh-readonly-queue/main/"))
     if (os.environ["GITHUB_REPOSITORY"] != REPO or os.environ["GITHUB_REPOSITORY_ID"] != str(REPO_ID)
-            or os.environ["GITHUB_REF"] != "refs/heads/main" or not HEX40.fullmatch(sha)):
+            or not protected or not HEX40.fullmatch(sha)):
         raise ValueError("Use the exact protected repository and main.")
     if parent:
         if os.environ.get("GITHUB_EVENT_NAME") not in {"push", "workflow_dispatch", "repository_dispatch"}:
@@ -257,10 +262,10 @@ def main(output, *, parent=False):
         print("Protected main state could not be fetched.")
     finally:
         temporary.unlink(missing_ok=True)
-    print("Using a fresh measurement of the protected parent.")
+    print("No authenticated protected state available for this request.")
 
 
 if __name__ == "__main__":
     os.umask(0o077)
-    main(Path(sys.argv[1]), parent=sys.argv[2:] == ["--parent"])
+    main(Path(sys.argv[1]), parent=sys.argv[2:] == ["--parent"], merge_base=sys.argv[2:] == ["--merge-base"])
 

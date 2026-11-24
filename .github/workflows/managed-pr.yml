@@ -88,6 +88,7 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+      actions: read
       pull-requests: read
       statuses: write
     outputs:
@@ -133,6 +134,16 @@ jobs:
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
             BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
             python3 -B ci/managed-check/github_io.py fetch "$RUNNER_TEMP/bfme-receive"
+      - name: Fetch provider evidence for the protected checkout
+        shell: bash
+        env:
+          BFME_READ_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          folder=$(mktemp -d "$RUNNER_TEMP/providers.XXXXXXXX")
+          (cd ci/managed-state && sha256sum -c --quiet bundle.sha256)
+          python3 -B ci/managed-state/state_fetch.py "$folder/base-state.json"
+          echo "BFME_PROVIDER_STATE=$folder/base-state.json" >> "$GITHUB_ENV"
       - name: Validate source and determine affected files
         id: plan
         shell: bash
@@ -142,6 +153,7 @@ jobs:
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C \
             GITHUB_OUTPUT="$GITHUB_OUTPUT" TMPDIR="$RUNNER_TEMP" \
             BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
+            BFME_PROVIDER_STATE="$BFME_PROVIDER_STATE" \
             python3 -B ci/managed-check/intake.py "$RUNNER_TEMP/bfme-receive" "$RUNNER_TEMP/bfme-plan"
       - name: Save protected source decision
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
