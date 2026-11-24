@@ -24,23 +24,7 @@ class RenderInfoClass;
 class ParticleSystemTemplate;
 class ParticleSystemManager;
 class ParticleSystemHandle;
-
-class ParticleSystem
-{
-public:
-	void setPosition(const Coord3D *pos);
-	void attachToDrawable(const Drawable *drawable); // 0x001F3C20
-	void attachToObject(const Object *object); // 0x001F3C43
-	void stop(); // 0x001F3852
-	void destroy(); // 0x001F462C (ledger name; ActiveBody::deleteAllParticleSystems 0x004BE3EF calls it)
-
-	UnsignedByte m_unk0x00[0x9C];
-	ParticleSystemHandle *m_firstHandle;					// 0x9C
-	ParticleSystemHandle *m_lastHandle;					// 0xA0
-	UnsignedByte m_unk0xA4[4];
-	ParticleSystemID m_systemID;						// 0xA8
-};
-// SIZE 0xAC
+class ParticleSystem;
 
 ParticleSystem *Make001FCBD7(); // Default object for an empty particle-system handle.
 
@@ -63,6 +47,29 @@ public:
 	ParticleSystemHandle *m_next;						// 0x08
 };
 // SIZE 0xC
+
+class ParticleSystem
+{
+public:
+	void setPosition(const Coord3D *pos);
+	void attachToDrawable(const Drawable *drawable); // 0x001F3C20
+	void attachToObject(const Object *object); // 0x001F3C43
+	void stop(); // 0x001F3852
+	void destroy(); // 0x001F462C (ledger name; ActiveBody::deleteAllParticleSystems 0x004BE3EF calls it)
+
+	UnsignedByte m_unk0x00[0x9C];
+	ParticleSystemHandle *m_firstHandle;					// 0x9C
+	ParticleSystemHandle *m_lastHandle;					// 0xA0
+	UnsignedByte m_unk0xA4[4];
+	ParticleSystemID m_systemID;						// 0xA8
+	UnsignedByte m_unk0xAC[0xB0];
+	ParticleSystemHandle m_slaveSystem;					// 0x15C the constructor builds an empty handle; destroy passes itself on through it
+	UnsignedByte m_unk0x168[0x3C];
+	Bool m_isDestroyed;							// 0x1A4 the constructor clears it, destroy sets it
+	UnsignedByte m_unk0x1A5[0x37];
+};
+// SIZE 0x1DC (createParticleSystem's allocation)
+typedef char ParticleSystemSize[(sizeof(ParticleSystem) == 0x1DC) ? 1 : -1];
 
 class ParticleSystemManager : public SubsystemInterface, public Snapshot
 {
