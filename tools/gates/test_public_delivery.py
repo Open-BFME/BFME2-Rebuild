@@ -67,6 +67,17 @@ class FakeApi(source.GitHub):
             if self.case.queue_head is None:
                 raise source.CheckUnavailable(missing)
             return {"object": {"sha": self.case.queue_head}}
+        if path.startswith("compare/") and "..." in path:
+            base, head = path.removeprefix("compare/").split("...", 1)
+            if base == head:
+                return {"status": "identical"}
+            if RUN(["git", "-C", str(self.case.origin), "merge-base", "--is-ancestor", base, head],
+                   env=GIT_ENV, capture_output=True).returncode == 0:
+                return {"status": "ahead"}
+            if RUN(["git", "-C", str(self.case.origin), "merge-base", "--is-ancestor", head, base],
+                   env=GIT_ENV, capture_output=True).returncode == 0:
+                return {"status": "behind"}
+            return {"status": "diverged"}
         raise AssertionError(path)
 
 
@@ -547,6 +558,180 @@ class Delivery(unittest.TestCase):
         for bad_sha in ("not-a-sha", q2):
             bad_env = self.environment("merge_group", head=q2, protected=q1) | {"SOURCE_TOOLS_SHA": bad_sha}
             self.assertEqual(self.authorize(bad_env)["reason"], "unexpected-event")
+
+    def test_stacked_queue_survives_main_advancing_to_queue_ancestor(self):
+        # Batch #1 (q1) merges into main while Batch #2 (q2, stacked on q1) is in flight.
+        q1 = self._make_batch_commit({"src/Size.cpp": "int Size() { return 2; }\n"}, parent=self.base)
+        q2 = self._make_batch_commit({"src/Size.cpp": "int Size() { return 3; }\n"}, parent=q1)
+        git(self.origin, "update-ref", QUEUE, q2)
+        git(self.origin, "update-ref", "refs/heads/main", q1)
+        self.queue_head = q2
+        self.main = q1
+
+        env = self.environment("merge_group", head=q2, protected=q1) | {"SOURCE_TOOLS_SHA": self.base}
+        result, _ = self.evaluate(env)
+        self.assertEqual(result["state"], "pass")
+        self.assertEqual(result["overall"], "success")
+        self.assertEqual(result["base"], self.base)
+        self.assertEqual(result["tools_commit"], self.base)
+        self.assertEqual(result["head"], q2)
+        self.assertEqual(self.publish(env, result), 0)
+        self.assert_statuses(q2)
+
+
+class QueueMainMoved(unittest.TestCase):
+    OLD_MAIN = "1" * 40
+    NEW_MAIN = "2" * 40
+    HEAD = "3" * 40
+    OTHER = "4" * 40
+
+    def _api(self, binding, *, main_sha, queue_sha=HEAD, compare=None, pr=None):
+        class StubGitHub(source.GitHub):
+            def __init__(self):
+                self.binding = binding
+                self.calls = []
+
+            def call(self, path, body=None, *, missing=None):
+                self.calls.append(path)
+                if path == f"pulls/{PR}":
+                    return pr
+                if path == "git/ref/heads/main":
+                    return {"object": {"sha": main_sha}}
+                if path == "git/ref/" + QUEUE.removeprefix("refs/"):
+                    if queue_sha is None:
+                        raise source.CheckUnavailable(missing)
+                    return {"object": {"sha": queue_sha}}
+                if path.startswith("compare/"):
+                    if isinstance(compare, Exception):
+                        raise compare
+                    return compare
+                raise AssertionError(path)
+
+        return StubGitHub()
+
+    def test_merge_group_current_accepts_main_ancestor_ahead_or_identical(self):
+        binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                 self.OLD_MAIN, self.HEAD, self.OLD_MAIN, QUEUE)
+        for status in ("ahead", "identical"):
+            with self.subTest(status=status):
+                api = self._api(binding, main_sha=self.NEW_MAIN, queue_sha=self.HEAD,
+                                compare={"status": status})
+                self.assertIsNone(api.current())
+                self.assertIn(f"compare/{self.NEW_MAIN}...{self.HEAD}", api.calls)
+
+    def test_merge_group_current_rejects_diverged_behind_or_failed_compare(self):
+        binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                 self.OLD_MAIN, self.HEAD, self.OLD_MAIN, QUEUE)
+        for compare in ({"status": "diverged"}, {"status": "behind"}, {}, "unexpected",
+                        source.CheckUnavailable("current-state-unavailable")):
+            with self.subTest(compare=compare):
+                api = self._api(binding, main_sha=self.NEW_MAIN, queue_sha=self.HEAD, compare=compare)
+                with self.assertRaises(source.CheckUnavailable) as ctx:
+                    api.current()
+                self.assertEqual(ctx.exception.reason, "main-moved")
+
+    def test_merge_group_current_raises_queue_moved_even_when_main_is_ancestor(self):
+        binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                 self.OLD_MAIN, self.HEAD, self.OLD_MAIN, QUEUE)
+        for queue_sha in (self.OTHER, None):
+            with self.subTest(queue_sha=queue_sha):
+                api = self._api(binding, main_sha=self.NEW_MAIN, queue_sha=queue_sha,
+                                compare={"status": "ahead"})
+                with self.assertRaises(source.CheckUnavailable) as ctx:
+                    api.current()
+                self.assertEqual(ctx.exception.reason, "queue-moved")
+                self.assertFalse(any(path.startswith("compare/") for path in api.calls))
+
+    def test_non_merge_group_current_strictly_rejects_moved_main(self):
+        binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, PR,
+                                 self.OLD_MAIN, self.HEAD, self.OLD_MAIN)
+        api = self._api(binding, main_sha=self.NEW_MAIN, compare={"status": "ahead"},
+                        pr=pull(self.OLD_MAIN, self.HEAD))
+        with self.assertRaises(source.CheckUnavailable) as ctx:
+            api.current()
+        self.assertEqual(ctx.exception.reason, "main-moved")
+        self.assertFalse(any(path.startswith("compare/") for path in api.calls))
+
+    def test_verify_received_and_receive_handle_merge_group_main_ancestor(self):
+        with TemporaryDirectory(prefix="bfme-queue-verify-") as tmp:
+            root = Path(tmp)
+            work = root / "work"
+            work.mkdir()
+            git(work, "init", "-q", "-b", "main")
+            (work / "src").mkdir()
+            (work / "src/A.cpp").write_text("int A() { return 1; }\n")
+            git(work, "add", "src/A.cpp")
+            git(work, "commit", "-q", "-m", "old main")
+            old_main = git(work, "rev-parse", "HEAD")
+
+            (work / "src/A.cpp").write_text("int A() { return 2; }\n")
+            git(work, "add", "src/A.cpp")
+            git(work, "commit", "-q", "-m", "batch 1 merged to main")
+            new_main = git(work, "rev-parse", "HEAD")
+
+            (work / "src/A.cpp").write_text("int A() { return 3; }\n")
+            git(work, "add", "src/A.cpp")
+            git(work, "commit", "-q", "-m", "batch 2 stacked")
+            q2 = git(work, "rev-parse", "HEAD")
+
+            # Also create an out-of-band commit diverged from old_main.
+            git(work, "checkout", "-q", "-b", "diverged", old_main)
+            (work / "src/A.cpp").write_text("int A() { return 99; }\n")
+            git(work, "add", "src/A.cpp")
+            git(work, "commit", "-q", "-m", "out of band main")
+            diverged_main = git(work, "rev-parse", "HEAD")
+
+            remote = root / "remote.git"
+            git(root, "clone", "-q", "--bare", str(work), str(remote))
+            git(remote, "update-ref", "refs/heads/main", new_main)
+            git(remote, "update-ref", QUEUE, q2)
+            git(remote, "update-ref", f"refs/pull/{PR}/head", q2)
+
+            class LocalGit(source.Git):
+                def __init__(self, repo):
+                    super().__init__(repo)
+                    self.environment["PATH"] = GIT_ENV["PATH"]
+                    self.environment["GIT_CONFIG_GLOBAL"] = os.devnull
+
+                def run(self, *args, extra_env=None, quota=False, timeout=120):
+                    return super().run(*args, extra_env=extra_env, quota=False, timeout=timeout)
+
+            # Stacked merge_group receive() + verify_received() passes when main moved to ancestor q1.
+            queue_binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                           old_main, q2, old_main, QUEUE)
+            bare_ok = LocalGit(root / "ok.git")
+            source.receive(bare_ok, queue_binding, str(remote))
+            source.verify_received(bare_ok, queue_binding)
+            self.assertEqual(bare_ok.rev(old_main), old_main)
+
+            # Out-of-band diverged main still raises main-moved.
+            git(remote, "update-ref", "refs/heads/main", diverged_main)
+            bare_div = LocalGit(root / "div.git")
+            with self.assertRaises(source.CheckUnavailable) as ctx:
+                source.receive(bare_div, queue_binding, str(remote))
+            self.assertEqual(ctx.exception.reason, "main-moved")
+
+            # Moved queue ref raises queue-moved even when main is an ancestor.
+            git(remote, "update-ref", "refs/heads/main", new_main)
+            git(remote, "update-ref", QUEUE, new_main)
+            bare_qmoved = LocalGit(root / "qmoved.git")
+            with self.assertRaises(source.CheckUnavailable) as ctx:
+                source.receive(bare_qmoved, queue_binding, str(remote))
+            self.assertEqual(ctx.exception.reason, "queue-moved")
+
+            # Missing binding.base when main moved to ancestor raises queue-history.
+            missing_base_binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, None,
+                                                  "a" * 40, q2, "a" * 40, QUEUE)
+            with self.assertRaises(source.CheckUnavailable) as ctx:
+                source.verify_received(bare_ok, missing_base_binding)
+            self.assertEqual(ctx.exception.reason, "queue-history")
+
+            # Non-merge_group strictly rejects moved main even when main is an ancestor of head.
+            pr_binding = source.Binding(source.REPOSITORY, source.REPOSITORY_ID, PR,
+                                        old_main, q2, old_main)
+            with self.assertRaises(source.CheckUnavailable) as ctx:
+                source.verify_received(bare_ok, pr_binding)
+            self.assertEqual(ctx.exception.reason, "main-moved")
 
 
 class Copy(unittest.TestCase):

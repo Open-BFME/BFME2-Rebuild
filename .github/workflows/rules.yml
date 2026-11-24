@@ -179,9 +179,20 @@ jobs:
               echo "Expected current protected main. Found an unavailable main." >&2
               exit 1
             fi
-            if [[ ! "$tools_sha" =~ ^[0-9a-f]{40}$ ]] || [[ "$tools_sha" != "$EVALUATED_TOOLS_SHA" ]]; then
+            if [[ ! "$tools_sha" =~ ^[0-9a-f]{40}$ ]] || [[ ! "$EVALUATED_TOOLS_SHA" =~ ^[0-9a-f]{40}$ ]]; then
               echo "Expected protected main to match the evaluated revision. Found a moved or invalid main." >&2
               exit 1
+            fi
+            if [[ "$tools_sha" != "$EVALUATED_TOOLS_SHA" ]]; then
+              if [[ ! "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]] ||
+                  ! compare_status=$(curl --fail --silent --proto '=https' --connect-timeout 8 --max-time 25 \
+                    --config - "https://api.github.com/repos/$GITHUB_REPOSITORY/compare/$tools_sha...$GITHUB_SHA" \
+                    <<< "header = \"Authorization: Bearer $QUEUE_READ_TOKEN\"" | jq -er '.status') ||
+                  [[ "$compare_status" != ahead && "$compare_status" != identical ]]; then
+                echo "Expected protected main to match the evaluated revision. Found a moved or invalid main." >&2
+                exit 1
+              fi
+              tools_sha="$EVALUATED_TOOLS_SHA"
             fi
           else
             tools_sha="$GITHUB_SHA"

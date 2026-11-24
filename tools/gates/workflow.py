@@ -207,12 +207,22 @@ class GitHub:
             pr = self.call(f"pulls/{binding.number}")
             binding.check_pr(pr)
         try:
-            if self.call("git/ref/heads/main")["object"]["sha"] != binding.tools_commit:
-                raise CheckUnavailable("main-moved")
+            current_main = self.call("git/ref/heads/main")["object"]["sha"]
             if binding.queue_ref:
                 path = "git/ref/" + quote(binding.queue_ref.removeprefix("refs/"), safe="/")
                 if self.call(path, missing="queue-moved")["object"]["sha"] != binding.head:
                     raise CheckUnavailable("queue-moved")
+                if current_main != binding.tools_commit:
+                    if not is_oid(current_main):
+                        raise CheckUnavailable("main-moved")
+                    try:
+                        comparison = self.call(f"compare/{current_main}...{binding.head}")
+                    except CheckUnavailable:
+                        raise CheckUnavailable("main-moved") from None
+                    if not isinstance(comparison, dict) or comparison.get("status") not in {"ahead", "identical"}:
+                        raise CheckUnavailable("main-moved")
+            elif current_main != binding.tools_commit:
+                raise CheckUnavailable("main-moved")
         except (KeyError, TypeError):
             raise CheckUnavailable("current-state-unavailable") from None
         return pr
@@ -308,6 +318,12 @@ def receive(git, binding, remote, token=None):
         if missing:
             raise CheckUnavailable("queue-moved" if binding.queue_ref else "missing-ref")
         raise CheckUnavailable("fetch-unavailable")
+    if (binding.queue_ref
+            and git.rev("refs/source-rules/main", optional=True) != binding.tools_commit
+            and git.rev("refs/source-rules/head", optional=True) == binding.head
+            and git.rev(binding.base, optional=True) is None
+            and git.run("merge-base", "--is-ancestor", "refs/source-rules/main", binding.head).returncode == 0):
+        git.run(*options, "--", remote, f"+{binding.base}:refs/source-rules/base", **run_options)
     verify_received(git, binding)
     if binding.queue_ref:
         return
@@ -320,14 +336,19 @@ def receive(git, binding, remote, token=None):
 
 
 def verify_received(git, binding):
-    refs = {"refs/source-rules/main": (binding.tools_commit, "main-moved"),
-            "refs/source-rules/head": (binding.head, "queue-moved" if binding.queue_ref else "pull-request-moved")}
-    for ref, (expected, reason) in refs.items():
-        actual = git.rev(ref, optional=True)
-        if actual is None:
-            raise CheckUnavailable("missing-ref")
-        if actual != expected:
-            raise CheckUnavailable(reason)
+    actual_main = git.rev("refs/source-rules/main", optional=True)
+    actual_head = git.rev("refs/source-rules/head", optional=True)
+    if actual_main is None or actual_head is None:
+        raise CheckUnavailable("missing-ref")
+    if actual_head != binding.head:
+        raise CheckUnavailable("queue-moved" if binding.queue_ref else "pull-request-moved")
+    if actual_main != binding.tools_commit:
+        if not binding.queue_ref:
+            raise CheckUnavailable("main-moved")
+        if git.run("merge-base", "--is-ancestor", actual_main, binding.head).returncode:
+            raise CheckUnavailable("main-moved")
+        if git.rev(binding.base, optional=True) is None:
+            raise CheckUnavailable("queue-history")
 
 
 def compose(git, binding):
