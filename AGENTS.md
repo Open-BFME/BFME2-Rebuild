@@ -16,14 +16,15 @@ Swarm prompts & playbooks: [docs/swarm.md](docs/swarm.md) · [docs/agents.md](do
 
 ## Zero-human auto-landing lanes (Ready fork PRs, non-owner token only)
 
-- **Narrow (`src/` only, fastest):** 1–8 files (`<= 3` substantive per G6), `<= 8` affected TUs, `250/author` & `1,200/day` (`BFME_ADMISSION_DAILY_*`, same-day per-commit dedup). Auto-merges on `source rules` + `Boat` pass (`Inline virtual` pending can land; fresh failure blocks).
-- **Wide (`include/`):** up to 60 `src/`+`include/` paths, `30/author` & `120/day` (`BFME_ADMISSION_WIDE_DAILY_*`, H10). Auto-merges on `Boat` + `Header rules` (H1–H10) pass: H2 ledger-matched methods, access updates, H5 plain non-inline/non-pure virtual overrides (no default args/private-base errors), non-virtual-base abstract classes, and H5 typed-access member witnesses. Anything outside H5's subset (`> 4` classes, unproved layout/base edits, virtual-base abstract, H9 ledger requests) holds safely for a maintainer.
+- **Merge Queue:** passing Ready fork PRs are **automatically enqueued into GitHub's Merge Queue** — batched and squash-merged after `BFME II / source rules` and `BFME II / Boat` pass (plus `Header rules` on wide PRs).
+- **Narrow (`src/` only, fastest):** 1–8 files (`<= 3` substantive per G6), `<= 8` affected TUs, `250/author` & `1,200/day` (`BFME_ADMISSION_DAILY_*`, same-day per-commit dedup). Auto-enqueues on `source rules` + `Boat` pass (`Inline virtual` pending can land; fresh failure blocks).
+- **Wide (`include/`):** up to 60 `src/`+`include/` paths, `30/author` & `120/day` (`BFME_ADMISSION_WIDE_DAILY_*`, H10). Auto-enqueues on `Boat` + `Header rules` (H1–H10) pass: H2 ledger-matched methods, access updates, H5 plain non-inline/non-pure virtual overrides (no default args/private-base errors), non-virtual-base abstract classes, and H5 typed-access member witnesses. Anything outside H5's subset (`> 4` classes, unproved layout/base edits, virtual-base abstract, H9 ledger requests) holds safely for a maintainer.
 - **Never touch canary PRs** (`#3`, `#4`, `#21`, `#27`, `#29` — intentional permanent refusal controls).
 
 ## Workflow (local tools allowed & encouraged)
 
 1. **Clone & isolate:** `git clone` (or fork & clone) freely; branch off fresh `upstream/main` (one `git worktree` per subagent).
-2. **Check claims first:** `gh pr list -R Open-BFME/BFME2-Rebuild --state open --search "<RVA|file>"` + `git grep` `src/`/`include/`. Claim before coding in a Draft PR (`Claim: <RVA|path>`).
+2. **Check open PRs first:** `gh pr list -R Open-BFME/BFME2-Rebuild --state open --search "<RVA|file>"` + `git grep` `src/`/`include/` to avoid duplicating work. Do not open empty Draft claim PRs (Draft PRs still consume GitHub Actions quota); only open a Ready fork PR after passing `gate.py` locally.
 3. **Verify against retail:** disassemble `baseline/game.dat` and run local math/offset/layout scripts in `/tmp` freely.
 4. **Write clean C++:** directly under the owning `// FUNCTION:` line with real types/shared headers and zero regressions. Add `NOTICE` attribution if adapting Zero Hour code; cite the retail vtable slot in the commit/PR for virtuals; add `Removed-Declaration: <Qualified::Name>` trailer when removing a declaration.
 5. **Local compile pre-checks (optional, saves Boat quota):** run `clang++ -m32`/`g++ -m32`/`cl.exe` layout/syntax probes in `/tmp` or local VC7.1 `tools/judge/bin/judge.py` ([tools/README.md](tools/README.md)). Keep all scratch files/objects outside Git; never paste raw disassembly dumps. Hosted Boat is the sole authoritative proof (include `head_sha` + `gate.py` `policy_digest` in subagent handoffs for pre-flight audit).
@@ -32,8 +33,8 @@ Swarm prompts & playbooks: [docs/swarm.md](docs/swarm.md) · [docs/agents.md](do
    python3 tools/gates/gate.py . <upstream-main-ref> HEAD --json /tmp/gate-<slug>.json
    ```
    Must exit `0` with `"status": "pass"`. Never spend a Boat slot on a G1–G8 failure.
-7. **Push & mark Ready:** enable `Allow edits by maintainers`; put claim + concise evidence in the PR body (auto-admission ignores Drafts).
-8. **Iterate cleanly (max 3 Boat rounds):** wait on `Held: daily limit` / `checking the source rules` / `runners unavailable` (auto-retried); on green `Landing: Held: merge-forbidden` (HTTP 403 after workflow edits on `main`), merge `upstream/main` and push once. If still refused after 3 rounds, log findings in `docs/hard_rows.md` or an issue and close the PR.
+7. **Push to your fork & open a Ready PR:** enable `Allow edits by maintainers`; put concise target/evidence in the PR body (auto-admission ignores Drafts and same-repo branches).
+8. **Iterate cleanly (max 3 Boat rounds):** wait on `Held: daily limit` / `checking the source rules` / `runners unavailable` (auto-retried); once `source rules` and `Boat` pass, the PR is automatically queued into GitHub's Merge Queue and merged in a batch. If still refused after 3 Boat rounds, log findings in `docs/hard_rows.md` or an issue and close the PR.
 
 ## Hard rules (G1–G8 & H1–H10)
 
