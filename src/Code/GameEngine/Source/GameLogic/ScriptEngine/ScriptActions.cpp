@@ -2659,6 +2659,19 @@ void ScriptActions::doTeamAvailableForRecruitment(const AsciiString &teamName, B
 // FUNCTION: BFME2 0x003C0425 size=269 name=?Rva003C0425Do@ScriptActions@@QAEXABVAsciiString@@_N1H0H@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x003C0532 size=88 name=?doResetMusicScripting@ScriptActions@@IAEX_N@Z evidence=N:ledger tier=A
+void ScriptActions::doResetMusicScripting(Bool reset)
+{
+	Int transition;
+	if (reset)
+		transition = 0;
+	else
+		transition = 1;
+	TheAudio->clearMusicSystem(0, 0, transition);
+	char flagName[] = "/___MusicScript_Init";
+	ScriptFlag *flag = TheScriptEngine->findFlag(flagName);
+	if (flag)
+		flag->m_value = true;
+}
 
 // FUNCTION: BFME2 0x003C058A size=84 name=?doTeamEnableStealth@ScriptActions@@IAEXABVAsciiString@@_N@Z evidence=N:ledger tier=A
 void ScriptActions::doTeamEnableStealth(const AsciiString &teamName, Bool enable)
