@@ -602,7 +602,7 @@ jobs:
         id: plan
         env:
           MANAGED_WIDE_SHARDS: "${{ vars.BFME_WIDE_SHARDS || '16' }}"
-          MANAGED_WIDE_TUS_PER_SHARD: "${{ vars.BFME_WIDE_TUS_PER_SHARD || '24' }}"
+          MANAGED_WIDE_TUS_PER_SHARD: "${{ vars.BFME_WIDE_TUS_PER_SHARD || '10' }}"
         run: |
           set -Eeuo pipefail
           trap 'rc=$?; printf "Expected protected workflow step to finish. Found exit %s at shell line %s.\n" "$rc" "$LINENO" >&2' ERR

@@ -331,6 +331,32 @@ class ResolveTests(unittest.TestCase):
         self.assertEqual(resolve.from_main(FakeRuns(cancelled_then_ok), main, 60)["run_id"], "1")
 
 
+class ResolveStalenessTests(unittest.TestCase):
+    def test_recent_no_artifact_stays_wait(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 60)
+        self.assertEqual(found["action"], "publish")
+        no_artifact = resolve.require_artifact(FakeRuns([], []), found, age_seconds=60)
+        self.assertEqual(no_artifact["action"], "wait")
+        self.assertIn("without artifact", no_artifact["why"])
+
+    def test_old_no_artifact_raises_stale(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 60)
+        self.assertEqual(found["action"], "publish")
+        stale = resolve.require_artifact(FakeRuns([], []), found, age_seconds=4 * 3600)
+        self.assertEqual(stale["action"], "stale")
+        self.assertIn("no published measurement", stale["why"])
+
+    def test_old_with_artifact_publishes(self):
+        main = "1" * 40
+        found = resolve.from_main(FakeRuns([run(1)]), main, 4 * 3600)
+        self.assertEqual(found["action"], "publish")
+        with_artifact = FakeRuns([], [{"name": "bfme-numeric-main-state-1", "expired": False}])
+        result = resolve.require_artifact(with_artifact, found, age_seconds=4 * 3600)
+        self.assertEqual(result["action"], "publish")
+
+
 class Interface(unittest.TestCase):
     def test_measuring_workflow_name_and_artifact(self):
         """The publisher follows the measuring workflow by name and reads its artifact by name."""

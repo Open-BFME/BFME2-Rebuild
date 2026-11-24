@@ -156,7 +156,7 @@ class AncestorArtifactLookup(unittest.TestCase):
         self.assertEqual(found, (1020 + 500000, 4096, "d" * 64))
         self.assertEqual(len(calls), 2)
         self.assertEqual(len(legacy_calls), 1 + 21)
-        self.assertIn("actions/artifacts?name=bfme-exact-main-state-1&per_page=100", calls)
+        self.assertIn("actions/artifacts?name=bfme-exact-main-state-1&per_page=100&page=1", calls)
 
     def test_nothing_retained_costs_two_calls_instead_of_twenty_six(self):
         found, calls, legacy_calls = self.assert_same_as_legacy([run_row(i) for i in range(30)], [])
@@ -189,9 +189,9 @@ class AncestorArtifactLookup(unittest.TestCase):
         artifacts = [artifact_row(1000, attempt=1), artifact_row(1001, attempt=2), artifact_row(1002, attempt=3)]
         found, calls, _ = self.assert_same_as_legacy(runs, artifacts)
         self.assertEqual(found[0], 1002 + 500000)
-        self.assertEqual(calls[1:], ["actions/artifacts?name=bfme-exact-main-state-2&per_page=100",
-                                     "actions/artifacts?name=bfme-exact-main-state-1&per_page=100",
-                                     "actions/artifacts?name=bfme-exact-main-state-3&per_page=100"])
+        self.assertEqual(calls[1:], ["actions/artifacts?name=bfme-exact-main-state-2&per_page=100&page=1",
+                                     "actions/artifacts?name=bfme-exact-main-state-1&per_page=100&page=1",
+                                     "actions/artifacts?name=bfme-exact-main-state-3&per_page=100&page=1"])
 
     def test_a_full_or_unreadable_listing_falls_back_to_asking_each_run(self):
         runs = [run_row(i) for i in range(5)]

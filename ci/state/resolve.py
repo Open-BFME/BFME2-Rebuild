@@ -85,12 +85,16 @@ def from_main(api, main, age_seconds, input_run=""):
     return {"action": "wait", "sha": main, "why": f"no measurement of main {main} yet; it is {age_seconds // 60} min old"}
 
 
-def require_artifact(api, result):
+def require_artifact(api, result, age_seconds=0):
     """A successful run whose jobs were all skipped has no measurement; that is not a failure to publish."""
     name = f"bfme-numeric-main-state-{result['attempt']}"
     found = api.get(f"actions/runs/{result['run_id']}/artifacts?name={name}&per_page=5")["artifacts"]
     if any(a.get("name") == name and not a.get("expired") for a in found):
         return result
+    if age_seconds > STALE_HOURS * 3600:
+        return {"action": "stale", "sha": result["sha"],
+                "why": f"run {result['run_id']} finished without artifact {name} and main {result['sha']} "
+                       f"has had no published measurement for {age_seconds // 3600} h (threshold {STALE_HOURS} h)"}
     return {"action": "wait", "sha": result["sha"],
             "why": f"run {result['run_id']} finished without artifact {name} (its jobs were skipped or it expired); "
                    "nothing to publish"}
@@ -98,6 +102,7 @@ def require_artifact(api, result):
 
 def main():
     env = os.environ
+    age = 0
     if env.get("EVENT") == "workflow_run":
         result = from_workflow_run(env)
     else:
@@ -114,10 +119,11 @@ def main():
         if run and not NUMBER.fullmatch(run):
             print(f"::error::resolve: expected a numeric run id, found {run!r}")
             return 1
-        result = from_main(api, main_sha, int(time.time()) - int(stamp.stdout), run)
+        age = int(time.time()) - int(stamp.stdout)
+        result = from_main(api, main_sha, age, run)
     if result["action"] == "publish":
         api = api if env.get("EVENT") != "workflow_run" else Api(env["GITHUB_REPOSITORY"], env.pop("READ_TOKEN"))
-        result = require_artifact(api, result)
+        result = require_artifact(api, result, age_seconds=age)
     print(f"Decision: {result['action']}: {result['why']}")
     with open(env["GITHUB_OUTPUT"], "a") as stream:
         for key in ("action", "run_id", "attempt", "sha"):

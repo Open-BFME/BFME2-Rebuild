@@ -40,8 +40,12 @@ class OvercapExitMigrationTest(unittest.TestCase):
 
 
 class ArtifactFirstLookupTest(unittest.TestCase):
-    def test_artifact_first_fallback_finds_artifact_past_run_window(self):
+    def _repo_id(self):
         from common import REPO_ID
+        return REPO_ID
+
+    def test_artifact_first_fallback_finds_artifact_past_run_window(self):
+        REPO_ID = self._repo_id()
         target_sha = "b" * 40
 
         class FakeApi:
@@ -56,7 +60,7 @@ class ArtifactFirstLookupTest(unittest.TestCase):
                     return {"artifacts": [
                         {"name": "bfme-exact-main-state-1", "expired": False, "id": 999,
                          "size_in_bytes": 1000, "digest": "sha256:" + "a" * 64,
-                         "workflow_run": {"id": 100}},
+                         "workflow_run": {"id": 100, "head_branch": "main"}},
                     ]}
                 if path == "actions/runs/100":
                     return {"id": 100, "run_attempt": 1, "path": ".github/workflows/state.yml",
@@ -82,6 +86,107 @@ class ArtifactFirstLookupTest(unittest.TestCase):
 
         result = state_fetch.select_ancestor_artifact(EmptyApi(), ["a" * 40])
         self.assertIsNone(result)
+
+    def test_attempt_mismatch_rejected(self):
+        REPO_ID = self._repo_id()
+        target_sha = "b" * 40
+
+        class FakeApi:
+            def call(self, path):
+                if path.startswith("actions/workflows/state.yml/runs?"):
+                    return {"workflow_runs": [
+                        {"id": 100, "run_attempt": 2, "path": ".github/workflows/state.yml",
+                         "head_sha": target_sha, "head_branch": "main", "status": "completed",
+                         "event": "push", "conclusion": "success",
+                         "repository": {"id": REPO_ID}},
+                    ]}
+                if "actions/artifacts?" in path and "name=bfme-exact-main-state-2" in path:
+                    return {"artifacts": []}
+                if "actions/artifacts?" in path and "name=bfme-exact-main-state-1" in path:
+                    return {"artifacts": [
+                        {"name": "bfme-exact-main-state-1", "expired": False, "id": 888,
+                         "size_in_bytes": 500, "digest": "sha256:" + "b" * 64,
+                         "workflow_run": {"id": 100, "head_branch": "main"}},
+                    ]}
+                if path.startswith("actions/runs/") and "/artifacts" in path:
+                    return {"artifacts": [
+                        {"name": "bfme-exact-main-state-1", "expired": False, "id": 888,
+                         "size_in_bytes": 500, "digest": "sha256:" + "b" * 64,
+                         "workflow_run": {"id": 100, "head_branch": "main"}},
+                    ]}
+                if "actions/artifacts?" in path:
+                    return {"artifacts": []}
+                return {"workflow_runs": []}
+
+        result = state_fetch.select_ancestor_artifact(FakeApi(), [target_sha])
+        self.assertIsNone(result)
+
+    def test_nearer_sha_preferred_over_older(self):
+        REPO_ID = self._repo_id()
+        near_sha = "1" * 40
+        far_sha = "2" * 40
+
+        class FakeApi:
+            def call(self, path):
+                if path.startswith("actions/workflows/state.yml/runs?"):
+                    return {"workflow_runs": [
+                        {"id": 200, "run_attempt": 1, "path": ".github/workflows/state.yml",
+                         "head_sha": far_sha, "head_branch": "main", "status": "completed",
+                         "event": "push", "conclusion": "success",
+                         "repository": {"id": REPO_ID}},
+                        {"id": 300, "run_attempt": 1, "path": ".github/workflows/state.yml",
+                         "head_sha": near_sha, "head_branch": "main", "status": "completed",
+                         "event": "push", "conclusion": "success",
+                         "repository": {"id": REPO_ID}},
+                    ]}
+                if "actions/artifacts?" in path:
+                    return {"artifacts": [
+                        {"name": "bfme-exact-main-state-1", "expired": False, "id": 701,
+                         "size_in_bytes": 500, "digest": "sha256:" + "c" * 64,
+                         "workflow_run": {"id": 200, "head_branch": "main"}},
+                        {"name": "bfme-exact-main-state-1", "expired": False, "id": 702,
+                         "size_in_bytes": 500, "digest": "sha256:" + "d" * 64,
+                         "workflow_run": {"id": 300, "head_branch": "main"}},
+                    ]}
+                if path.startswith("actions/runs/") and "/artifacts" in path:
+                    return {"artifacts": []}
+                return {"workflow_runs": []}
+
+        result = state_fetch.select_ancestor_artifact(FakeApi(), [near_sha, far_sha])
+        self.assertIsNotNone(result)
+        self.assertEqual(result[0], 702)
+
+    def test_page2_artifact_discovery(self):
+        REPO_ID = self._repo_id()
+        target_sha = "d" * 40
+
+        class FakeApi:
+            def call(self, path):
+                if path.startswith("actions/workflows/state.yml/runs?"):
+                    return {"workflow_runs": []}
+                if "actions/artifacts?" in path and "&page=1" in path:
+                    return {"artifacts": [{"name": "other", "expired": False, "id": i,
+                                           "size_in_bytes": 100, "digest": "sha256:" + "0" * 64,
+                                           "workflow_run": {"id": i, "head_branch": "main"}}
+                                          for i in range(100)]}
+                if "actions/artifacts?" in path and "&page=2" in path:
+                    return {"artifacts": [
+                        {"name": "bfme-exact-main-state-1", "expired": False, "id": 555,
+                         "size_in_bytes": 800, "digest": "sha256:" + "e" * 64,
+                         "workflow_run": {"id": 400, "head_branch": "main"}},
+                    ]}
+                if path == "actions/runs/400":
+                    return {"id": 400, "run_attempt": 1, "path": ".github/workflows/state.yml",
+                            "head_sha": target_sha, "head_branch": "main", "status": "completed",
+                            "event": "push", "conclusion": "success",
+                            "repository": {"id": REPO_ID}}
+                if "actions/artifacts?" in path:
+                    return {"artifacts": []}
+                return {"workflow_runs": []}
+
+        result = state_fetch.select_ancestor_artifact(FakeApi(), [target_sha])
+        self.assertIsNotNone(result)
+        self.assertEqual(result[0], 555)
 
 
 if __name__ == "__main__":
