@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:padding
 #include "WW3D2/Shadow.h"
 
+#include "Common/GameLOD.h"
 #include "Common/NameKeyGenerator.h"
 #include "GameClient/W3DHordeModelDraw.h"
 // FUNCTION: BFME2 0x0007894E size=61 name=?rva0007894E@W3DHordeModelDrawManager@@QAE_NPAVRva0007894EOuter@@@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers+class
@@ -56,6 +57,15 @@ const char *W3DHordeModelDraw::GetSnapshotName() const
 // FUNCTION: BFME2 0x00078F95 size=380 name=??RRva00078F95Cmp@@QBE_NPBURva00078F95Item@@0@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0007912D size=26 name=?GetLODIndex@@YAHXZ evidence=N:ledger tier=B hypothesis:cohesion
+int GetLODIndex(void)
+{
+	int index = TheGameLODManager->m_unk0x1788 - 1;
+	if (index < 0)
+		return 0;
+	if (index > 2)
+		return 2;
+	return index;
+}
 
 // FUNCTION: BFME2 0x00079147 size=16 name=?rva00079147@W3DHordeModelDrawModuleData@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:cohesion
 

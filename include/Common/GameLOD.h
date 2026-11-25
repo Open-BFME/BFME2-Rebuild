@@ -53,7 +53,8 @@ public:
     int m_staticLevel;				// +0x1768 set by rva00202739, which applies the level through rva002022E9 first
     int m_dynamicLevel;				// +0x176C set by rva0020276C, which loads the dynamic record into +0x178C
     int m_audioLevel;				// +0x1770 set by rva00202790 (0 or 1), which tells the audio system
-    unsigned char m_unk0x1774[0x178C-0x1774];
+    unsigned char m_unk0x1774[0x1788-0x1774];
+    int m_unk0x1788;				// +0x1788 GetLODIndex reads it as a one-based level
     int m_currentMinFPS;			// +0x178C zeroed by rva00202633
     int m_currentParticleSkipMask;	// +0x1790 the level record ParticleSkipMask
     int m_unk0x1794;				// +0x1794 zeroed by rva00202633
