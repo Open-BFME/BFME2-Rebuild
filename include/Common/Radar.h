@@ -176,6 +176,8 @@ public:
 	void rva002D7BB7(const void *box);						// 0x002D7BB7: copies a 16-byte box into +0x144C and marks it valid
 	void rva002D7BD3();										// 0x002D7BD3: resets the 16-byte rectangle to the empty box and clears its valid flag
 	bool isPriorityVisible(RadarPriorityType priority) const;	// 0x002D7ACB
+	// Zero Hour's inline setter: VictoryConditions::cachePlayerPtrs stores the flag directly, so retail has no out-of-line copy.
+	void forceOn(Bool force) { m_radarForceOn = force; }
 
 protected:
 	void deleteListResources();								// 0x002D75E5

@@ -8,6 +8,9 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "GameLogic/VictoryConditions.h"
 #include "Common/Player.h"
+#include "Common/PlayerList.h"
+#include "Common/Radar.h"
+#include "Common/Recorder.h"
 #include "GameLogic/GameLogic.h"
 #include "GameNetwork/GameInfo.h"
 // .bss 0x00E03138, after MeshInstancingManager.cpp's TheMeshInstancingManager 0x00E03134 (link order);
@@ -50,6 +53,29 @@ bool VictoryConditions::hasBeenDefeated(Player *player)
 }
 
 // FUNCTION: BFME2 0x0041FFAD size=106 name=?cachePlayerPtrs@VictoryConditions@@UAEXXZ evidence=N:ledger tier=A
+void VictoryConditions::cachePlayerPtrs(void)
+{
+	if (!TheRecorder->isMultiplayer())
+		return;
+
+	// cachePlayerPtr does the filtering and appending; this only counts the accepted players.
+	UnsignedInt playerCount = 0;
+	for (Int i = 0; i < MAX_PLAYER_COUNT; ++i)
+	{
+		if (cachePlayerPtr(ThePlayerList->getNthPlayer(i)))
+			++playerCount;
+	}
+	while (playerCount < MAX_PLAYER_COUNT)
+		m_players[playerCount++] = NULL;
+
+	// With no local player there is nothing to lose: watch as an observer with the radar on.
+	if (m_localSlotNum < 0)
+	{
+		m_localPlayerDefeated = true;
+		TheRadar->forceOn(TRUE);
+		m_isObserver = true;
+	}
+}
 
 // FUNCTION: BFME2 0x00420017 size=120 name=?rva00420017@VictoryConditions@@UAE_NPAVPlayer@@@Z evidence=?:placeholder tier=A
 
