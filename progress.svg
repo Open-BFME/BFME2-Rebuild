@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="344" viewBox="0 0 880 344" role="img" aria-label="Byte match 27.7 percent, linking 60.7 percent, 11037 of 41565 functions finished, the game run has not run yet">
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="344" viewBox="0 0 880 344" role="img" aria-label="Byte match 27.7 percent, linking 60.7 percent, 11082 of 41570 functions finished, the game run has not run yet">
 <style>
 .card{fill:#0d1117;stroke:#30363d}.box{fill:#161b22;stroke:#30363d}.track{fill:#21262d}
 .strong{fill:#f0f6fc}.muted{fill:#8b949e}.blue{fill:#3987e5}.orange{fill:#d95926}.green{fill:#3fb950}.red{fill:#f85149}
@@ -20,16 +20,16 @@ text{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif}
 <text class="strong" x="52" y="178" font-size="54" font-weight="700">27.7%</text>
 <text class="muted" x="52" y="204" font-size="13">of the original program, rebuilt byte for byte</text>
 <rect class="track" x="52" y="216" width="352" height="10" rx="5"/>
-<rect class="blue" x="52" y="216" width="97.3" height="10" rx="5"/>
+<rect class="blue" x="52" y="216" width="97.5" height="10" rx="5"/>
 <rect class="box" x="452" y="92" width="400" height="150" rx="10"/>
 <text class="muted" x="476" y="122" font-size="12" font-weight="600" letter-spacing="1.4">LINKING</text>
 <text class="strong" x="476" y="178" font-size="54" font-weight="700">60.7%</text>
 <text class="muted" x="476" y="204" font-size="13">of the names a full game needs: 5,010 of 8,253</text>
 <rect class="track" x="476" y="216" width="352" height="10" rx="5"/>
 <rect class="blue" x="476" y="216" width="213.7" height="10" rx="5"/>
-<text class="strong" x="28" y="286" font-size="24" font-weight="700">11,037</text>
+<text class="strong" x="28" y="286" font-size="24" font-weight="700">11,082</text>
 <text class="muted" x="28" y="306" font-size="12">functions finished,</text>
-<text class="muted" x="28" y="322" font-size="12">of 41,565</text>
+<text class="muted" x="28" y="322" font-size="12">of 41,570</text>
 <text class="strong" x="310" y="286" font-size="24" font-weight="700">—</text>
 <text class="muted" x="310" y="306" font-size="12">rebuilt files play identically</text>
 <text class="muted" x="310" y="322" font-size="12">inside the original game (not run yet)</text>

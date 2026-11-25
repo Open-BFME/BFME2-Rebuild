@@ -1,4 +1,4 @@
-# measured_utc=2026-11-23T14:20:36Z revision=cca4fc12cfe83ace89e550c3b7e19ad83c0cace4 left_out_duplicates=10
+# measured_utc=2026-11-25T21:17:57Z revision=9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54 left_out_duplicates=10
 header	classes_defined
 include/Draft/AABTreeLinkClass.h	AABTreeLinkClass
 include/Draft/AIAttackApproachTargetState00C12678.h	AIAttackApproachTargetState00C12678
@@ -20,7 +20,6 @@ include/Draft/ATL/CImage.h	CImage
 include/Draft/AerialPathfinder.h	AerialPathfinder
 include/Draft/AnimationSoundClientBehaviorData.h	AnimationSoundClientBehaviorData
 include/Draft/AnimationSoundModuleManager.h	AnimationSoundModuleManager
-include/Draft/AptRadialMenu/Impl/ButtonShell.h	ButtonShell
 include/Draft/ArmySummaryDescriptionVisitor.h	ArmySummaryDescriptionVisitor
 include/Draft/AssetManagerImpl.h	AssetManagerImpl
 include/Draft/AttackObjectGroupOrder.h	AttackObjectGroupOrder
@@ -318,7 +317,6 @@ include/Draft/Rva000AF082.h	Rva000AF082
 include/Draft/Rva000AF0E4.h	Rva000AF0E4
 include/Draft/Rva000B2E0B.h	Rva000B2E0B
 include/Draft/Rva000D3FA0Map.h	Rva000D3FA0Map
-include/Draft/Rva000E3B41.h	Rva000E3B41
 include/Draft/Rva000E59D3.h	Rva000E59D3
 include/Draft/Rva000E6AC0.h	Rva000E6AC0
 include/Draft/Rva000F0F19.h	Rva000F0F19
@@ -491,7 +489,6 @@ include/Draft/Rva002BED74.h	Rva002BED74
 include/Draft/Rva002C00E0Obj.h	Rva002C00E0Obj
 include/Draft/Rva002C5398.h	Rva002C5398
 include/Draft/Rva002CD4A6.h	Rva002CD4A6
-include/Draft/Rva002CEC0A.h	Rva002CEC0A
 include/Draft/Rva002D22CA.h	Rva002D22CA
 include/Draft/Rva002D3347.h	Rva002D3347
 include/Draft/Rva002D3573.h	Rva002D3573
@@ -957,7 +954,6 @@ include/Draft/Rva0053805DBase.h	Rva0053805DBase
 include/Draft/Rva00538E43Result.h	Rva00538E43Result
 include/Draft/Rva0053947D.h	Rva0053947D
 include/Draft/Rva0053DAD0.h	Rva0053DAD0
-include/Draft/Rva0053ED1A.h	Rva0053ED1A
 include/Draft/Rva0053FADE.h	Rva0053FADE
 include/Draft/Rva00540845.h	Rva00540845
 include/Draft/Rva00541EB8.h	Rva00541EB8
@@ -1063,7 +1059,6 @@ include/Draft/Rva005772BF.h	Rva005772BF
 include/Draft/Rva00577838.h	Rva00577838
 include/Draft/Rva00577846.h	Rva00577846
 include/Draft/Rva00577936.h	Rva00577936
-include/Draft/Rva00577F77.h	Rva00577F77
 include/Draft/Rva00579731.h	Rva00579731
 include/Draft/Rva0057A2B0.h	Rva0057A2B0
 include/Draft/Rva0057A2B0B1.h	Rva0057A2B0B1
@@ -1569,11 +1564,9 @@ include/Draft/W3DVolumetricShadow.h	W3DVolumetricShadow
 include/Draft/W3DVolumetricShadowV2.h	W3DVolumetricShadowV2
 include/Draft/W3dSailModelDrawModuleData.h	W3dSailModelDrawModuleData
 include/Draft/WaterDrawFXShaderParameterSourceNamespace.h	WaterDrawFXShaderParameterSourceNamespace
-include/Draft/WeatherSetting.h	WeatherSetting
 include/Draft/Win32BIGFileSystem.h	Win32BIGFileSystem
 include/Draft/Win32GameEngine.h	Win32GameEngine
 include/Draft/WindowTranslator.h	WindowTranslator
-include/Draft/WorldHeightMap.h	WorldHeightMap
 include/Draft/XferMD5CRC.h	XferMD5CRC
 include/Draft/_STL/_Locale_impl.h	_Locale_impl
 include/Draft/_STL/domain_error.h	domain_error

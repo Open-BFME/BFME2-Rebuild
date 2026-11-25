@@ -2,7 +2,7 @@
 
 How much of the original game (version 1.06) has been rebuilt as source code that compiles back to the same machine code. Measured automatically after every change; nobody edits this page.
 
-Measured **26 November 2026**. The code figures describe commit [`cca4fc12cfe8`](https://github.com/Open-BFME/BFME2-Rebuild/commit/cca4fc12cfe83ace89e550c3b7e19ad83c0cace4) (23 November 2026, 14:20 UTC); the build checks run every day.
+Measured **26 November 2026**. The code figures describe commit [`9dd2e2d4ee8a`](https://github.com/Open-BFME/BFME2-Rebuild/commit/9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54) (25 November 2026, 21:17 UTC); the build checks run every day.
 
 ![Progress](progress.svg)
 
@@ -10,17 +10,17 @@ Measured **26 November 2026**. The code figures describe commit [`cca4fc12cfe8`]
 
 ![The four figures](detail.svg)
 
-**Byte match**: `██████░░░░░░░░░░░░░░` 27.7% (1,751,385 of 6,333,616 bytes)  
+**Byte match**: `██████░░░░░░░░░░░░░░` 27.7% (1,755,055 of 6,333,909 bytes)  
 How much of the original game's code, by size, our source code compiles back to byte for byte.
 
 **Linking**: `████████████░░░░░░░░` 60.7% (5,010 of 8,253 names)  
 How many of the names the game needs to be assembled into one program our source already provides.
 Measured by the daily build of commit [`0fc7d30e48cf`](https://github.com/Open-BFME/BFME2-Rebuild/commit/0fc7d30e48cfd0424b96d4582bce4db53e2d5b1b) (24 November 2026), which can be newer or older than the commit the other figures describe.
 
-**Code proven**: `████░░░░░░░░░░░░░░░░` 19.4% (1,229,651 of 6,333,616 bytes)  
+**Code proven**: `████░░░░░░░░░░░░░░░░` 19.5% (1,236,605 of 6,333,909 bytes)  
 How much of the code, by size, is byte-matched and also confirmed at every place it refers to other code or data, so the match cannot be a coincidence.
 
-**Finished functions**: `█████░░░░░░░░░░░░░░░` 26.6% (11,037 of 41,565 functions)  
+**Finished functions**: `█████░░░░░░░░░░░░░░░` 26.7% (11,082 of 41,570 functions)  
 Functions that are proven, sit in a properly named source file, and belong to a class declared in a final header. Counted in functions, not bytes: small functions are often finished first, so this figure can be ahead of the byte figures.
 
 ## Does the rebuilt game run?
@@ -39,26 +39,26 @@ Byte match, by size, in each part of the source tree, largest part first.
 
 | Part | Byte match | Bar |
 | --- | ---: | --- |
-| Game engine: GameLogic | 26.3% (399,797 of 1,520,680 bytes) | `█████░░░░░░░░░░░░░░░` |
-| Game libraries | 52.3% (571,288 of 1,092,443 bytes) | `██████████░░░░░░░░░░` |
-| Game engine: GameClient | 20.3% (172,550 of 850,669 bytes) | `████░░░░░░░░░░░░░░░░` |
-| Platform layer: W3DDevice | 8.7% (46,344 of 531,429 bytes) | `██░░░░░░░░░░░░░░░░░░` |
-| Game engine: Common | 35.3% (108,929 of 308,675 bytes) | `███████░░░░░░░░░░░░░` |
-| Game engine: GameNetwork | 51.6% (112,226 of 217,464 bytes) | `██████████░░░░░░░░░░` |
+| Game engine: GameLogic | 26.1% (396,389 of 1,520,680 bytes) | `█████░░░░░░░░░░░░░░░` |
+| Game libraries | 52.6% (574,609 of 1,092,443 bytes) | `███████████░░░░░░░░░` |
+| Game engine: GameClient | 20.5% (174,629 of 850,669 bytes) | `████░░░░░░░░░░░░░░░░` |
+| Platform layer: W3DDevice | 8.8% (46,992 of 531,698 bytes) | `██░░░░░░░░░░░░░░░░░░` |
+| Game engine: Common | 35.4% (109,254 of 308,675 bytes) | `███████░░░░░░░░░░░░░` |
+| Game engine: GameNetwork | 51.6% (112,198 of 217,464 bytes) | `██████████░░░░░░░░░░` |
 | GameSpy SDK (online library) | 98.4% (105,280 of 106,969 bytes) | `████████████████████` |
 | Platform layer: MilesAudioDevice | 0.6% (363 of 64,798 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
 | Lua 4.0.1 (scripting library) | 96.9% (61,576 of 63,532 bytes) | `███████████████████░` |
 | FESL (EA online library) | 0.0% (0 of 42,125 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
-| STLport 4.6 (C++ library) | 88.2% (28,615 of 32,452 bytes) | `██████████████████░░` |
+| STLport 4.6 (C++ library) | 86.2% (27,981 of 32,452 bytes) | `█████████████████░░░` |
 | nbench (benchmark library) | 0.0% (0 of 26,290 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
 | zlib 1.1.4 (compression library) | 100.0% (23,719 of 23,719 bytes) | `████████████████████` |
 | ppmalloc 1.26.11 (memory allocator) | 0.0% (0 of 14,445 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
 | LZHL 1.0 (compression library) | 99.7% (7,125 of 7,150 bytes) | `████████████████████` |
 | Platform layer: Win32Device | 57.0% (1,564 of 2,742 bytes) | `███████████░░░░░░░░░` |
-| Not yet placed in a named file | 8.5% (112,009 of 1,323,501 bytes) | `██░░░░░░░░░░░░░░░░░░` |
-| Not yet assigned to any file | 0.0% (0 of 104,533 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
+| Not yet placed in a named file | 8.6% (113,376 of 1,323,501 bytes) | `██░░░░░░░░░░░░░░░░░░` |
+| Not yet assigned to any file | 0.0% (0 of 104,557 bytes) | `░░░░░░░░░░░░░░░░░░░░` |
 
-Provisional class declarations still in use (files under `include/Draft/` that some source file includes): 12. Each should become a final header.
+Provisional class declarations still in use (files under `include/Draft/` that some source file includes): 11. Each should become a final header.
 
 ## Over time
 
@@ -66,6 +66,7 @@ Provisional class declarations still in use (files under `include/Draft/` that s
 
 | Commit | Date | Byte match | Linking | Proven | Finished |
 | --- | --- | ---: | ---: | ---: | ---: |
+| [`9dd2e2d4ee8a`](https://github.com/Open-BFME/BFME2-Rebuild/commit/9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54) | 25 November 2026, 21:17 UTC | 27.71% | 60.71% (build `0fc7d30`) | 19.52% | 26.66% |
 | [`cca4fc12cfe8`](https://github.com/Open-BFME/BFME2-Rebuild/commit/cca4fc12cfe83ace89e550c3b7e19ad83c0cace4) | 23 November 2026, 14:20 UTC | 27.65% | 60.71% (build `0fc7d30`) | 19.41% | 26.55% |
 | [`b011d73f96dc`](https://github.com/Open-BFME/BFME2-Rebuild/commit/b011d73f96dcf5cf79290549d7dd8382eb4bbacb) | 23 November 2026, 14:04 UTC | 27.65% | 64.71% (build `4ae67ee`) | 19.41% | 26.55% |
 | [`c87f290c27b5`](https://github.com/Open-BFME/BFME2-Rebuild/commit/c87f290c27b542b4e65b4caa0fdbe40bb442c602) | 23 November 2026, 13:50 UTC | 27.65% | 64.71% (build `4ae67ee`) | 19.41% | 26.55% |
@@ -95,6 +96,5 @@ Provisional class declarations still in use (files under `include/Draft/` that s
 | [`275e5bc86e6c`](https://github.com/Open-BFME/BFME2-Rebuild/commit/275e5bc86e6c35cbf28c1c173eafe8dc772c5fdc) | 22 November 2026, 14:00 UTC | 27.61% | 64.70% | 19.39% | 26.52% |
 | [`439e43d7c563`](https://github.com/Open-BFME/BFME2-Rebuild/commit/439e43d7c56323576005221fe6ffd4c0ca71ca2c) | 22 November 2026, 07:36 UTC | 27.61% | 56.40% (build `9fa818c`) | 19.39% | 26.52% |
 | [`a8ba9aee59d9`](https://github.com/Open-BFME/BFME2-Rebuild/commit/a8ba9aee59d9634cf44fba99f4652f4e5b596314) | 20 November 2026, 23:55 UTC | 26.15% | 56.40% (build `9fa818c`) | 17.39% | 25.07% |
-| [`69da5d735238`](https://github.com/Open-BFME/BFME2-Rebuild/commit/69da5d7352386882778ba9c6ba4a5934ffdd3be5) | 20 November 2026, 19:03 UTC | 25.79% | 62.29% (build `5f2f839`) | 17.19% | 24.59% |
 
 How each figure is computed, with its exact formula: [ci/progress/README.md](https://github.com/Open-BFME/BFME2-Rebuild/blob/main/ci/progress/README.md).
