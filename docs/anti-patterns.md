@@ -24,8 +24,10 @@ evidence, and stop.
 | 9 | Explicitly instantiate a template (`template void X<T>::f();`) only to place a copy in an object. | Prefer the use that instantiated it in the original. An instantiation can stand in while that use is unwritten; say so next to it and remove it when the use lands. A template the original exports is evidenced by the export table. Zero Hour's game code has none. |
 | 10 | Rewrite a vendored library unit (STLport, zlib, Lua, GameSpy). | Compile upstream's file unchanged with the library's own flags. |
 
-The source rules (G3) refuse rows 1, 2, 5 and 7 and `__declspec(nothrow)` when
-a pull request adds them. G2 already refuses changes to `// cl:` lines. The
+The source rules (G3) refuse rows 1, 2, 4, 5 and 7 and `__declspec(nothrow)` when
+a pull request adds them. Row 4 allows `extern "C"` around `#include` lines, the
+`#ifdef __cplusplus` form of a header that C code includes too, and a name the
+ledger places on a C object, a prebuilt library or an import. G2 already refuses changes to `// cl:` lines. The
 other rows are review rules; see [RULES.md](../RULES.md).
 
 ## What the compiler already does

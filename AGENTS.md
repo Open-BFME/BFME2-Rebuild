@@ -40,7 +40,7 @@ Swarm prompts & playbooks: [docs/swarm.md](docs/swarm.md) · [docs/agents.md](do
 
 - **G1 Paths:** existing `src/` (never `src/Code/Tools/`) & eligible `include/` only; no new `.cpp`; UTF-8 regular files.
 - **G2 Annotations:** never edit `// FUNCTION:` / `// DATA:` / `// cl*` / `// stlport*` / `// psdk`; only `// dxsdk` or `// platformsdk` additions allowed at top of existing non-vendored `.c`/`.cpp` (LF, no duplicates/trailing space).
-- **G3 Forbidden:** no `__asm`, `__emit`, `#pragma optimize`, or banned casts/pragmas; no runtime, SDK or STLport workarounds (hand `dllimport`, `__imp_`, runtime or Windows declarations, `_CRTIMP`/`_STLP_*` defines, repeated includes). See [docs/anti-patterns.md](docs/anti-patterns.md).
+- **G3 Forbidden:** no `__asm`, `__emit`, `#pragma optimize`, or banned casts/pragmas; no runtime, SDK or STLport workarounds (hand `dllimport`, `__imp_`, runtime or Windows declarations, `_CRTIMP`/`_STLP_*` defines, repeated includes, `extern "C"` on game C++ code). See [docs/anti-patterns.md](docs/anti-patterns.md).
 - **G4 Types:** no `void *` or raw integer stand-ins where real engine types exist.
 - **G5 Comments:** no hex addresses (`0x...`), dates, or author/model tags in new source comments (evidence belongs in commits/PRs).
 - **G6 Scope:** one logical item per PR (`<= 3` substantive source files, except Draft promotions).

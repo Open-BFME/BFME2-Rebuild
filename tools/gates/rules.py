@@ -20,6 +20,8 @@ import void_abi
 REGULAR = 'Keep the change as a regular, non-executable UTF-8 source or header file.'
 SCOPE = 'Keep this pull request in existing C/C++ source and eligible headers. Ask a maintainer for other changes.'
 FORBIDDEN_FIX = 'Use ordinary C/C++ and the declared symbol. Ask a maintainer about an existing approved exception.'
+C_LINKAGE_FIX = ('Use C++ linkage. A C name the ledger puts on a C++ object is a ledger error: file a ledger request '
+                 'with the C++ name, or with the evidence that the object is a .c file.')
 PROMOTION_FIX = 'Keep this pull request to one item. Move every Draft includer to the permanent header.'
 BAD_TEXT = re.compile(r"[\x00-\x08\x0b-\x1f\x7f\x85\u2028\u2029]")
 FILE_COMPONENT = re.compile(r'[A-Za-z0-9_][A-Za-z0-9_.+-]*')
@@ -642,7 +644,95 @@ def workaround_spans(source, policy, path):
                                  else 'runtime function declaration')
 
 
-def forbidden(source, policy, path):
+CPLUSPLUS_GUARDS = {('ifdef', '__cplusplus'), ('if', 'defined', '__cplusplus'),
+                    ('if', 'defined', '(', '__cplusplus', ')')}
+
+
+def declared_name(values):
+    """The name one declaration or definition statement declares, else None."""
+    depth, stop = 0, len(values)
+    for i, value in enumerate(values):
+        if value == '(' and depth == 0:
+            inner = values[i+1:i+2]
+            if inner and (inner[0] in CALLING or inner[0] == '*'):
+                # A pointer declarator: int (__cdecl *name)(...).
+                close = matching(values, i)
+                names = [v for v in values[i+1:close] if v.isidentifier() and v not in CALLING]
+                return names[-1] if names else None
+            before = values[i-1] if i else ''
+            return before if before.isidentifier() and before not in CALLING else None
+        if value in ('=', '[', '{') and depth == 0:
+            stop = i
+            break
+        if value in ('(', '['):
+            depth += 1
+        elif value in (')', ']'):
+            depth -= 1
+    names = [v for v in values[:stop] if v.isidentifier()]
+    return names[-1] if names else None
+
+
+def linkage_statements(values, start, stop, skip):
+    """Yield [start, end) token intervals of the statements in values[start:stop]."""
+    i = start
+    while i < stop:
+        if i in skip or values[i] == ';':
+            i += 1
+            continue
+        j = i
+        while j < stop and values[j] != ';' and j not in skip:
+            if values[j] == '{':
+                close = matching(values, j)
+                if close is None or close >= stop:
+                    return
+                j = close
+                # A function body ends its statement; an initializer runs on to its ';'.
+                if values[close+1:close+2] != (';',) and values[j-1:j] != ('=',):
+                    break
+            j += 1
+        yield i, min(j + 1, stop)
+        i = j + 1
+
+
+def c_linkage_spans(source, policy, path, c_names=frozenset()):
+    """Yield (token start, end) for C linkage given to code that is not C.
+
+    Exempt are C files and vendored libraries, `extern "C"` wrapped only around
+    #include lines (a C header), the `#ifdef __cplusplus` form of a header that
+    C code includes too, typedefs, and declarations whose name is a runtime or
+    SDK function (refused separately when hand-written) or a C name the base
+    ledger places on a C object, a prebuilt library or an import.
+    """
+    if path.startswith(policy.vendored) or path.lower().endswith('.c') or not policy.kind(path):
+        return
+    values = source.ordered
+    directive_tokens, guarded = set(), set()
+    for start, end in source.directives():
+        directive_tokens.update(range(start, end))
+        if values[start+1:end] in CPLUSPLUS_GUARDS:
+            guarded.add(end)
+    names = policy.runtime_names | policy.platform_names | c_names
+    for i in range(len(values) - 1):
+        if values[i] != 'extern' or values[i+1] != '"C"' or i in directive_tokens or i in guarded:
+            continue
+        if values[i+2:i+3] == ('{',):
+            close = matching(values, i + 2)
+            if close is None:
+                continue
+            spans = list(linkage_statements(values, i + 3, close, directive_tokens))
+        else:
+            spans = list(linkage_statements(values, i, len(values), directive_tokens))[:1]
+        for start, end in spans:
+            statement = values[start:end]
+            body = statement[2:] if statement[:2] == ('extern', '"C"') else statement
+            if 'typedef' in body or any(import_at(values, n, end) for n in range(start, end)):
+                continue
+            if declared_name(body) in names:
+                continue
+            yield start, end
+
+
+def forbidden(source, policy, path, c_names=frozenset()):
     """Yield (physical start, end, construct kind, exact lexical fingerprint)."""
     values = source.ordered
 
@@ -710,16 +800,23 @@ def forbidden(source, policy, path):
 
     for start, end, kind in workaround_spans(source, policy, path):
         yield occurrence(start, end, kind)
+    for start, end in c_linkage_spans(source, policy, path, c_names):
+        yield occurrence(start, end, 'C linkage outside C code')
 
 
 def g3(ctx):
     """Refuse forbidden C/C++ constructs added by this change."""
+    c_names = None
     for edit in ctx.edits.values():
-        candidates = list(forbidden(edit.new, ctx.policy, edit.path))
+        if c_names is None and 'extern' in edit.new.ordered and ctx.policy.kind(edit.path):
+            oid = ctx.repo.ledger_oid(ctx.base, optional=True)
+            c_names = ctx.index.base_ledger(oid).c_linkage if oid else frozenset()
+        names = c_names or frozenset()
+        candidates = list(forbidden(edit.new, ctx.policy, edit.path, names))
         if not candidates:
             continue
         added = edit.added_lines()
-        old = Counter(key for _, _, _, key in forbidden(edit.old, ctx.policy, edit.path))
+        old = Counter(key for _, _, _, key in forbidden(edit.old, ctx.policy, edit.path, names))
         allowed = ctx.policy.approved.get(edit.path, Counter())
         unchanged = Counter()
         for start, end, _, key in candidates:
@@ -737,7 +834,8 @@ def g3(ctx):
                 continue
             if old[key] and edit.old.ordered == edit.new.ordered:
                 continue
-            yield Finding(edit.path, lines[0], 'G3', f'Added {label}.', FORBIDDEN_FIX)
+            yield Finding(edit.path, lines[0], 'G3', f'Added {label}.',
+                          C_LINKAGE_FIX if label == 'C linkage outside C code' else FORBIDDEN_FIX)
 
 
 def stand_in_counts(source, path, index, base):
@@ -971,6 +1069,16 @@ class LedgerNames:
     accepted: frozenset[str]
     void_abi_rows: frozenset[tuple[int, str]]
     unique_header_void_names: frozenset[str]
+    c_linkage: frozenset[str] = frozenset()
+
+
+C_SYMBOL = re.compile(r'[_@]([A-Za-z_]\w*?)(?:@\d+)?')
+
+
+def c_object(entry):
+    """True for a ledger object compiled as C, supplied by a prebuilt library or imported."""
+    paths = [str(entry.get('tu') or ''), str(entry.get('path') or '')]
+    return any(p.lower().endswith('.c') or '.lib/' in p.lower() or p.startswith('import/') for p in paths)
 
 
 class Index:
@@ -1047,11 +1155,17 @@ class Index:
     @lru_cache(maxsize=24)
     def base_ledger(self, oid):
         _, raw = self.repo.read_blob(oid, 1 << 30)
-        accepted, native_abi = set(), set()
+        accepted, native_abi, c_linkage = set(), set(), set()
         try:
-            for row in json.loads(raw)["rows"]:
+            ledger = json.loads(raw)
+            c_objects = {o.get("object_id") for o in ledger.get("objects", ()) if isinstance(o, dict) and c_object(o)}
+            for row in ledger["rows"]:
+                in_c = row.get("object_id") in c_objects or row.get("role") == "import_thunk"
                 for spelling in (row["name"], *row["accepted_names"]):
                     accepted.update(address_components(spelling, self.policy.address))
+                    plain = C_SYMBOL.fullmatch(spelling) if in_c else None
+                    if plain:
+                        c_linkage.add(plain.group(1))
                     if (row.get("role") == "owned" and ("PAX" in spelling or "PBX" in spelling)
                             and void_abi.DECORATED.fullmatch(spelling)):
                         native_abi.add((int(row["rva"], 16), spelling))
@@ -1059,7 +1173,7 @@ class Index:
             raise ObjectError("The trusted base ledger has an invalid name table.") from error
         addresses_per_name = Counter(spelling for _, spelling in native_abi)
         unique = frozenset(spelling for spelling, count in addresses_per_name.items() if count == 1)
-        return LedgerNames(frozenset(accepted), frozenset(native_abi), unique)
+        return LedgerNames(frozenset(accepted), frozenset(native_abi), unique, frozenset(c_linkage))
 
     def accepted(self, oid):
         return self.base_ledger(oid).accepted

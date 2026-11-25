@@ -731,6 +731,23 @@ GRAPH_CHANGES += (GATES_LEDGER_RUNTIME_NAMES_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(GATES_LEDGER_RUNTIME_NAMES_GRAPH)
 
+GATES_C_LINKAGE_GRAPH = {
+    'tools/gates/README.md': ('96b1d3d3bbad05f12f115b79f23e935c84b16dfcd15d43994877fdc7b832df50', '700d97e6adebdf8ef45ac3e148fbad41c578985bf05bc5d779bc9c1ed54fa04f'),
+    'tools/gates/ledger_runtime_names.py': ('a6072aa277b6ab65eca533eb0b93d07a107f6a1cf84a831abdc75b04fefa3445', '2b62ab30dd862af75e09b48d5a056b07dbb5215da8b78edca48c8d7795d31833'),
+    'tools/gates/rules.py': ('3914923d49f6beb8bd7bc778fce5ba6a61be63930d561260c106a06d4b1f4ec0', '2f62bb2eb0479432a5490d49cfcba149c09c391c7030db1941f94bd745374a79'),
+    'tools/gates/test_gate.py': ('9260b4b952f5de58e8385a2ba733006ea9ab666db3d7f32a8b67b277d4f82a2a', 'cd63a9b29f90e880c56b2ef522c48e781a6e90341d951e4dc02e3d44a60dcabe'),
+    'tools/gates/test_ledger_runtime_names.py': ('ad9ad1dcfd805a4fb481ece2d2088cbb6a7c9de00c697d191a655e54b0094894', 'e25b0f990474fb061832c5725f400eb7d3f0aeb067b151a26f5db36290df695f'),
+    'tools/gates/test_public_delivery.py': ('d31813480912510404819a87bc9f2db13cd33c29c0fb5687ac9747f3963512b9', '96a79064509a405b0a3641d9933004c21dd3e7a724a4aa795ed2e94765c3bc1a'),
+}
+GRAPH_CHANGES += (GATES_C_LINKAGE_GRAPH,) + tuple(
+    advance_graph(previous, GATES_C_LINKAGE_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_C_LINKAGE_GRAPH.keys())
+    and all(previous[path][1] == GATES_C_LINKAGE_GRAPH[path][0]
+            for path in previous.keys() & GATES_C_LINKAGE_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_C_LINKAGE_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2

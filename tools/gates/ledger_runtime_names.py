@@ -19,13 +19,21 @@ The names come from the import directory of baseline/game.dat and the alias
 classes in ci/managed-nt2/engine/gen/import_aliases.py. A spelling hits when it
 equals a runtime name or is the C symbol of one (``_free`` for ``free``).
 
-Usage: ledger_runtime_names.py [ROOT] [--json PATH]
-Exit status: 0 no refused rows, 1 refused rows (listed), 2 unreadable input.
+It also counts the C names (``_name``, ``_name@N``, ``@name@N``) the ledger puts on
+code rows of C++ objects. Each one asks the source for ``extern "C"``, which only C
+code, a C header or a runtime hook may use, so the count may fall but not rise
+above C_NAMES_ON_CPP_CEILING. Compiler-generated rows and import thunks are not
+counted.
+
+Usage: ledger_runtime_names.py [ROOT] [--json PATH] [--list-c-names]
+Exit status: 0 no refused rows, 1 refused rows (listed) or too many C names on C++
+objects, 2 unreadable input.
 """
 
 import argparse
 import ast
 import json
+import re
 import struct
 import sys
 from pathlib import Path
@@ -44,6 +52,13 @@ ALLOWED = {
     ('0x00030830', '_free'):
         'transitional caller alias of freeBlock, the game heap free; remove once no caller spells free',
 }
+
+
+# C names on code rows of C++ objects in the committed ledger. Lower it when rows are renamed; never raise it.
+C_NAMES_ON_CPP_CEILING = 517
+COMPILER_ROLES = frozenset({'unwind', 'ehhandler', 'padding', 'jumptable', 'initializer', 'terminator',
+                            'import_thunk'})
+C_SYMBOL = re.compile(r'[_@][A-Za-z_]\w*(?:@\d+)?')
 
 
 class LedgerError(Exception):
@@ -195,10 +210,23 @@ def check(ledger, image, aliases_source):
     return refused, allowed
 
 
+def c_names_on_cpp(ledger):
+    """[(rva, name, object path)] for code rows of C++ objects whose name is a C symbol."""
+    cpp = {}
+    for entry in ledger.get('objects', ()):
+        path = entry.get('tu') or entry.get('path') or ''
+        if path.lower().endswith('.cpp'):
+            cpp[entry['object_id']] = path
+    return [(row['rva'], row['name'], cpp[row['object_id']]) for row in ledger['rows']
+            if row.get('object_id') in cpp and row.get('role') not in COMPILER_ROLES
+            and C_SYMBOL.fullmatch(row['name'])]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('root', nargs='?', default='.', help='repository checkout (default: .)')
     parser.add_argument('--json', help='also write the findings to this file')
+    parser.add_argument('--list-c-names', action='store_true', help='list the C names on C++ objects')
     args = parser.parse_args(argv)
     root = Path(args.root)
     try:
@@ -206,6 +234,7 @@ def main(argv=None):
         image = (root / 'baseline/game.dat').read_bytes()
         aliases = (root / 'ci/managed-nt2/engine/gen/import_aliases.py').read_text(encoding='utf-8')
         refused, allowed = check(ledger, image, aliases)
+        c_names = c_names_on_cpp(ledger)
     except (OSError, ValueError, KeyError, TypeError, SyntaxError, LedgerError) as error:
         print(f'ledger runtime names: {error}', file=sys.stderr)
         return 2
@@ -215,11 +244,18 @@ def main(argv=None):
         kind = 'name' if item['primary'] else 'accepted alias'
         print(f"REFUSED  {item['rva']} {kind} {item['name']} is the msvcr71 import {item['runtime_name']} "
               f"(role {item['role']}, object {item['object_id']}); give the body its own name")
+    if args.list_c_names:
+        for rva, name, path in c_names:
+            print(f'c-name   {rva} {name} ({path})')
     if args.json:
-        Path(args.json).write_text(json.dumps({'refused': refused, 'allowed': allowed}, indent=2) + '\n',
+        Path(args.json).write_text(json.dumps({'refused': refused, 'allowed': allowed,
+                                               'c_names_on_cpp': len(c_names)}, indent=2) + '\n',
                                    encoding='utf-8')
     print(f'{len(refused)} refused, {len(allowed)} allowed')
-    return 1 if refused else 0
+    over = len(c_names) > C_NAMES_ON_CPP_CEILING
+    print(f"{len(c_names)} C names on C++ objects (ceiling {C_NAMES_ON_CPP_CEILING})"
+          + ('; REFUSED: give the new rows C++ names, or record the .c path of a C object' if over else ''))
+    return 1 if refused or over else 0
 
 
 if __name__ == '__main__':

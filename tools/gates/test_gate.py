@@ -466,6 +466,52 @@ class Fixture(unittest.TestCase):
         result = self.compare({SEED: old}, {SEED: old + '#define _CRTIMP\n'})
         self.assertEqual(1, len(self.assert_gate('G3', 'fail', result)))
 
+    def test_g3_c_linkage_on_game_code_is_refused(self):
+        result = self.compare({SEED: ''},
+                              {SEED: 'extern "C" int gameHelper(int value);\n'
+                                     'extern "C" { void first(); int second; }\n'
+                                     'extern "C" int (__cdecl *callback)(float x, void *target);\n'
+                                     'extern "C" Matrix g_identity;\n'
+                                     'extern "C" int table[3] = { 1, 2, 0 };\n'
+                                     'extern "C" unsigned __stdcall threadStart(void *param)\n'
+                                     '{\n    return 0;\n}\n'})
+        findings = self.assert_gate('G3', 'fail', result)
+        self.assertEqual(['Added C linkage outside C code.'] * 6, [f['message'] for f in findings])
+        self.assertEqual([1, 2, 3, 4, 5, 6], [f['line'] for f in findings])
+        self.assertIn('ledger request', findings[0]['remedy'])
+
+    def test_g3_c_linkage_for_c_headers_and_c_objects_passes(self):
+        ledger = json.dumps({
+            'objects': [{'object_id': 'O1', 'tu': 'src/lua-4.0.1/Lua/lapi.c'},
+                        {'object_id': 'O2', 'path': 'd3dx9.lib/obj/math.obj'},
+                        {'object_id': 'O3', 'tu': 'src/Game/Thing.cpp'}],
+            'rows': [{'name': '_luaGo', 'accepted_names': [], 'object_id': 'O1'},
+                     {'name': '_D3DXHelper@4', 'accepted_names': [], 'object_id': 'O2'},
+                     {'name': '_thingHelper', 'accepted_names': [], 'object_id': 'O3'}],
+        })
+        result = self.compare({SEED: '', 'config/map.json': ledger, 'include/codec.h': '',
+                               'src/codec/decode.c': ''},
+                              {SEED: 'extern "C" {\n#include "lua.h"\n}\n'
+                                     'extern "C" void luaGo(lua_State *L, int b);\n'
+                                     'extern "C" long __stdcall D3DXHelper(int);\n'
+                                     'extern "C" typedef void (*Hook)(void);\n'
+                                     'extern int ordinary;\n',
+                               'include/codec.h': '#ifdef __cplusplus\nextern "C" {\n#endif\n'
+                                                  'int codec_is(const void *data);\n'
+                                                  '#ifdef __cplusplus\n}\n#endif\n',
+                               'src/codec/decode.c': 'int codec_is(const void *data) { return 0; }\n'})
+        self.assert_gate('G3', 'pass', result)
+        result = self.compare({SEED: '', 'config/map.json': ledger},
+                              {SEED: 'extern "C" void thingHelper(void);\n'})
+        self.assertEqual(1, len(self.assert_gate('G3', 'fail', result)))
+
+    def test_g3_existing_c_linkage_may_stay_and_be_removed(self):
+        old = 'extern "C" int gameHelper(int value);\nint x;\n'
+        result = self.compare({SEED: old}, {SEED: old + 'int y;\n'})
+        self.assert_gate('G3', 'pass', result)
+        result = self.compare({SEED: old}, {SEED: 'int gameHelper(int value);\nint x;\n'})
+        self.assert_gate('G3', 'pass', result)
+
     def test_g3_vendored_library_keeps_its_configuration_but_shims_do_not(self):
         path = 'src/stlport-4.6/STLport-4.6/src/unit.cpp'
         result = self.compare({path: 'int x;\n'},

@@ -126,6 +126,25 @@ class LintTests(unittest.TestCase):
         self.assertEqual([(a['rva'], a['name']) for a in allowed], [('0x00030830', '_free')])
 
 
+class CNamesOnCppTests(unittest.TestCase):
+    def test_c_names_count_only_code_rows_of_cpp_objects(self):
+        ledger = {
+            'objects': [{'object_id': 'P', 'tu': 'src/Game/Thing.cpp'},
+                        {'object_id': 'C', 'tu': 'src/lua-4.0.1/Lua/lapi.c'},
+                        {'object_id': 'U', 'path': 'invented/O1', 'tu': 'src/unk/O1.CPP'}],
+            'rows': [row(0x10, '_helper', object_id='P'), row(0x20, '_Thread@4', object_id='U'),
+                     row(0x30, '@fast@8', object_id='P'), row(0x40, '_lua_go', object_id='C'),
+                     row(0x50, '?helper@@YAXXZ', object_id='P'), row(0x60, '_AIL_serve@0', 'import_thunk', object_id='P'),
+                     row(0x70, '__ehhandler$?f@@YAXXZ', 'ehhandler', object_id='P'), row(0x80, '_$E1', 'initializer', object_id='P')],
+        }
+        self.assertEqual([name for _, name, _ in lint.c_names_on_cpp(ledger)], ['_helper', '_Thread@4', '@fast@8'])
+
+    @unittest.skipUnless((ROOT / 'config/map.json').is_file(), 'needs the committed ledger')
+    def test_committed_ledger_stays_under_the_ceiling(self):
+        ledger = __import__('json').loads((ROOT / 'config/map.json').read_text(encoding='utf-8'))
+        self.assertLessEqual(len(lint.c_names_on_cpp(ledger)), lint.C_NAMES_ON_CPP_CEILING)
+
+
 @unittest.skipUnless((ROOT / 'baseline/game.dat').is_file(), 'needs the reference image')
 class CommittedLedgerTests(unittest.TestCase):
     def test_committed_ledger_has_no_refused_rows(self):
