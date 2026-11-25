@@ -1,1 +1,1 @@
-{"error":false,"functions":{"0x0030BA8C":["PARTIAL",53.3,false],"0x0030BAA0":["PARTIAL",31.0,false],"0x0030BAD8":["MATCH",100,false]},"gate_sha256":[],"schema":1,"tu":"src/unk/O0030B9F3.cpp","verified":false}
+{"error":false,"functions":{"0x0030BA8C":["MISSING",0,false],"0x0030BAA0":["MISSING",0,false],"0x0030BAD8":["MATCH",100,false]},"gate_sha256":[],"schema":1,"tu":"src/unk/O0030B9F3.cpp","verified":false}

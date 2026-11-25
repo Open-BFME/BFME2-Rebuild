@@ -1,1 +1,1 @@
-{"error":false,"functions":{"0x001DB686":["PARTIAL",72.7,false],"0x001DB68C":["MATCH",100,true]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/INI/INIControlBarScheme.cpp","verified":false}
+{"error":false,"functions":{"0x001DB686":["MISSING",0,false],"0x001DB68C":["MATCH",100,true]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/INI/INIControlBarScheme.cpp","verified":false}

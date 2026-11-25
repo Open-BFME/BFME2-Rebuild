@@ -1,1 +1,1 @@
-{"error":false,"functions":{"0x001DAEB2":["WRONG_REFERENCE",0,false],"0x001DAEB8":["MATCH",100,true]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/INI/INITerrainBridge.cpp","verified":false}
+{"error":false,"functions":{"0x001DAEB2":["MISSING",0,false],"0x001DAEB8":["MATCH",100,true]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/INI/INITerrainBridge.cpp","verified":false}

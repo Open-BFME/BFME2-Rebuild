@@ -1,1 +1,1 @@
-{"error":false,"functions":{"0x00559FAC":["MISSING",0,false],"0x0055A04C":["MISSING",0,false]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/RTS/MpGameRules.cpp","verified":false}
+{"error":false,"functions":{"0x00559FAC":["MISSING",0,false],"0x0055A04C":["MATCH",100,true]},"gate_sha256":[],"schema":1,"tu":"src/Code/GameEngine/Source/Common/RTS/MpGameRules.cpp","verified":false}
