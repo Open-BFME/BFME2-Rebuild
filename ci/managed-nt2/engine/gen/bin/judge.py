@@ -237,10 +237,12 @@ def existing_include(path):
 
 def compiler_base(text):
     if re.search(r'^// cl-profile: upstream[ \t]*$',text,re.M):return ['-nologo','-c','-Gy']
+    base=BASE
     # `// cl-arch: x87`: retail's object had no /arch:SSE (x87 code and branches where SSE gives cmov); VC7.1 has no
     # flag that turns /arch:SSE off once given, so the file asks for BASE without it.
-    if re.search(r'^// cl-arch: x87[ \t]*$',text,re.M):return [f for f in BASE if f!='-arch:SSE']
-    return BASE
+    if re.search(r'^// cl-arch: x87[ \t]*$',text,re.M):base=[f for f in base if f!='-arch:SSE']
+    if re.search(r'^// cl-runtime: static[ \t]*$',text,re.M):base=['-MT' if f=='-MD' else f for f in base]
+    return base
 
 # Per-process memos for the cache lookup (each check used to verify the STLport overlay and re-hash the toolchain and
 # retail image twice). A tool digest is reused only while size, mtime, inode and ctime are all unchanged; any write
@@ -267,7 +269,13 @@ def tool_digest(path):
 # and a file that says `// msvcstl` (MSVC's own STL). A file with `// stlport46` or `// stlport` keeps its own lines.
 STL_DEFAULT_LINES='\n// stlport46\n// cl: /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_BFME_RETAIL_TREE_INSERT_LAYOUT\n'
 STL_DEFAULT_EXEMPT=('src/zlib-1.1.4/','src/lua-4.0.1/')
+# Libraries retail shows were built without /MD: their _CRTIMP calls (sprintf, atoi and the like) reach msvcr71 only
+# through jmp [import] thunks, never through call [import] (docs/anti-patterns.md). Every unit under these paths
+# compiles as if it ended with STATIC_CRT_LINE. /MT stands in for that runtime: the binary does not show /MT from /ML.
+STATIC_CRT_LIBRARIES=('src/Code/Libraries/Source/Apt/','src/fesl/','src/Code/Libraries/Source/core/')
+STATIC_CRT_LINE='\n// cl-runtime: static\n'
 def effective_source(tu,text):
+    if tu.startswith(STATIC_CRT_LIBRARIES):text+=STATIC_CRT_LINE
     if not tu.startswith('src/') or not tu.lower().endswith('.cpp') or tu.startswith(STL_DEFAULT_EXEMPT):return text
     if any(compiler_support.marker(text,m) for m in ('stlport46','stlport','msvcstl')):return text
     return text+STL_DEFAULT_LINES
@@ -1107,7 +1115,7 @@ def main(argv):
         try:
             if use_cache:
                 settings=compile_settings(source);flags,environment,roots=settings
-                group=json.dumps([flags,{k:environment.get(k,'') for k in ('INCLUDE','LIB','WINEPATH','WINEPREFIX','LANG','LC_ALL','WINEDLLOVERRIDES')},list(map(str,roots))],sort_keys=True)
+                group=json.dumps([compiler_base(source),flags,{k:environment.get(k,'') for k in ('INCLUDE','LIB','WINEPATH','WINEPREFIX','LANG','LC_ALL','WINEDLLOVERRIDES')},list(map(str,roots))],sort_keys=True)
                 if group not in contexts:contexts[group]=cache_context(source,settings,walk=remembered_namespace);context_sources[group]=source
                 request=view.request(tu,contexts[group])
             else:request=None

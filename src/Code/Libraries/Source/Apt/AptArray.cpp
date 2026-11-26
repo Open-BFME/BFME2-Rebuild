@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP= /EHs /EHc-
+// cl: /O2 /G6 /EHs /EHc-
 // cl-arch: x87
 #include "Apt/AptArray.h"
 #include "Apt/AptInteger.h"

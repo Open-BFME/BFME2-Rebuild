@@ -1,4 +1,4 @@
-// cl: /O2 /Ob1 /G6 /MD /D_CRTIMP=
+// cl: /O2 /Ob1 /G6
 #include "Apt/AptLinker.h"
 #include "Apt/AptCIH.h"
 #include "Apt/AptSpriteInstBase.h"

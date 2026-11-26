@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /DNDEBUG /MD /D_CRTIMP=
+// cl: /O2 /G6 /DNDEBUG
 // cl-arch: x87
 #include "Apt/DogmaAllocator.h"
 #include <string.h>

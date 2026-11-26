@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 // cl-arch: x87
 #include "Apt/AptNativeFunction.h"
 // The cached native method objects of the XML prototype (load 0x006F1FD0, parseXml 0x006F2080 and two more); their method names are not

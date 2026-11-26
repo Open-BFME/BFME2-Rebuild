@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 // stlport46
 #include <math.h>
 #include <stdio.h>

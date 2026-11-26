@@ -59,7 +59,14 @@ def marker(text, name):
     return re.search(r"^// " + re.escape(name) + r"[ \t]*$", text, re.M) is not None
 
 
+# Libraries built without /MD (tools/judge/bin/judge.py STATIC_CRT_LIBRARIES).
+STATIC_CRT_LIBRARIES = ("src/Code/Libraries/Source/Apt/", "src/fesl/", "src/Code/Libraries/Source/core/")
+STATIC_CRT_LINE = "\n// cl-runtime: static\n"
+
+
 def effective_source(tu, text):
+    if tu.startswith(STATIC_CRT_LIBRARIES):
+        text += STATIC_CRT_LINE
     if not tu.startswith("src/") or not tu.lower().endswith(".cpp") or tu.startswith(STL_DEFAULT_EXEMPT):
         return text
     if any(marker(text, name) for name in ("stlport46", "stlport", "msvcstl")):
@@ -70,9 +77,12 @@ def effective_source(tu, text):
 def compiler_base(text):
     if re.search(r"^// cl-profile: upstream[ \t]*$", text, re.M):
         return ["-nologo", "-c", "-Gy"]
+    base = list(BASE)
     if re.search(r"^// cl-arch: x87[ \t]*$", text, re.M):
-        return [flag for flag in BASE if flag != "-arch:SSE"]
-    return list(BASE)
+        base = [flag for flag in base if flag != "-arch:SSE"]
+    if re.search(r"^// cl-runtime: static[ \t]*$", text, re.M):
+        base = ["-MT" if flag == "-MD" else flag for flag in base]
+    return base
 
 
 def build_plan(tu, raw_bytes):

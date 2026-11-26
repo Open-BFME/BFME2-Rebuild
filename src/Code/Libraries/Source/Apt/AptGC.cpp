@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 // cl-arch: x87
 #include "Apt/AptValue.h"
 #include "Apt/AptValueGC_PoolManager.h"

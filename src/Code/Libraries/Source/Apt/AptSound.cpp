@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 #include "Apt/AptValue.h"
 #include "Apt/Assert.h"
 extern AptValue *gpUndefinedValue; // VA 0x00E18078

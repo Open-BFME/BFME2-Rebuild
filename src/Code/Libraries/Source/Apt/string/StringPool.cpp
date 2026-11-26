@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 // cl-arch: x87
 #include "Apt/StringPool.h"
 #include "Apt/AptString.h"

@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 #include "Apt/DogmaAllocator.h"
 #include "Apt/AptNativeHash.h"
 #include "Apt/AptValue.h"

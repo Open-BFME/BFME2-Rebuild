@@ -57,7 +57,10 @@ treats the two spellings as one function (`import_aliases.py`).
 A library whose `_CRTIMP` functions (`sprintf`, `atoi` and the like) are only
 ever reached through thunks was built without `/MD`. In the original that is
 true of Apt, FESL and DirtySock. Whether they used `/MT` or `/ML` is not yet
-shown. Everything else uses `/MD`.
+shown. Everything else uses `/MD`. The checker builds every unit under
+`src/Code/Libraries/Source/Apt/`, `src/fesl/` and `src/Code/Libraries/Source/core/`
+with `/MT` in place of `/MD` (`STATIC_CRT_LIBRARIES` in `tools/judge/bin/judge.py`),
+so those units need no `_CRTIMP` setting of their own.
 
 ## Per-file settings
 

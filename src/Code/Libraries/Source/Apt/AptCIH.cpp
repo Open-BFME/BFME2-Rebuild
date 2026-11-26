@@ -1,4 +1,4 @@
-// cl: /O2 /Ob1 /G6 /MD /D_CRTIMP=
+// cl: /O2 /Ob1 /G6
 // cl-arch: x87
 #include <math.h>
 #include <string.h>

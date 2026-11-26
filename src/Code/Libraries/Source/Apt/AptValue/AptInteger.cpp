@@ -1,4 +1,4 @@
-// cl: /O2 /G6 /MD /D_CRTIMP=
+// cl: /O2 /G6
 #include "Apt/AptInteger.h"
 #include "Apt/AptValueVector.h"
 #include "Apt/Assert.h"
