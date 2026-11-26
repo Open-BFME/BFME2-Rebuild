@@ -688,6 +688,27 @@ ISSUE740_LIB_TRIG_HEADER = {
         "include/Lib/trig.h": (None, "ed2c3832677714e887c1f67c160a578c3f471345bcfbdc30ef79f55db2d87c2e"),
     },
 }
+REMOVE_FAKE_D3DX_HEADERS = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/wwmath/d3dxmatrixinverse.h",
+        "include/wwmath/d3dxvec3catmullrom.h",
+        "src/code/libraries/source/wwvegas/wwmath/matrix3d.cpp",
+        "src/code/libraries/source/wwvegas/wwmath/matrix4.cpp",
+        "src/code/gameengine/source/gameclient/drawable.cpp",
+    }),
+    "files": {
+        "include/WWMath/D3DXMatrixInverse.h": (
+            "f33f2b9dda6ba88227b0530866648cfa1b052977b5303a7ab0b70cd8c137ef88",
+            None,
+        ),
+        "include/WWMath/D3DXVec3CatmullRom.h": (
+            "6d04f5c36ad46adee85e26cba9c8cf6c001192a0570aa432137d51073c0c09df",
+            None,
+        ),
+    },
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -698,6 +719,7 @@ TU_MOVE_MIGRATIONS = (
     CUT17_AND_ISSUE20_LEDGER,
     ISSUE541_CUT17_AND_ISSUE20_LEDGER,
     ISSUE740_LIB_TRIG_HEADER,
+    REMOVE_FAKE_D3DX_HEADERS,
 )
 
 

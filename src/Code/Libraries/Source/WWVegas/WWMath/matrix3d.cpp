@@ -1,4 +1,5 @@
 // cl: /O2 /Oi
+// dxsdk
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <math.h>
 #include "WWMath/Matrix3D.h"
@@ -341,7 +342,10 @@ void Matrix3D::Set(const Quaternion &rot, const Vector3 &pos)
 }
 
 #include "WWMath/Matrix4.h"
-#include "WWMath/D3DXMatrixInverse.h"
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <d3dx9math.h>
 // FUNCTION: BFME2 0x00713290 size=337 name=?Get_Inverse@Matrix3D@@QBEXAAV1@@Z evidence=N:ledger tier=A
 void Matrix3D::Get_Inverse(Matrix3D &inv) const
 {
