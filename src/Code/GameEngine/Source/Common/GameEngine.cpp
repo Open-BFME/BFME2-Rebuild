@@ -2,6 +2,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <map>
 #include "Common/GameEngine.h"
+#include "Common/GameState.h"
 #include "GameClient/GameClient.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/MessageStream.h"
@@ -174,6 +175,10 @@ const char *SkirmishGameInfo::name() const
 // FUNCTION: BFME2 0x0022CC67 size=73 name=?rva0022CC67@Rva0022CC67@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0022CEF1 size=6 name=?name@Rva0022CEF1Named@@QBEPBDXZ evidence=?:placeholder tier=A
+const char *SaveGameInfo::GetSnapshotName() const
+{
+	return "SaveGameInfo";
+}
 
 // FUNCTION: BFME2 0x0022CF4C size=34 name=??9Rva00077710Value@@QBE_NABV0@@Z evidence=N:ledger tier=A
 

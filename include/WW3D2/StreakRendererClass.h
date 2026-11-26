@@ -12,7 +12,7 @@
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/WW3D.h"
 #include "WW3D2/VertexFormats.h"
-#include "WW3D2/w3d_emitter.h"
+#include "WW3D2/w3d_file.h"
 #include "WWMath/Vector2.h"
 #include "WWMath/Vector3.h"
 

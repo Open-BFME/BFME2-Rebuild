@@ -28,7 +28,25 @@ void Rva006CC110Log(int level, const char *format, ...); // 0x006CC110 (the map 
 // FUNCTION: BFME2 0x006F39A0 size=1463 name=?bfmeSkipVH@@YAHPBEH@Z evidence=N:ledger tier=B hypothesis:K
 // FUNCTION: BFME2 0x006F3F60 size=273 name=?Rva008B60B0@@YAPBUR4Word@@PBDI@Z evidence=?:placeholder tier=B hypothesis:K
 // FUNCTION: BFME2 0x006F4080 size=65 name=?isLeapYear@@YG_NH@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+bool __stdcall isLeapYear(int year)
+{
+    bool result = false;
+    if (year % 4 == 0) {
+        if (year % 100 != 0)
+            return true;
+        result = year % 400 == 0;
+    }
+    return result;
+}
+
 // FUNCTION: BFME2 0x006F40D0 size=66 name=?daysInYear@@YGHH@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+int __stdcall daysInYear(int year)
+{
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+        return 366;
+    return 365;
+}
+
 // FUNCTION: BFME2 0x006F4120 size=112 name=?dateGetNumDaysInMonth@AptDate@@QAEHHH@Z evidence=N:ledger
 int AptDate::dateGetNumDaysInMonth(int month, int year)
 {

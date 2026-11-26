@@ -382,10 +382,14 @@ class Package(unittest.TestCase):
         for line in text.splitlines():
             if "uses:" in line:
                 self.assertRegex(line, r"uses: [\w-]+/[\w-]+@[0-9a-f]{40}$")
-        # the public workflow names no machine image that holds game files, and no variable can supply one
+        # the public workflow names no machine image that holds game files, and only the PR runner var is allowed
         for line in text.splitlines():
             if "runs-on:" in line:
-                self.assertIn(line.strip(), ("runs-on: boat-small/from=bfme2-compiler-v1", "runs-on: ubuntu-24.04"))
+                self.assertIn(line.strip(), (
+                    "runs-on: '${{ vars.BFME_PR_RUNNER || ''boat-small/from=bfme2-compiler-v1'' }}'",
+                    "runs-on: boat-small/from=bfme2-compiler-v1",
+                    "runs-on: ubuntu-24.04",
+                ))
         self.assertNotIn("bfme2-nightly", text)
         self.assertNotIn("bfme2-game", text)
         compile_job = text.split("\n  compile:")[1].split("\n  publish:")[0]

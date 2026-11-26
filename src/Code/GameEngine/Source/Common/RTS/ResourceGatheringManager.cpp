@@ -85,6 +85,10 @@ ResourceGatheringManager::ResourceGatheringManager()
 }
 
 // FUNCTION: BFME2 0x004F5BAA size=6 name=?name@ResourceGatheringManager@@QBEPBDXZ evidence=N:ledger tier=B hypothesis:cohesion
+const char *ResourceGatheringManager::GetSnapshotName() const
+{
+	return "ResourceGatheringManager";
+}
 
 // FUNCTION: BFME2 0x004F5BB0 size=148 name=??1ResourceGatheringManager@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
 ResourceGatheringManager::~ResourceGatheringManager()

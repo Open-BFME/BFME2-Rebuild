@@ -23,7 +23,7 @@
 #include "WW3D2/ShareBufferClass.h"
 #include "WW3D2/TextureAsset.h"
 #include "WW3D2/ParticlePropertyStruct.h"
-#include "WW3D2/w3d_emitter.h"
+#include "WW3D2/w3d_file.h"
 #include "WWMath/AABoxClass.h"
 #include "WWMath/Vector2.h"
 #include "WWMath/Vector3.h"

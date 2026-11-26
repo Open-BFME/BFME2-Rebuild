@@ -283,6 +283,27 @@ void GeometryInfo::calcPitches(const Coord3D &thisPos, const GeometryInfo &that,
 
 
 // FUNCTION: BFME2 0x006BEB00 size=62 name=?bfmeOneCNG@BfmeSubCNG@@QAEXPAX@Z evidence=N:ledger tier=A
+void GeometryInfo::setMaxHeightAbovePosition(Real z)
+{
+	for (_STL::vector<GeometryShape>::iterator shape = m_shapes.begin(); shape != m_shapes.end(); ++shape)
+	{
+		if (shape->m_flag)
+		{
+			switch (shape->m_type)
+			{
+				case GEOMETRY_SPHERE:
+					shape->m_majorRadius = z;
+					break;
+
+				case GEOMETRY_BOX:
+				case GEOMETRY_CYLINDER:
+					shape->m_height = z;
+					break;
+			}
+		}
+	}
+	calcBoundingStuff();
+}
 
 // FUNCTION: BFME2 0x006BEB40 size=53 name=?expandFootprint@GeometryInfo@@QAEXM@Z evidence=N:ledger tier=A
 

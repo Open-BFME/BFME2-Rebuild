@@ -340,6 +340,16 @@ Bool Pathfinder::IsPointOnRamp(const Coord3D *pos)
 // FUNCTION: BFME2 0x002E7B29 size=143 name=?cellCallback@Rva002E7B29Info@@QAEHPAVPathfindCell@@0HH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002E7BB8 size=56 name=?Rva002E7BB8Get@@YAMXZ evidence=?:placeholder tier=A
+// A phase that advances by a fixed step each call and wraps at one.
+static Real s_phase;
+
+Real Rva002E7BB8Get()
+{
+	s_phase += 0.18409087f;
+	if (s_phase > 1.0f)
+		s_phase -= 1.0f;
+	return s_phase;
+}
 
 // FUNCTION: BFME2 0x002E7BF0 size=169 name=?rva002E7BF0@Rva002EC3CEProbes@@QAE_NHH_NHHHPAX0@Z evidence=?:placeholder tier=A
 
@@ -476,6 +486,19 @@ Bool Pathfinder::IsImpassableCell(Int pos, Int layer)
 }
 
 // FUNCTION: BFME2 0x002E996E size=79 name=?IsBuildRestrictedCell@Pathfinder@@QAE_NPBVCoord3D@@_N1H@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Bool Pathfinder::IsBuildRestrictedCell(const Coord3D *pos, Bool allowWater, Bool allowBridgeImpassable, Int layer)
+{
+	PathfindCell *cell = getCell((PathfindLayerEnum)layer, pos);
+	if (!cell)
+		return true;
+
+	Bool restricted = cell->getType() == PathfindCell::CELL_CLIFF;
+	if (!allowWater)
+		restricted = restricted || cell->getType() == PathfindCell::CELL_WATER || cell->getType() == PathfindCell::CELL_WATER_7;
+	if (!allowBridgeImpassable)
+		restricted = restricted || cell->getType() == PathfindCell::CELL_BRIDGE_IMPASSABLE;
+	return restricted;
+}
 
 // FUNCTION: BFME2 0x002E99BD size=60 name=?GetCellType@Pathfinder@@QAEXHPAX00H@Z evidence=N:ledger tier=A
 // The cell at the position (the map types the out-parameters as void *): whether there is one, its type and

@@ -42,6 +42,25 @@ AptNativeFunction *g_pSliceFunction = 0;   // VA 0x00E1805C (0x006DA3A0)
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:padding
 // FUNCTION: BFME2 0x006D8AD0 size=140 name=?SetAt@AptArray@@QAEXHPAVAptValue@@@Z evidence=X:map request (no_map_row, vtable split, 1 refs) tier=B hypothesis:mm1-neighbour-callers
+void AptArray::SetAt(int nIndex, AptValue *pNewValue)
+{
+    if (!pNewValue) {
+        g_bfmeAptAssertAtE17734("pNewValue != NULL", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_Apt.h", 0x117);
+        if (g_bfmeAptBreakOnAssertAtDDC01C)
+            APT_ASSERT_BREAK();
+    }
+    if (!(nIndex < mnCapacity)) {
+        g_bfmeAptAssertAtE17734("nIndex < mnCapacity", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_Apt.h", 0x118);
+        if (g_bfmeAptBreakOnAssertAtDDC01C)
+            APT_ASSERT_BREAK();
+    }
+    AptValue *old = mpValues[nIndex];
+    pNewValue->AddRef();
+    if (old)
+        old->Release();
+    mpValues[nIndex] = pNewValue;
+}
+
 // FUNCTION: BFME2 0x006D8B60 size=1462 name=?bfmeSkipVI@@YAHPBEH@Z evidence=N:ledger tier=B hypothesis:K
 int bfmeSkipVI(const unsigned char *str, int len)
 {

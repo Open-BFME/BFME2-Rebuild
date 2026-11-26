@@ -71,6 +71,29 @@ const char *W3DGhostObjectManager::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x00063537 size=116 name=?setLocalPlayerIndex@W3DGhostObjectManager@@UAEXH@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DGhostObjectManager::setLocalPlayerIndex(Int index)
+{
+	W3DGhostObject *mod = m_usedModules;
+
+	while (mod)
+	{
+		mod->removeFromScene(m_localPlayer);
+		if (mod->m_parentSnapshots[index])
+		{
+			if (!mod->m_parentSnapshots[m_localPlayer] && mod->m_parentObject)
+				mod->removeParentObject();
+			mod->addToScene(index);
+		}
+		else if (mod->m_parentSnapshots[m_localPlayer] && mod->m_parentObject)
+		{
+			mod->restoreParentObject();
+		}
+
+		mod = mod->m_nextSystem;
+	}
+
+	m_localPlayer = index;
+}
 
 // FUNCTION: BFME2 0x000635AB size=77 name=?rva000635AB@Rva000635AB@@QAEXHH@Z evidence=?:placeholder tier=B hypothesis:cohesion
 

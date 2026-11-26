@@ -4,5 +4,11 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameLogic/Map/PolygonTrigger.h"
+
 // FUNCTION: BFME2 0x0007E03A size=19 name=?rva0007E03A@PolygonTrigger@@QAE?AURegion2D@@XZ evidence=?:placeholder tier=B hypothesis:name:invented
+Region2D PolygonTrigger::rva0007E03A()
+{
+	return m_polygon.rva0030B6E3();
+}
 

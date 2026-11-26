@@ -16,7 +16,7 @@
 #include "WWLib/always.h"
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/ParticlePropertyStruct.h"
-#include "WW3D2/w3d_emitter.h"
+#include "WW3D2/w3d_file.h"
 #include "WW3D2/W3dUtilityClass.h"
 #include "WWMath/Vector2.h"
 #include "WWMath/Vector3.h"

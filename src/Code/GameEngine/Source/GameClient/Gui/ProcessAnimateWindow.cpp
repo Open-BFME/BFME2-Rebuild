@@ -323,6 +323,37 @@ bool ProcessAnimateWindowSlideFromBottom::reverseAnimateWindow(AnimateWindow *an
 }
 
 // FUNCTION: BFME2 0x005C59AC size=140 name=?initReverseAnimateWindow@ProcessAnimateWindowSlideFromBottomTimed@@UAEXPAVAnimateWindow@@I@Z evidence=N:ledger
+void ProcessAnimateWindowSlideFromBottomTimed::initReverseAnimateWindow(AnimateWindow *animWin, unsigned int maxDelay)
+{
+	ICoord2D restPos = {0, 0};
+	ICoord2D startPos = {0, 0};
+	ICoord2D curPos = {0, 0};
+	ICoord2D endPos = {0, 0};
+	Coord2D vel(0.0f, 0.0f);
+
+	if (!animWin)
+	{
+		return;
+	}
+
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+	{
+		return;
+	}
+	restPos = animWin->m_restPos;
+	startPos.x = restPos.x;
+	curPos.y = startPos.y = restPos.y;
+
+	Int travelDistance = TheDisplay->getWidth();
+	endPos.x = curPos.x = restPos.x;
+	endPos.y = restPos.y + travelDistance;
+
+	win->winSetPosition(startPos.x, startPos.y);
+
+	UnsignedInt now = timeGetTime();
+	animWin->setAnimData(startPos, endPos, curPos, restPos, vel, now, now + m_maxDuration);
+}
 
 // FUNCTION: BFME2 0x005C5A38 size=191 name=?initAnimateWindow@ProcessAnimateWindowSlideFromBottomTimed@@UAEXPAVAnimateWindow@@@Z evidence=N:ledger
 void ProcessAnimateWindowSlideFromBottomTimed::initAnimateWindow(AnimateWindow *animWin)

@@ -4,7 +4,14 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
+#include "GameClient/View.h"
+
 // FUNCTION: BFME2 0x000851A6 size=17 name=?setOrigin@View@@UAEXHH@Z evidence=N:ledger tier=B hypothesis:name:invented
+void View::setOrigin(Int x, Int y)
+{
+	m_originX = x;
+	m_originY = y;
+}
 
 // FUNCTION: BFME2 0x000851B7 size=22 name=?rva000851B7@Rva000851B7@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:cohesion
 

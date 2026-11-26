@@ -4,7 +4,14 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
+#include "Common/Command.h"
+
 // FUNCTION: BFME2 0x002A7548 size=15 name=?rva002A7548@Rva002A7461@@QAEHH@Z evidence=?:placeholder tier=A
+Int Command::rva002A7548(Int unused)
+{
+	Int pointsInUse = m_pointsInUse;
+	return rva002A7461() - pointsInUse;
+}
 
 // FUNCTION: BFME2 0x002A7557 size=49 name=?rva002A7557@Rva002A7461@@QAE_NPAURva002A7557In@@H@Z evidence=?:placeholder tier=A
 

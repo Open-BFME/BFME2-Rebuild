@@ -8,7 +8,41 @@
 #include "Common/AtomicRefCounted.h"
 #include "Common/AsciiString.h"
 #include "Common/Xfer.h"
+#include "Common/INI.h"
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(volatile long *);
+
+// The reverb room types by name, indexed by their type value.
+static const LookupListRec environmentTypeNames[] =
+{
+	{ "None", 0 },
+	{ "Padded Cell", 1 },
+	{ "Room", 2 },
+	{ "Bathroom", 3 },
+	{ "Living Room", 4 },
+	{ "Stone Room", 5 },
+	{ "Auditorium", 6 },
+	{ "Concert Hall", 7 },
+	{ "Cave", 8 },
+	{ "Arena", 9 },
+	{ "Hangar", 10 },
+	{ "Carpeted Hallway", 11 },
+	{ "Hallway", 12 },
+	{ "Stone Corridor", 13 },
+	{ "Alley", 14 },
+	{ "Forest", 15 },
+	{ "City", 16 },
+	{ "Mountains", 17 },
+	{ "Quarry", 18 },
+	{ "Plain", 19 },
+	{ "Parking Lot", 20 },
+	{ "Sewer Pipe", 21 },
+	{ "Underwater", 22 },
+	{ "Drugged", 23 },
+	{ "Dizzy", 24 },
+	{ "Psychotic", 25 },
+};
+enum { ENVIRONMENT_TYPE_COUNT = sizeof(environmentTypeNames) / sizeof(environmentTypeNames[0]) };
+
 // FUNCTION: BFME2 0x00050C61 size=24 name=?setAudioViewType@@YAXPAVAudioReceiver@@PAX@Z evidence=N:ledger tier=B hypothesis:cohesion
 void XferAudioViewType(Xfer *xfer, void *value)
 {
@@ -148,6 +182,15 @@ bool AtomicRefCounted::tryAddRef()
 // FUNCTION: BFME2 0x00050F76 size=7 name=?get@Rva00050F76FloatField@@QBEMXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00050F7D size=35 name=?getEnvironmentName@@YAPBDH@Z evidence=N:ledger tier=B hypothesis:cohesion
+const char *getEnvironmentName(int type)
+{
+	for (unsigned int i = 0; i < ENVIRONMENT_TYPE_COUNT; ++i)
+	{
+		if (type == environmentTypeNames[i].value)
+			return environmentTypeNames[i].name;
+	}
+	return "<Unknown>";
+}
 
 // FUNCTION: BFME2 0x00050FC9 size=26 name=?rva00050FC9@Rva00050FC9@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
@@ -462,6 +505,18 @@ bool AtomicRefCounted::tryAddRef()
 // FUNCTION: BFME2 0x00055041 size=30 name=?Rva00055041AsciiHash@@YGIPBVAsciiString@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0005505F size=65 name=?getEnvironmentTypeFromName@@YAHABVAsciiString@@@Z evidence=N:ledger tier=A
+int getEnvironmentTypeFromName(const AsciiString &name)
+{
+	// Also accept the misspelling of "Hangar".
+	if (name.compareNoCase("Hanger") == 0)
+		return 10;
+	for (unsigned int i = 0; i < ENVIRONMENT_TYPE_COUNT; ++i)
+	{
+		if (name.compareNoCase(environmentTypeNames[i].name) == 0)
+			return environmentTypeNames[i].value;
+	}
+	return -1;
+}
 
 // FUNCTION: BFME2 0x000550A0 size=87 name=?rva000550A0@GlobalVolumeData@MilesAudioManager@@QAEXH@Z evidence=?:placeholder tier=A
 

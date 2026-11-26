@@ -1,3 +1,4 @@
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // cl: /O1
 // stlport46
 #include <string.h>
@@ -23,8 +24,27 @@ extern "C" __declspec(dllimport) unsigned long __stdcall WaitForSingleObject(voi
 void NetworkDebugDisplay(DebugDisplayInterface *, void *, FILE *);
 
 // FUNCTION: BFME2 0x0025C262 size=278 name=?setDisplayMode@Display@@UAE_NIII_N@Z evidence=N:ledger tier=B hypothesis:cohesion
+bool Display::setDisplayMode(unsigned int xres, unsigned int yres, unsigned int bitdepth, bool windowed)
+{
+	UnsignedInt oldDisplayHeight = getHeight();
+	UnsignedInt oldDisplayWidth = getWidth();
+	Int oldViewWidth = TheTacticalView->getWidth();
+	Int oldViewHeight = TheTacticalView->getHeight();
+	Int oldViewOriginX, oldViewOriginY;
+	TheTacticalView->getOrigin(&oldViewOriginX, &oldViewOriginY);
 
-// FUNCTION: BFME2 0x0025C378 size=25 name=?setHeight@Display@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
+	setWidth(xres);
+	setHeight(yres);
+
+	// keep the view at the same proportions of the new screen
+	TheTacticalView->setWidth((Real)oldViewWidth / (Real)oldDisplayWidth * (Real)xres);
+	TheTacticalView->setHeight((Real)oldViewHeight / (Real)oldDisplayHeight * (Real)yres);
+	TheTacticalView->setOrigin((Real)oldViewOriginX / (Real)oldDisplayWidth * (Real)xres,
+		(Real)oldViewOriginY / (Real)oldDisplayHeight * (Real)yres);
+	return true;
+}
+
+// FUNCTION: BFME2 0x0025C378 size=25 name=?setWidth@Display@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
 void Display::setWidth(unsigned int width)
 {
 	m_width = width;
@@ -33,7 +53,7 @@ void Display::setWidth(unsigned int width)
 		mouse->setMouseLimits();
 }
 
-// FUNCTION: BFME2 0x0025C391 size=25 name=?setWidth@Display@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x0025C391 size=25 name=?setHeight@Display@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
 void Display::setHeight(unsigned int height)
 {
 	m_height = height;

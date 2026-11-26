@@ -10,7 +10,7 @@
 #ifndef BFME2_AGGREGATEDEFCLASS_H
 #define BFME2_AGGREGATEDEFCLASS_H
 
-#include "WW3D2/w3d_aggregate.h"
+#include "WW3D2/w3d_file.h"
 #include "WWLib/vector.h"
 
 class ChunkLoadClass;

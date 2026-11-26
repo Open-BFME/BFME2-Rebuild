@@ -22,53 +22,204 @@ PLAIN_TYPES = {
     ("double",): "N", ("long", "double"): "O", ("bool",): "_N", ("__int64",): "_J",
     ("unsigned", "__int64"): "_K",
 }
+ELABORATED_TAGS = {
+    "class": ("V",),
+    "struct": ("U",),
+    "union": ("T",),
+    "enum": ("W4",),
+}
+TYPE_KEYWORDS = frozenset({
+    "void", "signed", "unsigned", "char", "short", "int", "long", "float", "double",
+    "bool", "__int64", "const", "volatile", "class", "struct", "union", "enum",
+    "typename", "auto", "register", "mutable", *MODIFIERS,
+})
+MAX_VARIANTS = 32
+
+
+def _parse_qualified_type(words):
+    """Parse an optionally-elaborated qualified type name into (tags, innermost-first parts)."""
+    if not words:
+        return None
+    if words[0] in ELABORATED_TAGS:
+        tags = ELABORATED_TAGS[words[0]]
+        qual = words[1:]
+    else:
+        tags = None
+        qual = words
+    if not qual or len(qual) % 2 == 0:
+        return None
+    parts = []
+    for idx, piece in enumerate(qual):
+        if idx % 2 == 0:
+            if not ID.fullmatch(piece) or piece in TYPE_KEYWORDS:
+                return None
+            parts.append(piece)
+        elif piece != "::":
+            return None
+    return tags, tuple(reversed(parts))
+
+
+def _encode_qualified_name(parts, name_table):
+    """Encode a qualified name using MSVC's 10-entry identifier back-reference table."""
+    table = list(name_table)
+    out = []
+    for part in parts:
+        if part in table:
+            out.append(str(table.index(part)))
+        else:
+            out.append(part + "@")
+            if len(table) < 10:
+                table.append(part)
+    out.append("@")
+    return "".join(out), tuple(table)
+
+
+def _encode_type_variants(tokens, name_table, *, allow_by_value_user=True):
+    """Return (variants, void_offset) where each variant is (code, backref_eligible, next_name_table)."""
+    values = tuple(token.value for token in tokens)
+    if not values or "volatile" in values:
+        return None
+    if values in PLAIN_TYPES:
+        return ((PLAIN_TYPES[values], False, name_table),), None
+    if values[-1] in ("*", "&"):
+        if values.count("*") + values.count("&") != 1:
+            return None
+        target = values[:-1]
+        if not target or target.count("const") > 1:
+            return None
+        is_const = "const" in target
+        prefix = ("PB" if is_const else "PA") if values[-1] == "*" else ("AB" if is_const else "AA")
+        base = tuple(word for word in target if word != "const")
+        if base in PLAIN_TYPES:
+            code = PLAIN_TYPES[base]
+            if values[-1] == "&" and code == "X":
+                return None
+            offset = tokens[values.index("void")].offset if code == "X" else None
+            return ((prefix + code, True, name_table),), offset
+        parsed = _parse_qualified_type(base)
+        if parsed is None:
+            return None
+        tags, parts = parsed
+        tags = tags or ("V", "U")
+        encoded_qual, next_names = _encode_qualified_name(parts, name_table)
+        return tuple((prefix + tag + encoded_qual, True, next_names) for tag in tags), None
+    if "*" in values or "&" in values:
+        return None
+    if values.count("const") > 1:
+        return None
+    base = tuple(word for word in values if word != "const")
+    if base in PLAIN_TYPES:
+        return ((PLAIN_TYPES[base], False, name_table),), None
+    if not allow_by_value_user:
+        return None
+    parsed = _parse_qualified_type(base)
+    if parsed is None:
+        return None
+    tags, parts = parsed
+    tags = tags or ("V", "U", "W4")
+    encoded_qual, next_names = _encode_qualified_name(parts, name_table)
+    return tuple((tag + encoded_qual, True, next_names) for tag in tags), None
 
 
 def encode_type(tokens):
-    values = tuple(token.value for token in tokens)
-    if values in PLAIN_TYPES:
-        return PLAIN_TYPES[values], None
-    if values[-1:] != ("*",) or values.count("*") != 1:
+    """Encode a standalone primitive or void-pointer type (legacy helper)."""
+    result = _encode_type_variants(tokens, (), allow_by_value_user=False)
+    if result is None:
         return None
-    target = values[:-1]
-    qualifier = "B" if "const" in target else "A"
-    if target.count("const") > 1:
+    variants, offset = result
+    if len(variants) != 1:
         return None
-    builtin = tuple(word for word in target if word != "const")
-    code = PLAIN_TYPES.get(builtin)
-    if code is None:
-        return None
-    offset = tokens[values.index("void")].offset if code == "X" else None
-    return "P" + qualifier + code, offset
+    return variants[0][0], offset
 
 
-def parameter_types(tokens):
+def parameter_type_variants(tokens, initial_names):
+    """Return (tuple_of_encoded_param_lists, void_offsets) with MSVC back-references."""
     if not tokens or tuple(token.value for token in tokens) == ("void",):
-        return "XZ", ()
+        return ("XZ",), ()
     pieces, start = [], 0
     for i, token in enumerate(tokens):
         if token.value == ",":
             pieces.append(tokens[start:i])
             start = i + 1
     pieces.append(tokens[start:])
-    codes, offsets = [], []
+    # States are (encoded_prefix, param_backref_table, name_backref_table).
+    states = [("", (), tuple(initial_names))]
+    offsets = []
     for part in pieces:
-        encoded = encode_type(part)
-        if encoded is None and len(part) > 1 and ID.fullmatch(part[-1].value):
-            encoded = encode_type(part[:-1])
-        if encoded is None or encoded[0] == "X":
+        if not part:
             return None
-        code, offset = encoded
-        codes.append(code)
-        if offset is not None:
-            offsets.append(offset)
-    return "".join(codes) + "@Z", tuple(offsets)
+        probe = _encode_type_variants(part, states[0][2])
+        stripped = part
+        if probe is None and len(part) > 1 and ID.fullmatch(part[-1].value) and part[-1].value not in TYPE_KEYWORDS:
+            stripped = part[:-1]
+            probe = _encode_type_variants(stripped, states[0][2])
+        if probe is None or any(code == "X" for code, _, _ in probe[0]):
+            return None
+        if probe[1] is not None:
+            offsets.append(probe[1])
+        next_states = []
+        for prefix, param_refs, name_table in states:
+            encoded = _encode_type_variants(stripped, name_table)
+            if encoded is None:
+                return None
+            variants, _ = encoded
+            for code, eligible, next_names in variants:
+                if eligible:
+                    if code in param_refs:
+                        piece_code = str(param_refs.index(code))
+                        next_refs = param_refs
+                    else:
+                        piece_code = code
+                        next_refs = (*param_refs, code) if len(param_refs) < 10 else param_refs
+                else:
+                    piece_code = code
+                    next_refs = param_refs
+                next_states.append((prefix + piece_code, next_refs, next_names))
+                if len(next_states) > MAX_VARIANTS:
+                    return None
+        states = next_states
+    return tuple(dict.fromkeys(prefix + "@Z" for prefix, _, _ in states)), tuple(offsets)
+
+
+def parameter_types(tokens):
+    """Encode a parameter list without enclosing name context (legacy helper)."""
+    result = parameter_type_variants(tokens, ())
+    if result is None:
+        return None
+    variants, offsets = result
+    if len(variants) != 1:
+        return None
+    return variants[0], offsets
+
+
+def _signature_variants(return_tokens, param_tokens, initial_names):
+    """Encode all (return_code + param_list_code) variants and collect void-pointer offsets."""
+    ret = _encode_type_variants(return_tokens, tuple(initial_names))
+    if ret is None:
+        return None
+    ret_variants, ret_offset = ret
+    spellings = []
+    param_offsets = None
+    for ret_code, _, after_ret_names in ret_variants:
+        params = parameter_type_variants(param_tokens, after_ret_names)
+        if params is None:
+            return None
+        param_codes, offsets = params
+        if param_offsets is None:
+            param_offsets = offsets
+        for param_code in param_codes:
+            spellings.append(ret_code + param_code)
+            if len(spellings) > MAX_VARIANTS:
+                return None
+    all_offsets = param_offsets if ret_offset is None else (ret_offset, *param_offsets)
+    return tuple(dict.fromkeys(spellings)), all_offsets
 
 
 def declaration(source, start, decorated):
     """Prove recognized signature slots from the entire directly annotated head."""
     values, tokens = source.ordered, source.tokens
-    name = "::".join(reversed(decorated[1].split("@")))
+    name_parts = tuple(decorated[1].split("@"))
+    name = "::".join(reversed(name_parts))
     call, encoded = decorated.group(2, 3)
     left = start
     while left < len(values) and values[left] not in {"(", "#", ";", "{", "}"}:
@@ -84,12 +235,16 @@ def declaration(source, start, decorated):
     spelled_calls = [CONVENTIONS[token.value] for token in prefixes if token.value in CONVENTIONS]
     if spelled_calls and spelled_calls != [call[-1]]:
         return ()
-    returns = encode_type(tuple(token for token in prefixes if token.value not in MODIFIERS))
     closing = matching(values, left)
-    if returns is None or closing is None:
+    if closing is None:
         return ()
-    param = parameter_types(tokens[left + 1:closing])
-    if param is None or returns[0] + param[0] != encoded:
+    return_tokens = tuple(token for token in prefixes if token.value not in MODIFIERS)
+    initial_names = tuple(dict.fromkeys(name_parts))[:10]
+    sigs = _signature_variants(return_tokens, tokens[left + 1:closing], initial_names)
+    if sigs is None:
+        return ()
+    variants, offsets = sigs
+    if encoded not in variants:
         return ()
     end = closing + 1
     while end < len(values) and values[end] in {"const", "volatile"}:
@@ -104,7 +259,7 @@ def declaration(source, start, decorated):
         return ()
     if values[end:end + 1] != ("{",):
         return ()
-    return param[1] if returns[1] is None else (returns[1], *param[1])
+    return offsets
 
 
 def candidates(source):
@@ -188,15 +343,18 @@ def member_declaration(tokens, values, start, end, owner, access):
         if storage[1]:
             access_code = chr(ord(access_code) + 4)
         call = access_code + QUALIFIERS[frozenset(suffix)] + "E"
-    returns = encode_type(tuple(token for token in prefixes if token.value not in MODIFIERS))
-    argtypes = parameter_types(tokens[left + 1:right])
-    if returns is None or argtypes is None:
+    name_parts = (values[left - 1], *reversed(owner))
+    initial_names = tuple(dict.fromkeys(name_parts))[:10]
+    return_tokens = tuple(token for token in prefixes if token.value not in MODIFIERS)
+    sigs = _signature_variants(return_tokens, tokens[left + 1:right], initial_names)
+    if sigs is None:
         return None
-    offsets = argtypes[1] if returns[1] is None else (returns[1], *argtypes[1])
+    variants, offsets = sigs
     if not offsets:
         return None
-    spelling = "?" + "@".join((values[left - 1], *reversed(owner))) + "@@" + call + returns[0] + argtypes[0]
-    return (spelling, offsets) if DECORATED.fullmatch(spelling) else None
+    prefix = "?" + "@".join(name_parts) + "@@" + call
+    spellings = tuple(prefix + sig for sig in variants if DECORATED.fullmatch(prefix + sig))
+    return (spellings, offsets) if spellings else None
 
 
 def header_candidates(source):
@@ -232,7 +390,7 @@ def header_candidates(source):
                 elif (record and ID.fullmatch(record["name"]) and not record["args"]
                       and values[close + 1:close + 2] == (";",)):
                     default = "private" if record["kind"] == "class" else "public"
-                    walk(i + 1, close, (*owner, record["name"]), default, depth + 1)
+                    walk(i + 1, close, (*owner, record["name"]), default, depth=depth + 1)
                 i = close + 1
                 if namespace or record or "(" in values[start:head_end]:
                     start = i
@@ -256,5 +414,6 @@ def header_candidates(source):
     walk(0, len(values))
     if not candidates:
         return ()
-    counts = Counter(spelling for spelling, _ in candidates)
-    return tuple(pair for pair in candidates if counts[pair[0]] == 1)
+    counts = Counter(spelling for spellings, _ in candidates for spelling in spellings)
+    return tuple((spelling, offsets) for spellings, offsets in candidates
+                 for spelling in spellings if counts[spelling] == 1)

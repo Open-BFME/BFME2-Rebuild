@@ -137,6 +137,14 @@ int DebugIOCon::Read(char *buf, int maxchar)
 
 
 // FUNCTION: BFME2 0x00040B10 size=59 name=?bfmeWriteQN@@YGXHPAXPAD@Z evidence=N:ledger tier=B hypothesis:cohesion
+void DebugIOCon::Write(StringType type, const char *src, const char *str)
+{
+	if (type == StructuredCmdReply || !str)
+		return;
+
+	unsigned long written;
+	WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), str, strlen(str), &written, NULL);
+}
 
 // FUNCTION: BFME2 0x00040B50 size=239 name=?Execute@DebugIOCon@@UAEXAAVDebug@@PBD_NIPBQBD@Z evidence=N:ledger tier=B hypothesis:cohesion
 void DebugIOCon::Execute(Debug &dbg, const char *cmd, bool structuredCmd, unsigned int argn, const char *const *argv)

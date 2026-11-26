@@ -54,9 +54,9 @@ void clipCursorToClient()
 
 // FUNCTION: BFME2 0x00043240 size=256 name=?setDisplayMode@W3DDisplay@@UAE_NIII_N@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00043340 size=108 name=?setHeight@W3DDisplay@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00043340 size=108 name=?setWidth@W3DDisplay@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x000433AC size=108 name=?setWidth@W3DDisplay@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x000433AC size=108 name=?setHeight@W3DDisplay@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00043418 size=249 name=?reset@W3DDisplay@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 
