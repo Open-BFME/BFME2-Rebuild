@@ -36,6 +36,23 @@ void StatsCollector::collectMsgStats(const GameMessage *msg)
 }
 
 // FUNCTION: BFME2 0x00437634 size=91 name=?collectScoreKeeperStats@StatsCollector@@QAEXXZ evidence=N:ledger
+void StatsCollector::collectScoreKeeperStats()
+{
+	Player *player = ThePlayerList->getLocalPlayer();
+	if (!player)
+		return;
+	ScoreKeeper *keeper = player->getScoreKeeper();
+	if (!keeper)
+		return;
+	m_scoreKeeperMoneySpent = keeper->getTotalMoneySpent();
+	m_scoreKeeperMoneyEarned = keeper->getTotalMoneyEarned();
+	m_scoreKeeperUnitsDestroyed = keeper->getTotalUnitsDestroyed();
+	m_scoreKeeperUnitsBuilt = keeper->getTotalUnitsBuilt();
+	m_scoreKeeperUnitsLost = keeper->getTotalUnitsLost();
+	m_scoreKeeperBuildingsDestroyed = keeper->getTotalBuildingsDestroyed();
+	m_scoreKeeperBuildingsBuilt = keeper->getTotalBuildingsBuilt();
+	m_scoreKeeperBuildingsLost = keeper->getTotalBuildingsLost();
+}
 
 // FUNCTION: BFME2 0x0043768F size=19 name=?startScrollTime@StatsCollector@@QAEXXZ evidence=N:ledger
 void StatsCollector::startScrollTime()
@@ -188,25 +205,4 @@ void StatsCollector::reset()
 	collectScoreKeeperStats();
 
 	m_lastUpdate = TheGameLogic->getFrame();
-}
-
-
-
-
-void StatsCollector::collectScoreKeeperStats()
-{
-	Player *player = ThePlayerList->getLocalPlayer();
-	if (!player)
-		return;
-	ScoreKeeper *keeper = player->getScoreKeeper();
-	if (!keeper)
-		return;
-	m_scoreKeeperMoneySpent = keeper->getTotalMoneySpent();
-	m_scoreKeeperMoneyEarned = keeper->getTotalMoneyEarned();
-	m_scoreKeeperUnitsDestroyed = keeper->getTotalUnitsDestroyed();
-	m_scoreKeeperUnitsBuilt = keeper->getTotalUnitsBuilt();
-	m_scoreKeeperUnitsLost = keeper->getTotalUnitsLost();
-	m_scoreKeeperBuildingsDestroyed = keeper->getTotalBuildingsDestroyed();
-	m_scoreKeeperBuildingsBuilt = keeper->getTotalBuildingsBuilt();
-	m_scoreKeeperBuildingsLost = keeper->getTotalBuildingsLost();
 }
