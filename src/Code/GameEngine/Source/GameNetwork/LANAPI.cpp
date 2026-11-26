@@ -433,6 +433,33 @@ void LANAPI::RequestGameJoinDirectConnect(void *data)
 }
 
 // FUNCTION: BFME2 0x0044A0CF size=325 name=?RequestGameLeave@LANAPI@@UAEXXZ evidence=N:ledger tier=A
+void LANAPI::RequestGameLeave()
+{
+	LANMessage msg;
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+		msg.LANMessageType = LANMessage::MSG_REQUEST_HOST_LEAVE;
+	else
+		msg.LANMessageType = LANMessage::MSG_REQUEST_GAME_LEAVE;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.GameToLeave.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.GameToLeave.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+	{
+		OnPlayerLeave(m_name);
+		removeGame(m_currentGame);
+		::delete m_currentGame;
+		m_currentGame = 0;
+		m_inLobby = true;
+	}
+	else
+	{
+		m_pendingAction = ACT_LEAVE;
+		m_expiration = timeGetTime() + m_actionTimeout;
+	}
+}
 
 // FUNCTION: BFME2 0x0044A214 size=283 name=?RequestGameAnnounce@LANAPI@@UAEXXZ evidence=N:ledger tier=A
 void LANAPI::RequestGameAnnounce()
