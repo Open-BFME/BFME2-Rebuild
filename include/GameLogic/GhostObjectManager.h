@@ -20,6 +20,8 @@ public:
 	virtual GhostObject *addGhostObject(Object *object) = 0;
 	virtual GhostObject *getFirstGhostObject() const = 0;
 
+	Int getLocalPlayerIndex() { return m_localPlayer; }
+
 protected:
 	virtual void loadPostProcess();
 	virtual const char *GetSnapshotName() const;
@@ -31,3 +33,5 @@ protected:
 };
 
 typedef char GhostObjectManagerSize[(sizeof(GhostObjectManager) == 0xC) ? 1 : -1];
+
+extern GhostObjectManager *TheGhostObjectManager;
