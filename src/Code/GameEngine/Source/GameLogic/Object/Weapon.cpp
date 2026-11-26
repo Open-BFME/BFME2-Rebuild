@@ -38,6 +38,7 @@
 #include "GameLogic/FXList.h"
 #include "GameClient/Drawable.h"
 #include "Common/ThingFactory.h"
+#include "Common/CreateMask.h"
 #include "Common/ThingTemplate.h"
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/AssistedTargetingUpdate.h"
@@ -974,6 +975,29 @@ returnCachedStatus:
 }
 
 // FUNCTION: BFME2 0x002CC4DD size=155 name=?prepareProjectileStreamForFiring@Weapon@@QAEXXZ evidence=N:ledger tier=A
+void Weapon::prepareProjectileStreamForFiring()
+{
+	const AsciiString &streamName = m_template->m_projectileStreamName;
+	if (streamName.isEmpty())
+		return;
+
+	Object *owner = TheGameLogic->findObjectByID(m_ownerID);
+	if (owner == NULL)
+	{
+		m_projectileStreamID = INVALID_ID;
+		return;
+	}
+	if (TheGameLogic->findObjectByID(m_projectileStreamID) != NULL)
+		return;
+
+	m_projectileStreamID = INVALID_ID;
+	const ThingTemplate *streamTemplate = TheThingFactory->findTemplate(streamName);
+	CreateMask mask;
+	memset(&mask, 0, sizeof(mask));
+	Object *stream = TheThingFactory->newObject(streamTemplate, owner->getControllingPlayer()->getDefaultTeam(), &mask, INVALID_ID);
+	if (stream != NULL)
+		m_projectileStreamID = stream->getID();
+}
 
 // FUNCTION: BFME2 0x002CC578 size=105 name=?getRemainingAmmo@Weapon@@QBEI_N@Z evidence=N:ledger tier=A
 
