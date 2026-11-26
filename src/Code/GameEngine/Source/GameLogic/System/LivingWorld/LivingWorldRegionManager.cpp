@@ -180,7 +180,7 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 
 // FUNCTION: BFME2 0x0020EBA0 size=249 name=?UpdateBattleMarkers@LivingWorldRegionManager@@QAEXXZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0020EC99 size=184 name=?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAULivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0020EC99 size=184 name=?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAVLivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0020ED51 size=61 name=?rva0020ED51@@YGXPAXHH@Z evidence=?:placeholder tier=A
 

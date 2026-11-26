@@ -740,6 +740,89 @@ REMOVE_FAKE_D3DX_AND_W3D_FILE_H = {
     "force_changed": REMOVE_FAKE_D3DX_HEADERS["force_changed"] | CONSOLIDATE_W3D_FILE_H["force_changed"],
     "files": advance_graph(REMOVE_FAKE_D3DX_HEADERS["files"], CONSOLIDATE_W3D_FILE_H["files"]),
 }
+LEDGER_BATCH_741_747_636_667_650 = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/gameengine/source/common/messagestream.cpp",
+        "src/code/gameengine/source/common/recorder.cpp",
+        "src/code/gameengine/source/common/rts/player.cpp",
+        "src/code/gameengine/source/gameclient/gameclientdispatch.cpp",
+        "src/code/gameengine/source/gameclient/gui/aptplayer.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptcampaignreview.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptconnectionscreen.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptdisconnectscreen.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptfiletransferpopup.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptmappreview.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptobjectivesmenu.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptonlinecustommatch.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptonlineshell.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptoptions.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptplayertribute.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/ingameui/strategicingameuicancelarmymembermovebutton.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/livingworldarmyicon.cpp",
+        "src/code/gameengine/source/gameclient/messagestream/hintspy.cpp",
+        "src/code/gameengine/source/gameclient/messagestream/hotkey.cpp",
+        "src/code/gameengine/source/gameclient/system/image.cpp",
+        "src/code/gameengine/source/gamelogic/object/update/aiupdate/giantbirdaiupdate.cpp",
+        "src/code/gameengine/source/gamelogic/system/castlesystem.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldarmy.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldbattle.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldbuildingtemplate.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldlogic.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldplayer.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldregionmanager.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldtutorialtask.cpp",
+        "src/code/gameengine/source/gamenetwork/connection.cpp",
+        "src/code/gameengine/source/gamenetwork/connectionmanager.cpp",
+        "src/code/gameengine/source/gamenetwork/netcommandmsg.cpp",
+        "src/code/gameengine/source/gamenetwork/netpacket.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/baseheightmap.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/aabtreebuilder.cpp",
+        "src/unk/g003f3f83.cpp",
+        "src/unk/g003f9edf.cpp",
+        "src/unk/g00538ed1.cpp",
+        "src/unk/o004df983.cpp",
+        "src/unk/o0056b88a.cpp",
+        "src/unk/o005e39f3.cpp",
+        "src/unk/o005f594c.cpp",
+        "src/unk/o005f5d25.cpp",
+    }),
+    "files": {
+        "config/demangled.json": (
+            "377220f3c36c898946fca178e2716885414f977ac2a99ea0c6599a73437dcb83",
+            "df0160b78f92eaf9bf0cda53feab5f7b1d1f34bdb367a78d52a1269b7db9ea73",
+        ),
+        "config/map.json": (
+            "c0ad4ebec2e66d966adeec25eda3bf2411629307b7f670e2f1c5e0d999e15aa6",
+            "2fc722d19b8f4384b544724c394f23a34c9728bad04368ac9e19f714b00e1e76",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldBattle.cpp.json": (
+            "1efb91b9eedb9d4db9afea54820c85997f3cb53b105d56f55c527603e1f0a53d",
+            "5c335d0d7e76b44b789cbc25fc4aa4a15405f4a443b8f397ee03664f075fb0c0",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldBuildingTemplate.cpp.json": (
+            "6eb4018740e2ea1b72dc5ea107f21c70b7870a67191039cccf44d992e4029ae0",
+            "4d5edd0a986b928bf50ab0925555f0b3c036c63131833d9302abe39b0bf1936f",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp.json": (
+            "2ae52bf7b6c1a7eacfd8f7aac93840e9b189c59f45abe9c0cc80676ec8b02e56",
+            "5a699e50b78c9bc1a59fa5e6c29ccde40017bc502a8c78d25f3614884e100b67",
+        ),
+        "expected/Code/GameEngineDevice/Source/W3DDevice/GameClient/BaseHeightMap.cpp.json": (
+            "ace5f5707c41798de084994847fe8bb9e7c687a380abf5369723f3a28de727dc",
+            "b80d3085e54ad0e93e2bd0b2e9e1d0a1502830b4a960129f0ac3a69622a2a533",
+        ),
+        "expected/Code/Libraries/Source/WWVegas/WW3D2/aabtreebuilder.cpp.json": (
+            "6887d403af5600d97029c3ff9c53a84fcf211dd09ff6314b9340a64505406a4b",
+            "2c5ea5a52b18bde9ec7f2200641ab1cd697e2ead2a1a05c8fb18af573e73dc77",
+        ),
+        "expected/unk/O004DF983.cpp.json": (
+            "f939aade5de589319813da4028c97f129aa15627375b3eb0deca6dd72207fb37",
+            "fd80aa35e7d934eeb5c74ccc33873232e869cc398c9bd385ca8ab96e0ff8c146",
+        ),
+    },
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -753,6 +836,7 @@ TU_MOVE_MIGRATIONS = (
     REMOVE_FAKE_D3DX_AND_W3D_FILE_H,
     REMOVE_FAKE_D3DX_HEADERS,
     CONSOLIDATE_W3D_FILE_H,
+    LEDGER_BATCH_741_747_636_667_650,
 )
 
 

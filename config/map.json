@@ -136369,7 +136369,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F00068E15",
-      "name": "?allocate@?$allocator@PAULivingWorldArmy@@@_STL@@QAEPAPAULivingWorldArmy@@IPBX@Z",
+      "name": "?allocate@?$allocator@PAVLivingWorldArmy@@@_STL@@QAEPAPAVLivingWorldArmy@@IPBX@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -136382,7 +136382,7 @@
       "parent": null,
       "object": "O0006653B",
       "accepted_names": [
-        "?allocate@?$allocator@PAULivingWorldArmy@@@_STL@@QAEPAPAULivingWorldArmy@@IPBX@Z"
+        "?allocate@?$allocator@PAVLivingWorldArmy@@@_STL@@QAEPAPAVLivingWorldArmy@@IPBX@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -154558,7 +154558,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F0007E48F",
-      "name": "??$fill_n@PAPAULivingWorldArmy@@IPAU1@@_STL@@YAPAPAULivingWorldArmy@@PAPAU1@IABQAU1@@Z",
+      "name": "??$fill_n@PAPAVLivingWorldArmy@@IPAV1@@_STL@@YAPAPAVLivingWorldArmy@@PAPAV1@IABQAV1@@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -154571,7 +154571,7 @@
       "parent": null,
       "object": "unknown",
       "accepted_names": [
-        "??$fill_n@PAPAULivingWorldArmy@@IPAU1@@_STL@@YAPAPAULivingWorldArmy@@PAPAU1@IABQAU1@@Z",
+        "??$fill_n@PAPAVLivingWorldArmy@@IPAV1@@_STL@@YAPAPAVLivingWorldArmy@@PAPAV1@IABQAV1@@Z",
         "??$fill_n@PAPAVWeaponTemplate@@IPAV1@@_STL@@YAPAPAVWeaponTemplate@@PAPAV1@IABQAV1@@Z"
       ],
       "seed_tier": "B",
@@ -386539,7 +386539,7 @@
       "role": "comdat",
       "parent_rva": "",
       "fold_group": "",
-      "name": "??4SplitChoiceStruct@AABTreeNodeClass@@QAEAAU01@ABU01@@Z",
+      "name": "??4SplitChoiceStruct@AABTreeBuilderClass@@QAEAAU01@ABU01@@Z",
       "name_evidence": "N:ledger",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AABTreeBuilderClass;N+O:special member placed in another class's object (implicit/inline)",
@@ -386552,7 +386552,7 @@
       "parent": null,
       "object": "O00198B20",
       "accepted_names": [
-        "??4SplitChoiceStruct@AABTreeNodeClass@@QAEAAU01@ABU01@@Z"
+        "??4SplitChoiceStruct@AABTreeBuilderClass@@QAEAAU01@ABU01@@Z"
       ],
       "seed_tier": "L",
       "membership_hypothesis": "hypothesis:name:L"
@@ -486595,7 +486595,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAULivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z",
+      "name": "?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAVLivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -486608,7 +486608,7 @@
       "parent": null,
       "object": "O0020E374",
       "accepted_names": [
-        "?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAULivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z"
+        "?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAVLivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -513853,7 +513853,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?bfmeSetText@BfmeAptWindowManager@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z",
+      "name": "?bfmeSetText@AptPlayer@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-among-AptPlayer|BfmeDfe6e4",
@@ -513866,6 +513866,7 @@
       "parent": null,
       "object": "O0022244D",
       "accepted_names": [
+        "?bfmeSetText@AptPlayer@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z",
         "?bfmeSetText@BfmeAptWindowManager@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z"
       ],
       "seed_tier": "A",
@@ -648771,7 +648772,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?rva002B27B5@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z",
+      "name": "?rva002B27B5@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -648784,7 +648785,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B27B5@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z"
+        "?rva002B27B5@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -648822,7 +648823,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?rva002B2834@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H@Z",
+      "name": "?rva002B2834@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -648835,7 +648836,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B2834@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H@Z"
+        "?rva002B2834@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -648872,7 +648873,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?armyMoveRequest@LivingWorldLogic@@QAEXPAULivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z",
+      "name": "?armyMoveRequest@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -648885,7 +648886,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?armyMoveRequest@LivingWorldLogic@@QAEXPAULivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z"
+        "?armyMoveRequest@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -649460,7 +649461,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?rva002B2C12@LivingWorldLogic@@QAEHPAULivingWorldArmy@@0@Z",
+      "name": "?rva002B2C12@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@0@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -649473,7 +649474,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B2C12@LivingWorldLogic@@QAEHPAULivingWorldArmy@@0@Z"
+        "?rva002B2C12@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651702,7 +651703,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?MoveArmyMember@@YAXPAULivingWorldArmy@@H0@Z",
+      "name": "?MoveArmyMember@@YAXPAVLivingWorldArmy@@H0@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -651715,7 +651716,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?MoveArmyMember@@YAXPAULivingWorldArmy@@H0@Z"
+        "?MoveArmyMember@@YAXPAVLivingWorldArmy@@H0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651727,7 +651728,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?rva002B3E50@@YAXPAURva002B3E50Range@@PAULivingWorldArmy@@1@Z",
+      "name": "?rva002B3E50@@YAXPAURva002B3E50Range@@PAVLivingWorldArmy@@1@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -651740,7 +651741,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B3E50@@YAXPAURva002B3E50Range@@PAULivingWorldArmy@@1@Z"
+        "?rva002B3E50@@YAXPAURva002B3E50Range@@PAVLivingWorldArmy@@1@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651777,7 +651778,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanDisbandArmyMember@@YA_NPAULivingWorldArmy@@H@Z",
+      "name": "?CanDisbandArmyMember@@YA_NPAVLivingWorldArmy@@H@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -651790,7 +651791,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CanDisbandArmyMember@@YA_NPAULivingWorldArmy@@H@Z"
+        "?CanDisbandArmyMember@@YA_NPAVLivingWorldArmy@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651827,7 +651828,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?DisbandArmyMember@@YAXPAULivingWorldArmy@@H@Z",
+      "name": "?DisbandArmyMember@@YAXPAVLivingWorldArmy@@H@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -651840,7 +651841,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?DisbandArmyMember@@YAXPAULivingWorldArmy@@H@Z"
+        "?DisbandArmyMember@@YAXPAVLivingWorldArmy@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651877,7 +651878,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@PBVRva004E0632@@@Z",
+      "name": "?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@PBVRva004E0632@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -651890,7 +651891,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@PBVRva004E0632@@@Z"
+        "?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@PBVRva004E0632@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651902,7 +651903,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@@Z",
+      "name": "?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -651915,7 +651916,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@@Z"
+        "?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651927,7 +651928,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F002B4076",
-      "name": "?rva002B4076@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H0@Z",
+      "name": "?rva002B4076@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H0@Z",
       "name_evidence": "X:proven (caller-this+position)",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -651940,8 +651941,8 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B4076@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H0@Z",
-        "?rva002B4076@Rva002B4076@@QAEXPAULivingWorldArmy@@H0@Z"
+        "?rva002B4076@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H0@Z",
+        "?rva002B4076@Rva002B4076@@QAEXPAVLivingWorldArmy@@H0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -651978,7 +651979,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?validateArmySummaryEntryID@@YA_NHPAULivingWorldArmy@@@Z",
+      "name": "?validateArmySummaryEntryID@@YA_NHPAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -651991,7 +651992,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?validateArmySummaryEntryID@@YA_NHPAULivingWorldArmy@@@Z"
+        "?validateArmySummaryEntryID@@YA_NHPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -652028,7 +652029,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAULivingWorldArmy@@@Z",
+      "name": "?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -652041,7 +652042,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAULivingWorldArmy@@@Z"
+        "?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -653544,7 +653545,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?getArmyFromMessage@@YA_NPAPAULivingWorldArmy@@PBVGameMessage@@H@Z",
+      "name": "?getArmyFromMessage@@YA_NPAPAVLivingWorldArmy@@PBVGameMessage@@H@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -653557,7 +653558,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?getArmyFromMessage@@YA_NPAPAULivingWorldArmy@@PBVGameMessage@@H@Z"
+        "?getArmyFromMessage@@YA_NPAPAVLivingWorldArmy@@PBVGameMessage@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -655257,7 +655258,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
+      "name": "?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -655270,7 +655271,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
+        "?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -655460,7 +655461,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
+      "name": "?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -655473,7 +655474,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
+        "?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -655562,7 +655563,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z",
+      "name": "?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -655575,7 +655576,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z"
+        "?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -655587,7 +655588,7 @@
       "role": "comdat",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
+      "name": "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
       "name_evidence": "N:ledger",
       "confidence": "high",
       "evidence": "N:template-instantiation",
@@ -655600,7 +655601,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
+        "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -655715,7 +655716,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z",
+      "name": "?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -655728,7 +655729,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z"
+        "?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -656542,7 +656543,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?rva002B783C@LivingWorldLogic@@QAEHPAULivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z",
+      "name": "?rva002B783C@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -656555,7 +656556,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B783C@LivingWorldLogic@@QAEHPAULivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z"
+        "?rva002B783C@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -656847,7 +656848,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CancelArmyMemberMove@@YAXPAULivingWorldArmy@@H@Z",
+      "name": "?CancelArmyMemberMove@@YAXPAVLivingWorldArmy@@H@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -656860,7 +656861,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CancelArmyMemberMove@@YAXPAULivingWorldArmy@@H@Z"
+        "?CancelArmyMemberMove@@YAXPAVLivingWorldArmy@@H@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -658036,7 +658037,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@HH@Z",
+      "name": "?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@HH@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -658049,7 +658050,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@HH@Z"
+        "?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@HH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -658888,7 +658889,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?visit@Rva002B29D8@@UAE_NPAULivingWorldArmy@@@Z",
+      "name": "?visit@Rva002B29D8@@UAE_NPAVLivingWorldArmy@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -658901,7 +658902,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?visit@Rva002B29D8@@UAE_NPAULivingWorldArmy@@@Z"
+        "?visit@Rva002B29D8@@UAE_NPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -659038,7 +659039,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAULivingWorldArmy@@PAUArmyMemberIDVector@@@Z",
+      "name": "?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAVLivingWorldArmy@@PAUArmyMemberIDVector@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal",
@@ -659051,7 +659052,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAULivingWorldArmy@@PAUArmyMemberIDVector@@@Z"
+        "?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAVLivingWorldArmy@@PAUArmyMemberIDVector@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -695062,7 +695063,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F002DFCF6",
-      "name": "?_M_insert_overflow@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAULivingWorldArmy@@ABQAU3@ABU__true_type@2@I_N@Z",
+      "name": "?_M_insert_overflow@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAVLivingWorldArmy@@ABQAV3@ABU__true_type@2@I_N@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -695075,7 +695076,7 @@
       "parent": null,
       "object": "O002DFA7A",
       "accepted_names": [
-        "?_M_insert_overflow@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAULivingWorldArmy@@ABQAU3@ABU__true_type@2@I_N@Z",
+        "?_M_insert_overflow@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAVLivingWorldArmy@@ABQAV3@ABU__true_type@2@I_N@Z",
         "?_M_insert_overflow@?$vector@PAVWeaponTemplate@@V?$allocator@PAVWeaponTemplate@@@_STL@@@_STL@@IAEXPAPAVWeaponTemplate@@ABQAV3@ABU__true_type@2@I_N@Z"
       ],
       "seed_tier": "B",
@@ -698278,14 +698279,14 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?AddArmy@LivingWorldPlayer@@QAEXPAULivingWorldArmy@@@Z",
+      "name": "?AddArmy@LivingWorldPlayer@@QAEXPAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
       "object_id": "retained:O002E07C6",
       "object_evidence": "X:closure",
       "accepted_names": [
-        "?AddArmy@LivingWorldPlayer@@QAEXPAULivingWorldArmy@@@Z"
+        "?AddArmy@LivingWorldPlayer@@QAEXPAVLivingWorldArmy@@@Z"
       ],
       "parent": null,
       "object": "retained:O002E07C6",
@@ -732840,7 +732841,8 @@
       "object": "O0030F463",
       "accepted_names": [
         "??0GameMessage@@QAE@PAX@Z",
-        "??0Rva0030F47A@@QAE@PAX@Z"
+        "??0Rva0030F47A@@QAE@PAX@Z",
+        "??0GameMessage@@QAE@W4Type@0@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -813144,13 +813146,14 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?xfer@AIGiantBirdAttack@@MAEXPAVXfer@@@Z",
+      "name": "?xfer@AIGiantBirdAttackState@@MAEXPAVXfer@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-among-AIGiantBirdSwoopState|AIGiantBirdAttackState",
       "object_id": "retained:O00367564",
       "object_evidence": "X:closure",
       "accepted_names": [
+        "?xfer@AIGiantBirdAttackState@@MAEXPAVXfer@@@Z",
         "?xfer@AIGiantBirdAttack@@MAEXPAVXfer@@@Z"
       ],
       "parent": null,
@@ -924877,7 +924880,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?RemoveArmy@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z",
+      "name": "?RemoveArmy@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -924890,7 +924893,7 @@
       "parent": null,
       "object": "O003F40EF",
       "accepted_names": [
-        "?RemoveArmy@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z"
+        "?RemoveArmy@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -925227,7 +925230,7 @@
       "role": "thunk",
       "parent_rva": "0x003F5647",
       "fold_group": "",
-      "name": "?rva003F59FE@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z",
+      "name": "?rva003F59FE@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z",
       "name_evidence": "X:proven (vtable+position)",
       "confidence": "high",
       "evidence": "X:this-adjustor add ecx,imm8",
@@ -925240,8 +925243,8 @@
       "parent": "0x003F5647",
       "object": "O003F40EF",
       "accepted_names": [
-        "?rva003F59FE@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z",
-        "?rva003F59FE@Rva003F59FE@@QAEXPAULivingWorldArmy@@@Z"
+        "?rva003F59FE@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z",
+        "?rva003F59FE@Rva003F59FE@@QAEXPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -1158067,7 +1158070,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F004DFCB0",
-      "name": "?push_back@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@QAEXABQAULivingWorldArmy@@@Z",
+      "name": "?push_back@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@QAEXABQAVLivingWorldArmy@@@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -1158080,7 +1158083,7 @@
       "parent": null,
       "object": "O004DF983",
       "accepted_names": [
-        "?push_back@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@QAEXABQAULivingWorldArmy@@@Z",
+        "?push_back@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@QAEXABQAVLivingWorldArmy@@@Z",
         "?push_back@?$vector@PAVLocomotor@@V?$allocator@PAVLocomotor@@@_STL@@@_STL@@QAEXABQAVLocomotor@@@Z",
         "?push_back@?$vector@PAVTunnelTracker@@V?$allocator@PAVTunnelTracker@@@_STL@@@_STL@@QAEXABQAVTunnelTracker@@@Z",
         "?push_back@?$vector@PAVWeaponTemplate@@V?$allocator@PAVWeaponTemplate@@@_STL@@@_STL@@QAEXABQAVWeaponTemplate@@@Z",
@@ -1292107,7 +1292110,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?slot4@LivingWorldTutorialTask@@UAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z",
+      "name": "?slot4@LivingWorldTutorialTask@@UAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z",
       "name_evidence": "P:provisional (wb-file)",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -1292120,8 +1292123,8 @@
       "parent": null,
       "object": "O0056A9C6",
       "accepted_names": [
-        "?slot4@LivingWorldTutorialTask@@UAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z",
-        "?slot4@Rva0056ACFF@@UAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z"
+        "?slot4@LivingWorldTutorialTask@@UAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z",
+        "?slot4@Rva0056ACFF@@UAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -1406989,7 +1406992,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Rva005E39E6@@YAHPAULivingWorldArmy@@H@Z",
+      "name": "?Rva005E39E6@@YAHPAVLivingWorldArmy@@H@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -1407002,7 +1407005,7 @@
       "parent": null,
       "object": "O005E39F3",
       "accepted_names": [
-        "?Rva005E39E6@@YAHPAULivingWorldArmy@@H@Z"
+        "?Rva005E39E6@@YAHPAVLivingWorldArmy@@H@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:mm1-contiguity-callers",
@@ -1432810,7 +1432813,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z",
+      "name": "?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1432823,7 +1432826,7 @@
       "parent": null,
       "object": "O005F5694",
       "accepted_names": [
-        "?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z"
+        "?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1432835,7 +1432838,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z",
+      "name": "?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1432848,7 +1432851,7 @@
       "parent": null,
       "object": "O005F5694",
       "accepted_names": [
-        "?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z"
+        "?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433036,7 +1433039,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanUpgradeAny@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z",
+      "name": "?CanUpgradeAny@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1433049,7 +1433052,7 @@
       "parent": null,
       "object": "O005F594C",
       "accepted_names": [
-        "?CanUpgradeAny@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z"
+        "?CanUpgradeAny@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433061,7 +1433064,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z",
+      "name": "?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1433074,7 +1433077,7 @@
       "parent": null,
       "object": "O005F594C",
       "accepted_names": [
-        "?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z"
+        "?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433086,7 +1433089,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Rva005F5A32@@YAHPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z",
+      "name": "?Rva005F5A32@@YAHPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal",
@@ -1433099,7 +1433102,7 @@
       "parent": null,
       "object": "O005F594C",
       "accepted_names": [
-        "?Rva005F5A32@@YAHPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z"
+        "?Rva005F5A32@@YAHPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433111,7 +1433114,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?SendUpgradeMessages@StrategicInGameUI@@YAXPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z",
+      "name": "?SendUpgradeMessages@StrategicInGameUI@@YAXPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1433124,7 +1433127,7 @@
       "parent": null,
       "object": "O005F594C",
       "accepted_names": [
-        "?SendUpgradeMessages@StrategicInGameUI@@YAXPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z"
+        "?SendUpgradeMessages@StrategicInGameUI@@YAXPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433336,7 +1433339,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?ShouldEnableButton@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z",
+      "name": "?ShouldEnableButton@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1433349,7 +1433352,7 @@
       "parent": null,
       "object": "O005F5D25",
       "accepted_names": [
-        "?ShouldEnableButton@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z"
+        "?ShouldEnableButton@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -1433361,7 +1433364,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?DisbandArmyMembers@StrategicInGameUI@@YAXPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z",
+      "name": "?DisbandArmyMembers@StrategicInGameUI@@YAXPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -1433374,7 +1433377,7 @@
       "parent": null,
       "object": "O005F5D25",
       "accepted_names": [
-        "?DisbandArmyMembers@StrategicInGameUI@@YAXPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z"
+        "?DisbandArmyMembers@StrategicInGameUI@@YAXPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:cohesion"
@@ -2072517,7 +2072520,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B65B7",
       "fold_group": "",
-      "name": "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
+      "name": "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D934;X:parent-by-prologue",
@@ -2072530,7 +2072533,7 @@
       "parent": "0x002B65B7",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
+        "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -2072567,7 +2072570,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B6A04",
       "fold_group": "",
-      "name": "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
+      "name": "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D97C;X:parent-by-prologue",
@@ -2072580,7 +2072583,7 @@
       "parent": "0x002B6A04",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
+        "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -2072617,7 +2072620,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B6BCF",
       "fold_group": "",
-      "name": "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
+      "name": "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D9A0;X:parent-by-prologue",
@@ -2072630,7 +2072633,7 @@
       "parent": "0x002B6BCF",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
+        "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -2072967,7 +2072970,7 @@
       "role": "ehhandler",
       "parent_rva": "",
       "fold_group": "H00776257",
-      "name": "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z",
+      "name": "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D9C4;X:parent-by-prologue;X:EH stub shared by 3 functions (ICF-folded handler and FuncInfo)",
@@ -2072980,7 +2072983,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z"
+        "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

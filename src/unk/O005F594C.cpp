@@ -6,13 +6,13 @@
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
 // FUNCTION: BFME2 0x005F594C size=28 name=?rva005F594C@Rva005F594C@@UAE?AURva005E1753Result@@XZ evidence=?:placeholder tier=B hypothesis:name:invented
 
-// FUNCTION: BFME2 0x005F5968 size=142 name=?CanUpgradeAny@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F5968 size=142 name=?CanUpgradeAny@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x005F59F6 size=60 name=?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F59F6 size=60 name=?CanCancelAnyUpgrades@StrategicInGameUI@@YA_NPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x005F5A32 size=40 name=?Rva005F5A32@@YAHPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F5A32 size=40 name=?Rva005F5A32@@YAHPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x005F5A5A size=181 name=?SendUpgradeMessages@StrategicInGameUI@@YAXPAULivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F5A5A size=181 name=?SendUpgradeMessages@StrategicInGameUI@@YAXPAVLivingWorldArmy@@PAURva005F56B0Selection@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x005F5B0F size=104 name=?SendCancelUpgradeMessages@StrategicInGameUI@@YAXPAURva005F5B0FA@@PAURva005F5B0FB@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 

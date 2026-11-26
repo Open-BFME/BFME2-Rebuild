@@ -935,7 +935,7 @@
       "role": "thunk",
       "parent_rva": "0x003F5647",
       "fold_group": "",
-      "name": "?rva003F59FE@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z",
+      "name": "?rva003F59FE@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z",
       "name_evidence": "X:proven (vtable+position)",
       "confidence": "high",
       "evidence": "X:this-adjustor add ecx,imm8",
@@ -948,8 +948,8 @@
       "parent": "0x003F5647",
       "object": "O003F40EF",
       "accepted_names": [
-        "?rva003F59FE@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z",
-        "?rva003F59FE@Rva003F59FE@@QAEXPAULivingWorldArmy@@@Z"
+        "?rva003F59FE@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z",
+        "?rva003F59FE@Rva003F59FE@@QAEXPAVLivingWorldArmy@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

@@ -6,9 +6,9 @@
 // Hypothesis rules: hypothesis:cohesion
 // FUNCTION: BFME2 0x005F5694 size=28 name=?rva005F5694@Rva005F5694@@UAE?AURva005E1753Result@@XZ evidence=?:placeholder tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x005F56B0 size=153 name=?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F56B0 size=153 name=?CanCancelMove@StrategicInGameUI@@YA_NPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x005F5749 size=143 name=?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAULivingWorldArmy@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x005F5749 size=143 name=?CancelMove@StrategicInGameUI@@YAXPAURva005F56B0Selection@@PAVLivingWorldArmy@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x005F57D8 size=26 name=?rva005F57D8@Rva005F5819@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 

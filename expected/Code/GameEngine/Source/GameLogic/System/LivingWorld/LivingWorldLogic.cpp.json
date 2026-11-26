@@ -717,7 +717,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F002B4076",
-      "name": "?rva002B4076@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H0@Z",
+      "name": "?rva002B4076@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H0@Z",
       "name_evidence": "X:proven (caller-this+position)",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -730,8 +730,8 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?rva002B4076@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H0@Z",
-        "?rva002B4076@Rva002B4076@@QAEXPAULivingWorldArmy@@H0@Z"
+        "?rva002B4076@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H0@Z",
+        "?rva002B4076@Rva002B4076@@QAEXPAVLivingWorldArmy@@H0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -1820,7 +1820,7 @@
       "role": "comdat",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
+      "name": "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
       "name_evidence": "N:ledger",
       "confidence": "high",
       "evidence": "N:template-instantiation",
@@ -1833,7 +1833,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
+        "?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -5477,7 +5477,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B65B7",
       "fold_group": "",
-      "name": "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
+      "name": "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D934;X:parent-by-prologue",
@@ -5490,7 +5490,7 @@
       "parent": "0x002B65B7",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
+        "__ehhandler$?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -5527,7 +5527,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B6A04",
       "fold_group": "",
-      "name": "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
+      "name": "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D97C;X:parent-by-prologue",
@@ -5540,7 +5540,7 @@
       "parent": "0x002B6A04",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
+        "__ehhandler$?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -5577,7 +5577,7 @@
       "role": "ehhandler",
       "parent_rva": "0x002B6BCF",
       "fold_group": "",
-      "name": "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
+      "name": "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z",
       "name_evidence": "X:parent-name",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D9A0;X:parent-by-prologue",
@@ -5590,7 +5590,7 @@
       "parent": "0x002B6BCF",
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
+        "__ehhandler$?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -5927,7 +5927,7 @@
       "role": "ehhandler",
       "parent_rva": "",
       "fold_group": "H00776257",
-      "name": "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z",
+      "name": "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x0091D9C4;X:parent-by-prologue;X:EH stub shared by 3 functions (ICF-folded handler and FuncInfo)",
@@ -5940,7 +5940,7 @@
       "parent": null,
       "object": "O002B2275",
       "accepted_names": [
-        "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z"
+        "__ehhandler$?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

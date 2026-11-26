@@ -8,7 +8,7 @@
 // FUNCTION: BFME2 0x005E39AE size=43 name=?rva005E39AE@Rva005E39AE@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x005E39D9 size=7 name=?rva005E39D9@Rva005E39D9ScalarStore@@QAEXHH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x005E39E0 size=6 name=?name@Rva005E39E0Named@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
-// FUNCTION: BFME2 0x005E39E6 size=13 name=?Rva005E39E6@@YAHPAULivingWorldArmy@@H@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x005E39E6 size=13 name=?Rva005E39E6@@YAHPAVLivingWorldArmy@@H@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x005E3AA2 size=8 name=?fwd@Rva005E3AA2Mid@@QAEXXZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x005E3AAA size=55 name=?rva005E3AAA@Rva005E39AE@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:K

@@ -615,7 +615,7 @@ void AptPlayer::update()
 
 // FUNCTION: BFME2 0x00225299 size=104 name=?rva00225299@BfmeAptWindowManager@@QAEXABVAsciiString@@ABVUnicodeString@@PAVRva00222CCB@@@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x00225301 size=116 name=?bfmeSetText@BfmeAptWindowManager@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x00225301 size=116 name=?bfmeSetText@AptPlayer@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z evidence=N:ledger tier=A
 
 
 // FUNCTION: BFME2 0x00225375 size=77 name=?rva00225375@BfmeAptWindowManager@@QAEXABVAsciiString@@0_N@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-class

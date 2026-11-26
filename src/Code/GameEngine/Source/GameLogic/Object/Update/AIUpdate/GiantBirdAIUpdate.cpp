@@ -400,7 +400,7 @@ void AIGiantBirdSwoopState::onExit(StateExitType status)
 	}
 }
 
-// FUNCTION: BFME2 0x0036937A size=33 name=?xfer@AIGiantBirdAttack@@MAEXPAVXfer@@@Z evidence=N:ledger
+// FUNCTION: BFME2 0x0036937A size=33 name=?xfer@AIGiantBirdAttackState@@MAEXPAVXfer@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0036939B size=111 name=?onExit@AIGiantBirdAttackState@@UAEXW4StateExitType@@@Z evidence=N:ledger
 

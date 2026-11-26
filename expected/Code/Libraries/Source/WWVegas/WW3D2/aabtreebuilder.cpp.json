@@ -34,7 +34,7 @@
       "role": "comdat",
       "parent_rva": "",
       "fold_group": "",
-      "name": "??4SplitChoiceStruct@AABTreeNodeClass@@QAEAAU01@ABU01@@Z",
+      "name": "??4SplitChoiceStruct@AABTreeBuilderClass@@QAEAAU01@ABU01@@Z",
       "name_evidence": "N:ledger",
       "confidence": "low",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-among-AABTreeBuilderClass;N+O:special member placed in another class's object (implicit/inline)",
@@ -47,7 +47,7 @@
       "parent": null,
       "object": "O00198B20",
       "accepted_names": [
-        "??4SplitChoiceStruct@AABTreeNodeClass@@QAEAAU01@ABU01@@Z"
+        "??4SplitChoiceStruct@AABTreeBuilderClass@@QAEAAU01@ABU01@@Z"
       ],
       "seed_tier": "L",
       "membership_hypothesis": "hypothesis:name:L"

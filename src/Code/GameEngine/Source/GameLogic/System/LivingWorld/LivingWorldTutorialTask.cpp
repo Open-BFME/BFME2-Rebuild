@@ -43,7 +43,7 @@
 
 // FUNCTION: BFME2 0x0056ABCB size=11 name=?slot1@Rva0056ACFF@@UAE_NPAURva002B4BC9Arg@@@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x0056ABD6 size=80 name=?slot4@Rva0056ACFF@@UAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x0056ABD6 size=80 name=?slot4@Rva0056ACFF@@UAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0056ACAE size=23 name=?Visit@Rva0056ACAEVisitor@@UAE_NPAVLivingWorldPendingBattle@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 

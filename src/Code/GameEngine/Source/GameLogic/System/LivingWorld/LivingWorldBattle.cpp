@@ -189,7 +189,7 @@ int LivingWorldBattle::findPlayerOnSide(int side, const LivingWorldPlayer *playe
 
 // FUNCTION: BFME2 0x003F55B6 size=32 name=?invoke@Rva003F424F@@UAE_NH@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x003F5647 size=221 name=?RemoveArmy@LivingWorldBattle@@QAEXPAULivingWorldArmy@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x003F5647 size=221 name=?RemoveArmy@LivingWorldBattle@@QAEXPAVLivingWorldArmy@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x003F58A3 size=29 name=?backwardDispatchRva003F58A3@@YAPAURva003F5B3ERecord@@PAU1@00ABURva003F5B3EEmpty@@@Z evidence=N:ledger tier=A
 

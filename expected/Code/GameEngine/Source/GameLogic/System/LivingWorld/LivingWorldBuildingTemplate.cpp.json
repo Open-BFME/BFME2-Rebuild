@@ -84,7 +84,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F002DFCF6",
-      "name": "?_M_insert_overflow@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAULivingWorldArmy@@ABQAU3@ABU__true_type@2@I_N@Z",
+      "name": "?_M_insert_overflow@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAVLivingWorldArmy@@ABQAV3@ABU__true_type@2@I_N@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -97,7 +97,7 @@
       "parent": null,
       "object": "O002DFA7A",
       "accepted_names": [
-        "?_M_insert_overflow@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAULivingWorldArmy@@ABQAU3@ABU__true_type@2@I_N@Z",
+        "?_M_insert_overflow@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@IAEXPAPAVLivingWorldArmy@@ABQAV3@ABU__true_type@2@I_N@Z",
         "?_M_insert_overflow@?$vector@PAVWeaponTemplate@@V?$allocator@PAVWeaponTemplate@@@_STL@@@_STL@@IAEXPAPAVWeaponTemplate@@ABQAV3@ABU__true_type@2@I_N@Z"
       ],
       "seed_tier": "B",

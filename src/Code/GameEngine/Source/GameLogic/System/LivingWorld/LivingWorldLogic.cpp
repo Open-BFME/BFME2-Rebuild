@@ -133,15 +133,15 @@ LivingWorldRegion *LivingWorldLogic::getRegionByID(int id)
 
 // FUNCTION: BFME2 0x002B2757 size=94 name=?rva002B2757@Rva002B2757@@QAEXPAVRva00318C79Owner@@PAMPAX@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B27B5 size=87 name=?rva002B27B5@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVRva00318C32Ret@@@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002B27B5 size=87 name=?rva002B27B5@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVRva00318C32Ret@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B280C size=40 name=?rva002B280C@Rva002B280C@@QAE_NPAUArg54@@@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B2834 size=36 name=?rva002B2834@LivingWorldLogic@@QAEXPAULivingWorldArmy@@H@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002B2834 size=36 name=?rva002B2834@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@H@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B2858 size=89 name=?AdjustArmyMoveTargetPos@LivingWorldLogic@@QAE?AURva002B2858Coord@@PAVRva00318C32Ret@@PBVCoord2D@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B28B1 size=142 name=?armyMoveRequest@LivingWorldLogic@@QAEXPAULivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B28B1 size=142 name=?armyMoveRequest@LivingWorldLogic@@QAEXPAVLivingWorldArmy@@PAVRva00318C32Ret@@PBVCoord2D@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B293F size=22 name=?rva002B293F@Rva002B293F@@QAEXXZ evidence=?:placeholder tier=A
 
@@ -195,7 +195,7 @@ void LivingWorldLogic::updateBattleMarkers()
 
 // FUNCTION: BFME2 0x002B2BEC size=38 name=?rva002B2BEC@Rva002B2BEC@@QAEXPAURva002B2BECArg@@@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B2C12 size=46 name=?rva002B2C12@LivingWorldLogic@@QAEHPAULivingWorldArmy@@0@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002B2C12 size=46 name=?rva002B2C12@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@0@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B2C40 size=75 name=?rva002B2C40@Rva002B2C40@@QAE_NPAUArg54@@0@Z evidence=?:placeholder tier=A
 
@@ -379,31 +379,31 @@ void LivingWorldLogic::cycleLocalPlayer()
 
 // FUNCTION: BFME2 0x002B3DD0 size=20 name=?rva002B3DD0@Rva002B4650@@QAEHXZ evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B3DE4 size=108 name=?MoveArmyMember@@YAXPAULivingWorldArmy@@H0@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B3DE4 size=108 name=?MoveArmyMember@@YAXPAVLivingWorldArmy@@H0@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B3E50 size=46 name=?rva002B3E50@@YAXPAURva002B3E50Range@@PAULivingWorldArmy@@1@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002B3E50 size=46 name=?rva002B3E50@@YAXPAURva002B3E50Range@@PAVLivingWorldArmy@@1@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B3E7E size=88 name=?CanDisbandArmyMember@@YA_NPAVArmySummaryEntry@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B3ED6 size=36 name=?CanDisbandArmyMember@@YA_NPAULivingWorldArmy@@H@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B3ED6 size=36 name=?CanDisbandArmyMember@@YA_NPAVLivingWorldArmy@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B3EFA size=65 name=?DisbandArmy@@YAXPAX@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B3F3B size=100 name=?DisbandArmyMember@@YAXPAULivingWorldArmy@@H@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B3F3B size=100 name=?DisbandArmyMember@@YAXPAVLivingWorldArmy@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B3F9F size=52 name=?rva002B3F9F@@YAXPAXH@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B3FD3 size=83 name=?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@PBVRva004E0632@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B3FD3 size=83 name=?MarkTroopForUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@PBVRva004E0632@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B4026 size=80 name=?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAULivingWorldArmy@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B4026 size=80 name=?CancelTroopUpgrades@LivingWorldLogic@@QAEXHPAVLivingWorldArmy@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B408F size=32 name=?validateBattleSideIndex@@YA_NHABVLivingWorldBattle@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B40AF size=19 name=?validateArmySummaryEntryID@@YA_NHPAULivingWorldArmy@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B40AF size=19 name=?validateArmySummaryEntryID@@YA_NHPAVLivingWorldArmy@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B40C2 size=70 name=?getBattleSideIndexFromMessage@@YA_NPAHPBVGameMessage@@HABVLivingWorldBattle@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B4108 size=57 name=?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAULivingWorldArmy@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B4108 size=57 name=?getArmySummaryEntryIDFromMessage@@YA_NPAHPBVGameMessage@@HPAVLivingWorldArmy@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B4141 size=179 name=?HandleSwapArmiesInBattleMessage@@YAXPAVGameMessage@@@Z evidence=N:ledger tier=A
 
@@ -557,7 +557,7 @@ LivingWorldPlayer *LivingWorldLogic::GetPlayerAtIndex(int index)
 
 // FUNCTION: BFME2 0x002B5414 size=41 name=?rva002B5414PlayerFromMessage@@YA_NPAPAVRva002E2903Player@@PBVGameMessage@@H@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B543D size=58 name=?getArmyFromMessage@@YA_NPAPAULivingWorldArmy@@PBVGameMessage@@H@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B543D size=58 name=?getArmyFromMessage@@YA_NPAPAVLivingWorldArmy@@PBVGameMessage@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B5477 size=68 name=?HandleUnmarkUnitForUpgradeMessage@@YAXPBVGameMessage@@@Z evidence=N:ledger tier=A
 
@@ -669,7 +669,7 @@ const char *RegionAwardDispute::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x002B64C7 size=240 name=?event1_1@LivingWorldLogic@@UAEXH@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002B65B7 size=438 name=?spawnArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B65B7 size=438 name=?spawnArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAVSpawnArmy@@PAURva002B6A04Player@@_N@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B676D size=240 name=?rva002B676D@LivingWorldLogic@@QAEXXZ evidence=?:placeholder tier=A
 
@@ -685,7 +685,7 @@ const char *RegionAwardDispute::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x002B69A6 size=94 name=?rva002B69A6@Rva002B69A6@@QAEXPAX@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B6A04 size=158 name=?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAULivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B6A04 size=158 name=?CreateEmptyGarrisonArmy@LivingWorldLogic@@QAEPAVLivingWorldArmy@@PAURva002B6A04Player@@PAVLivingWorldRegion@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B6AA2 size=74 name=?rva002B6AA2@Rva002B6AA2@@QAEXXZ evidence=?:placeholder tier=A
 
@@ -704,7 +704,7 @@ LivingWorldPlayer *LivingWorldLogic::findPlayer(const AsciiString &name, unsigne
 	return 0;
 }
 
-// FUNCTION: BFME2 0x002B6B5B size=116 name=?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B6B5B size=116 name=?CanMoveArmyMember_internal@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@PAVArmySummaryEntry@@0_N@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B6C9F size=70 name=?rva002B6C9F@Rva002B6C9F@@QAE_NHHH@Z evidence=?:placeholder tier=A
 
@@ -714,7 +714,7 @@ LivingWorldPlayer *LivingWorldLogic::findPlayer(const AsciiString &name, unsigne
 
 // FUNCTION: BFME2 0x002B6D85 size=63 name=?rva002B6D85@Rva002B6D85@@QAEXPAXPAURva002B3E50Range@@01@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B6DC4 size=198 name=?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAULivingWorldArmy@@PAVRva003F287F@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B6DC4 size=198 name=?GetArmoryToUpgradeTroop@LivingWorldLogic@@QAEPBVRva004E0632@@PAVArmySummaryEntry@@PAVLivingWorldArmy@@PAVRva003F287F@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B6E8A size=167 name=?GetNumUpgradeableTroopsInRegionForPlayer@LivingWorldLogic@@QAEXPAVRva003F287F@@HPAH1@Z evidence=N:ledger tier=A
 
@@ -736,7 +736,7 @@ LivingWorldPlayer *LivingWorldLogic::findPlayer(const AsciiString &name, unsigne
 
 // FUNCTION: BFME2 0x002B77F7 size=69 name=?rva002B77F7@LivingWorldLogic@@QAEIXZ evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B783C size=242 name=?rva002B783C@LivingWorldLogic@@QAEHPAULivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002B783C size=242 name=?rva002B783C@LivingWorldLogic@@QAEHPAVLivingWorldArmy@@PAVRva003F287F@@1PAVCoord2D@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002B792E size=503 name=?PrepareBattleForLoading@LivingWorldLogic@@QAEXPAVLivingWorldBattle@@@Z evidence=N:ledger tier=A
 
@@ -766,7 +766,7 @@ void LivingWorldLogic::processArmyDestroyList()
 
 // FUNCTION: BFME2 0x002B8019 size=44 name=?rva002B8019@Rva002B6C9F@@QAE_NHHH@Z evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002B8045 size=137 name=?CancelArmyMemberMove@@YAXPAULivingWorldArmy@@H@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B8045 size=137 name=?CancelArmyMemberMove@@YAXPAVLivingWorldArmy@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B8106 size=26 name=?rva002B8106@Rva002B8106@@QAEXABUBfmeStringRecord002B4DC1@@@Z evidence=?:placeholder tier=A
 
@@ -820,7 +820,7 @@ void LivingWorldLogic::removePlayerByID(int id)
 		RemovePlayer(player);
 }
 
-// FUNCTION: BFME2 0x002B8F8B size=104 name=?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@HH@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002B8F8B size=104 name=?CanMoveArmyMember@LivingWorldLogic@@QAE_NPAVLivingWorldArmy@@HH@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002B90B3 size=35 name=?reset@Rva002B90B3@@QAEXPAVRva002B74DE@@@Z evidence=?:placeholder tier=A
 
@@ -854,7 +854,7 @@ const char *LivingWorldLogic::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x002B9FDB size=951 name=?PrepareRetreats@LivingWorldLogic@@QAEXXZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002BA392 size=96 name=?visit@Rva002B29D8@@UAE_NPAULivingWorldArmy@@@Z evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x002BA392 size=96 name=?visit@Rva002B29D8@@UAE_NPAVLivingWorldArmy@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002BA3F2 size=610 name=?rva002BA3F2@LivingWorldLogic@@UAEXPBVRva002E0687@@@Z evidence=?:placeholder tier=A
 
@@ -866,7 +866,7 @@ const char *LivingWorldLogic::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x002BAA3D size=365 name=?XferPlayers@LivingWorldLogic@@QAEXPAVXfer@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x002BABAA size=159 name=?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAULivingWorldArmy@@PAUArmyMemberIDVector@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002BABAA size=159 name=?ExtractArmyDataFromSwapArmyMembersMessage@@YA_NPBVGameMessage@@PAHPAPAVLivingWorldArmy@@PAUArmyMemberIDVector@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002BAC49 size=211 name=?HandleSwapArmyMembersMessage@LivingWorldLogic@@QAEXPBVGameMessage@@@Z evidence=N:ledger tier=A
 

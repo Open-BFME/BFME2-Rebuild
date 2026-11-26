@@ -244,7 +244,7 @@ int LivingWorldPlayer::rva002E199E(const ThingTemplate *unitTemplate)
 
 // FUNCTION: BFME2 0x002E2386 size=231 name=?parseLivingWorldPlayerTemplateDefinition@@YAXPAVINI@@@Z evidence=N:ledger
 
-// FUNCTION: BFME2 0x002E246D size=151 name=?AddArmy@LivingWorldPlayer@@QAEXPAULivingWorldArmy@@@Z evidence=N:ledger
+// FUNCTION: BFME2 0x002E246D size=151 name=?AddArmy@LivingWorldPlayer@@QAEXPAVLivingWorldArmy@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x002E2612 size=125 name=?Rva002E2612Parse@@YAXPAVINI@@PAX1PBX@Z evidence=?:placeholder
 

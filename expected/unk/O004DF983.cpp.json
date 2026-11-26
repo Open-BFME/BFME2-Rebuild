@@ -84,7 +84,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F004DFCB0",
-      "name": "?push_back@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@QAEXABQAULivingWorldArmy@@@Z",
+      "name": "?push_back@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@QAEXABQAVLivingWorldArmy@@@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -97,7 +97,7 @@
       "parent": null,
       "object": "O004DF983",
       "accepted_names": [
-        "?push_back@?$vector@PAULivingWorldArmy@@V?$allocator@PAULivingWorldArmy@@@_STL@@@_STL@@QAEXABQAULivingWorldArmy@@@Z",
+        "?push_back@?$vector@PAVLivingWorldArmy@@V?$allocator@PAVLivingWorldArmy@@@_STL@@@_STL@@QAEXABQAVLivingWorldArmy@@@Z",
         "?push_back@?$vector@PAVLocomotor@@V?$allocator@PAVLocomotor@@@_STL@@@_STL@@QAEXABQAVLocomotor@@@Z",
         "?push_back@?$vector@PAVTunnelTracker@@V?$allocator@PAVTunnelTracker@@@_STL@@@_STL@@QAEXABQAVTunnelTracker@@@Z",
         "?push_back@?$vector@PAVWeaponTemplate@@V?$allocator@PAVWeaponTemplate@@@_STL@@@_STL@@QAEXABQAVWeaponTemplate@@@Z",

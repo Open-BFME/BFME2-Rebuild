@@ -309,7 +309,7 @@
       "role": "icf_fold",
       "parent_rva": "",
       "fold_group": "F00068E15",
-      "name": "?allocate@?$allocator@PAULivingWorldArmy@@@_STL@@QAEPAPAULivingWorldArmy@@IPBX@Z",
+      "name": "?allocate@?$allocator@PAVLivingWorldArmy@@@_STL@@QAEPAPAVLivingWorldArmy@@IPBX@Z",
       "name_evidence": "L:vendored=stlport-4.5.3",
       "confidence": "medium",
       "evidence": "N:fold ledger-fold-proof",
@@ -322,7 +322,7 @@
       "parent": null,
       "object": "O0006653B",
       "accepted_names": [
-        "?allocate@?$allocator@PAULivingWorldArmy@@@_STL@@QAEPAPAULivingWorldArmy@@IPBX@Z"
+        "?allocate@?$allocator@PAVLivingWorldArmy@@@_STL@@QAEPAPAVLivingWorldArmy@@IPBX@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
