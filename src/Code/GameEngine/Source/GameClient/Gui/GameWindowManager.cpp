@@ -12,6 +12,7 @@
 #include "GameClient/GadgetStaticText.h"
 #include "GameClient/GadgetTextEntry.h"
 #include "GameClient/GadgetPushButton.h"
+#include "GameClient/WindowLayout.h"
 
 // The window manager singleton (retail VA 0x00DFEF1C).
 GameWindowManager *TheWindowManager = NULL;
@@ -272,6 +273,12 @@ WindowMsgHandledType PassMessagesToParentSystem(GameWindow *window, unsigned int
 }
 
 // FUNCTION: BFME2 0x002C0A0F size=77 name=?init@GameWindowManager@@UAEXXZ evidence=N:ledger
+void GameWindowManager::init()
+{
+    TheTransitionHandler=new GameWindowTransitionsHandler;
+    TheTransitionHandler->load();
+    TheTransitionHandler->init();
+}
 
 // FUNCTION: BFME2 0x002C0A5C size=24 name=?reset@GameWindowManager@@UAEXXZ evidence=N:ledger
 void GameWindowManager::reset()
@@ -318,32 +325,160 @@ void GameWindowManager::linkWindow(GameWindow *window)
 }
 
 // FUNCTION: BFME2 0x002C0B11 size=129 name=?insertWindowAheadOf@GameWindowManager@@QAEXPAVGameWindow@@0@Z evidence=N:ledger
+void GameWindowManager::insertWindowAheadOf(GameWindow *window,GameWindow *aheadOf)
+{
+    if (!window) return;
+    if (!aheadOf) { linkWindow(window); return; }
+    GameWindow *parent = aheadOf->winGetParent();
+    if (!parent) {
+        window->m_prev=aheadOf->m_prev;
+        if (aheadOf->m_prev) aheadOf->m_prev->m_next=window;
+        else m_windowList=window;
+        aheadOf->m_prev=window;
+        window->m_next=aheadOf;
+    } else {
+        window->m_prev=aheadOf->m_prev;
+        if (aheadOf->m_prev) aheadOf->m_prev->m_next=window;
+        else parent->m_child=window;
+        aheadOf->m_prev=window;
+        window->m_parent=parent;
+        window->m_next=aheadOf;
+    }
+}
 
 // FUNCTION: BFME2 0x002C0B92 size=69 name=?unlinkWindow@GameWindowManager@@QAEXPAVGameWindow@@@Z evidence=N:ledger
+void GameWindowManager::unlinkWindow(GameWindow *window)
+{
+    if (window->m_next) window->m_next->m_prev = window->m_prev;
+    else m_windowTail = window->m_prev;
+    if (window->m_prev) window->m_prev->m_next = window->m_next;
+    else m_windowList = window->m_next;
+}
 
 // FUNCTION: BFME2 0x002C0BD7 size=110 name=?unlinkChildWindow@GameWindowManager@@QAEXPAVGameWindow@@@Z evidence=N:ledger
+void GameWindowManager::unlinkChildWindow(GameWindow *window)
+{
+    if (window->m_prev) {
+        window->m_prev->m_next=window->m_next;
+        if(window->m_next) window->m_next->m_prev=window->m_prev;
+    } else if(window->m_next) {
+        window->m_parent->m_child=window->m_next;
+        window->m_next->m_prev=window->m_prev;
+        window->m_next=0;
+    } else {
+        window->m_parent->m_child=0;
+    }
+    window->m_parent=0;
+}
 
 // FUNCTION: BFME2 0x002C0C45 size=44 name=?bfmeLess@@YA_NPBVBfmeItemEG@@0@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x002C0C71 size=33 name=?isEnabled@GameWindowManager@@UAE_NPAVGameWindow@@@Z evidence=N:ledger
+bool GameWindowManager::isEnabled(GameWindow *window)
+{
+    if (!window) return false;
+    do {
+        if (!(window->m_status & 8)) return false;
+        window = window->m_parent;
+    } while (window);
+    return true;
+}
 
 // FUNCTION: BFME2 0x002C0C92 size=33 name=?isHidden@GameWindowManager@@UAE_NPAVGameWindow@@@Z evidence=N:ledger
+bool GameWindowManager::isHidden(GameWindow *window)
+{
+    if (!window) return true;
+    do {
+        if (window->m_status & 0x10) return true;
+        window = window->m_parent;
+    } while (window);
+    return false;
+}
 
 // FUNCTION: BFME2 0x002C0CB3 size=58 name=?addWindowToParent@GameWindowManager@@UAEXPAVGameWindow@@0@Z evidence=N:ledger
+void GameWindowManager::addWindowToParent(GameWindow *window, GameWindow *parent)
+{
+    if (parent) {
+        window->m_prev = 0;
+        window->m_next = parent->m_child;
+        if (parent->m_child) parent->m_child->m_prev = window;
+        parent->m_child = window;
+        window->m_parent = parent;
+    }
+}
 
 // FUNCTION: BFME2 0x002C0CED size=80 name=?addWindowToParentAtEnd@GameWindowManager@@UAEXPAVGameWindow@@0@Z evidence=N:ledger
+void GameWindowManager::addWindowToParentAtEnd(GameWindow *window,GameWindow *parent)
+{
+    if (!parent) return;
+    window->m_prev=0;
+    window->m_next=0;
+    if (parent->m_child) {
+        GameWindow *last=parent->m_child;
+        while(last->m_next) last=last->m_next;
+        last->m_next=window;
+        window->m_prev=last;
+    } else parent->m_child=window;
+    window->m_parent=parent;
+}
 
 // FUNCTION: BFME2 0x002C0D3D size=95 name=?windowHiding@GameWindowManager@@UAEXPAVGameWindow@@@Z evidence=N:ledger
+void GameWindowManager::windowHiding(GameWindow *window)
+{
+    if (m_keyboardFocus==window) m_keyboardFocus=0;
+    if (m_modalHead && m_modalHead->window==window) winUnsetModal(window);
+    if (m_mouseCaptor==window) winCapture(0);
+    for(GameWindow *child=window->winGetChild();child;child=child->winGetNext())
+        windowHiding(child);
+}
 
 // FUNCTION: BFME2 0x002C0D9C size=52 name=?hideWindowsInRange@GameWindowManager@@UAEXPAVGameWindow@@HH_N@Z evidence=N:ledger
+void GameWindowManager::hideWindowsInRange(GameWindow *parent,int first,int last,bool hide)
+{
+    for(int id=first;id<=last;++id) {
+        GameWindow *window=winGetWindowFromId(parent,id);
+        if(window) window->winHide(hide);
+    }
+}
 
 // FUNCTION: BFME2 0x002C0DD0 size=52 name=?enableWindowsInRange@GameWindowManager@@UAEXPAVGameWindow@@HH_N@Z evidence=N:ledger
+void GameWindowManager::enableWindowsInRange(GameWindow *parent,int first,int last,bool enable)
+{
+    for(int id=first;id<=last;++id) {
+        GameWindow *window=winGetWindowFromId(parent,id);
+        if(window) window->winEnable(enable);
+    }
+}
 
 // FUNCTION: BFME2 0x002C0E04 size=23 name=?winCapture@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winCapture(GameWindow *window)
+{
+    if (m_mouseCaptor) return -4;
+    m_mouseCaptor = window;
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C0E1B size=18 name=?winRelease@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winRelease(GameWindow *window)
+{
+    if (window == m_mouseCaptor) m_mouseCaptor = 0;
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C0E2D size=80 name=?winGetWindowFromId@GameWindowManager@@UAEPAVGameWindow@@PAV2@H@Z evidence=N:ledger
+GameWindow *GameWindowManager::winGetWindowFromId(GameWindow *window,int id)
+{
+    if (!window) window=m_windowList;
+    while(window) {
+        if(window->winGetWindowId()==id) return window;
+        if(window->m_child) {
+            GameWindow *found=winGetWindowFromId(window->m_child,id);
+            if(found) return found;
+        }
+        window=window->m_next;
+    }
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C0E7D size=44 name=?winSendSystemMsg@GameWindowManager@@UAE?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z evidence=N:ledger
 WindowMsgHandledType GameWindowManager::winSendSystemMsg(GameWindow *window, unsigned int message,
@@ -364,6 +499,26 @@ WindowMsgHandledType GameWindowManager::winSendInputMsg(GameWindow *window, unsi
 }
 
 // FUNCTION: BFME2 0x002C0ED5 size=147 name=?winSetFocus@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winSetFocus(GameWindow *window)
+{
+    bool wantsFocus=false;
+    if (window && (window->winGetStatus() & 0x400)) return 0;
+    if (m_keyboardFocus && m_keyboardFocus!=window) {
+        bool wantsOldFocus;
+        winSendSystemMsg(m_keyboardFocus,23,0,(unsigned int)&wantsOldFocus);
+    }
+    m_keyboardFocus=window;
+    if(m_keyboardFocus) {
+        for(;;) {
+            winSendSystemMsg(window,23,1,(unsigned int)&wantsFocus);
+            if(wantsFocus) break;
+            window=window->winGetParent();
+            if(!window) break;
+        }
+    }
+    if(!wantsFocus) m_keyboardFocus=0;
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C0F68 size=97 name=?rva002C0F68@GameWindowManager@@UAEH_N0@Z evidence=?:placeholder
 WinInputReturnCode GameWindowManager::winProcessKey(unsigned char key, unsigned char state)
@@ -427,6 +582,29 @@ void GameWindowManager::dumpWindow(GameWindow *window)
 }
 
 // FUNCTION: BFME2 0x002C1173 size=217 name=?winDestroy@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winDestroy(GameWindow *window)
+{
+    if(!window) return -2;
+    if(window->m_status & 0x800) return 0;
+    window->m_status |= 0x800;
+    if(m_mouseCaptor==window) winRelease(window);
+    if(m_keyboardFocus==window) winSetFocus(0);
+    if(m_modalHead && window==m_modalHead->window) winUnsetModal(m_modalHead->window);
+    if(m_currMouseRgn==window) m_currMouseRgn=0;
+    if(m_grabWindow==window) m_grabWindow=0;
+    GameWindow *next;
+    for(GameWindow *child=window->m_child;child;child=next) {
+        next=child->m_next;
+        winDestroy(child);
+    }
+    if(!window->m_parent) unlinkWindow(window);
+    else unlinkChildWindow(window);
+    window->m_prev=0;
+    window->m_next=m_destroyList;
+    m_destroyList=window;
+    if(window->m_layout) window->m_layout->removeWindow(window);
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C124C size=46 name=?winDestroyAll@GameWindowManager@@UAEHXZ evidence=N:ledger
 int GameWindowManager::winDestroyAll()
@@ -447,6 +625,15 @@ int GameWindowManager::winDestroyAll()
 }
 
 // FUNCTION: BFME2 0x002C12A0 size=60 name=?winUnsetModal@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winUnsetModal(GameWindow *window)
+{
+    if (!window) return -2;
+    if (!m_modalHead || m_modalHead->window!=window) return -1;
+    ModalWindow *next=m_modalHead->next;
+    ::delete m_modalHead;
+    m_modalHead=next;
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C12DC size=51 name=?winSetLoneWindow@GameWindowManager@@UAEXPAVGameWindow@@@Z evidence=N:ledger
 void GameWindowManager::winSetLoneWindow(GameWindow *window)
@@ -482,6 +669,17 @@ void GadgetTextEntrySetText(GameWindow *window, UnicodeString text)
 }
 
 // FUNCTION: BFME2 0x002C182D size=80 name=?winSetModal@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
+int GameWindowManager::winSetModal(GameWindow *window)
+{
+    if (!window) return -2;
+    if (window->m_parent) return -3;
+    ModalWindow *entry=new ModalWindow;
+    if (!entry) return -1;
+    entry->window=window;
+    entry->next=m_modalHead;
+    m_modalHead=entry;
+    return 0;
+}
 
 // FUNCTION: BFME2 0x002C187D size=137 name=?gogoMessageBox@GameWindowManager@@UAEPAVGameWindow@@HHHHGVUnicodeString@@0P6AXXZ111@Z evidence=N:ledger
 GameWindow *GameWindowManager::gogoMessageBox(int x, int y, int width, int height,
@@ -710,56 +908,6 @@ void GameWindowManager::winPrevTab(GameWindow *window)
     winSetLoneWindow(0);
 }
 
-
-#include "GameClient/GameWindowManager.h"
-void GameWindowManager::unlinkWindow(GameWindow *window)
-{
-    if (window->m_next) window->m_next->m_prev = window->m_prev;
-    else m_windowTail = window->m_prev;
-    if (window->m_prev) window->m_prev->m_next = window->m_next;
-    else m_windowList = window->m_next;
-}
-
-bool GameWindowManager::isEnabled(GameWindow *window)
-{
-    if (!window) return false;
-    do {
-        if (!(window->m_status & 8)) return false;
-        window = window->m_parent;
-    } while (window);
-    return true;
-}
-bool GameWindowManager::isHidden(GameWindow *window)
-{
-    if (!window) return true;
-    do {
-        if (window->m_status & 0x10) return true;
-        window = window->m_parent;
-    } while (window);
-    return false;
-}
-void GameWindowManager::addWindowToParent(GameWindow *window, GameWindow *parent)
-{
-    if (parent) {
-        window->m_prev = 0;
-        window->m_next = parent->m_child;
-        if (parent->m_child) parent->m_child->m_prev = window;
-        parent->m_child = window;
-        window->m_parent = parent;
-    }
-}
-int GameWindowManager::winCapture(GameWindow *window)
-{
-    if (m_mouseCaptor) return -4;
-    m_mouseCaptor = window;
-    return 0;
-}
-int GameWindowManager::winRelease(GameWindow *window)
-{
-    if (window == m_mouseCaptor) m_mouseCaptor = 0;
-    return 0;
-}
-
 #include "GameClient/GameWindowCreationData.h"
 GameWindow *GameWindowManager::gogoGadgetProgressBar(GameWindowCreationData *info, GameFont *font, bool visual)
 {
@@ -769,158 +917,4 @@ GameWindow *GameWindowManager::gogoGadgetProgressBar(GameWindowCreationData *inf
     window->winSetOwner(info->parent);
     assignDefaultGadgetLook(window,font,visual);
     return window;
-}
-void GameWindowManager::insertWindowAheadOf(GameWindow *window,GameWindow *aheadOf)
-{
-    if (!window) return;
-    if (!aheadOf) { linkWindow(window); return; }
-    GameWindow *parent = aheadOf->winGetParent();
-    if (!parent) {
-        window->m_prev=aheadOf->m_prev;
-        if (aheadOf->m_prev) aheadOf->m_prev->m_next=window;
-        else m_windowList=window;
-        aheadOf->m_prev=window;
-        window->m_next=aheadOf;
-    } else {
-        window->m_prev=aheadOf->m_prev;
-        if (aheadOf->m_prev) aheadOf->m_prev->m_next=window;
-        else parent->m_child=window;
-        aheadOf->m_prev=window;
-        window->m_parent=parent;
-        window->m_next=aheadOf;
-    }
-}
-void GameWindowManager::unlinkChildWindow(GameWindow *window)
-{
-    if (window->m_prev) {
-        window->m_prev->m_next=window->m_next;
-        if(window->m_next) window->m_next->m_prev=window->m_prev;
-    } else if(window->m_next) {
-        window->m_parent->m_child=window->m_next;
-        window->m_next->m_prev=window->m_prev;
-        window->m_next=0;
-    } else {
-        window->m_parent->m_child=0;
-    }
-    window->m_parent=0;
-}
-void GameWindowManager::addWindowToParentAtEnd(GameWindow *window,GameWindow *parent)
-{
-    if (!parent) return;
-    window->m_prev=0;
-    window->m_next=0;
-    if (parent->m_child) {
-        GameWindow *last=parent->m_child;
-        while(last->m_next) last=last->m_next;
-        last->m_next=window;
-        window->m_prev=last;
-    } else parent->m_child=window;
-    window->m_parent=parent;
-}
-void GameWindowManager::hideWindowsInRange(GameWindow *parent,int first,int last,bool hide)
-{
-    for(int id=first;id<=last;++id) {
-        GameWindow *window=winGetWindowFromId(parent,id);
-        if(window) window->winHide(hide);
-    }
-}
-void GameWindowManager::enableWindowsInRange(GameWindow *parent,int first,int last,bool enable)
-{
-    for(int id=first;id<=last;++id) {
-        GameWindow *window=winGetWindowFromId(parent,id);
-        if(window) window->winEnable(enable);
-    }
-}
-GameWindow *GameWindowManager::winGetWindowFromId(GameWindow *window,int id)
-{
-    if (!window) window=m_windowList;
-    while(window) {
-        if(window->winGetWindowId()==id) return window;
-        if(window->m_child) {
-            GameWindow *found=winGetWindowFromId(window->m_child,id);
-            if(found) return found;
-        }
-        window=window->m_next;
-    }
-    return 0;
-}
-#include "GameClient/ModalWindow.h"
-int GameWindowManager::winSetModal(GameWindow *window)
-{
-    if (!window) return -2;
-    if (window->m_parent) return -3;
-    ModalWindow *entry=new ModalWindow;
-    if (!entry) return -1;
-    entry->window=window;
-    entry->next=m_modalHead;
-    m_modalHead=entry;
-    return 0;
-}
-int GameWindowManager::winUnsetModal(GameWindow *window)
-{
-    if (!window) return -2;
-    if (!m_modalHead || m_modalHead->window!=window) return -1;
-    ModalWindow *next=m_modalHead->next;
-    ::delete m_modalHead;
-    m_modalHead=next;
-    return 0;
-}
-void GameWindowManager::windowHiding(GameWindow *window)
-{
-    if (m_keyboardFocus==window) m_keyboardFocus=0;
-    if (m_modalHead && m_modalHead->window==window) winUnsetModal(window);
-    if (m_mouseCaptor==window) winCapture(0);
-    for(GameWindow *child=window->winGetChild();child;child=child->winGetNext())
-        windowHiding(child);
-}
-int GameWindowManager::winSetFocus(GameWindow *window)
-{
-    bool wantsFocus=false;
-    if (window && (window->winGetStatus() & 0x400)) return 0;
-    if (m_keyboardFocus && m_keyboardFocus!=window) {
-        bool wantsOldFocus;
-        winSendSystemMsg(m_keyboardFocus,23,0,(unsigned int)&wantsOldFocus);
-    }
-    m_keyboardFocus=window;
-    if(m_keyboardFocus) {
-        for(;;) {
-            winSendSystemMsg(window,23,1,(unsigned int)&wantsFocus);
-            if(wantsFocus) break;
-            window=window->winGetParent();
-            if(!window) break;
-        }
-    }
-    if(!wantsFocus) m_keyboardFocus=0;
-    return 0;
-}
-
-#include "GameClient/WindowLayout.h"
-int GameWindowManager::winDestroy(GameWindow *window)
-{
-    if(!window) return -2;
-    if(window->m_status & 0x800) return 0;
-    window->m_status |= 0x800;
-    if(m_mouseCaptor==window) winRelease(window);
-    if(m_keyboardFocus==window) winSetFocus(0);
-    if(m_modalHead && window==m_modalHead->window) winUnsetModal(m_modalHead->window);
-    if(m_currMouseRgn==window) m_currMouseRgn=0;
-    if(m_grabWindow==window) m_grabWindow=0;
-    GameWindow *next;
-    for(GameWindow *child=window->m_child;child;child=next) {
-        next=child->m_next;
-        winDestroy(child);
-    }
-    if(!window->m_parent) unlinkWindow(window);
-    else unlinkChildWindow(window);
-    window->m_prev=0;
-    window->m_next=m_destroyList;
-    m_destroyList=window;
-    if(window->m_layout) window->m_layout->removeWindow(window);
-    return 0;
-}
-void GameWindowManager::init()
-{
-    TheTransitionHandler=new GameWindowTransitionsHandler;
-    TheTransitionHandler->load();
-    TheTransitionHandler->init();
 }
