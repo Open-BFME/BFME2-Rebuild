@@ -146023,7 +146023,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture8@@@Z",
+      "name": "?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -146036,7 +146036,7 @@
       "parent": null,
       "object": "O00075343",
       "accepted_names": [
-        "?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture8@@@Z"
+        "?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:Z"
@@ -146324,7 +146324,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?endRenderToTexture@W3DShaderManager@@SAPAUIDirect3DTexture8@@XZ",
+      "name": "?endRenderToTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -146337,7 +146337,7 @@
       "parent": null,
       "object": "O00075480",
       "accepted_names": [
-        "?endRenderToTexture@W3DShaderManager@@SAPAUIDirect3DTexture8@@XZ"
+        "?endRenderToTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -146349,7 +146349,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?getRenderTexture@W3DShaderManager@@SAPAUIDirect3DTexture8@@XZ",
+      "name": "?getRenderTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -146362,7 +146362,7 @@
       "parent": null,
       "object": "O00075480",
       "accepted_names": [
-        "?getRenderTexture@W3DShaderManager@@SAPAUIDirect3DTexture8@@XZ"
+        "?getRenderTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -146675,7 +146675,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?performGlow@W3DShaderManager@@SAXMPBUGlowSampleVector@@HPAUIDirect3DTexture8@@PAUIDirect3DSurface8@@12@Z",
+      "name": "?performGlow@W3DShaderManager@@SAXMPBUGlowSampleVector@@HPAUIDirect3DTexture9@@PAUIDirect3DSurface9@@12@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -146688,7 +146688,7 @@
       "parent": null,
       "object": "O00075480",
       "accepted_names": [
-        "?performGlow@W3DShaderManager@@SAXMPBUGlowSampleVector@@HPAUIDirect3DTexture8@@PAUIDirect3DSurface8@@12@Z"
+        "?performGlow@W3DShaderManager@@SAXMPBUGlowSampleVector@@HPAUIDirect3DTexture9@@PAUIDirect3DSurface9@@12@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -250994,7 +250994,7 @@
       "accepted_names": [
         "??0W3DRadarResetSurface@@QAE@PAUBfmeItemDC@@@Z",
         "??0BfmeThingDC@@QAE@PAUBfmeItemDC@@@Z",
-        "??0SurfaceClass@@QAE@PAVIDirect3DSurface9@@@Z"
+        "??0SurfaceClass@@QAE@PAUIDirect3DSurface9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:legacy-membership"
@@ -258133,7 +258133,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT8@@@Z",
+      "name": "?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -258146,7 +258146,7 @@
       "parent": null,
       "object": "O0011C470",
       "accepted_names": [
-        "?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT8@@@Z"
+        "?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:name:invented"
@@ -260096,7 +260096,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT8@@@Z",
+      "name": "?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260109,7 +260109,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT8@@@Z"
+        "?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT9@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260480,7 +260480,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?_Create_DX8_Surface@DXWrapper@@SAPAVIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z",
+      "name": "?_Create_DX8_Surface@DXWrapper@@SAPAUIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260493,7 +260493,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?_Create_DX8_Surface@DXWrapper@@SAPAVIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z"
+        "?_Create_DX8_Surface@DXWrapper@@SAPAUIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260576,7 +260576,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT8@@@Z",
+      "name": "?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260589,7 +260589,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT8@@@Z"
+        "?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT9@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260672,7 +260672,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?_Get_DX8_Front_Buffer@DXWrapper@@SAPAVIDirect3DSurface9@@XZ",
+      "name": "?_Get_DX8_Front_Buffer@DXWrapper@@SAPAUIDirect3DSurface9@@XZ",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260685,7 +260685,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?_Get_DX8_Front_Buffer@DXWrapper@@SAPAVIDirect3DSurface9@@XZ"
+        "?_Get_DX8_Front_Buffer@DXWrapper@@SAPAUIDirect3DSurface9@@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260793,7 +260793,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@_N@Z",
+      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@_N@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260806,7 +260806,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@_N@Z"
+        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@_N@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260818,7 +260818,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@0@Z",
+      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@0@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260831,7 +260831,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@0@Z"
+        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -260866,7 +260866,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain8@@PAX@Z",
+      "name": "?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain9@@PAX@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -260879,7 +260879,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain8@@PAX@Z"
+        "?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain9@@PAX@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -264944,7 +264944,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain8@@@Z",
+      "name": "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -264957,7 +264957,7 @@
       "parent": null,
       "object": "O0011CC60",
       "accepted_names": [
-        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain8@@@Z"
+        "?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain9@@@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -272305,7 +272305,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice8@@@Z",
+      "name": "?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272318,7 +272318,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice8@@@Z"
+        "?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272401,7 +272401,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z",
+      "name": "?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272414,7 +272414,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z"
+        "?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272449,7 +272449,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z",
+      "name": "?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272462,7 +272462,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z"
+        "?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272497,7 +272497,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z",
+      "name": "?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272510,7 +272510,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z"
+        "?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272687,7 +272687,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z",
+      "name": "?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class;X:unreached-bytes=14",
@@ -272700,7 +272700,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z"
+        "?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272781,7 +272781,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z",
+      "name": "?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272794,7 +272794,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z"
+        "?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272829,7 +272829,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z",
+      "name": "?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272842,7 +272842,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z"
+        "?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -272877,7 +272877,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z",
+      "name": "?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -272890,7 +272890,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z"
+        "?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -273088,7 +273088,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -273101,7 +273101,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -273136,7 +273136,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-with-own-class",
@@ -273149,7 +273149,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:K"
@@ -273184,7 +273184,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-with-own-class",
@@ -273197,7 +273197,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:Z"
@@ -273232,7 +273232,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "??0DX8Caps@@QAE@PAUIDirect3D8@@ABU_D3DCAPS8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "??0DX8Caps@@QAE@PAUIDirect3D9@@ABU_D3DCAPS9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;N:special-member(may be implicit);O:placed-with-own-class",
@@ -273245,7 +273245,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "??0DX8Caps@@QAE@PAUIDirect3D8@@ABU_D3DCAPS8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "??0DX8Caps@@QAE@PAUIDirect3D9@@ABU_D3DCAPS9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:Z"
@@ -277087,7 +277087,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture8@@XZ",
+      "name": "?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture9@@XZ",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-among-TextureRecolorView|BfmeThingIJ",
@@ -277100,7 +277100,7 @@
       "parent": null,
       "object": "O001310CF",
       "accepted_names": [
-        "?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture8@@XZ"
+        "?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture9@@XZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null
@@ -289544,7 +289544,7 @@
       "role": "owned",
       "parent_rva": "",
       "fold_group": "",
-      "name": "?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL8@@@Z",
+      "name": "?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL9@@@Z",
       "name_evidence": "N:ledger",
       "confidence": "medium",
       "evidence": "?:no-compiler-generated-signal;O:placed-among-BufferStraw|VertexMaterialClass",
@@ -289557,7 +289557,7 @@
       "parent": null,
       "object": "O0013C930",
       "accepted_names": [
-        "?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL8@@@Z"
+        "?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:name:invented"
@@ -1910924,7 +1910924,7 @@
       "role": "ehhandler",
       "parent_rva": "",
       "fold_group": "H0076564A",
-      "name": "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x00909948;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
@@ -1910937,7 +1910937,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:Z"

@@ -13,8 +13,8 @@
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented
 // FUNCTION: BFME2 0x0006615F size=126 name=?Set_DX8_Render_State@DXWrapper@@SAXKI@Z evidence=N:ledger tier=B hypothesis:Z
 // The device is a Direct3D 9 device behind Direct3D 8's name: SetRenderState is slot 57 (+0xE4), SetTextureStageState slot 67 (+0x10C).
-typedef HRESULT(__stdcall *DX8Wrapper_SetRenderStateFn)(IDirect3DDevice8 *, DWORD, DWORD);
-typedef HRESULT(__stdcall *DX8Wrapper_SetTextureStageStateFn)(IDirect3DDevice8 *, DWORD, DWORD, DWORD);
+typedef HRESULT(__stdcall *DX8Wrapper_SetRenderStateFn)(IDirect3DDevice9 *, DWORD, DWORD);
+typedef HRESULT(__stdcall *DX8Wrapper_SetTextureStageStateFn)(IDirect3DDevice9 *, DWORD, DWORD, DWORD);
 
 void DXWrapper::Set_DX8_Render_State(unsigned long state, unsigned value)
 {

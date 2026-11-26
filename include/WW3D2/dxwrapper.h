@@ -11,18 +11,17 @@
 //   0x00139290 are their emitted copies).
 // - Clear takes a third bool (clear_stencil) before the colour.
 // - The Draw_Triangles/Draw_Strip family takes plain `unsigned` parameters (map names SAXIIIII/SAXIIII).
-// - The device behind D3DDevice is a Direct3D 9 device with Direct3D 8's name: retail's SetTransform call goes through
-//   slot 44 (`call [edx+0xB0]`; d3d8.h has it at slot 37), SetRenderState through slot 57, SetTextureStageState slot 67,
-//   SetTexture slot 65. DX8Wrapper_SetTransform below calls by slot, with the argument types d3d8.h gives.
+// - The device behind D3DDevice is a Direct3D 9 device (IDirect3DDevice9): retail calls SetTransform (slot 44),
+//   SetRenderState (slot 57), SetTextureStageState (slot 67), and SetTexture (slot 65) directly through d3d9.h.
 // - Set_Transform(Matrix4x4) stores the projection arm twice: ProjectionMatrix (0x00DEDC30) and then the device copy
 //   DeviceProjectionMatrix (0x00DEDBF0), and uploads the second; its world and view arms clear the identity bit
 //   before they set the changed bit (retail's Apply rows 0x001844A0, 0x00184FD0, 0x00185E80, 0x00184AD0, 0x00185980).
-// Files that include this header need the DirectX opt-in line `// dxsdk` (it includes d3d8.h).
+// Files that include this header need the DirectX opt-in line `// dxsdk` (it includes d3d9.h).
 #pragma once
 #ifndef BFME2_DXWRAPPER_H
 #define BFME2_DXWRAPPER_H
 
-#include <d3d8.h>
+#include <d3d9.h>
 
 #include "WWMath/Matrix3D.h"
 #include "WWMath/Matrix4.h"
@@ -73,9 +72,6 @@ class LightClass;
 class SurfaceClass;
 class StringClass;
 class DX8Caps;
-class IDirect3DSurface9;
-struct IDirect3DDevice8;
-struct IDirect3DDevice9;
 
 // Zero Hour's counters: each DX8 call through the device counts one.
 extern unsigned number_of_DX8_calls;		// ?number_of_DX8_calls@@3IA, 0x00DEDA98
@@ -88,7 +84,7 @@ struct RenderStateStruct
 	ShaderClass shader;
 	VertexMaterialClass *material;
 	TextureAsset Textures[MAX_TEXTURE_STAGES];		// +0x08, owning texture handles
-	D3DLIGHT8 Lights[4];
+	D3DLIGHT9 Lights[4];
 	bool LightEnable[4];
 	Matrix4x4 world;		// +0x1EC
 	Matrix4x4 view;		// +0x22C
@@ -154,7 +150,7 @@ public:
 
 	static void Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil, const Vector3 &color, float dest_alpha = 0.0f, float z = 1.0f, unsigned int stencil = 0);	// 0x0011D330
 
-	static void Set_Viewport(CONST D3DVIEWPORT8 *pViewport);								// 0x0011D480
+	static void Set_Viewport(CONST D3DVIEWPORT9 *pViewport);								// 0x0011D480
 
 	static void Set_Vertex_Buffer(const VertexBufferClass *vb, unsigned stream = 0);		// 0x0011D4A0
 	static void Set_Vertex_Buffer(const DynamicVBAccessClass &vba);							// 0x0011D5C0
@@ -166,7 +162,7 @@ public:
 	static void Set_Render_State(const RenderStateStruct &state);							// 0x0012E3E0
 	static void Release_Render_State();														// 0x0011C500
 
-	static void Set_DX8_Material(const D3DMATERIAL8 *mat);									// 0x0013C930
+	static void Set_DX8_Material(const D3DMATERIAL9 *mat);									// 0x0013C930
 
 	static void Set_Gamma(float gamma, float bright, float contrast, bool calibrate = true, bool uselimit = true);	// 0x00120980
 
@@ -179,16 +175,16 @@ public:
 	static void Set_World_Identity();														// 0x0010737E
 	static void Set_View_Identity();														// 0x001100E8
 
-	static void Set_DX8_Light(int index, D3DLIGHT8 *light);									// 0x0011C470
+	static void Set_DX8_Light(int index, D3DLIGHT9 *light);									// 0x0011C470
 	static void Set_DX8_Render_State(unsigned long state, unsigned value);					// 0x0006615F
 	static void Set_DX8_Texture_Stage_State(unsigned stage, unsigned long state, unsigned value);	// 0x000661DD
-	static void Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture);		// 0x00075412
+	static void Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture);		// 0x00075412
 	static void Set_Light_Environment(LightEnvironmentClass *light_env);					// 0x00122EA0
 
 	static void Set_Shader(const ShaderClass &shader);										// 0x000662E5
 	static void Get_Shader(ShaderClass &shader);											// 0x0010852B
 	static void Set_Material(const VertexMaterialClass *material);							// 0x000662B1
-	static void Set_Light(unsigned index, const D3DLIGHT8 *light);							// 0x0011DD20
+	static void Set_Light(unsigned index, const D3DLIGHT9 *light);							// 0x0011DD20
 	static void Set_Light(unsigned index, const LightClass &light);							// 0x0011DD80
 
 	static void Apply_Render_State_Changes();												// 0x0011D930
@@ -217,7 +213,7 @@ public:
 
 	static unsigned long Get_FrameCount(void) { return FrameCount; }
 	static int Get_Texture_Bit_Depth(void) { return TextureBitDepth; }
-	static const D3DADAPTER_IDENTIFIER8 &Get_Current_Adapter_Identifier() { return CurrentAdapterIdentifier; }
+	static const D3DADAPTER_IDENTIFIER9 &Get_Current_Adapter_Identifier() { return CurrentAdapterIdentifier; }
 
 	static void Begin_Statistics();															// 0x0011D140
 	static void End_Statistics();															// 0x0011D180
@@ -248,10 +244,10 @@ public:
 	static void _Enable_Triangle_Draw(bool enable);											// 0x0012D2C0 (out of line in retail)
 	static bool _Is_Triangle_Draw_Enabled() { return _EnableTriangleDraw; }
 
-	static IDirect3DSwapChain8 *Create_Additional_Swap_Chain(void *render_window);			// 0x0011E580
-	static void Set_Render_Target(IDirect3DSurface8 *render_target, bool use_default_depth_buffer = false);	// 0x0011E250
-	static void Set_Render_Target(IDirect3DSurface8 *render_target, IDirect3DSurface8 *depth_buffer);	// 0x0011E3E0
-	static void Set_Render_Target(IDirect3DSwapChain8 *swap_chain);							// 0x00120940
+	static IDirect3DSwapChain9 *Create_Additional_Swap_Chain(void *render_window);			// 0x0011E580
+	static void Set_Render_Target(IDirect3DSurface9 *render_target, bool use_default_depth_buffer = false);	// 0x0011E250
+	static void Set_Render_Target(IDirect3DSurface9 *render_target, IDirect3DSurface9 *depth_buffer);	// 0x0011E3E0
+	static void Set_Render_Target(IDirect3DSwapChain9 *swap_chain);							// 0x00120940
 	static bool Is_Render_To_Texture(void) { return IsRenderToTexture; }
 	static void Set_Render_Target_With_Z(TextureClass *texture, ZTextureClass *ztexture = 0);	// 0x00120850
 
@@ -263,10 +259,8 @@ public:
 	static void Set_Ambient(const Vector3 &color);											// 0x00117F50
 	static const Vector3 &Get_Ambient() { return Ambient_Color; }
 
-	static IDirect3DDevice8 *_Get_D3D_Device8() { return D3DDevice; }
-	// The same device through the Direct3D 9 slots retail calls it by (include WW3D2/IDirect3DDevice9.h to call through it).
-	static IDirect3DDevice9 *_Get_D3D_Device9() { return (IDirect3DDevice9 *)D3DDevice; }
-	static IDirect3D8 *_Get_D3D8() { return D3DInterface; }
+	static IDirect3DDevice9 *_Get_D3D_Device8() { return D3DDevice; }
+	static IDirect3D9 *_Get_D3D8() { return D3DInterface; }
 
 	static bool Reset_Device(bool reload_assets = true);									// 0x00122600
 	static const DX8Caps *Get_Current_Caps() { return CurrentCaps; }
@@ -379,7 +373,7 @@ protected:
 	static bool world_identity;
 	static unsigned RenderStates[256];														// 0x00DED5F8
 	static unsigned TextureStageStates[MAX_TEXTURE_STAGES][32];								// 0x00DECA38
-	static IDirect3DBaseTexture8 *Textures[MAX_TEXTURE_STAGES];								// 0x00DEC4B0
+	static IDirect3DBaseTexture9 *Textures[MAX_TEXTURE_STAGES];								// 0x00DEC4B0
 
 	static bool FogEnable;																	// 0x00DEDA21
 	static D3DCOLOR FogColor;																// 0x00DEDA24
@@ -413,15 +407,15 @@ protected:
 
 	static DX8Caps *CurrentCaps;
 
-	static D3DADAPTER_IDENTIFIER8 CurrentAdapterIdentifier;									// 0x00DEC5E8
+	static D3DADAPTER_IDENTIFIER9 CurrentAdapterIdentifier;									// 0x00DEC5E8
 
-	static IDirect3D8 *D3DInterface;														// 0x00DEDA30
-	static IDirect3DDevice8 *D3DDevice;														// 0x00DEDA34
+	static IDirect3D9 *D3DInterface;														// 0x00DEDA30
+	static IDirect3DDevice9 *D3DDevice;														// 0x00DEDA34
 
-	static IDirect3DSurface8 *CurrentRenderTarget;											// 0x00DEDA38
-	static IDirect3DSurface8 *CurrentDepthBuffer;											// 0x00DEDA3C
-	static IDirect3DSurface8 *DefaultRenderTarget;											// 0x00DEDA40
-	static IDirect3DSurface8 *DefaultDepthBuffer;											// 0x00DEDA44
+	static IDirect3DSurface9 *CurrentRenderTarget;											// 0x00DEDA38
+	static IDirect3DSurface9 *CurrentDepthBuffer;											// 0x00DEDA3C
+	static IDirect3DSurface9 *DefaultRenderTarget;											// 0x00DEDA40
+	static IDirect3DSurface9 *DefaultDepthBuffer;											// 0x00DEDA44
 
 	static unsigned DrawPolygonLowBoundLimit;
 
@@ -437,7 +431,7 @@ protected:
 	friend void bfmeSetProjectionDepthBias(float bias);
 	friend class WW3D;
 	friend bool SaveRenderDeviceRegistrySettings(const char *sub_key, int device, int width, int height, int depth, bool windowed, int texture_depth);
-	static void Set_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture);
+	static void Set_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture);
 
 	friend class TextureFilterClass;
 	friend class TextureAsset::Impl;
@@ -446,11 +440,10 @@ protected:
 };
 
 // SetTexture is slot 65 (+0x104).
-WWINLINE void DXWrapper::Set_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture)
+WWINLINE void DXWrapper::Set_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture)
 {
-	typedef HRESULT(__stdcall *DX8Wrapper_SetTextureFn)(IDirect3DDevice8 *, DWORD, IDirect3DBaseTexture8 *);
 	if (stage >= MAX_TEXTURE_STAGES) {
-		((*(DX8Wrapper_SetTextureFn **)D3DDevice)[65])(D3DDevice, stage, texture);
+		D3DDevice->SetTexture(stage, texture);
 		number_of_DX8_calls++;
 		return;
 	}
@@ -460,7 +453,7 @@ WWINLINE void DXWrapper::Set_Texture(unsigned int stage, IDirect3DBaseTexture8 *
 	if (Textures[stage]) Textures[stage]->Release();
 	Textures[stage] = texture;
 	if (Textures[stage]) Textures[stage]->AddRef();
-	((*(DX8Wrapper_SetTextureFn **)D3DDevice)[65])(D3DDevice, stage, texture);
+	D3DDevice->SetTexture(stage, texture);
 	number_of_DX8_calls++;
 	texture_changes++;
 }
@@ -468,8 +461,7 @@ WWINLINE void DXWrapper::Set_Texture(unsigned int stage, IDirect3DBaseTexture8 *
 // evidence: retail 0x001844A0, 0x00184FD0, 0x00185E80, 0x00184AD0 and 0x00185980 (the mapper Apply rows) carry this
 // body expanded in place (1,266 to 1,288 bytes each, no call to DXWrapper::Set_Transform); the out-of-line copy is
 // 0x000A68A7. The device call goes through slot 44 (+0xB0), then number_of_DX8_calls counts it.
-typedef HRESULT(__stdcall *DX8Wrapper_SetTransformFn)(IDirect3DDevice8 *, D3DTRANSFORMSTATETYPE, const D3DMATRIX *);
-#define DX8_SET_TRANSFORM(device, type, matrix) ((*(DX8Wrapper_SetTransformFn **)(device))[44])((device), (type), (const D3DMATRIX *)(matrix))
+#define DX8_SET_TRANSFORM(device, type, matrix) (device)->SetTransform((type), (const D3DMATRIX *)(matrix))
 
 WWINLINE void DXWrapper::Set_Transform(D3DTRANSFORMSTATETYPE transform, const Matrix4x4 &m)
 {
@@ -500,12 +492,10 @@ WWINLINE void DXWrapper::Set_Transform(D3DTRANSFORMSTATETYPE transform, const Ma
 
 // evidence: retail 0x0013D570 (VertexMaterialClass::Apply) and 0x0013D180 expand it in place: material_changes++ at 0x00DEDA50, then
 // the device's SetMaterial (slot 49, `call [edx+0xC4]`), then number_of_DX8_calls++; 0x0013C930 is the out-of-line copy.
-typedef HRESULT(__stdcall *DX8Wrapper_SetMaterialFn)(IDirect3DDevice8 *, const D3DMATERIAL8 *);
-
-WWINLINE void DXWrapper::Set_DX8_Material(const D3DMATERIAL8 *mat)
+WWINLINE void DXWrapper::Set_DX8_Material(const D3DMATERIAL9 *mat)
 {
 	material_changes++;
-	((*(DX8Wrapper_SetMaterialFn **)_Get_D3D_Device8())[49])(_Get_D3D_Device8(), mat);
+	_Get_D3D_Device8()->SetMaterial(mat);
 	number_of_DX8_calls++;
 }
 

@@ -37,7 +37,7 @@
 #include "assetmanager/AssetFactoryBase.h"
 #include "WWLib/wwstring.h"
 
-struct IDirect3DBaseTexture8;
+struct IDirect3DBaseTexture9;
 class File;
 
 class TextureAsset : public TextureBaseClass
@@ -57,7 +57,7 @@ public:
 		void PostLoad(const char *name);					// 0x00131E6E
 
 		bool m_unk04;					// +0x04
-		IDirect3DBaseTexture8 *D3DTexture;		// +0x08
+		IDirect3DBaseTexture9 *D3DTexture;		// +0x08
 		int m_unk0C;					// +0x0C (getter 0x00132731)
 		File *m_file;					// +0x10 the image file PreLoad found
 		char *m_fileData;				// +0x14 its contents (Load: readEntireAndClose)

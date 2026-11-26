@@ -11,7 +11,7 @@
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented
 // FUNCTION: BFME2 0x00075343 size=86 name=?Set_Vertex_Shader_Constant@DXWrapper@@SAXHPBXH@Z evidence=N:ledger tier=B hypothesis:name:invented
 // The device is a Direct3D 9 device behind Direct3D 8's name: SetVertexShaderConstant is slot 94 (+0x178), SetPixelShaderConstant slot 109 (+0x1B4).
-typedef HRESULT(__stdcall *DX8Wrapper_SetShaderConstantFn)(IDirect3DDevice8 *, DWORD, const void *, DWORD);
+typedef HRESULT(__stdcall *DX8Wrapper_SetShaderConstantFn)(IDirect3DDevice9 *, DWORD, const void *, DWORD);
 
 void DXWrapper::Set_Vertex_Shader_Constant(int reg, const void *data, int count)
 {
@@ -40,8 +40,8 @@ void DXWrapper::Set_Pixel_Shader_Constant(int reg, const void *data, int count)
 
 // FUNCTION: BFME2 0x000753EF size=35 name=?bfmeGo1054E@@YAXHH@Z evidence=N:ledger tier=B hypothesis:Z
 
-// FUNCTION: BFME2 0x00075412 size=110 name=?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture8@@@Z evidence=N:ledger tier=B hypothesis:Z
-void DXWrapper::Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture)
+// FUNCTION: BFME2 0x00075412 size=110 name=?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture9@@@Z evidence=N:ledger tier=B hypothesis:Z
+void DXWrapper::Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture)
 {
 	Set_Texture(stage, texture);
 }

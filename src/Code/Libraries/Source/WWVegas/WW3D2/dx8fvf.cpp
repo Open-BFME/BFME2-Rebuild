@@ -10,7 +10,7 @@
 #include "WW3D2/FVFInfoClass.h"
 #include "WW3D2/VertexFormats.h"
 #include "WWLib/wwstring.h"
-#include <d3d8.h>
+#include <d3d9.h>
 
 extern "C" UINT WINAPI D3DXGetFVFVertexSize(DWORD fvf);
 

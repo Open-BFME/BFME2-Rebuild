@@ -12634,7 +12634,7 @@
         }
       ]
     },
-    "?CurrentAdapterIdentifier@DXWrapper@@1U_D3DADAPTER_IDENTIFIER8@@A": {
+    "?CurrentAdapterIdentifier@DXWrapper@@1U_D3DADAPTER_IDENTIFIER9@@A": {
       "candidates": [
         {
           "rva": "0x009EC5E8",
@@ -12699,7 +12699,7 @@
         }
       ]
     },
-    "?CurrentDepthBuffer@DXWrapper@@1PAUIDirect3DSurface8@@A": {
+    "?CurrentDepthBuffer@DXWrapper@@1PAUIDirect3DSurface9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA3C",
@@ -12711,7 +12711,7 @@
         }
       ]
     },
-    "?CurrentRenderTarget@DXWrapper@@1PAUIDirect3DSurface8@@A": {
+    "?CurrentRenderTarget@DXWrapper@@1PAUIDirect3DSurface9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA38",
@@ -12771,7 +12771,7 @@
         }
       ]
     },
-    "?D3DDevice@DXWrapper@@1PAUIDirect3DDevice8@@A": {
+    "?D3DDevice@DXWrapper@@1PAUIDirect3DDevice9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA34",
@@ -12791,7 +12791,7 @@
         }
       ]
     },
-    "?D3DInterface@DXWrapper@@1PAUIDirect3D8@@A": {
+    "?D3DInterface@DXWrapper@@1PAUIDirect3D9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA30",
@@ -13242,7 +13242,7 @@
         }
       ]
     },
-    "?DefaultDepthBuffer@DXWrapper@@1PAUIDirect3DSurface8@@A": {
+    "?DefaultDepthBuffer@DXWrapper@@1PAUIDirect3DSurface9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA44",
@@ -13290,7 +13290,7 @@
         }
       ]
     },
-    "?DefaultRenderTarget@DXWrapper@@1PAUIDirect3DSurface8@@A": {
+    "?DefaultRenderTarget@DXWrapper@@1PAUIDirect3DSurface9@@A": {
       "candidates": [
         {
           "rva": "0x009EDA40",
@@ -13356,7 +13356,7 @@
         }
       ]
     },
-    "?Direct3DCreate8Ptr@@3P6GPAUIDirect3D8@@I@ZA": {
+    "?Direct3DCreate8Ptr@@3P6GPAUIDirect3D9@@I@ZA": {
       "candidates": [
         {
           "rva": "0x009EDBD4",
@@ -19352,7 +19352,7 @@
         }
       ]
     },
-    "?Textures@DXWrapper@@1PAPAUIDirect3DBaseTexture8@@A": {
+    "?Textures@DXWrapper@@1PAPAUIDirect3DBaseTexture9@@A": {
       "candidates": [
         {
           "rva": "0x009EC4B0",
@@ -31058,7 +31058,7 @@
         }
       ]
     },
-    "?_PresentParameters@@3U_D3DPRESENT_PARAMETERS@@A": {
+    "?_PresentParameters@@3U_D3DPRESENT_PARAMETERS_@@A": {
       "candidates": [
         {
           "rva": "0x009ED5B8",
@@ -35078,7 +35078,7 @@
         }
       ]
     },
-    "?default_settings@?1??Apply_Null@VertexMaterialClass@@CAXXZ@4U_D3DMATERIAL8@@A": {
+    "?default_settings@?1??Apply_Null@VertexMaterialClass@@CAXXZ@4U_D3DMATERIAL9@@A": {
       "candidates": [
         {
           "rva": "0x009B62E0",
@@ -63696,7 +63696,7 @@
         }
       ]
     },
-    "?m_oldRenderSurface@W3DShaderManager@@2PAUIDirect3DSurface8@@A": {
+    "?m_oldRenderSurface@W3DShaderManager@@2PAUIDirect3DSurface9@@A": {
       "candidates": [
         {
           "rva": "0x009E1F64",
@@ -63830,7 +63830,7 @@
         }
       ]
     },
-    "?m_renderTexture@W3DShaderManager@@2PAUIDirect3DTexture8@@A": {
+    "?m_renderTexture@W3DShaderManager@@2PAUIDirect3DTexture9@@A": {
       "candidates": [
         {
           "rva": "0x009E1F68",
@@ -69051,7 +69051,7 @@
         }
       ]
     },
-    "?shadowIndexBufferD3D@@3PAUIDirect3DIndexBuffer8@@A": {
+    "?shadowIndexBufferD3D@@3PAUIDirect3DIndexBuffer9@@A": {
       "candidates": [
         {
           "rva": "0x009EBCE0",
@@ -69063,7 +69063,7 @@
         }
       ]
     },
-    "?shadowVertexBufferD3D@@3PAUIDirect3DVertexBuffer8@@A": {
+    "?shadowVertexBufferD3D@@3PAUIDirect3DVertexBuffer9@@A": {
       "candidates": [
         {
           "rva": "0x009EBCDC",

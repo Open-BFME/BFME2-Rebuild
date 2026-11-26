@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <new>
 #include <string.h>
-#include <d3d8.h>
+#include <d3d9.h>
 #include "WW3D2/VertexMaterialClass.h"
 #include "WW3D2/dxwrapper.h"
 #include "WW3D2/WW3D.h"
@@ -54,7 +54,7 @@ VertexMaterialClass::~VertexMaterialClass(void)
 unsigned long VertexMaterialClass::Compute_CRC(void) const
 {
 	unsigned long crc = 0;
-	crc = CRC_Memory((const unsigned char *)Material, sizeof(D3DMATERIAL8), crc);
+	crc = CRC_Memory((const unsigned char *)Material, sizeof(D3DMATERIAL9), crc);
 	crc = CRC_Memory((const unsigned char *)&Flags, sizeof(Flags), crc);
 	crc = CRC_Memory((const unsigned char *)&DiffuseColorSource, sizeof(DiffuseColorSource), crc);
 	crc = CRC_Memory((const unsigned char *)&AmbientColorSource, sizeof(AmbientColorSource), crc);
@@ -349,7 +349,7 @@ void VertexMaterialClass::Parse_W3dVertexMaterialStruct(const W3dVertexMaterialS
 void VertexMaterialClass::Apply_Null(void)
 {
 	int i;
-	static D3DMATERIAL8 default_settings =
+	static D3DMATERIAL9 default_settings =
 	{
 		{ 1.0f, 1.0f, 1.0f, 1.0f },	// diffuse
 		{ 1.0f, 1.0f, 1.0f, 1.0f },	// ambient
@@ -452,8 +452,8 @@ VertexMaterialClass::VertexMaterialClass(void) :
 	}
 
 	// A white, fully opaque material by default.
-	Material = new D3DMATERIAL8;
-	memset(Material, 0, sizeof(D3DMATERIAL8));
+	Material = new D3DMATERIAL9;
+	memset(Material, 0, sizeof(D3DMATERIAL9));
 	Set_Ambient(1.0f, 1.0f, 1.0f);
 	Set_Diffuse(1.0f, 1.0f, 1.0f);
 	Set_Opacity(1.0f);

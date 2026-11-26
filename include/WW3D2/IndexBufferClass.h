@@ -25,7 +25,7 @@
 
 class DXWrapper;
 class SortingRendererClass;
-struct IDirect3DIndexBuffer8;
+struct IDirect3DIndexBuffer9;
 class DX8IndexBufferClass;
 class SortingIndexBufferClass;
 
@@ -138,10 +138,10 @@ public:
 	DX8IndexBufferClass(unsigned int index_count, UsageType usage = USAGE_DEFAULT);	// 0x00138980
 	virtual ~DX8IndexBufferClass(void);												// 0x00138AA0
 
-	IDirect3DIndexBuffer8 *Get_DX8_Index_Buffer(void) { return index_buffer; }
+	IDirect3DIndexBuffer9 *Get_DX8_Index_Buffer(void) { return index_buffer; }
 
 private:
-	IDirect3DIndexBuffer8 *index_buffer;		// +0x14
+	IDirect3DIndexBuffer9 *index_buffer;		// +0x14
 };
 
 class SortingIndexBufferClass : public IndexBufferClass

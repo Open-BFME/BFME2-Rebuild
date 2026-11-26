@@ -84,7 +84,7 @@
       "role": "ehhandler",
       "parent_rva": "",
       "fold_group": "H0076564A",
-      "name": "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z",
+      "name": "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z",
       "name_evidence": "?:placeholder",
       "confidence": "high",
       "evidence": "X:eh-stub FuncInfo=0x00909948;X:parent-by-prologue;X:EH stub shared by 2 functions (ICF-folded handler and FuncInfo)",
@@ -97,7 +97,7 @@
       "parent": null,
       "object": "O0012A640",
       "accepted_names": [
-        "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z"
+        "__ehhandler$??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z"
       ],
       "seed_tier": "B",
       "membership_hypothesis": "hypothesis:Z"

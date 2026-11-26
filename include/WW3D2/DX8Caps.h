@@ -1,7 +1,7 @@
 // DX8Caps.h: the capabilities the renderer probed from the device (Zero Hour's dx8caps.h). Only the members with a verified
 // reader are declared; the rest is opaque storage until a body needs it.
 // Target facts (retail game.dat): SIZE 0x2E4 (StringClass members inside). The D3D caps copy sits at +0x08 (the
-// first 0x2C bytes agree with D3DCAPS8: RasterCaps +0x24 inside it, tested by Set_Default_Global_Render_States 0x00122510 at
+// first 0x2C bytes agree with D3DCAPS9: RasterCaps +0x24 inside it, tested by Set_Default_Global_Render_States 0x00122510 at
 // +0x2E for D3DPRASTERCAPS_FOGRANGE; MaxTextureWidth/Height at +0x60/+0x64 per AdjustTextureSize 0x0011E670). Support_Gamma
 // reads the byte at +0x13A (DXWrapper::Set_Gamma 0x00120980), Support_TnL the byte at +0x138 (the DX8IndexBufferClass constructor 0x00138980
 // forces software vertex processing when it is clear) and Support_NPatches the byte at +0x13B
@@ -10,7 +10,7 @@
 #ifndef BFME2_DX8CAPS_H
 #define BFME2_DX8CAPS_H
 
-#include <d3d8.h>
+#include <d3d9.h>
 #include "WW3D2/ww3dformat.h"
 #include "WWLib/wwstring.h"
 
@@ -163,10 +163,10 @@ public:
 		DEVICE_INTEL_815
 	};
 
-	void Compute_Caps(WW3DFormat display_format, const D3DADAPTER_IDENTIFIER8 &adapter_id);	// 0x0012BDE0
-	DX8Caps(IDirect3D8 *direct3d, IDirect3DDevice8 *D3DDevice, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER8 &adapter_id);	// 0x0012C670
-	DX8Caps(IDirect3D8 *direct3d, const D3DCAPS8 &caps, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER8 &adapter_id);	// 0x0012C780
-	const D3DCAPS8 &Get_DX8_Caps() const { return Caps; }
+	void Compute_Caps(WW3DFormat display_format, const D3DADAPTER_IDENTIFIER9 &adapter_id);	// 0x0012BDE0
+	DX8Caps(IDirect3D9 *direct3d, IDirect3DDevice9 *D3DDevice, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER9 &adapter_id);	// 0x0012C670
+	DX8Caps(IDirect3D9 *direct3d, const D3DCAPS9 &caps, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER9 &adapter_id);	// 0x0012C780
+	const D3DCAPS9 &Get_DX8_Caps() const { return Caps; }
 	bool Support_TnL() const { return SupportTnL; }
 	bool Support_DXTC() const { return SupportDXTC; }
 	bool Support_Gamma() const { return SupportGamma; }
@@ -187,24 +187,23 @@ private:
 	static DeviceTypeS3 Get_S3_Device(unsigned device_id);						// 0x0012B0F0
 	static DeviceTypeIntel Get_Intel_Device(unsigned device_id);				// 0x0012B130
 
-	void Init_Caps(IDirect3DDevice8 *D3DDevice);								// 0x0012B160
-	void Check_Texture_Format_Support(WW3DFormat display_format, const D3DCAPS8 &caps);	// 0x0012B210
-	void Check_Render_To_Texture_Support(WW3DFormat display_format, const D3DCAPS8 &caps);	// 0x0012B2A0
-	void Check_Maximum_Texture_Support(const D3DCAPS8 &caps);					// 0x0012B310
-	void Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCAPS8 &caps);	// 0x0012B3A0
-	void Check_Bumpmap_Support(const D3DCAPS8 &caps);							// 0x0012B440
-	void Check_Texture_Compression_Support(const D3DCAPS8 &caps);				// 0x0012B4E0
-	void Check_Shader_Support(const D3DCAPS8 &caps);							// 0x0012B550
+	void Init_Caps(IDirect3DDevice9 *D3DDevice);								// 0x0012B160
+	void Check_Texture_Format_Support(WW3DFormat display_format, const D3DCAPS9 &caps);	// 0x0012B210
+	void Check_Render_To_Texture_Support(WW3DFormat display_format, const D3DCAPS9 &caps);	// 0x0012B2A0
+	void Check_Maximum_Texture_Support(const D3DCAPS9 &caps);					// 0x0012B310
+	void Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCAPS9 &caps);	// 0x0012B3A0
+	void Check_Bumpmap_Support(const D3DCAPS9 &caps);							// 0x0012B440
+	void Check_Texture_Compression_Support(const D3DCAPS9 &caps);				// 0x0012B4E0
+	void Check_Shader_Support(const D3DCAPS9 &caps);							// 0x0012B550
 	void Check_Driver_Version_Status();										// 0x0012B5B0
-	void Vendor_Specific_Hacks(const D3DADAPTER_IDENTIFIER8 &adapter_id);		// 0x0012B9B0
+	void Vendor_Specific_Hacks(const D3DADAPTER_IDENTIFIER9 &adapter_id);		// 0x0012B9B0
 
 	// Retail's layout (SIZE 0x2E4), Zero Hour's member order with BFME 2's changes: the capability block is a Direct3D 9
-	// D3DCAPS9 (0x130 bytes; the first 0xD8 agree with D3DCAPS8, the rest is kept as storage until a body reads it), the
+	// D3DCAPS9 (0x130 bytes; the first 0xD8 agree with D3DCAPS9, the rest is kept as storage until a body reads it), the
 	// format tables are indexed by the Direct3D format number (see ww3dformat.h), and a raw device id follows the mapped one.
 	int MaxDisplayWidth;					// +0x000
 	int MaxDisplayHeight;					// +0x004
-	D3DCAPS8 Caps;							// +0x008
-	unsigned char CapsTail[0x130 - sizeof(D3DCAPS8)];	// +0x0E0 .. +0x137 (the D3DCAPS9 members past D3DCAPS8's)
+	D3DCAPS9 Caps;							// +0x008
 	bool SupportTnL;						// +0x138
 	bool SupportDXTC;						// +0x139
 	bool SupportGamma;						// +0x13A
@@ -233,7 +232,7 @@ private:
 	int DriverVersionStatus;				// +0x2CC
 	int VendorId;							// +0x2D0
 	StringClass DriverDLL;					// +0x2D4
-	IDirect3D8 *Direct3D;					// +0x2D8
+	IDirect3D9 *Direct3D;					// +0x2D8
 	StringClass CapsLog;					// +0x2DC
 	StringClass CompactLog;					// +0x2E0
 };

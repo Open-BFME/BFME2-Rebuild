@@ -4,5 +4,5 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
-// FUNCTION: BFME2 0x0013C930 size=34 name=?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL8@@@Z evidence=N:ledger tier=B hypothesis:name:invented
+// FUNCTION: BFME2 0x0013C930 size=34 name=?Set_DX8_Material@DXWrapper@@SAXPBU_D3DMATERIAL9@@@Z evidence=N:ledger tier=B hypothesis:name:invented
 

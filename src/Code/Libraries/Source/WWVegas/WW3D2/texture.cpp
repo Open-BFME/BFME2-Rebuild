@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <stddef.h>
 #include <string.h>
-#include <d3d8.h>
+#include <d3d9.h>
 #include <vector>
 #include "sys_util/Synchronization.h"
 #include "WW3D2/DX8DeviceLock.h"
@@ -251,8 +251,8 @@ void TextureAsset::Factory::PostLoad(void)
 
 // FUNCTION: BFME2 0x001326EA size=34 name=?tryDynamicRecolor@TextureRecolorView@@QAE_NPAX@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0013270C size=37 name=?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture8@@XZ evidence=N:ledger tier=A
-IDirect3DBaseTexture8 *TextureBaseClass::Peek_D3D_Base_Texture() const
+// FUNCTION: BFME2 0x0013270C size=37 name=?Peek_D3D_Base_Texture@TextureBaseClass@@QBEPAUIDirect3DBaseTexture9@@XZ evidence=N:ledger tier=A
+IDirect3DBaseTexture9 *TextureBaseClass::Peek_D3D_Base_Texture() const
 {
 	TextureAsset::Factory *factory = static_cast<TextureAsset::Factory *>(m_factory);
 	if (factory == NULL)
@@ -414,14 +414,14 @@ void TextureAsset::SetQualityEnabled(bool enabled)
 
 // FUNCTION: BFME2 0x00133283 size=151 name=?bfmeReleaseQueuedDeviceInterfaces@@YAXXZ evidence=N:ledger tier=A
 static CriticalSection deferredTextureReleaseLock(1);
-static std::vector<IDirect3DBaseTexture8 *> deferredTextureReleases;
+static std::vector<IDirect3DBaseTexture9 *> deferredTextureReleases;
 
 void bfmeReleaseQueuedDeviceInterfaces(void)
 {
 	if (!deferredTextureReleases.empty()) {
 		DX8DeviceLock deviceLock;
 		ScopedCriticalSection queueLock(&deferredTextureReleaseLock);
-		for (std::vector<IDirect3DBaseTexture8 *>::iterator entry = deferredTextureReleases.begin();
+		for (std::vector<IDirect3DBaseTexture9 *>::iterator entry = deferredTextureReleases.begin();
 				entry != deferredTextureReleases.end(); ++entry) {
 			(*entry)->Release();
 		}

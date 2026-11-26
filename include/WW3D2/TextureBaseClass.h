@@ -17,7 +17,7 @@
 
 #include "assetmanager/AssetFactoryBase.h"
 
-struct IDirect3DBaseTexture8;
+struct IDirect3DBaseTexture9;
 
 class TextureBaseClass
 {
@@ -54,7 +54,7 @@ public:
 		*this = that;
 	}
 
-	IDirect3DBaseTexture8 *Peek_D3D_Base_Texture() const;		// 0x0013270C
+	IDirect3DBaseTexture9 *Peek_D3D_Base_Texture() const;		// 0x0013270C
 	bool Has_Factory() const { return m_factory != 0; }		// MeshMatDescClass::Is_Empty 0x0015A6C0 tests the handle word
 
 	// The neighbouring getters over the loaded data (the factory's Impl; 0x00132731..0x0013282C): each loads the texture when it

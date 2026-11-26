@@ -8,7 +8,7 @@
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:name:Z, hypothesis:padding
 // dxsdk
 #include <math.h>
-#include <d3d8.h>
+#include <d3d9.h>
 #include "WW3D2/CameraClass.h"
 #include "WW3D2/dxwrapper.h"
 #include "WW3D2/WW3D.h"
@@ -424,7 +424,7 @@ void CameraClass::Apply(void)
 	bool windowed;
 	WW3D::Get_Render_Target_Resolution(width, height, bits, windowed);
 
-	D3DVIEWPORT8 vp;
+	D3DVIEWPORT9 vp;
 	vp.X = (DWORD)(Viewport.Min.X * (float)width);
 	vp.Y = (DWORD)(Viewport.Min.Y * (float)height);
 	vp.Width = (DWORD)((Viewport.Max.X - Viewport.Min.X) * (float)width);

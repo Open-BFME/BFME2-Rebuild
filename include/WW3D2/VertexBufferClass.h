@@ -28,7 +28,7 @@ class SortingRendererClass;
 class Vector2;
 class Vector3;
 class Vector4;
-struct IDirect3DVertexBuffer8;
+struct IDirect3DVertexBuffer9;
 struct VertexFormatXYZNDUV2;
 class DX8VertexBufferClass;
 class SortingVertexBufferClass;
@@ -107,7 +107,7 @@ public:
 	DX8VertexBufferClass(const Vector3 *vertices, const Vector2 *tex_coords, unsigned short vertex_count, unsigned usage = USAGE_DEFAULT);	// 0x0013AE40
 	virtual ~DX8VertexBufferClass(void);											// 1: 0x0013AC70 (deleting), body 0x00139720
 
-	IDirect3DVertexBuffer8 *Get_DX8_Vertex_Buffer(void) { return VertexBuffer; }
+	IDirect3DVertexBuffer9 *Get_DX8_Vertex_Buffer(void) { return VertexBuffer; }
 
 	void Copy(const Vector3 *loc, unsigned first_vertex, unsigned count);														// 0x00139BF0
 	void Copy(const Vector3 *loc, const Vector2 *uv, unsigned first_vertex, unsigned count);									// 0x00139DA0
@@ -119,7 +119,7 @@ public:
 	void Create(unsigned usage);					// 0x001397B0
 
 protected:
-	IDirect3DVertexBuffer8 *VertexBuffer;		// +0x1C
+	IDirect3DVertexBuffer9 *VertexBuffer;		// +0x1C
 };
 
 class DynamicVBAccessClass

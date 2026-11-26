@@ -7,7 +7,7 @@
 //   zeroes +8..+0x18, builds the StringClass at +0x1C, zeroes the eight mapper
 //   pointers +0x20..+0x3C and sets the UV sources +0x40..+0x5C to 0..7, zeroes
 //   +0x60, sets the bytes +0x68 = 1 and +0x69 = 0, then allocates the 0x44-byte
-//   D3DMATERIAL8 at +8, clears it and sets the diffuse and ambient RGB and the
+//   D3DMATERIAL9 at +8, clears it and sets the diffuse and ambient RGB and the
 //   diffuse alpha to 1.0f.
 // - The destructor 0x0013C990 releases each non-null mapper (inline
 //   Release_Ref) and clears it, frees the material, then destroys the name.
@@ -32,7 +32,7 @@
 #include "WWMath/Vector3.h"
 #include "WW3D2/TextureMapperClass.h"
 
-struct _D3DMATERIAL8;
+struct _D3DMATERIAL9;
 struct W3dMaterial3Struct;
 struct W3dVertexMaterialStruct;
 class TextureMapperClass;
@@ -171,7 +171,7 @@ private:
 	void Apply(void) const;								// 0x0013D570
 	static void Apply_Null(void);							// 0x0013D180
 
-	_D3DMATERIAL8 *Material;			// +0x08
+	_D3DMATERIAL9 *Material;			// +0x08
 	unsigned int Flags;				// +0x0C
 	int AmbientColorSource;				// +0x10 a D3DMATERIALCOLORSOURCE
 	int EmissiveColorSource;			// +0x14

@@ -2,7 +2,7 @@
 // Get_Description 0x00116620 calls the Direct3D 9 surface's byte slot 0x30.
 #pragma once
 
-class IDirect3DSurface9;
+struct IDirect3DSurface9;
 
 class SurfaceClass
 {

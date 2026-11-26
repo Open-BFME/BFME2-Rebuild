@@ -2,7 +2,7 @@
 // dxsdk
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WW3D2/TextureFilterClass.h"
-#include <d3d8.h>
+#include <d3d9.h>
 #include "WW3D2/dxwrapper.h"
 #include "WW3D2/DX8Caps.h"
 // The per-stage filter tables, defined here in retail .bss order: 0x00DF3048, 0x00DF3188, 0x00DF32C8 (16 x 5 words each).
@@ -17,7 +17,7 @@ unsigned int _MipMapFilters[TextureFilterClass::MAX_TEXTURE_STAGES][TextureFilte
 // Hypothesis rules: hypothesis:Z, hypothesis:name:Z, hypothesis:padding
 // The device behind D3DDevice is a Direct3D 9 device: retail's Apply calls its SetSamplerState (slot 69, `call [edx+0x114]`)
 // with Direct3D 9's sampler state numbers, then counts the call twice.
-typedef long (__stdcall *TextureFilterSamplerStateFn)(IDirect3DDevice8 *, unsigned, unsigned, unsigned);
+typedef long (__stdcall *TextureFilterSamplerStateFn)(IDirect3DDevice9 *, unsigned, unsigned, unsigned);
 #define TEXTURE_FILTER_SET_SAMPLER_STATE(stage, state, value) 	do { 		((*(TextureFilterSamplerStateFn **)DXWrapper::D3DDevice)[69])(DXWrapper::D3DDevice, (stage), (state), (value)); 		number_of_DX8_calls++; 		DXWrapper::texture_stage_state_changes++; 	} while (0)
 
 const unsigned SAMPLER_ADDRESSU = 1;
@@ -58,7 +58,7 @@ void TextureFilterClass::Apply(unsigned int stage)
 // FUNCTION: BFME2 0x0013EB60 size=420 name=?_Init_Filters@TextureFilterClass@@SAXW4TextureFilterMode@1@@Z evidence=N:ledger tier=B hypothesis:Z
 void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 {
-	const D3DCAPS8 &dx8caps = DXWrapper::Get_Current_Caps()->Get_DX8_Caps();
+	const D3DCAPS9 &dx8caps = DXWrapper::Get_Current_Caps()->Get_DX8_Caps();
 
 	_MinTextureFilters[0][FILTER_TYPE_NONE] = D3DTEXF_POINT;
 	_MagTextureFilters[0][FILTER_TYPE_NONE] = D3DTEXF_POINT;

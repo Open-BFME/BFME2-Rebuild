@@ -289,10 +289,10 @@ DX8Caps::DeviceTypeIntel DX8Caps::Get_Intel_Device(unsigned device_id)
 	}
 }
 
-// FUNCTION: BFME2 0x0012B160 size=51 name=?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Init_Caps(IDirect3DDevice8 *D3DDevice)
+// FUNCTION: BFME2 0x0012B160 size=51 name=?Init_Caps@DX8Caps@@AAEXPAUIDirect3DDevice9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Init_Caps(IDirect3DDevice9 *D3DDevice)
 {
-	DXWrapper::_Get_D3D_Device8()->GetDeviceCaps((D3DCAPS8 *)&Caps);
+	DXWrapper::_Get_D3D_Device8()->GetDeviceCaps(&Caps);
 	number_of_DX8_calls++;
 
 	SupportTnL = ((Caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) == D3DDEVCAPS_HWTRANSFORMANDLIGHT);
@@ -300,8 +300,8 @@ void DX8Caps::Init_Caps(IDirect3DDevice8 *D3DDevice)
 
 // FUNCTION: BFME2 0x0012B1A0 size=110 name=?supportTextureFormat@W3DRadarFormatCaps@@QAE_NW4WW3DFormat@@@Z evidence=N:ledger tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0012B210 size=129 name=?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Texture_Format_Support(WW3DFormat display_format, const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B210 size=129 name=?Check_Texture_Format_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Texture_Format_Support(WW3DFormat display_format, const D3DCAPS9 &caps)
 {
 	if (display_format == WW3D_FORMAT_UNKNOWN) {
 		for (unsigned i = 0; i < 123; ++i) {
@@ -322,8 +322,8 @@ void DX8Caps::Check_Texture_Format_Support(WW3DFormat display_format, const D3DC
 	}
 }
 
-// FUNCTION: BFME2 0x0012B2A0 size=100 name=?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Render_To_Texture_Support(WW3DFormat display_format, const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B2A0 size=100 name=?Check_Render_To_Texture_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Render_To_Texture_Support(WW3DFormat display_format, const D3DCAPS9 &caps)
 {
 	if (display_format == WW3D_FORMAT_UNKNOWN) {
 		for (unsigned i = 0; i < 118; ++i) {
@@ -343,8 +343,8 @@ void DX8Caps::Check_Render_To_Texture_Support(WW3DFormat display_format, const D
 	}
 }
 
-// FUNCTION: BFME2 0x0012B310 size=19 name=?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Maximum_Texture_Support(const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B310 size=19 name=?Check_Maximum_Texture_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Maximum_Texture_Support(const D3DCAPS9 &caps)
 {
 	MaxSimultaneousTextures = caps.MaxSimultaneousTextures;
 }
@@ -359,8 +359,8 @@ bool DX8Caps::Is_Valid_Display_Format(int width, int height, WW3DFormat format)
 
 // FUNCTION: BFME2 0x0012B360 size=36 name=?rva0091B6A0@DX8Caps@@QAE_NH@Z evidence=?:placeholder tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0012B3A0 size=146 name=?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B3A0 size=146 name=?Check_Depth_Stencil_Support@DX8Caps@@AAEXW4WW3DFormat@@ABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCAPS9 &caps)
 {
 	if (display_format == WW3D_FORMAT_UNKNOWN) {
 		for (unsigned i = 0; i < 118; ++i) {
@@ -394,8 +394,8 @@ void DX8Caps::Check_Depth_Stencil_Support(WW3DFormat display_format, const D3DCA
 	}
 }
 
-// FUNCTION: BFME2 0x0012B440 size=150 name=?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Bumpmap_Support(const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B440 size=150 name=?Check_Bumpmap_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Bumpmap_Support(const D3DCAPS9 &caps)
 {
 	SupportBumpEnvmap = !!(caps.TextureOpCaps & D3DTEXOPCAPS_BUMPENVMAP);
 	SupportBumpEnvmapLuminance = !!(caps.TextureOpCaps & D3DTEXOPCAPS_BUMPENVMAPLUMINANCE);
@@ -405,10 +405,10 @@ void DX8Caps::Check_Bumpmap_Support(const D3DCAPS8 &caps)
 	CapsLog += CapsWorkString;
 }
 
-// FUNCTION: BFME2 0x0012B4E0 size=98 name=?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x0012B4E0 size=98 name=?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0012B550 size=95 name=?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
-void DX8Caps::Check_Shader_Support(const D3DCAPS8 &caps)
+// FUNCTION: BFME2 0x0012B550 size=95 name=?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS9@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Shader_Support(const D3DCAPS9 &caps)
 {
 	VertexShaderVersion = caps.VertexShaderVersion;
 	PixelShaderVersion = caps.PixelShaderVersion;
@@ -575,12 +575,12 @@ void DX8Caps::Check_Driver_Version_Status()
 	}
 }
 
-// FUNCTION: BFME2 0x0012B9B0 size=1065 name=?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER8@@@Z evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x0012B9B0 size=1065 name=?Vendor_Specific_Hacks@DX8Caps@@AAEXABU_D3DADAPTER_IDENTIFIER9@@@Z evidence=N:ledger tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0012BDE0 size=2160 name=?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x0012BDE0 size=2160 name=?Compute_Caps@DX8Caps@@QAEXW4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z evidence=N:ledger tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0012C670 size=269 name=??0DX8Caps@@QAE@PAUIDirect3D8@@PAUIDirect3DDevice8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z evidence=N:ledger tier=B hypothesis:Z
-DX8Caps::DX8Caps(IDirect3D8 *direct3d, IDirect3DDevice8 *D3DDevice, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER8 &adapter_id) :
+// FUNCTION: BFME2 0x0012C670 size=269 name=??0DX8Caps@@QAE@PAUIDirect3D9@@PAUIDirect3DDevice9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z evidence=N:ledger tier=B hypothesis:Z
+DX8Caps::DX8Caps(IDirect3D9 *direct3d, IDirect3DDevice9 *D3DDevice, WW3DFormat display_format, const D3DADAPTER_IDENTIFIER9 &adapter_id) :
 	MaxDisplayWidth(0),
 	MaxDisplayHeight(0),
 	RawDeviceId(0),
@@ -593,5 +593,5 @@ DX8Caps::DX8Caps(IDirect3D8 *direct3d, IDirect3DDevice8 *D3DDevice, WW3DFormat d
 	Compute_Caps(display_format, adapter_id);
 }
 
-// FUNCTION: BFME2 0x0012C780 size=265 name=??0DX8Caps@@QAE@PAUIDirect3D8@@ABU_D3DCAPS8@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER8@@@Z evidence=N:ledger tier=B hypothesis:Z
+// FUNCTION: BFME2 0x0012C780 size=265 name=??0DX8Caps@@QAE@PAUIDirect3D9@@ABU_D3DCAPS9@@W4WW3DFormat@@ABU_D3DADAPTER_IDENTIFIER9@@@Z evidence=N:ledger tier=B hypothesis:Z
 

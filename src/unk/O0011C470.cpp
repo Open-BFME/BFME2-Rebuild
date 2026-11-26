@@ -12,12 +12,12 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented, hypothesis:padding
-// FUNCTION: BFME2 0x0011C470 size=134 name=?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT8@@@Z evidence=N:ledger tier=B hypothesis:name:invented
+// FUNCTION: BFME2 0x0011C470 size=134 name=?Set_DX8_Light@DXWrapper@@SAXHPAU_D3DLIGHT9@@@Z evidence=N:ledger tier=B hypothesis:name:invented
 // The device is a Direct3D 9 device behind Direct3D 8's name: SetLight is slot 51 (+0xCC), LightEnable slot 53 (+0xD4).
-typedef HRESULT(__stdcall *DX8Wrapper_SetLightFn)(IDirect3DDevice8 *, DWORD, const D3DLIGHT8 *);
-typedef HRESULT(__stdcall *DX8Wrapper_LightEnableFn)(IDirect3DDevice8 *, DWORD, BOOL);
+typedef HRESULT(__stdcall *DX8Wrapper_SetLightFn)(IDirect3DDevice9 *, DWORD, const D3DLIGHT9 *);
+typedef HRESULT(__stdcall *DX8Wrapper_LightEnableFn)(IDirect3DDevice9 *, DWORD, BOOL);
 
-void DXWrapper::Set_DX8_Light(int index, D3DLIGHT8 *light)
+void DXWrapper::Set_DX8_Light(int index, D3DLIGHT9 *light)
 {
 	if (light) {
 		light_changes++;
@@ -27,7 +27,7 @@ void DXWrapper::Set_DX8_Light(int index, D3DLIGHT8 *light)
 		number_of_DX8_calls++;
 		CurrentDX8LightEnables[index] = true;
 	} else if (CurrentDX8LightEnables[index]) {
-		IDirect3DDevice8 *device = D3DDevice;
+		IDirect3DDevice9 *device = D3DDevice;
 		light_changes++;
 		CurrentDX8LightEnables[index] = false;
 		((*(DX8Wrapper_LightEnableFn **)device)[53])(device, index, FALSE);

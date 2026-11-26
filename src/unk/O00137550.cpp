@@ -7,7 +7,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented, hypothesis:padding
-#include <d3d8.h>
+#include <d3d9.h>
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/w3d_file.h"
 

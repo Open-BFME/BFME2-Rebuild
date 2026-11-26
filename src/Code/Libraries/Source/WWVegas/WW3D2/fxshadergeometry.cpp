@@ -2,7 +2,6 @@
 // dxsdk
 // stlport46
 #include "WW3D2/dxwrapper.h"
-#include "WW3D2/IDirect3DDevice9.h"
 #include "WW3D2/FXShaderGeometry.h"
 #include "WW3D2/IndexBufferClass.h"
 #include "WW3D2/VertexBufferClass.h"
@@ -28,7 +27,7 @@ void FXShaderGeometry::Begin_Rendering(unsigned short vertex_offset)
 
 	if (Declaration != NULL) {
 		// The device is D3D9 behind the DX8 wrapper's pointer. SetVertexDeclaration is slot 87.
-		IDirect3DDevice9 *device = DXWrapper::_Get_D3D_Device9();
+		IDirect3DDevice9 *device = DXWrapper::_Get_D3D_Device8();
 		device->SetVertexDeclaration(Declaration);
 		++number_of_DX8_calls;
 	}

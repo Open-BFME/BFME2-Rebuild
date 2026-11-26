@@ -14,8 +14,8 @@
 
 #include "WW3D2/TextureAsset.h"
 
-struct IDirect3DTexture8;
-struct IDirect3DSurface8;
+struct IDirect3DTexture9;
+struct IDirect3DSurface9;
 // Zero Hour's filter list (view.h): the four entries match the four-dword filter table the constructor clears.
 enum FilterTypes
 {
@@ -53,8 +53,8 @@ public:
 	static int getShaderPasses(ShaderTypes shader);
 	static void resetShader(ShaderTypes shader);		// 0x00075695
 	static void startRenderToTexture(void);
-	static IDirect3DTexture8 *endRenderToTexture(void);
-	static IDirect3DTexture8 *getRenderTexture(void);
+	static IDirect3DTexture9 *endRenderToTexture(void);
+	static IDirect3DTexture9 *getRenderTexture(void);
 	static bool isRenderingToTexture(void) { return m_renderingToTexture; }		// out-of-line copy 0x000A60EA
 	static bool canRenderToTexture(void) { return m_oldRenderSurface && m_newRenderSurface; }	// out-of-line copy 0x000F630C
 
@@ -62,10 +62,10 @@ protected:
 	static ShaderTypes m_currentShader;					// 0x00DE1F54
 	static FilterTypes m_currentFilter;					// 0x00DE1F5C
 	static bool m_renderingToTexture;					// 0x00DE1F60
-	static IDirect3DSurface8 *m_oldRenderSurface;		// 0x00DE1F64
-	static IDirect3DTexture8 *m_renderTexture;			// 0x00DE1F68
-	static IDirect3DSurface8 *m_newRenderSurface;		// 0x00DE1F6C
-	static IDirect3DSurface8 *m_oldDepthSurface;		// 0x00DE1F70
+	static IDirect3DSurface9 *m_oldRenderSurface;		// 0x00DE1F64
+	static IDirect3DTexture9 *m_renderTexture;			// 0x00DE1F68
+	static IDirect3DSurface9 *m_newRenderSurface;		// 0x00DE1F6C
+	static IDirect3DSurface9 *m_oldDepthSurface;		// 0x00DE1F70
 };
 
 #endif

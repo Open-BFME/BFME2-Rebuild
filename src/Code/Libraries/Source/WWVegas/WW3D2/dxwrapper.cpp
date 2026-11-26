@@ -13,7 +13,6 @@
 #include "WW3D2/VertexBufferClass.h"
 #include "WW3D2/IndexBufferClass.h"
 
-#include "WW3D2/PresentParameters9.h"
 #include "WWLib/thread.h"
 #include "debug/Debug.h"
 #include "sys_util/Synchronization.h"
@@ -61,7 +60,7 @@ void bfmeSetProjectionDepthBias(float bias);	// 0x0011F1C0 (the depth-bias sette
 // Retail's present parameters (0x00DED5B8; the ledger's ?_PresentParameters@@3U_D3DPRESENT_PARAMETERS@@A). Only BackBufferCount (+0xC) is read here.
 // This unit's statics (Zero Hour's dx8wrapper.cpp keeps all four file-static; .bss, retail address order; witnessed by
 // byte-equal functions of this file at 0x00DED5B8, 0x00DEDA00, 0x00DEDF90, 0x00DEE5C0).
-static struct _D3DPRESENT_PARAMETERS _PresentParameters = { 0 };
+static D3DPRESENT_PARAMETERS _PresentParameters = { 0 };
 static HWND _Hwnd = 0;		// the render window (0x00DEDA00; the ledger's __Hwnd)
 
 // The render device name tables (0x00DEDF90 short names, 0x00DEE5C0 names; the ledger's __RenderDeviceNameTable and friends).
@@ -82,7 +81,7 @@ int DXWrapper::ResolutionHeight = 480;										// 0x00DB5FD8
 int DXWrapper::BitDepth = 32;												// 0x00DB5FDC
 int DXWrapper::TextureBitDepth = 16;										// 0x00DB5FE0
 // .bss, zero-initialised (explicit zeros keep definition order):
-IDirect3DBaseTexture8 *DXWrapper::Textures[MAX_TEXTURE_STAGES];					// 0x00DEC4B0
+IDirect3DBaseTexture9 *DXWrapper::Textures[MAX_TEXTURE_STAGES];					// 0x00DEC4B0
 float DXWrapper::ZNear = 0.0f;												// 0x00DEC4F0
 unsigned DXWrapper::render_state_changed = 0;								// 0x00DEC4F4
 bool DXWrapper::IsDeviceLost = false;										// 0x00DEC4F8
@@ -97,12 +96,12 @@ bool DXWrapper::FogEnable = false;										// 0x00DEDA21
 D3DCOLOR DXWrapper::FogColor = 0;										// 0x00DEDA24
 float DXWrapper::FogStart = 0.0f;										// 0x00DEDA28
 float DXWrapper::FogEnd = 0.0f;											// 0x00DEDA2C
-IDirect3D8 *DXWrapper::D3DInterface = 0;									// 0x00DEDA30
-IDirect3DDevice8 *DXWrapper::D3DDevice = 0;								// 0x00DEDA34
-IDirect3DSurface8 *DXWrapper::CurrentRenderTarget = 0;						// 0x00DEDA38
-IDirect3DSurface8 *DXWrapper::CurrentDepthBuffer = 0;						// 0x00DEDA3C
-IDirect3DSurface8 *DXWrapper::DefaultRenderTarget = 0;						// 0x00DEDA40
-IDirect3DSurface8 *DXWrapper::DefaultDepthBuffer = 0;						// 0x00DEDA44
+IDirect3D9 *DXWrapper::D3DInterface = 0;									// 0x00DEDA30
+IDirect3DDevice9 *DXWrapper::D3DDevice = 0;								// 0x00DEDA34
+IDirect3DSurface9 *DXWrapper::CurrentRenderTarget = 0;						// 0x00DEDA38
+IDirect3DSurface9 *DXWrapper::CurrentDepthBuffer = 0;						// 0x00DEDA3C
+IDirect3DSurface9 *DXWrapper::DefaultRenderTarget = 0;						// 0x00DEDA40
+IDirect3DSurface9 *DXWrapper::DefaultDepthBuffer = 0;						// 0x00DEDA44
 bool DXWrapper::IsRenderToTexture = false;									// 0x00DEDA48
 unsigned DXWrapper::matrix_changes = 0;									// 0x00DEDA4C
 unsigned DXWrapper::material_changes = 0;									// 0x00DEDA50
@@ -131,7 +130,7 @@ Matrix4x4 DXWrapper::ProjectionMatrix;										// 0x00DEDC30
 RenderStateStruct DXWrapper::render_state;									// 0x00DEE5D8
 
 // FUNCTION: BFME2 0x0011CC60 size=215 name=?Rva0011CC60InvalidateTextureStages@DX8WrapperStageHelper@@SAXXZ evidence=?:placeholder tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_InvalidateSetTextureFn)(IDirect3DDevice8 *, DWORD, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_InvalidateSetTextureFn)(IDirect3DDevice9 *, DWORD, void *);
 
 void DXWrapper::Invalidate_Texture_Stages(void)
 {
@@ -208,10 +207,10 @@ bool DXWrapper::Registry_Load_Render_Device(const char *sub_key, char *device, i
 }
 
 // FUNCTION: BFME2 0x0011CF80 size=248 name=?Find_Color_Mode@DXWrapper@@KA_NW4_D3DFORMAT@@HHPAI@Z evidence=N:ledger tier=A
-// The Direct3D 9 interface behind IDirect3D8: GetAdapterModeCount is slot 6 (+0x18), EnumAdapterModes slot 7 (+0x1C), CheckDeviceType slot 9 (+0x24).
-typedef UINT(__stdcall *DX8Wrapper_GetAdapterModeCountFn)(IDirect3D8 *, UINT, UINT);
-typedef HRESULT(__stdcall *DX8Wrapper_EnumAdapterModesFn)(IDirect3D8 *, UINT, UINT, UINT, D3DDISPLAYMODE *);
-typedef HRESULT(__stdcall *DX8Wrapper_CheckDeviceTypeFn)(IDirect3D8 *, UINT, D3DDEVTYPE, UINT, UINT, BOOL);
+// The Direct3D 9 interface behind IDirect3D9: GetAdapterModeCount is slot 6 (+0x18), EnumAdapterModes slot 7 (+0x1C), CheckDeviceType slot 9 (+0x24).
+typedef UINT(__stdcall *DX8Wrapper_GetAdapterModeCountFn)(IDirect3D9 *, UINT, UINT);
+typedef HRESULT(__stdcall *DX8Wrapper_EnumAdapterModesFn)(IDirect3D9 *, UINT, UINT, UINT, D3DDISPLAYMODE *);
+typedef HRESULT(__stdcall *DX8Wrapper_CheckDeviceTypeFn)(IDirect3D9 *, UINT, D3DDEVTYPE, UINT, UINT, BOOL);
 
 // Find the resolution mode with at least resx,resy with the highest supported refresh rate.
 bool DXWrapper::Find_Color_Mode(D3DFORMAT colorbuffer, int resx, int resy, UINT *mode)
@@ -265,9 +264,9 @@ bool DXWrapper::Find_Color_Mode(D3DFORMAT colorbuffer, int resx, int resy, UINT 
 }
 
 // FUNCTION: BFME2 0x0011D080 size=70 name=?Test_Z_Mode@DXWrapper@@KA_NW4_D3DFORMAT@@00@Z evidence=N:ledger tier=A
-// Retail's IDirect3D8 is a Direct3D 9 interface: CheckDeviceFormat is slot 10 (+0x28), CheckDepthStencilMatch slot 12 (+0x30).
-typedef HRESULT(__stdcall *DX8Wrapper_CheckDeviceFormatFn)(IDirect3D8 *, UINT, D3DDEVTYPE, D3DFORMAT, DWORD, D3DRESOURCETYPE, D3DFORMAT);
-typedef HRESULT(__stdcall *DX8Wrapper_CheckDepthStencilMatchFn)(IDirect3D8 *, UINT, D3DDEVTYPE, D3DFORMAT, D3DFORMAT, D3DFORMAT);
+// Retail's IDirect3D9 is a Direct3D 9 interface: CheckDeviceFormat is slot 10 (+0x28), CheckDepthStencilMatch slot 12 (+0x30).
+typedef HRESULT(__stdcall *DX8Wrapper_CheckDeviceFormatFn)(IDirect3D9 *, UINT, D3DDEVTYPE, D3DFORMAT, DWORD, D3DRESOURCETYPE, D3DFORMAT);
+typedef HRESULT(__stdcall *DX8Wrapper_CheckDepthStencilMatchFn)(IDirect3D9 *, UINT, D3DDEVTYPE, D3DFORMAT, D3DFORMAT, D3DFORMAT);
 
 bool DXWrapper::Test_Z_Mode(D3DFORMAT colorbuffer, D3DFORMAT backbuffer, D3DFORMAT zmode)
 {
@@ -380,7 +379,7 @@ int getDX8FrameCount(void)
 
 // FUNCTION: BFME2 0x0011D2B0 size=31 name=?Begin_Scene_Inner@DXWrapper@@SAXXZ evidence=N:ledger tier=A
 // The device is a Direct3D 9 device behind Direct3D 8's name: BeginScene is slot 41 (+0xA4).
-typedef HRESULT(__stdcall *DX8Wrapper_BeginSceneFn)(IDirect3DDevice8 *);
+typedef HRESULT(__stdcall *DX8Wrapper_BeginSceneFn)(IDirect3DDevice9 *);
 
 void DXWrapper::Begin_Scene_Inner(void)
 {
@@ -392,7 +391,7 @@ void DXWrapper::Begin_Scene_Inner(void)
 
 // FUNCTION: BFME2 0x0011D2D0 size=87 name=?Rva0011D2D0WaitForBackBuffer@DXWrapper@@SAXXZ evidence=?:placeholder tier=A
 // GetBackBuffer is slot 18 (+0x48), the surface's LockRect slot 13 (+0x34), UnlockRect slot 14 (+0x38), Release slot 2 (+0x08).
-typedef HRESULT(__stdcall *DX8Wrapper_GetBackBufferFn)(IDirect3DDevice8 *, UINT, UINT, UINT, void **);
+typedef HRESULT(__stdcall *DX8Wrapper_GetBackBufferFn)(IDirect3DDevice9 *, UINT, UINT, UINT, void **);
 typedef HRESULT(__stdcall *DX8Wrapper_LockRectFn)(void *, D3DLOCKED_RECT *, const RECT *, DWORD);
 typedef HRESULT(__stdcall *DX8Wrapper_UnlockRectFn)(void *);
 typedef ULONG(__stdcall *DX8Wrapper_ReleaseFn)(void *);
@@ -414,9 +413,9 @@ void DXWrapper::Wait_For_Back_Buffer(void)
 // FUNCTION: BFME2 0x0011D330 size=329 name=?Clear@DXWrapper@@SAX_N00ABVVector3@@MMI@Z evidence=N:ledger tier=A
 // The device is a Direct3D 9 device behind Direct3D 8's name: GetDepthStencilSurface is slot 40 (+0xA0), Clear slot 43
 // (+0xAC); the surface's GetDesc is slot 12 (+0x30) and Release slot 2 (+0x08).
-typedef HRESULT(__stdcall *DX8Wrapper_GetDepthStencilSurfaceFn)(IDirect3DDevice8 *, void **);
+typedef HRESULT(__stdcall *DX8Wrapper_GetDepthStencilSurfaceFn)(IDirect3DDevice9 *, void **);
 typedef HRESULT(__stdcall *DX8Wrapper_GetDescFn)(void *, D3DSURFACE_DESC *);
-typedef HRESULT(__stdcall *DX8Wrapper_ClearFn)(IDirect3DDevice8 *, DWORD, const D3DRECT *, DWORD, D3DCOLOR, float, DWORD);
+typedef HRESULT(__stdcall *DX8Wrapper_ClearFn)(IDirect3DDevice9 *, DWORD, const D3DRECT *, DWORD, D3DCOLOR, float, DWORD);
 
 void DXWrapper::Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil, const Vector3 &color, float dest_alpha, float z, unsigned int stencil)
 {
@@ -440,7 +439,7 @@ void DXWrapper::Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil
 	if (clear_z_stencil) flags |= D3DCLEAR_ZBUFFER;
 	if (clear_stencil && has_stencil) flags |= D3DCLEAR_STENCIL;
 	if (flags) {
-		IDirect3DDevice8 *device = D3DDevice;
+		IDirect3DDevice9 *device = D3DDevice;
 		const D3DCOLOR clearColor = Convert_Color(color, dest_alpha);
 		((*(DX8Wrapper_ClearFn **)device)[43])(device, 0, 0, flags, clearColor, z, stencil);
 		number_of_DX8_calls++;
@@ -448,10 +447,10 @@ void DXWrapper::Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil
 }
 
 
-// FUNCTION: BFME2 0x0011D480 size=27 name=?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT8@@@Z evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_SetViewportFn)(IDirect3DDevice8 *, CONST D3DVIEWPORT8 *);
+// FUNCTION: BFME2 0x0011D480 size=27 name=?Set_Viewport@DXWrapper@@SAXPBU_D3DVIEWPORT9@@@Z evidence=N:ledger tier=A
+typedef HRESULT(__stdcall *DX8Wrapper_SetViewportFn)(IDirect3DDevice9 *, CONST D3DVIEWPORT9 *);
 
-void DXWrapper::Set_Viewport(CONST D3DVIEWPORT8 *pViewport)
+void DXWrapper::Set_Viewport(CONST D3DVIEWPORT9 *pViewport)
 {
 	((*(DX8Wrapper_SetViewportFn **)_Get_D3D_Device8())[47])(_Get_D3D_Device8(), pViewport);
 	number_of_DX8_calls++;
@@ -556,8 +555,8 @@ void DXWrapper::Set_Index_Buffer(const DynamicIBAccessClass &iba_, unsigned shor
 
 // FUNCTION: BFME2 0x0011DC20 size=58 name=?bfmeStepTDB@@YAXXZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0011DC60 size=62 name=?_Create_DX8_Surface@DXWrapper@@SAPAVIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_CreateOffscreenPlainSurface9Fn)(IDirect3DDevice8 *, UINT, UINT, UINT, UINT, void **, void *);
+// FUNCTION: BFME2 0x0011DC60 size=62 name=?_Create_DX8_Surface@DXWrapper@@SAPAUIDirect3DSurface9@@IIW4WW3DFormat@@W4_D3DPOOL@@@Z evidence=N:ledger tier=A
+typedef HRESULT(__stdcall *DX8Wrapper_CreateOffscreenPlainSurface9Fn)(IDirect3DDevice9 *, UINT, UINT, UINT, UINT, void **, void *);
 
 IDirect3DSurface9 *DXWrapper::_Create_DX8_Surface(unsigned int width, unsigned int height, WW3DFormat format, D3DPOOL pool)
 {
@@ -569,8 +568,8 @@ IDirect3DSurface9 *DXWrapper::_Create_DX8_Surface(unsigned int width, unsigned i
 
 // FUNCTION: BFME2 0x0011DCA0 size=120 name=?copySurfaceRects006e@@YAXVW3DRadarResetSurface@@PBUBfmeRect@@01H@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0011DD20 size=90 name=?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT8@@@Z evidence=N:ledger tier=A
-void DXWrapper::Set_Light(unsigned index, const D3DLIGHT8 *light)
+// FUNCTION: BFME2 0x0011DD20 size=90 name=?Set_Light@DXWrapper@@SAXIPBU_D3DLIGHT9@@@Z evidence=N:ledger tier=A
+void DXWrapper::Set_Light(unsigned index, const D3DLIGHT9 *light)
 {
 	if (light) {
 		render_state.Lights[index] = *light;
@@ -585,9 +584,9 @@ void DXWrapper::Set_Light(unsigned index, const D3DLIGHT8 *light)
 // FUNCTION: BFME2 0x0011DD80 size=595 name=?Set_Light@DXWrapper@@SAXIABVLightClass@@@Z evidence=N:ledger tier=A
 void DXWrapper::Set_Light(unsigned index, const LightClass &light)
 {
-	D3DLIGHT8 dlight;
+	D3DLIGHT9 dlight;
 	Vector3 temp;
-	memset(&dlight, 0, sizeof(D3DLIGHT8));
+	memset(&dlight, 0, sizeof(D3DLIGHT9));
 
 	switch (light.Get_Type()) {
 	case LightClass::POINT:
@@ -654,11 +653,11 @@ void DXWrapper::Set_Light(unsigned index, const LightClass &light)
 	Set_Light(index, &dlight);
 }
 
-// FUNCTION: BFME2 0x0011DFE0 size=112 name=?_Get_DX8_Front_Buffer@DXWrapper@@SAPAVIDirect3DSurface9@@XZ evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0011DFE0 size=112 name=?_Get_DX8_Front_Buffer@DXWrapper@@SAPAUIDirect3DSurface9@@XZ evidence=N:ledger tier=A
 // The device's GetDisplayMode is slot 8 (+0x20), CreateOffscreenPlainSurface slot 36 (+0x90), GetFrontBufferData slot 33 (+0x84).
-typedef HRESULT(__stdcall *DX8Wrapper_GetDisplayModeFn)(IDirect3DDevice8 *, UINT, D3DDISPLAYMODE *);
-typedef HRESULT(__stdcall *DX8Wrapper_CreateOffscreenPlainSurfaceFn)(IDirect3DDevice8 *, UINT, UINT, UINT, UINT, void **, void *);
-typedef HRESULT(__stdcall *DX8Wrapper_GetFrontBufferDataFn)(IDirect3DDevice8 *, UINT, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_GetDisplayModeFn)(IDirect3DDevice9 *, UINT, D3DDISPLAYMODE *);
+typedef HRESULT(__stdcall *DX8Wrapper_CreateOffscreenPlainSurfaceFn)(IDirect3DDevice9 *, UINT, UINT, UINT, UINT, void **, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_GetFrontBufferDataFn)(IDirect3DDevice9 *, UINT, void *);
 
 IDirect3DSurface9 *DXWrapper::_Get_DX8_Front_Buffer()
 {
@@ -677,16 +676,16 @@ IDirect3DSurface9 *DXWrapper::_Get_DX8_Front_Buffer()
 
 // FUNCTION: BFME2 0x0011E050 size=195 name=?getBackBufferSurface006e@@YA?AVW3DRadarResetSurface@@H@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0011E250 size=400 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@_N@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0011E250 size=400 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@_N@Z evidence=N:ledger tier=A
 // The device's SetRenderTarget is slot 37 (+0x94), GetRenderTarget slot 38 (+0x98), SetDepthStencilSurface slot 39 (+0x9C),
 // GetDepthStencilSurface slot 40 (+0xA0); a surface's AddRef is slot 1 and Release slot 2.
-typedef HRESULT(__stdcall *DX8Wrapper_SetRenderTargetFn)(IDirect3DDevice8 *, UINT, void *);
-typedef HRESULT(__stdcall *DX8Wrapper_GetRenderTargetFn)(IDirect3DDevice8 *, UINT, void **);
-typedef HRESULT(__stdcall *DX8Wrapper_SetDepthStencilFn)(IDirect3DDevice8 *, void *);
-typedef HRESULT(__stdcall *DX8Wrapper_GetDepthStencilFn)(IDirect3DDevice8 *, void **);
+typedef HRESULT(__stdcall *DX8Wrapper_SetRenderTargetFn)(IDirect3DDevice9 *, UINT, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_GetRenderTargetFn)(IDirect3DDevice9 *, UINT, void **);
+typedef HRESULT(__stdcall *DX8Wrapper_SetDepthStencilFn)(IDirect3DDevice9 *, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_GetDepthStencilFn)(IDirect3DDevice9 *, void **);
 typedef ULONG(__stdcall *DX8Wrapper_AddRefFn)(void *);
 
-void DXWrapper::Set_Render_Target(IDirect3DSurface8 *render_target, bool use_default_depth_buffer)
+void DXWrapper::Set_Render_Target(IDirect3DSurface9 *render_target, bool use_default_depth_buffer)
 {
 	// Should we restore the default render target, or set a new one?
 	if (render_target == NULL || render_target == DefaultRenderTarget) {
@@ -752,8 +751,8 @@ void DXWrapper::Set_Render_Target(IDirect3DSurface8 *render_target, bool use_def
 	IsRenderToTexture = false;
 }
 
-// FUNCTION: BFME2 0x0011E3E0 size=415 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface8@@0@Z evidence=N:ledger tier=A
-void DXWrapper::Set_Render_Target(IDirect3DSurface8 *render_target, IDirect3DSurface8 *depth_buffer)
+// FUNCTION: BFME2 0x0011E3E0 size=415 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSurface9@@0@Z evidence=N:ledger tier=A
+void DXWrapper::Set_Render_Target(IDirect3DSurface9 *render_target, IDirect3DSurface9 *depth_buffer)
 {
 	// Should we restore the default render target, or set a new one?
 	if (render_target == NULL || render_target == DefaultRenderTarget) {
@@ -817,12 +816,12 @@ void DXWrapper::Set_Render_Target(IDirect3DSurface8 *render_target, IDirect3DSur
 
 	IsRenderToTexture = true;
 }
-// FUNCTION: BFME2 0x0011E580 size=132 name=?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain8@@PAX@Z evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_CreateAdditionalSwapChainFn)(IDirect3DDevice8 *, _D3DPRESENT_PARAMETERS *, IDirect3DSwapChain8 **);
+// FUNCTION: BFME2 0x0011E580 size=132 name=?Create_Additional_Swap_Chain@DXWrapper@@SAPAUIDirect3DSwapChain9@@PAX@Z evidence=N:ledger tier=A
+typedef HRESULT(__stdcall *DX8Wrapper_CreateAdditionalSwapChainFn)(IDirect3DDevice9 *, D3DPRESENT_PARAMETERS *, IDirect3DSwapChain9 **);
 
-IDirect3DSwapChain8 *DXWrapper::Create_Additional_Swap_Chain(void *render_window)
+IDirect3DSwapChain9 *DXWrapper::Create_Additional_Swap_Chain(void *render_window)
 {
-	_D3DPRESENT_PARAMETERS params = { 0 };
+	D3DPRESENT_PARAMETERS params = { 0 };
 	params.BackBufferFormat = _PresentParameters.BackBufferFormat;
 	params.BackBufferCount = 1;
 	params.MultiSampleType = D3DMULTISAMPLE_NONE;
@@ -835,14 +834,14 @@ IDirect3DSwapChain8 *DXWrapper::Create_Additional_Swap_Chain(void *render_window
 	params.FullScreen_RefreshRateInHz = 0;
 	params.PresentationInterval = 0;
 
-	IDirect3DSwapChain8 *swap_chain = NULL;
+	IDirect3DSwapChain9 *swap_chain = NULL;
 	((*(DX8Wrapper_CreateAdditionalSwapChainFn **)_Get_D3D_Device8())[13])(_Get_D3D_Device8(), &params, &swap_chain);
 	number_of_DX8_calls++;
 	return swap_chain;
 }
 
 // FUNCTION: BFME2 0x0011E610 size=19 name=?bfmeEvictManagedResources@@YAXXZ evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_EvictFn)(IDirect3DDevice8 *);
+typedef HRESULT(__stdcall *DX8Wrapper_EvictFn)(IDirect3DDevice9 *);
 
 void bfmeEvictManagedResources(void)
 {
@@ -851,7 +850,7 @@ void bfmeEvictManagedResources(void)
 }
 
 // FUNCTION: BFME2 0x0011E630 size=19 name=?Get_Free_Texture_RAM@DXWrapper@@SAIXZ evidence=N:ledger tier=A
-typedef unsigned(__stdcall *DX8Wrapper_GetAvailableTextureMemFn)(IDirect3DDevice8 *);
+typedef unsigned(__stdcall *DX8Wrapper_GetAvailableTextureMemFn)(IDirect3DDevice9 *);
 
 unsigned int DXWrapper::Get_Free_Texture_RAM()
 {
@@ -876,7 +875,7 @@ void DXWrapper::AdjustTextureSize(unsigned &width, unsigned &height)
 	if (caps == NULL) {
 		return;
 	}
-	const D3DCAPS8 &dx8caps = caps->Get_DX8_Caps();
+	const D3DCAPS9 &dx8caps = caps->Get_DX8_Caps();
 	width = ClampedPowerOfTwo009056F0(width, dx8caps.MaxTextureWidth);
 	height = ClampedPowerOfTwo009056F0(height, dx8caps.MaxTextureHeight);
 }
@@ -1619,13 +1618,13 @@ void DXWrapper::bfmeRva00120700(unsigned start_vertex, unsigned polygon_count)
 
 // FUNCTION: BFME2 0x00120850 size=228 name=?Set_Render_Target_With_Z@DXWrapper@@SAXPAVTextureClass@@PAVZTextureClass@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x00120940 size=64 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain8@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x00120940 size=64 name=?Set_Render_Target@DXWrapper@@SAXPAUIDirect3DSwapChain9@@@Z evidence=N:ledger tier=A
 // The swap chain's GetBackBuffer is slot 5 (+0x14), Release slot 2.
-typedef HRESULT(__stdcall *DX8Wrapper_SwapChainGetBackBufferFn)(IDirect3DSwapChain8 *, UINT, UINT, void **);
+typedef HRESULT(__stdcall *DX8Wrapper_SwapChainGetBackBufferFn)(IDirect3DSwapChain9 *, UINT, UINT, void **);
 
-void DXWrapper::Set_Render_Target(IDirect3DSwapChain8 *swap_chain)
+void DXWrapper::Set_Render_Target(IDirect3DSwapChain9 *swap_chain)
 {
-	IDirect3DSurface8 *render_target = 0;
+	IDirect3DSurface9 *render_target = 0;
 	((*(DX8Wrapper_SwapChainGetBackBufferFn **)swap_chain)[5])(swap_chain, 0, 0, (void **)&render_target);
 	Set_Render_Target(render_target, true);
 	if (render_target) {
@@ -1635,7 +1634,7 @@ void DXWrapper::Set_Render_Target(IDirect3DSwapChain8 *swap_chain)
 }
 
 // FUNCTION: BFME2 0x00120980 size=519 name=?Set_Gamma@DXWrapper@@SAXMMM_N0@Z evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_SetGammaRampFn)(IDirect3DDevice8 *, UINT, DWORD, const D3DGAMMARAMP *);	// slot 21 (+0x54)
+typedef HRESULT(__stdcall *DX8Wrapper_SetGammaRampFn)(IDirect3DDevice9 *, UINT, DWORD, const D3DGAMMARAMP *);	// slot 21 (+0x54)
 
 void DXWrapper::Set_Gamma(float gamma, float bright, float contrast, bool calibrate, bool uselimit)
 {
@@ -1801,9 +1800,9 @@ const StringClass &StringClass::operator+=(const char *string)
 
 // FUNCTION: BFME2 0x00121770 size=232 name=?Release_Device@DXWrapper@@KAXXZ evidence=N:ledger tier=A
 // The device's SetTexture is slot 65 (+0x104), SetStreamSource slot 100 (+0x190), SetIndices slot 104 (+0x1A0).
-typedef HRESULT(__stdcall *DX8Wrapper_SetTextureFn)(IDirect3DDevice8 *, DWORD, void *);
-typedef HRESULT(__stdcall *DX8Wrapper_SetStreamSourceFn)(IDirect3DDevice8 *, UINT, void *, UINT, UINT);
-typedef HRESULT(__stdcall *DX8Wrapper_SetIndicesFn)(IDirect3DDevice8 *, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_SetTextureFn)(IDirect3DDevice9 *, DWORD, void *);
+typedef HRESULT(__stdcall *DX8Wrapper_SetStreamSourceFn)(IDirect3DDevice9 *, UINT, void *, UINT, UINT);
+typedef HRESULT(__stdcall *DX8Wrapper_SetIndicesFn)(IDirect3DDevice9 *, void *);
 
 void DXWrapper::Release_Device(void)
 {
@@ -1846,7 +1845,7 @@ void DXWrapper::Release_Device(void)
 }
 
 // FUNCTION: BFME2 0x00121860 size=195 name=?Get_Render_Target_Resolution@DXWrapper@@CAXAAH00AA_N@Z evidence=N:ledger tier=A
-typedef HRESULT(__stdcall *DX8Wrapper_SurfaceGetDescFn)(IDirect3DSurface8 *, D3DSURFACE_DESC *);
+typedef HRESULT(__stdcall *DX8Wrapper_SurfaceGetDescFn)(IDirect3DSurface9 *, D3DSURFACE_DESC *);
 
 void DXWrapper::Get_Render_Target_Resolution(int &set_w, int &set_h, int &set_bits, bool &set_windowed)
 {
@@ -2076,7 +2075,7 @@ static unsigned F2DW(float f)
 
 void DXWrapper::Set_Default_Global_Render_States(void)
 {
-	const D3DCAPS8 &caps = Get_Current_Caps()->Get_DX8_Caps();
+	const D3DCAPS9 &caps = Get_Current_Caps()->Get_DX8_Caps();
 
 	Set_DX8_Render_State(D3DRS_RANGEFOGENABLE, (caps.RasterCaps & D3DPRASTERCAPS_FOGRANGE) ? TRUE : FALSE);
 	Set_DX8_Render_State(D3DRS_FOGTABLEMODE, D3DFOG_NONE);
@@ -2154,8 +2153,8 @@ bool DXWrapper::Set_Device_Resolution(int width, int height, int bits, int windo
 
 // FUNCTION: BFME2 0x00122DF0 size=168 name=?Flip_To_Primary@DXWrapper@@SAXXZ evidence=N:ledger tier=A
 // The device's TestCooperativeLevel is slot 3 (+0x0C), Present slot 17 (+0x44).
-typedef HRESULT(__stdcall *DX8Wrapper_TestCooperativeLevelFn)(IDirect3DDevice8 *);
-typedef HRESULT(__stdcall *DX8Wrapper_PresentFn)(IDirect3DDevice8 *, const RECT *, const RECT *, HWND, const RGNDATA *);
+typedef HRESULT(__stdcall *DX8Wrapper_TestCooperativeLevelFn)(IDirect3DDevice9 *);
+typedef HRESULT(__stdcall *DX8Wrapper_PresentFn)(IDirect3DDevice9 *, const RECT *, const RECT *, HWND, const RGNDATA *);
 
 void DXWrapper::Flip_To_Primary(void)
 {
