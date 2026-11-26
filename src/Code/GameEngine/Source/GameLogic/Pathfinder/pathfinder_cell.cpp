@@ -14,7 +14,7 @@
 
 // FUNCTION: BFME2 0x0052DA95 size=47 name=?StartPathfind@PathfindCell@@QAE_NH@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0052DAC4 size=14 name=?SetParentCell@PathfindCell@@QAEXPAH@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0052DAC4 size=14 name=?SetParentCell@PathfindCell@@QAEXPAV1@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0052DAD2 size=23 name=?set@Rva003F69C0Object@@QAEXPAHH@Z evidence=?:placeholder tier=A
 

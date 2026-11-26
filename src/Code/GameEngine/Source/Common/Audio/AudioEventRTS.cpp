@@ -109,7 +109,7 @@ int AudioEventRTS::rva002D95F1() const
     return 0;
 }
 
-// FUNCTION: BFME2 0x002D95FE size=10 name=?setLeechRangeActive@Weapon@@QAEX_N@Z evidence=N:ledger
+// FUNCTION: BFME2 0x002D95FE size=10 name=?rva002D95FE@AudioEventRTS@@QAEX_N@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x002D9608 size=26 name=?rva002D9608@Rva002D9608@@QAE_NXZ evidence=?:placeholder
 bool AudioEventRTS::rva002D9608()

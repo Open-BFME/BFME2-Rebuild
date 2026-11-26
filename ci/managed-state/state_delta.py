@@ -1049,6 +1049,46 @@ MIGRATE_D3D8_TO_D3D9 = {
         ),
     },
 }
+LEDGER_BATCH_632_633_746 = {
+    "files": {
+        "config/map.json": (
+            "9d0f75bde103b27a75b2842d6820f5f1012d3bbabf344993fb6e4c098a0c1c8a",
+            "b53e982e866f70a2ec32e791374718d6bef21109b0f1d191f2bdbd83b9cdd3d2",
+        ),
+        "expected/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBar.cpp.json": (
+            "25ae33896e106abdd255903f5fffade157e001a87fbf51336ee51cfb0ece9ae6",
+            "fca9a2893a311fa889d429937aceb8071409af0a755b68bb642870e2894d93ef",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeScaffoldBehavior.cpp.json": (
+            "f228dda937b76d844cfc3c7fcfabafc9c4bc8e12ce7b7daf968e5bdbcfbd8355",
+            "9f3baf8367e13142fe0c42cc2b63cdde2bc080526743ef7e0f18671a6f221465",
+        ),
+        "expected/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/W3DScriptedModelDraw.cpp.json": (
+            "cddc9960ee27959eacb636f2d29b82b8e0c1e119ad6a00cfe8a1f32ba6b8fd2a",
+            "58fc0c51dcdd3fbc410b535f070e504ee38e7225522584e6a490de70e51a1bc1",
+        ),
+    },
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/gameengine/source/common/audio/audioeventrts.cpp",
+        "src/code/gameengine/source/common/system/upgrade.cpp",
+        "src/code/gameengine/source/gameclient/buffmanager.cpp",
+        "src/code/gameengine/source/gameclient/drawable.cpp",
+        "src/code/gameengine/source/gameclient/gui/controlbar/controlbar.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptlanlobby.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/livingworld.cpp",
+        "src/code/gameengine/source/gamelogic/object/behavior/bridgescaffoldbehavior.cpp",
+        "src/code/gameengine/source/gamelogic/object/contain/siegeenginecontain.cpp",
+        "src/code/gameengine/source/gamelogic/object/ghostobject.cpp",
+        "src/code/gameengine/source/gamelogic/pathfinder/pathfinder_cell.cpp",
+        "src/code/gameengine/source/gamelogic/skirmishai/aibuildable.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/drawable/w3dscriptedmodeldraw.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dview.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gamelogic/w3dghostobject.cpp",
+        "src/unk/o0047bef8.cpp",
+    }),
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -1065,6 +1105,7 @@ TU_MOVE_MIGRATIONS = (
     LEDGER_BATCH_741_747_636_667_650,
     REMOVE_GAMESPY_SDK_SHIMS,
     MIGRATE_D3D8_TO_D3D9,
+    LEDGER_BATCH_632_633_746,
 )
 
 

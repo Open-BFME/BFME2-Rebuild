@@ -366,7 +366,8 @@
         "?Unload@Factory@FXShaderAsset@@UAEXXZ",
         "?slot44@BehaviorModule@@UAEXXZ",
         "?Release_Device_Resources@Impl@TextureAsset@@UAEXXZ",
-        "?onCreate@DynamicPortalBehaviour@@UAEXXZ"
+        "?onCreate@DynamicPortalBehaviour@@UAEXXZ",
+        "?loadPostProcess@BuffInstance@@MAEXXZ"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

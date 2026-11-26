@@ -6,7 +6,7 @@
 // Hypothesis rules: none; hard membership, hypothetical extent
 // FUNCTION: BFME2 0x0055AD91 size=41 name=?registerWithBuilder@AIBuildable@@UAEXPAX_N@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x0055ADBA size=30 name=?unRegisterWithBuilder@AIBuildable@@QAEXPAX@Z evidence=X:proven (wb-assert|wb-file) tier=B hypothesis:mm1-contiguity-class
-// FUNCTION: BFME2 0x0055ADD8 size=10 name=?failBuild@AIBuildable@@QAEHH@Z evidence=X:proven (wb-assert|wb-file) tier=B hypothesis:mm1-contiguity-class
+// FUNCTION: BFME2 0x0055ADD8 size=10 name=?failBuild@AIBuildable@@QAEXH@Z evidence=X:proven (wb-assert|wb-file) tier=B hypothesis:mm1-contiguity-class
 // FUNCTION: BFME2 0x0055ADE2 size=147 name=?doBuild@AIBuildable@@QAE_NPAVPlayer@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x0055AE75 size=97 name=?doCanMake@AIBuildable@@QAEHPAVPlayer@@@Z evidence=N:ledger tier=A
 

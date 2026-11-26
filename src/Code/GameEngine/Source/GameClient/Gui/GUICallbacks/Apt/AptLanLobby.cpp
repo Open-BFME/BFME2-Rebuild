@@ -244,7 +244,7 @@ void Rva00444525Init(void)
 
 // FUNCTION: BFME2 0x0044455C size=288 name=??1AptLanLobby@@UAE@XZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0044467C size=4 name=?vslot10@GhostObject@@UBEPAVPartitionData@@XZ evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0044467C size=4 name=?ShroudGetData@GhostObject@@UBEPAVPartitionData@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0044469C size=196 name=?rva0044469C@AptLanLobby@@QAEXXZ evidence=?:placeholder tier=A
 

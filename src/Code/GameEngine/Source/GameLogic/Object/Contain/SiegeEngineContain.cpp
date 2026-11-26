@@ -37,7 +37,7 @@ NameKeyType HordeSiegeEngineContain::getModuleNameKey() const
 
 // FUNCTION: BFME2 0x0047D0E7 size=181 name=?addToContainList@HordeSiegeEngineContain@@UAEXPAVObject@@@Z evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0047D19C size=170 name=?LoadPostProcess@HordeSiegeEngineContain@@UAEXXZ evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0047D19C size=170 name=?loadPostProcess@HordeSiegeEngineContain@@MAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0047D247 size=215 name=??0HordeSiegeEngineContain@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=A
 

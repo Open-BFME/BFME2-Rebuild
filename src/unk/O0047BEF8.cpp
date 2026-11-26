@@ -43,7 +43,7 @@ NameKeyType SiegeEngineContain::getModuleNameKey() const
 
 // FUNCTION: BFME2 0x0047C07F size=244 name=?addToContainList@SiegeEngineContain@@UAEXPAVObject@@@Z evidence=N:ledger tier=B hypothesis:name:invented
 
-// FUNCTION: BFME2 0x0047C173 size=170 name=?LoadPostProcess@SiegeEngineContain@@UAEXXZ evidence=N:ledger tier=B hypothesis:name:invented
+// FUNCTION: BFME2 0x0047C173 size=170 name=?loadPostProcess@SiegeEngineContain@@MAEXXZ evidence=N:ledger tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x0047C21E size=184 name=??0SiegeEngineContain@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:name:invented
 

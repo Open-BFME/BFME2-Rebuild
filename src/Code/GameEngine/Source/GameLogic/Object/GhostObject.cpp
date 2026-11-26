@@ -11,11 +11,11 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/GhostObject.h"
 #include "GameLogic/GhostObjectManager.h"
-// FUNCTION: BFME2 0x00305927 size=4 name=?vslot00@GhostObject@@UBEPBXXZ evidence=N:ledger tier=B hypothesis:name:Z
+// FUNCTION: BFME2 0x00305927 size=4 name=?ShroudGetGeometryInfo@GhostObject@@UBEPBVGeometryInfo@@XZ evidence=N:ledger tier=B hypothesis:name:Z
 
-// FUNCTION: BFME2 0x0030592B size=4 name=?vslot04@GhostObject@@UBEPBXXZ evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x0030592B size=4 name=?ShroudGetPosition@GhostObject@@UBEPBVCoord3D@@XZ evidence=N:ledger tier=B hypothesis:K
 
-// FUNCTION: BFME2 0x0030592F size=4 name=?vslot08@GhostObject@@UBEMXZ evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x0030592F size=4 name=?ShroudGetOrientation@GhostObject@@UBEMXZ evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00305933 size=20 name=??0GhostObjectManager@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
 GhostObjectManager::GhostObjectManager()
@@ -76,15 +76,15 @@ const char *GhostObject::GetSnapshotName() const
 }
 
 
-// FUNCTION: BFME2 0x00305B36 size=8 name=?vslot00@GhostObject@@$4PPPPPPPM@A@BEPBXXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00305B36 size=8 name=?ShroudGetGeometryInfo@GhostObject@@$4PPPPPPPM@A@BEPBVGeometryInfo@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00305B3E size=8 name=?vslot04@GhostObject@@$4PPPPPPPM@A@BEPBXXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00305B3E size=8 name=?ShroudGetPosition@GhostObject@@$4PPPPPPPM@A@BEPBVCoord3D@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00305B46 size=8 name=?vslot08@GhostObject@@$4PPPPPPPM@A@BEMXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00305B46 size=8 name=?ShroudGetOrientation@GhostObject@@$4PPPPPPPM@A@BEMXZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00305B4E size=8 name=?vslot0C@GhostObject@@$4PPPPPPPM@A@AEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00305B4E size=8 name=?ShroudSetData@GhostObject@@$4PPPPPPPM@A@AEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00305B56 size=8 name=?vslot10@GhostObject@@$4PPPPPPPM@A@BEPAVPartitionData@@XZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00305B56 size=8 name=?ShroudGetData@GhostObject@@$4PPPPPPPM@A@BEPAVPartitionData@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00305B5E size=88 name=??1GhostObject@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
 

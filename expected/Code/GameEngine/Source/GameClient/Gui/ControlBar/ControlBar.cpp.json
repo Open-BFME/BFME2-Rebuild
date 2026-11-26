@@ -225,7 +225,8 @@
       "object": "O0031AA4B",
       "accepted_names": [
         "?erase@?$vector@PAXV?$allocator@PAX@_STL@@@_STL@@QAEPAPAXPAPAX0@Z",
-        "?erase@?$vector@HV?$allocator@H@_STL@@@_STL@@QAEPAHPAH0@Z"
+        "?erase@?$vector@HV?$allocator@H@_STL@@@_STL@@QAEPAHPAH0@Z",
+        "?erase@?$vector@PAVUpgradeTemplate@@V?$allocator@PAVUpgradeTemplate@@@_STL@@@_STL@@QAEPAPAVUpgradeTemplate@@PAPAV3@0@Z"
       ],
       "seed_tier": "A",
       "membership_hypothesis": null

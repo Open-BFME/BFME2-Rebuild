@@ -3,6 +3,29 @@
   "object": "retained:O00458279",
   "rows": [
     {
+      "rva": "0x004583AF",
+      "size": 14,
+      "section": ".text",
+      "role": "icf_fold",
+      "parent_rva": "",
+      "fold_group": "F004583AF",
+      "name": "?setVerticalSpeed@BridgeScaffoldBehavior@@UAEXM@Z",
+      "name_evidence": "N:ledger",
+      "confidence": "medium",
+      "evidence": "?:no-compiler-generated-signal;O:placed-among-BridgeScaffoldBehavior",
+      "object_id": "retained:O00458279",
+      "object_evidence": "X:closure",
+      "accepted_names": [
+        "?setVerticalSpeed@BridgeScaffoldBehavior@@UAEXM@Z",
+        "?setPitch@View@@QAEXM@Z",
+        "?slot67@View@@UAEXM@Z"
+      ],
+      "parent": null,
+      "object": "retained:O00458279",
+      "seed_tier": "B",
+      "membership_hypothesis": "hypothesis:legacy-preserved"
+    },
+    {
       "rva": "0x00458402",
       "size": 32,
       "section": ".text",

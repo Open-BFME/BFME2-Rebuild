@@ -1196,7 +1196,7 @@ void View::slot128()
 	m_unk0x98 = 0.0f;
 }
 
-// FUNCTION: BFME2 0x0008BC37 size=7 name=?_bfme_ro_get_98@RenderObjClass@@UBEMXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x0008BC37 size=7 name=?slot129@View@@UAEMXZ evidence=N:ledger tier=B hypothesis:cohesion
 
 
 // FUNCTION: BFME2 0x0008BC3E size=31 name=?rva0008BC3E@Rva0008BC2B@@QAEXMM@Z evidence=?:placeholder tier=B hypothesis:cohesion

@@ -477,7 +477,7 @@ void Drawable::rva00271779(RGBColor color, UnsignedInt preTime, UnsignedInt post
 	m_unk0x84 = amplitude;
 }
 
-// FUNCTION: BFME2 0x002717BC size=47 name=?LoadPostProcess@Drawable@@UAEXXZ evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002717BC size=47 name=?loadPostProcess@Drawable@@UAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002717EB size=43 name=?friend_lockDirtyStuffForIteration@Drawable@@SAXXZ evidence=N:ledger tier=A
 void Drawable::friend_lockDirtyStuffForIteration()
@@ -1731,7 +1731,7 @@ void Drawable::setCustomSoundAmbientInfo(const OpaqueRefElement4 &customAmbientI
 
 // FUNCTION: BFME2 0x0027A018 size=513 name=?createEmbeddedPortals@Drawable@@QAEXXZ evidence=N:ledger tier=A
 
-// FUNCTION: BFME2 0x0027A219 size=3955 name=?DoXfer@Drawable@@UAEXPAVXfer@@@Z evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x0027A219 size=3955 name=?xfer@Drawable@@UAEXPAVXfer@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0027B18C size=755 name=?rva0027B18C@Drawable@@QAEXPAUDamageInfo@@@Z evidence=?:placeholder tier=A
 

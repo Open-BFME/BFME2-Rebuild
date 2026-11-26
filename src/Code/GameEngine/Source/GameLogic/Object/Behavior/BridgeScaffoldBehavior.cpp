@@ -96,8 +96,6 @@ const char *BridgeScaffoldBehavior::GetSnapshotName() const
 	return "BridgeScaffoldBehavior";
 }
 
-// FUNCTION: BFME2 0x004583AF size=14 name=?setPitch@View@@QAEXM@Z evidence=N:ledger
-
 // FUNCTION: BFME2 0x004583BD size=69 name=?rva0004583BD@BridgeScaffoldBehavior@@SA?AW4NameKeyType@@XZ evidence=?:placeholder
 NameKeyType BridgeScaffoldBehavior::getModuleNameKey() const
 {

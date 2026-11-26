@@ -51,7 +51,7 @@ int Rva002BE8CEGet()
 
 // FUNCTION: BFME2 0x002BED91 size=19 name=?clear@Rva002BED91@@QAEXXZ evidence=?:placeholder tier=A
 
-// FUNCTION: BFME2 0x002BEDBE size=12 name=?getLegalSurfaces@Locomotor@@QBEHXZ evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x002BEDBE size=12 name=?rva002BEDBE@@YAHXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002BEDCA size=259 name=?rva002BEDCA@Rva002D3627Host@@QAEHPBVCoord3D@@M@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
