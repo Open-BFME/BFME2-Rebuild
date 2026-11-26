@@ -9,6 +9,7 @@
 #include "GameClient/W3DProjectileStreamDraw.h"
 #include <stddef.h>
 #include "Common/INI.h"
+#include "Common/Xfer.h"
 #include "GameLogic/Module/W3DProjectileStreamDrawModuleData.h"
 #include "GameClient/W3DDisplay.h"
 #include "GameClient/W3DScene.h"
@@ -50,10 +51,26 @@ void W3DProjectileStreamDraw::setFullyObscuredByShroud(Bool fullyObscured)
 }
 
 // FUNCTION: BFME2 0x000D11A6 size=44 name=?xfer@W3DProjectileStreamDraw@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DProjectileStreamDraw::xfer(Xfer *xfer)
+{
+	xfer->Version1();
+	DrawModule::xfer(xfer);
+}
 
 // FUNCTION: BFME2 0x000D11D2 size=84 name=??0W3DProjectileStreamDrawModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+W3DProjectileStreamDrawModuleData::W3DProjectileStreamDrawModuleData()
+{
+	m_texture = "";
+	m_width = 0.0f;
+	m_tileFactor = 0.0f;
+	m_scrollRate = 0.0f;
+	m_maxSegments = 0;
+}
 
 // FUNCTION: BFME2 0x000D1226 size=54 name=??1W3DProjectileStreamDrawModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+W3DProjectileStreamDrawModuleData::~W3DProjectileStreamDrawModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x000D125C size=17 name=?buildFieldParse@W3DProjectileStreamDrawModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 void W3DProjectileStreamDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
