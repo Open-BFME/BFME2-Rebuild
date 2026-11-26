@@ -1,4 +1,4 @@
-# measured_utc=2026-11-24 revision=0fc7d30e48cfd0424b96d4582bce4db53e2d5b1b body_checked_against=9dd2e2d4ee left_out_written=424
+# measured_utc=2026-11-24 revision=0fc7d30e48cfd0424b96d4582bce4db53e2d5b1b body_checked_against=e897cba172 left_out_written=441
 referrers	state	rva	file	symbol	first_referrer	body_check
 51	owned:MISSING	0x00253390	src/unk/O0024EEBB.cpp	??0UpdateModule@@QAE@PAVThing@@PBVModuleData@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Behavior/AutoHealBehavior.cpp	none-found
 15	owned:MISSING	0x0004233A	src/unk/G000421F2.cpp	?Inv_Sqrt@WWMath@@SIMM@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Shadow/W3DShadowMapManager.cpp	none-found
@@ -300,7 +300,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x0003C730	src/Code/Libraries/Source/debug/debug_except.cpp	?DebugCopyToClipboard@@YAXPBD@Z	src/Code/Libraries/Source/debug/debug_except.cpp	none-found
 1	owned:MISSING	0x0003DCD0	src/Code/Libraries/Source/debug/debug_except.cpp	?ExceptionFilter@DebugExceptionhandler@@SGJPAU_EXCEPTION_POINTERS@@@Z	src/Code/Libraries/Source/debug/debug_debug.cpp	none-found
 1	owned:MISSING	0x0003F460	src/Code/Libraries/Source/debug/debug_io_ods.cpp	??1DebugIOOds@@UAE@XZ	src/Code/Libraries/Source/debug/debug_io_ods.cpp	none-found
-1	owned:MISSING	0x00040B10	src/Code/Libraries/Source/debug/debug_io_con.cpp	?Write@DebugIOCon@@UAEXW4StringType@DebugIOInterface@@PBD1@Z	src/Code/Libraries/Source/debug/debug_io_con.cpp	none-found
 1	owned:MISSING	0x0004224C	src/unk/G000421F2.cpp	??0FPModeScope@@QAE@XZ	src/Code/GameEngine/Source/Common/System/SaveGame/GameState.cpp	none-found
 1	owned:MISSING	0x000424FF	src/unk/G000424F8.cpp	?rva0020424FF@ScriptEngine@@QAE_NXZ	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngine.cpp	none-found
 1	owned:MISSING	0x00045473	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplay.cpp	?Rva00045473Equal@@YA_NPBX0@Z	src/Code/GameEngine/Source/GameLogic/Object/Contain/OpenContain.cpp	none-found
@@ -313,7 +312,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x00062C95	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	?getLayerHeight@W3DTerrainLogic@@UBEMMMW4PathfindLayerEnum@@PAVCoord3D@@_N@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	none-found
 1	owned:MISSING	0x00063082	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	?rva00063082@W3DTerrainLogic@@UBE_NPBVCoord3D@@@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	none-found
 1	owned:MISSING	0x00063153	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	?loadMap@W3DTerrainLogic@@UAE_NABVAsciiString@@PAVChunkInputStream@@_N2@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	none-found
-1	owned:MISSING	0x00063537	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?setLocalPlayerIndex@W3DGhostObjectManager@@UAEXH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	none-found
 1	owned:MISSING	0x000636DF	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?disableUVAnimations@@YAXPAVRenderObjClass@@@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	none-found
 1	owned:MISSING	0x00063B1E	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?addGhostObject@W3DGhostObjectManager@@UAEPAVGhostObject@@PAVObject@@@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	none-found
 1	owned:MISSING	0x00063C48	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?reset@W3DGhostObjectManager@@UAEXXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	none-found
@@ -370,8 +368,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x000E67E3	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DVegetationBufferBase.cpp	?ResolveBindings@VegetationFXShaderParameterSourceNamespace@@UAEXPBD0PAVFXShaderParameterBinder@@@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DVegetationBufferBase.cpp	none-found
 1	owned:MISSING	0x000FF448	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Water/W3DWaterTracks.cpp	?shutdown@WaterTracksRenderSystem@@QAEXXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Water/W3DWaterTracks.cpp	none-found
 1	owned:MISSING	0x00101CDA	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DRopeDraw.cpp	?setVolume@AudioEventInfo@@QAEXM@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp	none-found
-1	owned:MISSING	0x00101E1E	src/unk/G00101E1E.cpp	?W3DLogicalScreenToPixelScreen@@YAXMMPAH0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp	none-found
-1	owned:MISSING	0x00101E6D	src/unk/G00101E1E.cpp	?PixelScreenToW3DLogicalScreen@@YAXHHPAM0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp	none-found
 1	owned:MISSING	0x001171B0	src/Code/Libraries/Source/WWVegas/WW3D2/ww3d.cpp	?_Invalidate_Textures@WW3D@@SAXXZ	src/Code/Libraries/Source/WWVegas/WW3D2/ww3d.cpp	none-found
 1	owned:MISSING	0x0011D930	src/Code/Libraries/Source/WWVegas/WW3D2/dxwrapper.cpp	?Apply_Render_State_Changes@DXWrapper@@SAXXZ	src/Code/Libraries/Source/WWVegas/WW3D2/dx8renderer.cpp	none-found
 1	owned:MISSING	0x001203C0	src/Code/Libraries/Source/WWVegas/WW3D2/dxwrapper.cpp	?Draw@DXWrapper@@CAXIIIII_N@Z	src/Code/Libraries/Source/WWVegas/WW3D2/dxwrapper.cpp	none-found
@@ -495,7 +491,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x001FF223	src/Code/GameEngine/Source/Common/RTS/PlayerTemplate.cpp	?init@PlayerTemplateStore@@UAEXXZ	src/Code/GameEngine/Source/Common/RTS/PlayerTemplate.cpp	none-found
 1	owned:MISSING	0x00200BBA	src/unk/O00200BBA.cpp	?getEditableFieldParse@WaterTransparencySetting@@UAEPBUFieldParse@@XZ	src/Code/GameEngine/Source/Common/INI/INIWater.cpp	none-found
 1	owned:MISSING	0x00200BD9	src/unk/O00200BBA.cpp	?getEditableInstance@WaterTransparencySetting@@UAEPAXXZ	src/Code/GameEngine/Source/Common/INI/INIWater.cpp	none-found
-1	owned:MISSING	0x00201134	src/Code/GameEngine/Source/GameClient/Snow.cpp	?reset@SnowManager@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Snow.cpp	none-found
 1	owned:MISSING	0x00201165	src/Code/GameEngine/Source/GameClient/Snow.cpp	?updateIniSettings@SnowManager@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Snow.cpp	none-found
 1	owned:MISSING	0x00202244	src/Code/GameEngine/Source/Common/GameLOD.cpp	?rva00202244@GameLODManager@@QAEXHPAVOptionPreferences@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptOptions.cpp	none-found
 1	owned:MISSING	0x002022E9	src/Code/GameEngine/Source/Common/GameLOD.cpp	?rva002022E9@GameLODManager@@QAEXH@Z	src/Code/GameEngine/Source/Common/GameLOD.cpp	none-found
@@ -599,8 +594,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x00283D70	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	?rva00283D70@TerrainLogic@@QAEPAVObject@@PBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/FireSpreadUpdate.cpp	none-found
 1	owned:MISSING	0x00283E9C	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	?buildBeacons@TerrainLogic@@IAEXXZ	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	none-found
 1	owned:MISSING	0x0028418A	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	??1TerrainLogic@@UAE@XZ	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	none-found
-1	owned:MISSING	0x0028A65E	src/unk/G0028A5D5.cpp	?rva0028A65E@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp	none-found
-1	owned:MISSING	0x0028A8B5	src/unk/G0028A807.cpp	?clampVisionBonusPercent@ThingTemplate@@QBEXPAM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
 1	owned:MISSING	0x0028B35B	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?rva0028B35B@Object@@QBE_NPBV1@@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
 1	owned:MISSING	0x0028B7B5	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?hasWeaponLockStatus@Object@@QBE_NXZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MISSING	0x0028C264	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?rva0028C264@Object@@QAE_NPAHH@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
@@ -642,7 +635,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x002A5A50	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	?addNamedTimer@InGameUI@@QAEXABVAsciiString@@ABVUnicodeString@@_N@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp	none-found
 1	owned:MISSING	0x002A71BC	src/unk/G002A71B1.cpp	?Init@Command@@QAEXH_N@Z	src/Code/GameEngine/Source/Common/RTS/Player.cpp	none-found
 1	owned:MISSING	0x002A7461	src/unk/G002A71B1.cpp	?rva002A7461@Command@@QAEHXZ	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp	none-found
-1	owned:MISSING	0x002A7548	src/Code/GameEngine/Source/Common/RTS/Command.cpp	?rva002A7548@Command@@QAEHH@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp	none-found
 1	owned:MISSING	0x002A7611	src/unk/O002A75DA.cpp	?RemoveUpgradableCommandPointsFromBonus@Command@@QAEXHW4ObjectID@@@Z	src/unk/O004B86AE.cpp	none-found
 1	owned:MISSING	0x002A77C1	src/unk/G002A77C1.cpp	?AddUpgradableCommandPointsToBonus@Command@@QAEXHW4ObjectID@@PBX@Z	src/unk/O004B86AE.cpp	none-found
 1	owned:MISSING	0x002A8306	src/Code/GameEngine/Source/Common/RTS/PlayerList.cpp	?rva002A8306@PlayerList@@QAEX_N@Z	src/Code/GameEngine/Source/GameClient/Gui/InGame/Tactical/Palantir.cpp	none-found
@@ -829,7 +821,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MATCH	0x0034B167	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?isGuardIdle@AIAttackAreaState@@UBE_NXZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MATCH	0x0034B167	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?isGuardIdle@AIAttackSquadState@@UBE_NXZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MATCH	0x0034B167	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?isGuardIdle@AIHuntState@@UBE_NXZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
-1	owned:MISSING	0x0034B3C0	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?xfer@AIAttackState@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MISSING	0x0034B502	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?onEnter@AIAttackState@@UAE?AW4StateReturnType@@XZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MISSING	0x0034B889	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?onExit@AIAttackState@@UAEXW4StateExitType@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
 1	owned:MISSING	0x0034C7BD	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?onEnter@AIMoveToState@@UAE?AW4StateReturnType@@XZ	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	none-found
@@ -875,7 +866,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MATCH	0x00374815	src/Code/GameEngine/Source/GameLogic/Object/Update/StealthUpdate.cpp	?rva00374815@Rva00373EC6@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/AI/AIGroup.cpp	none-found
 1	owned:MISSING	0x0037588B	src/unk/O00374FD5.cpp	??0StealthUpdateModuleData@@QAE@XZ	src/unk/G0024E36B.cpp	none-found
 1	owned:MISSING	0x00377613	src/Code/GameEngine/Source/GameLogic/System/GameLogicDispatch.cpp	?logicMessageDispatcher@GameLogic@@QAEXPAVGameMessage@@PAX@Z	src/unk/O0023C8DA.cpp	none-found
-1	owned:MISSING	0x0037AD8D	src/unk/O0037AD8D.cpp	?rva0037AD8D@GameSlot@@QAEXABVCreateAHeroData@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptSkirmish.cpp	none-found
 1	owned:MISSING	0x0037B7F6	src/Code/GameEngine/Source/Common/Recorder.cpp	?appendNextCommand@RecorderClass@@IAEXXZ	src/Code/GameEngine/Source/Common/Recorder.cpp	none-found
 1	owned:MISSING	0x0037C57E	src/Code/GameEngine/Source/Common/Recorder.cpp	?startRecording@RecorderClass@@IAEXHHHH@Z	src/Code/GameEngine/Source/Common/Recorder.cpp	none-found
 1	owned:MISSING	0x0037EBEA	src/Code/GameEngine/Source/Common/RTS/UnitRevivalTracker.cpp	?calcButtonImage@UnitRevivalEntry@@QAEPBVImage@@PBVPlayer@@@Z	src/Code/GameEngine/Source/Common/RTS/UnitRevivalTracker.cpp	none-found
@@ -949,12 +939,10 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x00409C3D	src/Code/GameEngine/Source/GameLogic/Object/CreateAHeroHero.cpp	??0CreateAHeroData@@QAE@HHHABVUnicodeString@@HHH@Z	src/Code/GameEngine/Source/GameNetwork/GameInfo.cpp	none-found
 1	owned:MISSING	0x0040A3F9	src/unk/O0040A16E.cpp	?findIndex@Rva0040A3F9@@QBEHPAVCreateAHeroData@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptMpGameSetup.cpp	none-found
 1	owned:MISSING	0x0040A441	src/unk/O0040A16E.cpp	?rva0040A441@Rva0040A3F9@@QAE_NPAVCreateAHeroData@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptCreateAHeroManager.cpp	none-found
-1	owned:MISSING	0x00419BA5	src/unk/O00419BA5.cpp	?release@TBuff@@QAEXXZ	src/Code/GameEngine/Source/GameClient/BuffManager.cpp	none-found
 1	owned:MISSING	0x0041BAD2	src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp	?rva0041BAD2@ActionManager@@QAE_NPBVObject@@0W4CommandSourceType@@W4WeaponSlotType@@@Z	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	none-found
 1	owned:MISSING	0x0041C085	src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp	?canFireWeaponAtLocation@ActionManager@@QAE_NPBVObject@@PBVCoord3D@@W4CommandSourceType@@W4WeaponSlotType@@0@Z	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	none-found
 1	owned:MISSING	0x0041C2D0	src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp	?canEnterObject@ActionManager@@QAE_NPBVObject@@0W4CommandSourceType@@W4CanEnterType@@_NPA_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate.cpp	none-found
 1	owned:MISSING	0x0041C6CF	src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp	?getCanAttackObject@ActionManager@@QAE?AW4CanAttackResult@@PBVObject@@0W4CommandSourceType@@W4AbleToAttackType@@@Z	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	none-found
-1	owned:MISSING	0x0041FDEE	src/unk/G0041FDDE.cpp	?setPriority@AudioEventInfo@@QAEXW4AudioPriority@@@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp	none-found
 1	owned:MISSING	0x004207D4	src/Code/GameEngine/Source/GameLogic/ScriptEngine/VictoryConditions.cpp	?testDefeat@VictoryConditions@@QAE_NPAVPlayer@@@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/VictoryConditions.cpp	none-found
 1	owned:MISSING	0x004264F4	src/unk/O0042643D.cpp	?findNugget@EmotionSystem@@QAEPAVEmotionTrackerUpdateEntry@@ABVAsciiString@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/EmotionTrackerUpdate.cpp	none-found
 1	owned:MISSING	0x00427738	src/Code/GameEngine/Source/GameLogic/System/CaveSystem.cpp	?xfer@CaveSystem@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/System/CaveSystem.cpp	none-found
@@ -1278,7 +1266,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MATCH	0x004C8A95	src/unk/O004C8A10.cpp	?xfer@WeaponChangeSpecialPowerModule@@MAEXPAVXfer@@@Z	src/unk/O004C4022.cpp	none-found
 1	owned:MISSING	0x004C8DE2	src/Code/GameEngine/Source/GameLogic/Object/Update/CritterEmitter.cpp	?update@CritterEmitterUpdate@@UAE?AW4UpdateSleepTime@@XZ	src/Code/GameEngine/Source/GameLogic/Object/Update/CritterEmitter.cpp	none-found
 1	owned:MISSING	0x004C923B	src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp	?clientUpdate@SwayClientUpdate@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp	none-found
-1	owned:MISSING	0x004C98AF	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp	?clientUpdate@BeaconClientUpdate@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp	none-found
 1	owned:MATCH	0x004C9C7D	src/Code/GameEngine/Source/GameLogic/Object/Behavior/BehaviorModule.cpp	?xfer@AnimatedParticleSysBoneClientUpdate@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameClient/Drawable/Update/AnimatedParticleSysBoneClientUpdate.cpp	none-found
 1	owned:MISSING	0x004CB047	src/unk/O004CAB6C.cpp	?Rva004CB047Parse@@YAXPAVINI@@PAX1PBX@Z	src/unk/G004CB0F3.cpp	none-found
 1	owned:MISSING	0x004CBB54	src/Code/GameEngine/Source/Common/Thing/Module.cpp	?parseSoundUpgrade@UpgradeSoundSelectorClientBehaviorModuleData@@SAXPAVINI@@PAX1PBX@Z	src/unk/G004CBBB4.cpp	none-found
@@ -1319,7 +1306,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x004DE4E2	src/Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderPosGoalManager.cpp	?rva004DE4E2@PathfinderPosGoalManager@@QAEXH@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
 1	owned:MISSING	0x004DE511	src/Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderPosGoalManager.cpp	?rva004DE511@PathfinderPosGoalManager@@QAEXHH@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
 1	owned:MISSING	0x004DE767	src/Code/GameEngine/Source/GameLogic/Object/Helper/ObjectSMCHelper.cpp	??1ObjectSMCHelper@@UAE@XZ	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
-1	owned:MISSING	0x004E05E9	src/unk/G004E04D9.cpp	?rva004E05E9@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp	none-found
 1	owned:MISSING	0x004E400D	src/unk/G004E3FF0.cpp	?Rva004E400DEnable@@YAXXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	none-found
 1	owned:MISSING	0x004E4179	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	?Rva004E4179Get@@YAPAXXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	none-found
 1	owned:MISSING	0x004E476C	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	?rva004E476C@AptPlayerStatus@@QAEXXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	none-found
@@ -1349,9 +1335,7 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x004F418A	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	?updateBridgeRepair@AIPlayer@@IAEXXZ	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	none-found
 1	owned:MISSING	0x004F437E	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	?recruitSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	none-found
 1	owned:MISSING	0x004F571B	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp	?onTunnelDestroyed@TunnelTracker@@QAE_NPBVObject@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp	none-found
-1	owned:MISSING	0x004F585C	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp	?loadPostProcess@TunnelTracker@@MAEXXZ	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp	none-found
 1	owned:MISSING	0x004F5A67	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp	?rva004F5A67@ResourceGatheringManager@@QAE_NPAVObject@@PAVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/SupplyTruckAIUpdate.cpp	none-found
-1	owned:MISSING	0x004F5BAA	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp	?GetSnapshotName@ResourceGatheringManager@@MBEPBDXZ	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp	none-found
 1	owned:MISSING	0x004FBDF7	src/unk/O004FBDDF.cpp	?xfer@RegionAwardDispute@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp	none-found
 1	owned:MISSING	0x004FBED6	src/unk/O004FBE7A.cpp	?GetResolvableBy@RegionAwardDispute@@QAEHXZ	src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp	none-found
 1	owned:MISSING	0x004FC05C	src/unk/G004FBF8E.cpp	??1RegionAwardDispute@@UAE@XZ	src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp	none-found
@@ -1555,7 +1539,6 @@ referrers	state	rva	file	symbol	first_referrer	body_check
 1	owned:MISSING	0x006BD470	src/unk/G006BD360.cpp	?getLocalCenter@GeometryInfo@@QAEXPAUCoord3DBase@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/SpecialAbilityUpdate.cpp	none-found
 1	owned:MISSING	0x006BD980	src/Code/Libraries/Source/geometry/Geometry.cpp	?getGeometryShape@GeometryInfo@@QAEPAVGeometryShape@@H@Z	src/Code/GameEngine/Source/GameLogic/Object/Body/ActiveBody.cpp	none-found
 1	owned:MISSING	0x006BE160	src/Code/Libraries/Source/geometry/Geometry.cpp	?usePluralShadowName@GeometryInfo@@QBE_NXZ	src/Code/GameEngine/Source/Common/Thing/ThingTemplate.cpp	none-found
-1	owned:MISSING	0x006BEB00	src/Code/Libraries/Source/geometry/Geometry.cpp	?setMaxHeightAbovePosition@GeometryInfo@@QAEXM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	none-found
 1	owned:MISSING	0x006BF3C0	src/Code/Libraries/Source/geometry/Geometry.cpp	?setFlag@GeometryInfo@@QAEXABVAsciiString@@D@Z	src/Code/GameEngine/Source/GameLogic/Object/Behavior/GateOpenAndCloseBehavior.cpp	none-found
 1	owned:MISSING	0x006BF450	src/Code/Libraries/Source/geometry/Geometry.cpp	?setShapesActiveExcept@GeometryInfo@@QAEXABVAsciiString@@_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Body/ActiveBody.cpp	none-found
 1	owned:MISSING	0x006C5310	src/Code/Libraries/Source/profile/profile.cpp	?RemovePatternEntry@Profile@@CAXPAUPatternListEntry@1@@Z	src/Code/Libraries/Source/profile/profile.cpp	none-found

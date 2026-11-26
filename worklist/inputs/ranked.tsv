@@ -749,7 +749,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x0004FA11	src/Code/GameEngineDevice/Source/W3DDevice/Common/System/W3DRadar.cpp	?GetSnapshotName@Radar@@UBEPBDXZ	src/Code/GameEngine/Source/Common/System/Radar.cpp
 1	owned:MATCH	0x00458AC7	src/unk/O00458AAE.cpp	?GetSnapshotName@RampageBehavior@@UBEPBDXZ	src/unk/O00458AAE.cpp
 1	owned:MATCH	0x004867D7	src/Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDie.cpp	?GetSnapshotName@RebuildHoleExposeDie@@MBEPBDXZ	src/Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDie.cpp
-1	owned:MISSING	0x004F5BAA	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp	?GetSnapshotName@ResourceGatheringManager@@MBEPBDXZ	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp
+1	owned:MATCH	0x004F5BAA	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp	?GetSnapshotName@ResourceGatheringManager@@MBEPBDXZ	src/Code/GameEngine/Source/Common/RTS/ResourceGatheringManager.cpp
 1	owned:MATCH	0x00493DA4	src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SpecialPowerModule.cpp	?GetSnapshotName@SpecialPowerModule@@MBEPBDXZ	src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SpecialPowerModule.cpp
 1	owned:MATCH	0x0026EDF9	src/Code/GameEngine/Source/Common/System/Upgrade.cpp	?GetSnapshotName@Upgrade@@MBEPBDXZ	src/Code/GameEngine/Source/Common/System/Upgrade.cpp
 1	owned:MATCH	0x000B2214	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DDefaultDraw.cpp	?GetSnapshotName@W3DDefaultDraw@@MBEPBDXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DDefaultDraw.cpp
@@ -822,7 +822,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x003B5EA5	src/Code/GameEngine/Source/GameLogic/ScriptEngine/Scripts.cpp	?ParseAction@ScriptAction@@KAPAV1@AAVDataChunkInput@@PAUDataChunkInfo@@PAX@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/Scripts.cpp
 1	owned:MISSING	0x00449258	src/unk/O00448423.cpp	?ParseGameOptionsString@@YA_NPAVLANGameInfo@@VAsciiString@@PBXH@Z	src/Code/GameEngine/Source/GameNetwork/LANAPICallbacks.cpp
 1	owned:MISSING	0x0013DD10	src/Code/Libraries/Source/WWVegas/WW3D2/vertmaterial.cpp	?Parse_Mapping_Args@VertexMaterialClass@@QAEXABUW3dVertexMaterialStruct@@PAD1@Z	src/Code/Libraries/Source/WWVegas/WW3D2/vertmaterial.cpp
-1	owned:MISSING	0x00101E6D	src/unk/G00101E1E.cpp	?PixelScreenToW3DLogicalScreen@@YAXHHPAM0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp
+1	owned:MATCH	0x00101E6D	src/unk/G00101E1E.cpp	?PixelScreenToW3DLogicalScreen@@YAXHHPAM0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp
 1	owned:MISSING	0x0027EAFC	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	?Point_In_Triangle_2D@@YA_NABVVector3@@000HHAAE@Z	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp
 1	owned:MATCH	0x006FE920	src/Code/Libraries/Source/Apt/AptActionInterpreter.cpp	?Pop@AptBasePtrStack@@QAEXXZ	src/Code/Libraries/Source/Apt/AptArray.cpp
 1	owned:MISSING	0x005B6052	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptCreateAHeroManager.cpp	?PopulateAwards@Manager@AptCreateAHero@@QAEXXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptCreateAHeroManager.cpp
@@ -990,8 +990,8 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MATCH	0x001A61A0	src/Code/Libraries/Source/WWVegas/WW3D2/composite.cpp	?Update_Obj_Space_Bounding_Volumes@CompositeRenderObjClass@@UAEXXZ	src/Code/Libraries/Source/WWVegas/WW3D2/animobj.cpp
 1	owned:MISSING	0x0019DB50	src/Code/Libraries/Source/WWVegas/WW3D2/hlod.cpp	?Update_Obj_Space_Bounding_Volumes@HLodClass@@MAEXXZ	src/Code/Libraries/Source/WWVegas/WW3D2/hlod.cpp
 1	owned:MISSING	0x0019D640	src/Code/Libraries/Source/WWVegas/WW3D2/hlod.cpp	?Update_Sub_Object_Transforms@HLodClass@@MAEXXZ	src/Code/Libraries/Source/WWVegas/WW3D2/hlod.cpp
-1	owned:MISSING	0x00101E1E	src/unk/G00101E1E.cpp	?W3DLogicalScreenToPixelScreen@@YAXMMPAH0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp
-1	owned:MISSING	0x00040B10	src/Code/Libraries/Source/debug/debug_io_con.cpp	?Write@DebugIOCon@@UAEXW4StringType@DebugIOInterface@@PBD1@Z	src/Code/Libraries/Source/debug/debug_io_con.cpp
+1	owned:MATCH	0x00101E1E	src/unk/G00101E1E.cpp	?W3DLogicalScreenToPixelScreen@@YAXMMPAH0HH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DView.cpp
+1	owned:MATCH	0x00040B10	src/Code/Libraries/Source/debug/debug_io_con.cpp	?Write@DebugIOCon@@UAEXW4StringType@DebugIOInterface@@PBD1@Z	src/Code/Libraries/Source/debug/debug_io_con.cpp
 1	owned:MISSING	0x003B6975	src/Code/GameEngine/Source/GameLogic/ScriptEngine/Scripts.cpp	?WriteGroupDataChunk@@YAXAAVDataChunkOutput@@PAVScriptList@@PAVScriptGroup@@@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/Scripts.cpp
 1	owned:MISSING	0x006C7A60	src/Code/Libraries/Source/profile/profile_result.cpp	?WriteResults@ProfileResultFileCSV@@UAEXXZ	src/Code/Libraries/Source/profile/profile_result.cpp
 1	owned:MISSING	0x006C6F70	src/Code/Libraries/Source/profile/profile_result.cpp	?WriteResults@ProfileResultFileDOT@@UAEXXZ	src/Code/Libraries/Source/profile/profile_result.cpp
@@ -1121,14 +1121,14 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x004EF6A0	src/Code/GameEngine/Source/GameLogic/AI/AISkirmishPlayer.cpp	?checkBridges@AISkirmishPlayer@@UAE_NPAVObject@@PAVWaypoint@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AISkirmishPlayer.cpp
 1	owned:MISSING	0x002C7D03	src/Code/GameEngine/Source/GameLogic/Object/WeaponSet.cpp	?chooseBestWeaponForTarget@WeaponSet@@QAE_NPBVObject@@0W4WeaponChoiceCriteria@@W4CommandSourceType@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x00263FA7	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate.cpp	?chooseGoodLocomotorFromCurrentSet@AIUpdateInterface@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate.cpp
-1	owned:MISSING	0x0028A8B5	src/unk/G0028A807.cpp	?clampVisionBonusPercent@ThingTemplate@@QBEXPAM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
+1	owned:MATCH	0x0028A8B5	src/unk/G0028A807.cpp	?clampVisionBonusPercent@ThingTemplate@@QBEXPAM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x005ACD51	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/TargetlessTactics/AIFarmKillSquad.cpp	?cleanUp@AIFarmKillSquad@@UAEXXZ	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/TargetlessTactics/AIFarmKillSquad.cpp
 1	owned:MISSING	0x005AA88D	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/ExpansionTactics/AISimpleExpansionTactic.cpp	?cleanUp@AISimpleExpansionTactic@@UAEXXZ	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/ExpansionTactics/AISimpleExpansionTactic.cpp
 1	owned:MISSING	0x001D9709	src/unk/G001D96FF.cpp	?clearControl@AudioEventInfo@@QAEXH@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
 1	owned:MATCH	0x006E1540	src/Code/Libraries/Source/Apt/AptCIH.cpp	?clearInstanceContents@AptValue@@QAEXXZ	src/Code/Libraries/Source/Apt/AptDisplayList.cpp
 1	owned:MISSING	0x004D6C29	src/unk/G004D6B29.cpp	?clearSquad@Squad@@QAEXXZ	src/Code/GameEngine/Source/Common/RTS/Player.cpp
 1	owned:MATCH	0x0036859F	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/GiantBirdAIUpdate.cpp	?clearUnk0x558@GiantBirdAIUpdate@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/Object/Update/SpecialAbilityUpdate.cpp
-1	owned:MISSING	0x004C98AF	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp	?clientUpdate@BeaconClientUpdate@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp
+1	owned:MATCH	0x004C98AF	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp	?clientUpdate@BeaconClientUpdate@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Drawable/Update/BeaconClientUpdate.cpp
 1	owned:MISSING	0x004C923B	src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp	?clientUpdate@SwayClientUpdate@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Drawable/Update/SwayClientUpdate.cpp
 1	owned:MISSING	0x002B07A9	src/Code/GameEngine/Source/Common/RTS/Player.cpp	?cloneFrom@Player@@QAE_NPAV1@@Z	src/Code/GameEngine/Source/Common/RTS/PlayerList.cpp
 1	owned:MISSING	0x0072A5C0	src/unk/O00727400.cpp	?collide_obb_obb@@YA_NAAUObbCollisionStruct@@PAUCastResultStruct@@@Z	src/Code/Libraries/Source/WWVegas/WWMath/colmathobbobb.cpp
@@ -1228,7 +1228,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MATCH	0x002E4CF3	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp	?getAllHealthBars@OptionPreferences@@QAE_NXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptOptions.cpp
 1	owned:MATCH	0x002E4D4E	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp	?getAlternateMouseSetup@OptionPreferences@@QAE_NXZ	src/Code/GameEngine/Source/Common/GlobalData.cpp
 1	owned:MISSING	0x00323F9C	src/Code/GameEngine/Source/GameClient/Gui/Gadget/GadgetListBox.cpp	?getBottomVisibleEntry@_ListboxData@@QAEHXZ	src/Code/GameEngine/Source/GameClient/Gui/Gadget/GadgetListBox.cpp
-1	owned:MISSING	0x002E3978	src/Code/GameEngine/Source/GameLogic/Map/PolygonTrigger.cpp	?getBounds@PolygonTrigger@@QAEXPAUIRegion2D@@@Z	src/Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder_path.cpp
+1	owned:MATCH	0x002E3978	src/Code/GameEngine/Source/GameLogic/Map/PolygonTrigger.cpp	?getBounds@PolygonTrigger@@QAEXPAUIRegion2D@@@Z	src/Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder_path.cpp
 1	owned:MATCH	0x002E4A47	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp	?getBrightness@OptionPreferences@@QAEMXZ	src/Code/GameEngine/Source/Common/GlobalData.cpp
 1	owned:MISSING	0x0041C6CF	src/Code/GameEngine/Source/Common/RTS/ActionManager.cpp	?getCanAttackObject@ActionManager@@QAE?AW4CanAttackResult@@PBVObject@@0W4CommandSourceType@@W4AbleToAttackType@@@Z	src/Code/GameEngine/Source/GameClient/InGameUI.cpp
 1	owned:MISSING	0x001E3647	src/Code/GameEngine/Source/GameLogic/Object/Locomotor.cpp	?getCell@Pathfinder@@QAEPAVPathfindCell@@W4PathfindLayerEnum@@PBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp
@@ -1352,7 +1352,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x0047901B	src/Code/GameEngine/Source/GameLogic/Object/Contain/GarrisonContain.cpp	?loadGarrisonPoints@GarrisonContain@@IAEXXZ	src/Code/GameEngine/Source/GameLogic/Object/Contain/GarrisonContain.cpp
 1	owned:MISSING	0x000DCA8B	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.cpp	?loadH@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1_NM@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.cpp
 1	owned:MISSING	0x00063153	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	?loadMap@W3DTerrainLogic@@UAE_NABVAsciiString@@PAVChunkInputStream@@_N2@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp
-1	owned:MISSING	0x004F585C	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp	?loadPostProcess@TunnelTracker@@MAEXXZ	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp
+1	owned:MATCH	0x004F585C	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp	?loadPostProcess@TunnelTracker@@MAEXXZ	src/Code/GameEngine/Source/Common/RTS/TunnelTracker.cpp
 1	owned:MISSING	0x000B3A2D	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/W3DScriptedModelDraw.cpp	?loadPostProcess@W3DScriptedModelDraw@@MAEXXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DTankDraw.cpp
 1	owned:MISSING	0x00067800	src/Code/GameEngineDevice/Source/W3DDevice/GameClient/BaseHeightMap.cpp	?loadRoadsAndBridges@BaseHeightMapRenderObjClass@@QAEXPAVW3DTerrainLogic@@_N@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp
 1	owned:MISSING	0x003006E1	src/Code/GameEngine/Source/GameClient/MapUtil.cpp	?loadStandardMaps@MapCache@@QAEXXZ	src/Code/GameEngine/Source/GameClient/MapUtil.cpp
@@ -1488,7 +1488,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x0035164E	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?reconstitute@AIStoredCommand@@QBEXAAUAICommandParms@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/DeployStyleAIUpdate.cpp
 1	owned:MISSING	0x004F437E	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	?recruitSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp
 1	owned:MISSING	0x004EFFC9	src/Code/GameEngine/Source/GameLogic/AI/AIPlayer.cpp	?recruitSpecificAITeam@AISkirmishPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AISkirmishPlayer.cpp
-1	owned:MISSING	0x00419BA5	src/unk/O00419BA5.cpp	?release@TBuff@@QAEXXZ	src/Code/GameEngine/Source/GameClient/BuffManager.cpp
+1	owned:MATCH	0x00419BA5	src/unk/O00419BA5.cpp	?release@TBuff@@QAEXXZ	src/Code/GameEngine/Source/GameClient/BuffManager.cpp
 1	owned:MISSING	0x00360CB0	src/Code/GameEngine/Source/GameLogic/System/ObjectFilter.cpp	?releaseObjectFilterRecord@@YAXPAH@Z	src/Code/GameEngine/Source/GameLogic/System/ObjectFilter.cpp
 1	owned:MISSING	0x002D335B	src/Code/GameEngine/Source/GameClient/Gui/InGame/Tactical/Palantir.cpp	?releaseTarget@RadarMarker@@QAEXXZ	src/Code/GameEngine/Source/Common/System/Radar.cpp
 1	owned:MISSING	0x0047E0CE	src/Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp	?removeAllContained@TunnelContain@@UAEX_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp
@@ -1510,7 +1510,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MATCH	0x0058C0F0	src/Code/GameEngine/Source/GameNetwork/NetCommandWrapperList.cpp	?reset@NetCommandWrapperList@@QAEXXZ	src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp
 1	owned:MISSING	0x002F462C	src/Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp	?reset@Pathfinder@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/AI/ai.cpp
 1	owned:MISSING	0x003E3C66	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions.cpp	?reset@ScriptConditions@@UAEXXZ	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions.cpp
-1	owned:MISSING	0x00201134	src/Code/GameEngine/Source/GameClient/Snow.cpp	?reset@SnowManager@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Snow.cpp
+1	owned:MATCH	0x00201134	src/Code/GameEngine/Source/GameClient/Snow.cpp	?reset@SnowManager@@UAEXXZ	src/Code/GameEngine/Source/GameClient/Snow.cpp
 1	owned:MISSING	0x00063C48	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?reset@W3DGhostObjectManager@@UAEXXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp
 1	owned:MISSING	0x00062B44	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp	?reset@W3DTerrainLogic@@UAEXXZ	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp
 1	owned:MATCH	0x0058B715	src/Code/GameEngine/Source/GameNetwork/FrameDataManager.cpp	?resetFrame@FrameDataManager@@QAEXI_N@Z	src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp
@@ -1569,7 +1569,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x00276223	src/Code/GameEngine/Source/GameClient/Drawable.cpp	?rva00276223@Drawable@@QAEXVAsciiString@@_NH@Z	src/Code/GameEngine/Source/GameClient/FXList.cpp
 1	owned:MISSING	0x0027930F	src/Code/GameEngine/Source/GameClient/Drawable.cpp	?rva0027930F@Drawable@@QAEXH@Z	src/Code/GameEngine/Source/GameClient/GameClient.cpp
 1	owned:MISSING	0x00283D70	src/Code/GameEngine/Source/GameLogic/Map/TerrainLogic.cpp	?rva00283D70@TerrainLogic@@QAEPAVObject@@PBVCoord3D@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/FireSpreadUpdate.cpp
-1	owned:MISSING	0x0028A65E	src/unk/G0028A5D5.cpp	?rva0028A65E@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp
+1	owned:MATCH	0x0028A65E	src/unk/G0028A5D5.cpp	?rva0028A65E@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp
 1	owned:MISSING	0x0028B35B	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?rva0028B35B@Object@@QBE_NPBV1@@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x0028C264	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?rva0028C264@Object@@QAE_NPAHH@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp
 1	owned:MISSING	0x0028C4B6	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?rva0028C4B6@Object@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
@@ -1585,7 +1585,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x0029FCD9	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	?rva0029FCD9@InGameUI@@QAE_NPBD@Z	src/Code/GameEngine/Source/GameClient/Gui/ControlBar/CommandButton.cpp
 1	owned:MISSING	0x002A4A0C	src/Code/GameEngine/Source/GameClient/InGameUI.cpp	?rva002A4A0C@InGameUI@@QAEXVAsciiString@@IPBVGameClientRandomVariable@@111@Z	src/Code/GameEngine/Source/GameClient/FXList.cpp
 1	owned:MISSING	0x002A7461	src/unk/G002A71B1.cpp	?rva002A7461@Command@@QAEHXZ	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp
-1	owned:MISSING	0x002A7548	src/Code/GameEngine/Source/Common/RTS/Command.cpp	?rva002A7548@Command@@QAEHH@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp
+1	owned:MATCH	0x002A7548	src/Code/GameEngine/Source/Common/RTS/Command.cpp	?rva002A7548@Command@@QAEHH@Z	src/Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp
 1	owned:MISSING	0x002A8306	src/Code/GameEngine/Source/Common/RTS/PlayerList.cpp	?rva002A8306@PlayerList@@QAEX_N@Z	src/Code/GameEngine/Source/GameClient/Gui/InGame/Tactical/Palantir.cpp
 1	owned:MISSING	0x002A8F24	src/Code/GameEngine/Source/GameLogic/SkirmishAI/SkirmishAIManager.cpp	?rva002A8F24@SkirmishAIManager@@QAEPAURva002A8F24Record@@PAVPlayer@@@Z	src/Code/GameEngine/Source/Common/RTS/ScoreKeeper.cpp
 1	owned:MISSING	0x002A9365	src/Code/GameEngine/Source/GameLogic/SkirmishAI/SkirmishAIManager.cpp	?rva002A9365@SkirmishAIManager@@QAEXPAVObject@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Upgrade/CommandSetUpgrade.cpp
@@ -1634,7 +1634,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MATCH	0x0037379B	src/Code/GameEngine/Source/GameLogic/Object/Behavior/MineshaftPortalBehaviour.cpp	?rva0037379B@AICommandInterface@@QAEXPAVObject@@W4CommandSourceType@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Contain/HordeContain/HordeContain.cpp
 1	owned:MISSING	0x00373F59	src/Code/GameEngine/Source/GameLogic/Object/Update/StealthUpdate.cpp	?rva00373F59@StealthUpdate@@QAE_NPBVCoord3D@@0@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/StealthUpdate.cpp
 1	owned:MATCH	0x00374815	src/Code/GameEngine/Source/GameLogic/Object/Update/StealthUpdate.cpp	?rva00374815@Rva00373EC6@@QAEXXZ	src/Code/GameEngine/Source/GameLogic/AI/AIGroup.cpp
-1	owned:MISSING	0x0037AD8D	src/unk/O0037AD8D.cpp	?rva0037AD8D@GameSlot@@QAEXABVCreateAHeroData@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptSkirmish.cpp
+1	owned:MATCH	0x0037AD8D	src/unk/O0037AD8D.cpp	?rva0037AD8D@GameSlot@@QAEXABVCreateAHeroData@@@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptSkirmish.cpp
 1	owned:MISSING	0x0037F2C0	src/Code/GameEngine/Source/Common/RTS/UnitRevivalTracker.cpp	?rva0037F2C0@UnitRevivalTracker@@QAEHPAVObject@@_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/RespawnUpdate.cpp
 1	owned:MISSING	0x00381CED	src/unk/G00381CED.cpp	?rva00381CED@Rva00381CED@@QAEXPAX@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptMpGameSetup.cpp
 1	owned:MISSING	0x0039AE04	src/Code/GameEngine/Source/GameLogic/Object/ExperienceTracker.cpp	?rva0039AE04@ExperienceTracker@@QBE_NXZ	src/Code/GameEngine/Source/GameLogic/Object/Update/DockUpdate/SupplyCenterDockUpdate.cpp
@@ -1718,7 +1718,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x004DE2ED	src/Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderPosGoalManager.cpp	?rva004DE2ED@PathfinderPosGoalManager@@QAE_NXZ	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x004DE4E2	src/Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderPosGoalManager.cpp	?rva004DE4E2@PathfinderPosGoalManager@@QAEXH@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x004DE511	src/Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderPosGoalManager.cpp	?rva004DE511@PathfinderPosGoalManager@@QAEXHH@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
-1	owned:MISSING	0x004E05E9	src/unk/G004E04D9.cpp	?rva004E05E9@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp
+1	owned:MATCH	0x004E05E9	src/unk/G004E04D9.cpp	?rva004E05E9@DisconnectManager@@QBEHXZ	src/Code/GameEngine/Source/GameNetwork/Network.cpp
 1	owned:MISSING	0x004E476C	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp	?rva004E476C@AptPlayerStatus@@QAEXXZ	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptObjectivesMenu.cpp
 1	owned:MISSING	0x004E908C	src/Code/GameEngine/Source/GameLogic/SkirmishAI/GameTeams.cpp	?rva004E908C@GateOpenBehaviorList@@QAEXPAX@Z	src/Code/GameEngine/Source/GameLogic/Object/Behavior/GateOpenAndCloseBehavior.cpp
 1	owned:MISSING	0x004EC2D4	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AIWallBuilder/AIWall.cpp	?rva004EC2D4@AIBuilder@@QAEXW4ObjectID@@@Z	src/Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/DozerAIUpdate.cpp
@@ -1811,8 +1811,8 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MATCH	0x0058B76B	src/Code/GameEngine/Source/GameNetwork/FrameDataManager.cpp	?setFrameCommandCount@FrameDataManager@@QAEXII@Z	src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp
 1	owned:MISSING	0x00271058	src/Code/GameEngine/Source/GameClient/Drawable.cpp	?setID@Drawable@@QAEXW4DrawableID@@@Z	src/Code/GameEngine/Source/GameClient/GameClient.cpp
 1	owned:MISSING	0x002B38F7	src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp	?setLocalPlayer@LivingWorldLogic@@QAEXPAVLivingWorldPlayer@@@Z	src/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp
-1	owned:MISSING	0x00063537	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?setLocalPlayerIndex@W3DGhostObjectManager@@UAEXH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp
-1	owned:MISSING	0x006BEB00	src/Code/Libraries/Source/geometry/Geometry.cpp	?setMaxHeightAbovePosition@GeometryInfo@@QAEXM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
+1	owned:MATCH	0x00063537	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp	?setLocalPlayerIndex@W3DGhostObjectManager@@UAEXH@Z	src/Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp
+1	owned:MATCH	0x006BEB00	src/Code/Libraries/Source/geometry/Geometry.cpp	?setMaxHeightAbovePosition@GeometryInfo@@QAEXM@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MATCH	0x00210C91	src/Code/GameEngine/Source/GameClient/LivingWorld/LivingWorldManager.cpp	?setMaxRange@AudioEventInfo@@QAEXM@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
 1	owned:MISSING	0x001D972B	src/unk/G001D96FF.cpp	?setMinRange@AudioEventInfo@@QAEXM@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
 1	owned:MISSING	0x003ACA08	src/unk/O003ACA08.cpp	?setMinVolume@AudioEventInfo@@QAEXM@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
@@ -1823,7 +1823,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x00297379	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp	?setOrRestoreTeam@Object@@AAEXPAVTeam@@_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Object.cpp
 1	owned:MISSING	0x004C5BE3	src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SiegeDeploySpecialPower.cpp	?setPhase@SiegeDeploySpecialPower@@AAEXH@Z	src/Code/GameEngine/Source/GameLogic/Object/SpecialPower/SiegeDeploySpecialPower.cpp
 1	owned:MATCH	0x001EDE4C	src/Code/GameEngine/Source/GameClient/Input/Mouse.cpp	?setPosition@Mouse@@UAEXHH@Z	src/Code/GameEngineDevice/Source/Win32Device/GameClient/Win32Mouse.cpp
-1	owned:MISSING	0x0041FDEE	src/unk/G0041FDDE.cpp	?setPriority@AudioEventInfo@@QAEXW4AudioPriority@@@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
+1	owned:MATCH	0x0041FDEE	src/unk/G0041FDDE.cpp	?setPriority@AudioEventInfo@@QAEXW4AudioPriority@@@Z	src/Code/GameEngine/Source/Common/Audio/DynamicAudioEventInfo.cpp
 1	owned:MATCH	0x0058B818	src/Code/GameEngine/Source/GameNetwork/FrameDataManager.cpp	?setQuitFrame@FrameDataManager@@QAEXI@Z	src/Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp
 1	owned:MATCH	0x002E553D	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Menus/OptionsMenu.cpp	?setSetting@OptionPreferences@@QAEXHH@Z	src/Code/GameEngine/Source/GameClient/Gui/GUICallbacks/Apt/AptOptions.cpp
 1	owned:MISSING	0x006BF450	src/Code/Libraries/Source/geometry/Geometry.cpp	?setShapesActiveExcept@GeometryInfo@@QAEXABVAsciiString@@_N@Z	src/Code/GameEngine/Source/GameLogic/Object/Body/ActiveBody.cpp
@@ -1970,7 +1970,7 @@ referrers	state	rva	file	symbol	first_referrer
 1	owned:MISSING	0x00437755	src/Code/GameEngine/Source/Common/StatsCollector.cpp	?writeInitialFileInfo@StatsCollector@@AAEXXZ	src/Code/GameEngine/Source/Common/StatsCollector.cpp
 1	owned:MISSING	0x00437921	src/Code/GameEngine/Source/Common/StatsCollector.cpp	?writeStatInfo@StatsCollector@@AAEXXZ	src/Code/GameEngine/Source/Common/StatsCollector.cpp
 1	owned:MISSING	0x002FE799	src/Code/GameEngine/Source/GameLogic/AI/ai.cpp	?xfer@AI@@UAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/AI/ai.cpp
-1	owned:MISSING	0x0034B3C0	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?xfer@AIAttackState@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp
+1	owned:MATCH	0x0034B3C0	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?xfer@AIAttackState@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp
 1	owned:MISSING	0x003417F1	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp	?xfer@AIHarvestState@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/AI/AIStates.cpp
 1	owned:MISSING	0x005AA90D	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/ExpansionTactics/AISimpleExpansionTactic.cpp	?xfer@AISimpleExpansionTactic@@UAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/ExpansionTactics/AISimpleExpansionTactic.cpp
 1	owned:MATCH	0x004C9C7D	src/Code/GameEngine/Source/GameLogic/Object/Behavior/BehaviorModule.cpp	?xfer@AnimatedParticleSysBoneClientUpdate@@MAEXPAVXfer@@@Z	src/Code/GameEngine/Source/GameClient/Drawable/Update/AnimatedParticleSysBoneClientUpdate.cpp
