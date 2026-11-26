@@ -25,6 +25,8 @@ concurrency:
 
 env:
   SHARDS: '16'
+  # Which sealed compiler runner compiles nightly; it selects the image pin in ci/managed-check/common.py.
+  BFME_PR_RUNNER: '${{ vars.BFME_PR_RUNNER || '''' }}'
 
 jobs:
   compile:
@@ -32,7 +34,8 @@ jobs:
       github.repository == 'Open-BFME/BFME2-Rebuild' && github.ref == 'refs/heads/main' &&
       github.event.schedule != '47 19 * * *' && !inputs.fold_game_result
     name: Compile shard ${{ matrix.shard }}
-    runs-on: boat-small/from=bfme2-compiler-v1
+    # The same sealed compiler runner the pull request checks use (vars.BFME_PR_RUNNER); Boat when unset.
+    runs-on: '${{ vars.BFME_PR_RUNNER || ''boat-small/from=bfme2-compiler-v1'' }}'
     timeout-minutes: 40
     permissions:
       contents: read
@@ -115,7 +118,7 @@ jobs:
         run: |
           set -euo pipefail
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
-            GITHUB_SHA="$GITHUB_SHA" \
+            GITHUB_SHA="$GITHUB_SHA" BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
             python3 -B ci/nightly/compile_main.py --self-check
       - name: Compile and judge this shard
         shell: bash
@@ -126,7 +129,7 @@ jobs:
           test -z "${GITHUB_TOKEN:-}"
           if ! [[ "$SHARD" =~ ^([0-9]|1[0-5])$ ]]; then echo "::error::expected a shard number 0 to 15; found '$SHARD'"; exit 1; fi
           env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C TMPDIR="$RUNNER_TEMP" \
-            GITHUB_SHA="$GITHUB_SHA" \
+            GITHUB_SHA="$GITHUB_SHA" BFME_PR_RUNNER="${BFME_PR_RUNNER:-}" \
             python3 -B ci/nightly/compile_main.py "$SHARD" "$SHARDS" "$RUNNER_TEMP/shard"
       - name: Save this shard's objects and verdicts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
