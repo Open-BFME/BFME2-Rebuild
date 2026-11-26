@@ -839,14 +839,60 @@ void CountUpTransition::update(int frame)
 }
 
 // FUNCTION: BFME2 0x0035FA03 size=39 name=??0TextOnFrameTransition@@QAE@XZ evidence=N:ledger
+TextOnFrameTransition::TextOnFrameTransition()
+{
+    m_startFrame=0;
+    m_win=0;
+    m_endFrame=30;
+    m_frameLength=30;
+    m_isForward=true;
+}
 
 // FUNCTION: BFME2 0x0035FA39 size=87 name=?s4ParseFieldsRva005A01F0@@YAXPAVINI@@PAUGen_00489270@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035FA90 size=62 name=?init@TextOnFrameTransition@@UAEXPAVGameWindow@@@Z evidence=N:ledger
+void TextOnFrameTransition::init(GameWindow *win)
+{
+    if (win) m_win=win;
+    if (m_win->winIsHidden()) {
+        m_isFinished=true;
+        m_isForward=true;
+        m_frameLength=0;
+    } else {
+        m_isForward=false;
+        update(m_startFrame);
+        m_isFinished=false;
+        m_isForward=true;
+    }
+}
 
 // FUNCTION: BFME2 0x0035FACE size=74 name=?update@TextOnFrameTransition@@UAEXH@Z evidence=N:ledger
+void TextOnFrameTransition::update(int frame)
+{
+    if (frame<m_startFrame || frame>m_endFrame) return;
+    if (frame==m_startFrame) {
+        if (!m_isForward && m_win) {
+            m_win->winHide(true);
+            m_isFinished=true;
+        }
+    } else if (frame==m_endFrame) {
+        if (m_isForward && m_win) {
+            m_win->winHide(false);
+            m_isFinished=true;
+        }
+    }
+}
 
 // FUNCTION: BFME2 0x0035FB18 size=33 name=?reverse@TextOnFrameTransition@@UAEXXZ evidence=N:ledger
+void TextOnFrameTransition::reverse()
+{
+    m_isFinished=false;
+    m_isForward=false;
+    if (m_win->winIsHidden()) {
+        m_isFinished=true;
+        m_frameLength=0;
+    }
+}
 
 // FUNCTION: BFME2 0x0035FB55 size=21 name=?copy@Rva005A0430@@QAEXXZ evidence=?:placeholder
 
@@ -912,56 +958,3 @@ void TextTypeTransition::update(int frame)
 }
 
 // FUNCTION: BFME2 0x0035FF1D size=57 name=?draw@TextTypeTransition@@UAEXXZ evidence=N:ledger
-
-
-#include "GameClient/GameWindowTransitions.h"
-#include "GameClient/GameWindow.h"
-
-TextOnFrameTransition::TextOnFrameTransition()
-{
-    m_startFrame=0;
-    m_win=0;
-    m_endFrame=30;
-    m_frameLength=30;
-    m_isForward=true;
-}
-
-void TextOnFrameTransition::init(GameWindow *win)
-{
-    if (win) m_win=win;
-    if (m_win->winIsHidden()) {
-        m_isFinished=true;
-        m_isForward=true;
-        m_frameLength=0;
-    } else {
-        m_isForward=false;
-        update(m_startFrame);
-        m_isFinished=false;
-        m_isForward=true;
-    }
-}
-void TextOnFrameTransition::update(int frame)
-{
-    if (frame<m_startFrame || frame>m_endFrame) return;
-    if (frame==m_startFrame) {
-        if (!m_isForward && m_win) {
-            m_win->winHide(true);
-            m_isFinished=true;
-        }
-    } else if (frame==m_endFrame) {
-        if (m_isForward && m_win) {
-            m_win->winHide(false);
-            m_isFinished=true;
-        }
-    }
-}
-void TextOnFrameTransition::reverse()
-{
-    m_isFinished=false;
-    m_isForward=false;
-    if (m_win->winIsHidden()) {
-        m_isFinished=true;
-        m_frameLength=0;
-    }
-}
-
