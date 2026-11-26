@@ -743,6 +743,20 @@ GRAPH_CHANGES += (GATES_LEDGER_RUNTIME_NAMES_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(GATES_LEDGER_RUNTIME_NAMES_GRAPH)
 
+GATES_VOID_ABI_CLASS_PTRS_GRAPH = {
+    'tools/gates/void_abi.py': ('0e2871578628970fb952daef54d6f0a7221d8152c3630c06725e8d183d096f32', 'c6e0edf323440bcb063168e947bc3db73887805b0b8a096d607436c153984eb9'),
+    'tools/gates/test_gate.py': ('9260b4b952f5de58e8385a2ba733006ea9ab666db3d7f32a8b67b277d4f82a2a', '7fef78228c245a95d7785bc10bb7e827a3da61c6c6b4dad7291b9c76107ed31a'),
+    'tools/gates/test_public_delivery.py': ('d31813480912510404819a87bc9f2db13cd33c29c0fb5687ac9747f3963512b9', '76e40a3712f05db67580d5673a702c146e6bfe73c6a09f269fac2e4557d3d5a3'),
+}
+GRAPH_CHANGES += (GATES_VOID_ABI_CLASS_PTRS_GRAPH,) + tuple(
+    advance_graph(previous, GATES_VOID_ABI_CLASS_PTRS_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+    and all(previous[path][1] == GATES_VOID_ABI_CLASS_PTRS_GRAPH[path][0]
+            for path in previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_VOID_ABI_CLASS_PTRS_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2

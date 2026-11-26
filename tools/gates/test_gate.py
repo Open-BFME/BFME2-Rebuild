@@ -293,6 +293,58 @@ class Fixture(unittest.TestCase):
         self.assert_gate("G4", "pass", self.compare(old, {SEED: current}))
         self.assert_gate("G4", "fail", self.compare(old, {SEED: current.replace(") const", ")")}))
 
+    def test_g4_ini_field_parser_class_pointers_and_backrefs(self):
+        # Issue #618: class/struct pointers, references, and MSVC parameter/name back-references.
+        member_name = "?IniParseEmotionType@EmotionNuggetTemplate@@SAXPAVINI@@PAX1PBX@Z"
+        free_name = "?parsePitchShift@@YAXPAVINI@@PAX1PBX@Z"
+        self_name = "?parseSelf@INI@@SAXPAV1@PAX1PBX@Z"
+        ref_name = "?dispatch@Router@@QAEXABVAsciiString@@PAXPAUFieldParse@@1@Z"
+        rows = [
+            {"rva": "0x004DC702", "role": "owned", "name": member_name, "accepted_names": []},
+            {"rva": "0x0002F5F4", "role": "owned", "name": free_name, "accepted_names": []},
+            {"rva": "0x0002DE3C", "role": "owned", "name": self_name, "accepted_names": []},
+            {"rva": "0x00012345", "role": "owned", "name": ref_name, "accepted_names": []},
+        ]
+        m = json.dumps({"rows": rows})
+        old_cpp = (
+            f"// FUNCTION: BFME2 0x004DC702 size=4 name={member_name}\n"
+            f"// FUNCTION: BFME2 0x0002F5F4 size=4 name={free_name}\n"
+            f"// FUNCTION: BFME2 0x0002DE3C size=4 name={self_name}\n"
+            f"// FUNCTION: BFME2 0x00012345 size=4 name={ref_name}\n"
+        )
+        new_cpp = (
+            f"// FUNCTION: BFME2 0x004DC702 size=4 name={member_name}\n"
+            "void EmotionNuggetTemplate::IniParseEmotionType(INI *ini, void *instance, void *store, const void *userData) { (void)ini; (void)instance; (void)store; (void)userData; }\n"
+            f"// FUNCTION: BFME2 0x0002F5F4 size=4 name={free_name}\n"
+            "void parsePitchShift(INI *ini, void *instance, void *store, const void *userData) { (void)ini; (void)instance; (void)store; (void)userData; }\n"
+            f"// FUNCTION: BFME2 0x0002DE3C size=4 name={self_name}\n"
+            "void INI::parseSelf(INI *ini, void *instance, void *store, const void *userData) { (void)ini; (void)instance; (void)store; (void)userData; }\n"
+            f"// FUNCTION: BFME2 0x00012345 size=4 name={ref_name}\n"
+            "void Router::dispatch(const AsciiString &key, void *a, struct FieldParse *fp, void *b) { (void)key; (void)a; (void)fp; (void)b; }\n"
+        )
+        self.assert_gate("G4", "pass", self.compare({SEED: old_cpp, "config/map.json": m}, {SEED: new_cpp}))
+        # Adding a void * local inside the body must still fail G4.
+        with_local = new_cpp.replace("(void)ini;", "void *extra = instance; (void)extra; (void)ini;", 1)
+        self.assert_gate("G4", "fail", self.compare({SEED: old_cpp, "config/map.json": m}, {SEED: with_local}))
+        # Wrong class name or wrong constness must still fail G4.
+        wrong_class = new_cpp.replace("INI *ini", "Other *ini", 1)
+        self.assert_gate("G4", "fail", self.compare({SEED: old_cpp, "config/map.json": m}, {SEED: wrong_class}))
+        wrong_const = new_cpp.replace("const void *userData", "void *userData", 1)
+        self.assert_gate("G4", "fail", self.compare({SEED: old_cpp, "config/map.json": m}, {SEED: wrong_const}))
+        # Header declaration for static INI field parser and self-referential method.
+        hdr = "include/EmotionNugget.h"
+        hdr_code = (
+            "class EmotionNuggetTemplate {\npublic:\n"
+            "  static void IniParseEmotionType(INI *ini, void *instance, void *store, const void *userData);\n"
+            "};\n"
+            "class INI {\npublic:\n"
+            "  static void parseSelf(INI *ini, void *instance, void *store, const void *userData);\n"
+            "};\n"
+        )
+        self.assert_gate("G4", "pass", self.compare({hdr: "", "config/map.json": m}, {hdr: hdr_code}))
+        self.assert_gate("G4", "fail", self.compare({hdr: "", "config/map.json": m},
+                                                    {hdr: hdr_code.replace("INI *ini", "Other *ini", 1)}))
+
     def test_g4_header_declarations_bind_to_real_qualified_x86_slots(self):
         path = "include/Job.h"
         names = ("?move@Job@@QAEXPAX@Z", "?get@Inner@Job@@QBEPBXXZ",
