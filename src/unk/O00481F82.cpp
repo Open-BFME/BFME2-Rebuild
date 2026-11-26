@@ -95,6 +95,12 @@ void TerrainResourceBehavior::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x0048223D size=28 name=?loadPostProcess@TerrainResourceBehavior@@MAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
+void TerrainResourceBehavior::loadPostProcess()
+{
+	UpdateModule::loadPostProcess();
+	if (!m_unk0x28)
+		setWakeFrame(getObject(), UPDATE_SLEEP_NONE);
+}
 
 // FUNCTION: BFME2 0x004822A5 size=684 name=?update@TerrainResourceBehavior@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:K
 
