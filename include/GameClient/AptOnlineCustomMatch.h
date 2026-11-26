@@ -53,6 +53,7 @@ public:
   virtual bool MpOwnerSelectStartPosition(GameSlot *, int); // slot 11, 0x005A186B
   virtual bool MpOwnerSelectTeam(GameSlot *, int); // slot 12, 0x005A13D8
   virtual bool MpOwnerSetClanID(GameSlot *, const UnicodeString &); // slot 13, 0x005A19C0
+  virtual void MpOwnerGetLocalPlayerName(UnicodeString &); // slot 14, 0x0059EBAF
   virtual void MpOwnerPrintMessage(const UnicodeString &, int); // slot 17, 0x0059F043
   virtual void enableSetupUI(); // slot 15, 0x005A1D32 (the map holds it as rva005A1D32)
   virtual void setBusy(bool); // slot 16, 0x005A1C87 (the map holds it as rva005A1C87)

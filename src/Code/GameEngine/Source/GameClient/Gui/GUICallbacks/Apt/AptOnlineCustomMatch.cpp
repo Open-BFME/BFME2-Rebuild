@@ -40,6 +40,16 @@ extern int GameSpyColor[29];
 // Hypothesis rules: hypothesis:K
 // FUNCTION: BFME2 0x0059EB6F size=64 name=?MpOwnerSelectStrategicScenario@AptOnlineCustomMatch@@UAE_NH@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+pointers-mixed
 // FUNCTION: BFME2 0x0059EBAF size=47 name=?MpOwnerGetLocalPlayerName@AptOnlineCustomMatch@@QAEXAAVUnicodeString@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+pointers-mixed
+void AptOnlineCustomMatch::MpOwnerGetLocalPlayerName(UnicodeString &name)
+{
+	if (TheGameSpyInfo)
+	{
+		GameSpyStagingRoom *room = TheGameSpyInfo->getCurrentStagingRoom();
+		if (room)
+			name = room->getSlot(0)->m_name;
+	}
+}
+
 // FUNCTION: BFME2 0x0059EBDE size=32 name=?rva0059EBDE@AptOnlineCustomMatch@@UAE_NXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-class+pointers-mixed
 // FUNCTION: BFME2 0x0059EBFE size=82 name=?rva0059EBFE@AptOnlineCustomMatch@@UAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-class+pointers-mixed
 // FUNCTION: BFME2 0x0059EC50 size=21 name=?rva0059EC50@AptOnlineCustomMatch@@UAE_NXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-class+pointers-mixed
