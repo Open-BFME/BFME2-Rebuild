@@ -174,10 +174,82 @@ void ProcessAnimateWindowSlideFromLeft::initAnimateWindow(AnimateWindow *animWin
 }
 
 // FUNCTION: BFME2 0x005C53DD size=223 name=?updateAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromLeft::updateAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
 
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D endPos = animWin->getEndPos();
+	Coord2D vel = animWin->getVel();
+	curPos.x += (Int)vel.x;
+
+	if (curPos.x > endPos.x)
+	{
+		animWin->setFinished(true);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+	if (endPos.x - curPos.x <= m_slowDownThreshold)
+		vel.x *= m_slowDownRatio;
+	if (vel.x < 1.0f)
+		vel.x = 1.0f;
+	animWin->setVel(vel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C54BC size=233 name=?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromLeft::reverseAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
 
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D startPos = animWin->getStartPos();
+	Coord2D vel = animWin->getVel();
+	curPos.x += (Int)vel.x;
+
+	if (curPos.x < startPos.x)
+	{
+		curPos.x = startPos.x;
+		animWin->setFinished(true);
+		win->winSetPosition(curPos.x, curPos.y);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+
+	ICoord2D endPos = animWin->getEndPos();
+	Real speed;
+	if (endPos.x - curPos.x <= m_slowDownThreshold)
+		speed = vel.x * m_speedUpRatio;
+	else
+		speed = -m_maxVel.x;
+	if (speed < -m_maxVel.x)
+		speed = -m_maxVel.x;
+	Coord2D newVel;
+	newVel.x = speed;
+	newVel.y = vel.y;
+	animWin->setVel(newVel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C55A5 size=63 name=??0ProcessAnimateWindowSlideFromTop@@QAE@XZ evidence=N:ledger
 
@@ -280,7 +352,40 @@ void ProcessAnimateWindowSlideFromBottom::initAnimateWindow(AnimateWindow *animW
 }
 
 // FUNCTION: BFME2 0x005C57C4 size=228 name=?updateAnimateWindow@ProcessAnimateWindowSlideFromBottom@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromBottom::updateAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
 
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D endPos = animWin->getEndPos();
+	Coord2D vel = animWin->getVel();
+	curPos.y += (Int)vel.y;
+
+	if (curPos.y < endPos.y)
+	{
+		curPos.y = endPos.y;
+		animWin->setFinished(true);
+		win->winSetPosition(curPos.x, curPos.y);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+	if (curPos.y - endPos.y <= m_slowDownThreshold)
+		vel.y *= m_slowDownRatio;
+	if (vel.y >= -1.0f)
+		vel.y = -1.0f;
+	animWin->setVel(vel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C58A8 size=232 name=?reverseAnimateWindow@ProcessAnimateWindowSlideFromBottom@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
 bool ProcessAnimateWindowSlideFromBottom::reverseAnimateWindow(AnimateWindow *animWin)
@@ -323,6 +428,37 @@ bool ProcessAnimateWindowSlideFromBottom::reverseAnimateWindow(AnimateWindow *an
 }
 
 // FUNCTION: BFME2 0x005C59AC size=140 name=?initReverseAnimateWindow@ProcessAnimateWindowSlideFromBottomTimed@@UAEXPAVAnimateWindow@@I@Z evidence=N:ledger
+void ProcessAnimateWindowSlideFromBottomTimed::initReverseAnimateWindow(AnimateWindow *animWin, unsigned int maxDelay)
+{
+	ICoord2D restPos = {0,0};
+	ICoord2D startPos = {0,0};
+	ICoord2D curPos = {0,0};
+	ICoord2D endPos = {0,0};
+	Coord2D vel(0.0f, 0.0f);
+
+	if(!animWin)
+	{
+		return;
+	}
+
+	GameWindow *win = animWin->getGameWindow();
+	if(!win)
+	{
+		return;
+	}
+	restPos = animWin->m_restPos;
+	startPos.x = restPos.x;
+	curPos.y = startPos.y = restPos.y;
+
+	Int travelDistance = TheDisplay->getWidth();
+	endPos.x = curPos.x = restPos.x;
+	endPos.y = restPos.y + travelDistance;
+
+	win->winSetPosition(startPos.x, startPos.y);
+
+	UnsignedInt now = timeGetTime();
+	animWin->setAnimData(startPos, endPos, curPos, restPos, vel, now, now + m_maxDuration);
+}
 
 // FUNCTION: BFME2 0x005C5A38 size=191 name=?initAnimateWindow@ProcessAnimateWindowSlideFromBottomTimed@@UAEXPAVAnimateWindow@@@Z evidence=N:ledger
 void ProcessAnimateWindowSlideFromBottomTimed::initAnimateWindow(AnimateWindow *animWin)
@@ -644,10 +780,84 @@ void ProcessAnimateWindowSlideFromTopFast::initAnimateWindow(AnimateWindow *anim
 }
 
 // FUNCTION: BFME2 0x005C6106 size=232 name=?updateAnimateWindow@ProcessAnimateWindowSlideFromTop@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromTop::updateAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
 
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D endPos = animWin->getEndPos();
+	Coord2D vel = animWin->getVel();
+	curPos.y += (Int)vel.y;
+
+	if (curPos.y > endPos.y)
+	{
+		curPos.y = endPos.y;
+		win->winSetPosition(curPos.x, curPos.y);
+		animWin->setFinished(true);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+	if (endPos.y - curPos.y <= m_slowDownThreshold)
+		vel.y *= m_slowDownRatio;
+	if (vel.y < 1.0f)
+		vel.y = 1.0f;
+	animWin->setVel(vel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C61EE size=234 name=?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromTopFast::reverseAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
 
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D startPos = animWin->getStartPos();
+	Coord2D vel = animWin->getVel();
+	curPos.y += (Int)vel.y;
+
+	if (curPos.y < startPos.y)
+	{
+		curPos.y = startPos.y;
+		animWin->setFinished(true);
+		win->winSetPosition(curPos.x, curPos.y);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+
+	ICoord2D endPos = animWin->getEndPos();
+	Real speed;
+	if (endPos.y - curPos.y <= m_slowDownThreshold)
+		speed = vel.y * m_speedUpRatio;
+	else
+		speed = -m_maxVel.y;
+	if (speed < -m_maxVel.y)
+		speed = -m_maxVel.y;
+	Coord2D newVel;
+	newVel.y = speed;
+	newVel.x = vel.x;
+	animWin->setVel(newVel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C62D8 size=63 name=??0ProcessAnimateWindowSlideFromRightFast@@QAE@XZ evidence=N:ledger
 
@@ -736,4 +946,36 @@ void ProcessAnimateWindowSlideFromRightFast::initAnimateWindow(AnimateWindow *an
 }
 
 // FUNCTION: BFME2 0x005C64BE size=219 name=?updateAnimateWindow@ProcessAnimateWindowSlideFromRight@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromRight::updateAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+		return true;
+	if (animWin->isFinished())
+		return true;
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
+
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+		return true;
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D endPos = animWin->getEndPos();
+	Coord2D vel = animWin->getVel();
+	curPos.x += (Int)vel.x;
+
+	if (curPos.x < endPos.x)
+	{
+		animWin->setFinished(true);
+		return true;
+	}
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+	if (curPos.x - endPos.x <= m_slowDownThreshold)
+		vel.x *= m_slowDownRatio;
+	if (vel.x >= -1.0f)
+		vel.x = -1.0f;
+	animWin->setVel(vel);
+	return false;
+}
 
