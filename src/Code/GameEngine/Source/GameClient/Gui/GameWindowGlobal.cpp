@@ -11,6 +11,10 @@ extern ImageCollection *TheMappedImageCollection;
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unproven right=unknown-rows
 // FUNCTION: BFME2 0x00314C1D size=33 name=?winMakeColor@GameWindowManager@@UAEHEEEE@Z evidence=N:ledger
+int GameWindowManager::winMakeColor(unsigned char red,unsigned char green,unsigned char blue,unsigned char alpha)
+{
+    return (alpha << 24) | (red << 16) | (green << 8) | blue;
+}
 
 // FUNCTION: BFME2 0x00314C3E size=85 name=?winFindImage@GameWindowManager@@UAEPBVImage@@PBD@Z evidence=N:ledger
 const Image *GameWindowManager::winFindImage(const char *name)
@@ -48,11 +52,4 @@ GameFont *GameWindowManager::winFindFont(AsciiString fontName, Int pointSize, Bo
 		return TheFontLibrary->getFont(&fontName, (Real)pointSize, bold);
 
 	return NULL;
-}
-
-
-#include "GameClient/GameWindowManager.h"
-int GameWindowManager::winMakeColor(unsigned char red,unsigned char green,unsigned char blue,unsigned char alpha)
-{
-    return (alpha << 24) | (red << 16) | (green << 8) | blue;
 }
