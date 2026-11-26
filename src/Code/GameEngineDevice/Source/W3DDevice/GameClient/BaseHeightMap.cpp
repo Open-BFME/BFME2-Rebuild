@@ -6,9 +6,8 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
-#include "WWMath/PlaneClass.h"
-#include "GameClient/BaseHeightMapRenderObjClass.h"
 #include "GameClient/W3DBibBuffer.h"
+#include "WWMath/PlaneClass.h"
 // FUNCTION: BFME2 0x000664BE size=49 name=?Rva006C5BE0@@YANNH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000664EF size=5 name=?enable@Rva000664EFOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x000664F4 size=21 name=?rva000664F4@BaseHeightMap@@QAEXPBUGapQuad@@@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-callers
