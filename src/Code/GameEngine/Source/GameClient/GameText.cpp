@@ -103,14 +103,35 @@ GameTextTable::~GameTextTable()
 // FUNCTION: BFME2 0x002E6329 size=33 name=?rva002E6329@@YAPAXPAX0000@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x002E63AA size=97 name=??0GameTextManager@@QAE@XZ evidence=N:ledger
+GameTextManager::GameTextManager()
+    : m_usedCSF(false),m_initialized(false),
+      m_failed(L"***FATAL*** String Manager failed to initialize properly"),
+      m_noStringList(0),m_unknown28(0),m_textTable(0),m_mapTable(0),m_translateMode(0)
+{
+}
 
 // FUNCTION: BFME2 0x002E640B size=10 name=?setTranslateMode@GameTextManager@@UAEXH@Z evidence=N:ledger
+void GameTextManager::setTranslateMode(int mode)
+{
+    m_translateMode=mode;
+}
 
 // FUNCTION: BFME2 0x002E6431 size=32 name=?reset@GameTextManager@@UAEXXZ evidence=N:ledger
+void GameTextManager::reset()
+{
+    if (m_mapTable) {
+        delete m_mapTable;
+        m_mapTable=0;
+    }
+}
 
 // FUNCTION: BFME2 0x002E6451 size=74 name=?rva002E6451@Rva002E6451@@QAEPAXPBD@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x002E651F size=50 name=?CreateGameTextInterface@@YAPAVGameTextInterface@@XZ evidence=N:ledger
+GameTextInterface *CreateGameTextInterface()
+{
+    return new GameTextManager;
+}
 
 // FUNCTION: BFME2 0x002E6551 size=96 name=?deinit@GameTextManager@@UAEXXZ evidence=N:ledger
 void GameTextManager::deinit()
@@ -172,26 +193,5 @@ UnicodeString GameTextManager::fetch(const AsciiString &label,bool *exists)
 UnicodeString *GameTextManager::fetchPtr(const AsciiString &label,bool *exists)
 {
     return fetchPtr(label.str(),exists);
-}
-void GameTextManager::setTranslateMode(int mode)
-{
-    m_translateMode=mode;
-}
-void GameTextManager::reset()
-{
-    if (m_mapTable) {
-        delete m_mapTable;
-        m_mapTable=0;
-    }
-}
-GameTextManager::GameTextManager()
-    : m_usedCSF(false),m_initialized(false),
-      m_failed(L"***FATAL*** String Manager failed to initialize properly"),
-      m_noStringList(0),m_unknown28(0),m_textTable(0),m_mapTable(0),m_translateMode(0)
-{
-}
-GameTextInterface *CreateGameTextInterface()
-{
-    return new GameTextManager;
 }
 
