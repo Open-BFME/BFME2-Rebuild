@@ -29,6 +29,12 @@ void AttributeModifierAuraUpdate::getUpgradeActivationMasks(UpgradeMaskType &act
 }
 
 // FUNCTION: BFME2 0x0049B648 size=15 name=?performUpgradeFX@AttributeModifierAuraUpdate@@MAEXXZ evidence=N:ledger
+void AttributeModifierAuraUpdate::performUpgradeFX()
+{
+	const ModuleData *moduleData = getModuleData();
+	const AttributeModifierAuraUpdateModuleData *auraData = static_cast<const AttributeModifierAuraUpdateModuleData *>(moduleData);
+	auraData->m_upgradeMuxData.performUpgradeFX(getObject());
+}
 
 // FUNCTION: BFME2 0x0049B657 size=10 name=?get@Rva0049B657ByteChase32Field@@QBEEXZ evidence=?:placeholder
 
