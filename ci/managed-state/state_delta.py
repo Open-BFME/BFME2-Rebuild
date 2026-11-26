@@ -680,6 +680,14 @@ ISSUE541_CUT17_AND_ISSUE20_LEDGER = {
     "force_changed": ISSUE541_AND_CUT17_LOCALFILE_LEDGER["force_changed"] | ISSUE20_HEADERS_AND_LEDGER["force_changed"],
     "files": advance_graph(ISSUE541_AND_CUT17_LOCALFILE_LEDGER["files"], ISSUE20_HEADERS_AND_LEDGER["files"]),
 }
+ISSUE740_LIB_TRIG_HEADER = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset(),
+    "files": {
+        "include/Lib/trig.h": (None, "ed2c3832677714e887c1f67c160a578c3f471345bcfbdc30ef79f55db2d87c2e"),
+    },
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -689,6 +697,7 @@ TU_MOVE_MIGRATIONS = (
     ISSUE20_HEADERS_AND_LEDGER,
     CUT17_AND_ISSUE20_LEDGER,
     ISSUE541_CUT17_AND_ISSUE20_LEDGER,
+    ISSUE740_LIB_TRIG_HEADER,
 )
 
 
