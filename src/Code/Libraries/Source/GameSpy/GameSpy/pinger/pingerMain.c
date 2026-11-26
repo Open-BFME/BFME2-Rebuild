@@ -5,9 +5,26 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=rests-on:veto right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:padding
+// FUNCTION: BFME2 0x006B2150 size=29 name=_piGetNextID evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x006B2170 size=141 name=_piBytesToPing evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x006B2200 size=52 name=_piPingToBytes evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x006B2240 size=156 name=_piSendPing evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x006B22E0 size=186 name=_piSocketInit evidence=N:ledger tier=B hypothesis:name:invented
+// FUNCTION: BFME2 0x006B23A0 size=127 name=_piQueueCallback evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+// FUNCTION: BFME2 0x006B2420 size=143 name=_piCallCallbacks evidence=N:ledger tier=B hypothesis:name:invented
 // FUNCTION: BFME2 0x006B24B0 size=282 name=_pingerInit evidence=N:ledger tier=A
-
 // FUNCTION: BFME2 0x006B25D0 size=86 name=_pingerShutdown evidence=N:ledger tier=A
+// FUNCTION: BFME2 0x006B2630 size=19 name=_piFindActivePingCompareFn evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+// FUNCTION: BFME2 0x006B2650 size=73 name=_piFindActivePing evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B26A0 size=3 name=_piCalculatePing evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B26B0 size=269 name=_piProcessTrip1 evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B27C0 size=230 name=_piProcessTrip2 evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B28B0 size=104 name=_piProcessTrip3 evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B2920 size=75 name=_pingerProcessPing evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+// FUNCTION: BFME2 0x006B2970 size=271 name=_piProcessIncoming evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+// FUNCTION: BFME2 0x006B2A80 size=178 name=_piCheckTimeouts evidence=N:ledger tier=L hypothesis:name:L
+// FUNCTION: BFME2 0x006B2B40 size=34 name=_pingerThink evidence=N:ledger tier=L hypothesis:name:L
+// FUNCTION: BFME2 0x006B2B70 size=341 name=_pingerPing evidence=N:ledger tier=L hypothesis:name:L
 // cl: -O2 -G6 -GR- -EHsc- /MD -Isrc/gamespy-sdk/GameSpy -Isrc/Code/Libraries/Source/GameSpy/GameSpy/pinger
 // Provenance: GameSpy Peer SDK source (the 2004-2005 snapshot BFME 2 linked); GameSpy Industries copyright header kept below.
 // Text is used with the project owner's permission; see NOTICE. Differences from the stock text are marked BFME-RETAIL in place.

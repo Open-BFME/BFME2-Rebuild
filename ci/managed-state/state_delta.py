@@ -1089,6 +1089,79 @@ LEDGER_BATCH_632_633_746 = {
         "src/unk/o0047bef8.cpp",
     }),
 }
+
+ISSUE634_PINGER_UNIT = {
+    "files": {
+        "config/map.json": (
+            "b53e982e866f70a2ec32e791374718d6bef21109b0f1d191f2bdbd83b9cdd3d2",
+            "7ef31f0552fe082ea8319fef38170f3e2f18da09b096d1344308c709bc1d404e",
+        ),
+        "expected/gamespy-sdk/GameSpy/peer/peerPing.c.json": (
+            "36d17aef3e83252177ab2666aa65e854704563dc49e00216070d71787c0ee61e",
+            None,
+        ),
+        "expected/gamespy-sdk/GameSpy/peer/peerPing.c.neighbours.json": (
+            "38ed351327f70b8bae49009b20ec574d76f12bb766bef42092c9ce8802736ab2",
+            None,
+        ),
+        "expected/unk/G006B2150.cpp.json": (
+            "f53d37db01160761a6e28c5228bf76f418037322b8c708f6c06b806733db0d28",
+            None,
+        ),
+        "expected/unk/G006B23A0.cpp.json": (
+            "e37dc16b8942999720171791b3edbb37554a3e241f468d64468ab672b2dc19d6",
+            None,
+        ),
+        "expected/unk/O006B22E0.cpp.json": (
+            "940dcfce027678f80c98206ace972b0a5c2ec7f99eaee79582860282979cf352",
+            None,
+        ),
+        "expected/unk/O006B22E0.cpp.neighbours.json": (
+            "b7293d714f18951d9de20a5e6e1851db56b262c7426b1f38ec62742cd8ec6d24",
+            None,
+        ),
+        "expected/unk/O006B2420.cpp.json": (
+            "97eebb160b6ff8302c0ad06ae3ab8c7597c8ad14e297f915c6e22ab2f8aabd8f",
+            None,
+        ),
+        "expected/unk/O006B2420.cpp.neighbours.json": (
+            "922c4f4c4402c4192fb5ea2bd7f4744130cfd973ddbc3019f6cf3fe59af5bbae",
+            None,
+        ),
+        "src/gamespy-sdk/GameSpy/peer/peerPing.c": (
+            "6787c0a0137d04fafbe46bc8f28e6754a657111832ad3dc4c0f74685f4f96a7e",
+            None,
+        ),
+        "src/unk/G006B2150.cpp": (
+            "1cea00049884683ed53a4c932f17fdd4494c080fc264556c2932fae1e3d62f6b",
+            None,
+        ),
+        "src/unk/G006B23A0.cpp": (
+            "dde2c926c1058cd5ad2c34cb055d6f946ba1fbd276de5caa0b2d51c4956366c9",
+            None,
+        ),
+        "src/unk/O006B22E0.cpp": (
+            "2e77f5395c07a881cf561b39fa99622a06545190f6018716c391e76a985baac0",
+            None,
+        ),
+        "src/unk/O006B2420.cpp": (
+            "d202908d9387703f6cf9adadb03ba299d54c80c291f9a6d9d5a6a32fd833e56c",
+            None,
+        ),
+    },
+    "old_tus": frozenset({
+        "src/gamespy-sdk/GameSpy/peer/peerPing.c",
+        "src/unk/G006B2150.cpp",
+        "src/unk/G006B23A0.cpp",
+        "src/unk/O006B22E0.cpp",
+        "src/unk/O006B2420.cpp",
+    }),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/libraries/source/gamespy/gamespy/pinger/pingermain.c",
+    }),
+}
+
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -1105,6 +1178,7 @@ TU_MOVE_MIGRATIONS = (
     LEDGER_BATCH_741_747_636_667_650,
     REMOVE_GAMESPY_SDK_SHIMS,
     MIGRATE_D3D8_TO_D3D9,
+    ISSUE634_PINGER_UNIT,
     LEDGER_BATCH_632_633_746,
 )
 
