@@ -119,6 +119,18 @@ bool AudioEventRTS::rva002D9608()
 }
 
 // FUNCTION: BFME2 0x002D9622 size=100 name=?generateFilenamePrefix@AudioEventRTS@@SAPBVAsciiString@@H@Z evidence=N:ledger
+const AsciiString *AudioEventRTS::generateFilenamePrefix(int type)
+{
+    switch(type) {
+    case 0: return &TheAudio->getAudioSettings()->m_musicFolder;
+    case 1: return &TheAudio->getAudioSettings()->m_streamingFolder;
+    case 2:
+    case 4: return &TheAudio->getAudioSettings()->m_soundsFolder;
+    case 3: return &TheAudio->getAudioSettings()->m_ambientStreamFolder;
+    case 5: return &AsciiString::TheEmptyString;
+    default: return &AsciiString::TheEmptyString;
+    }
+}
 
 // FUNCTION: BFME2 0x002D9686 size=77 name=?getRandomSoundIndexByWeight@@YAHIPBUWeightedSoundRange@@@Z evidence=N:ledger
 struct WeightedSoundRange;
@@ -206,6 +218,15 @@ void AudioEventRTS::clampDelay(float minimum, float maximum)
 }
 
 // FUNCTION: BFME2 0x002D9C07 size=40 name=?hasMoreLoops@AudioEventRTS@@QBE_NXZ evidence=N:ledger
+bool AudioEventRTS::hasMoreLoops() const
+{
+    if (m_bypassLoops) return false;
+    const AudioEventInfo *info = m_eventInfo.get();
+    if (!info) return true;
+    unsigned int type = info->m_soundType;
+    if (type == 0 || type == 3 || (info->m_flags & 1) != 0) return true;
+    return false;
+}
 
 // FUNCTION: BFME2 0x002D9C37 size=67 name=?isPositionalAudio@AudioEventRTS@@QBE_NXZ evidence=N:ledger
 bool AudioEventRTS::isPositionalAudio() const
@@ -262,6 +283,16 @@ unsigned int AudioEventRTS::getSoundClass() const
 // FUNCTION: BFME2 0x002D9FD9 size=151 name=?rva002D9FD9@Rva002D9FD9Owner@@QAEXPAVRva002D9FD9Arg@@@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x002DA08C size=67 name=?advanceNextPlayPortion@AudioEventRTS@@QAEXXZ evidence=N:ledger
+void AudioEventRTS::advanceNextPlayPortion()
+{
+    switch (m_portionToPlayNext) {
+    case 0: m_portionToPlayNext=1; break;
+    case 1:
+        if (!hasMoreLoops()) m_portionToPlayNext=m_decayName.isEmpty()?3:2;
+        break;
+    case 2: m_portionToPlayNext=3; break;
+    }
+}
 
 // FUNCTION: BFME2 0x002DA0CF size=132 name=?rva002DA0CF@Rva002DA0CF@@QAENXZ evidence=?:placeholder
 
@@ -402,37 +433,5 @@ void AudioEventRTS::generatePlayInfo()
 }
 
 
-bool AudioEventRTS::hasMoreLoops() const
-{
-    if (m_bypassLoops) return false;
-    const AudioEventInfo *info = m_eventInfo.get();
-    if (!info) return true;
-    unsigned int type = info->m_soundType;
-    if (type == 0 || type == 3 || (info->m_flags & 1) != 0) return true;
-    return false;
-}
-void AudioEventRTS::advanceNextPlayPortion()
-{
-    switch (m_portionToPlayNext) {
-    case 0: m_portionToPlayNext=1; break;
-    case 1:
-        if (!hasMoreLoops()) m_portionToPlayNext=m_decayName.isEmpty()?3:2;
-        break;
-    case 2: m_portionToPlayNext=3; break;
-    }
-}
-#include "Common/AudioSettings.h"
-const AsciiString *AudioEventRTS::generateFilenamePrefix(int type)
-{
-    switch(type) {
-    case 0: return &TheAudio->getAudioSettings()->m_musicFolder;
-    case 1: return &TheAudio->getAudioSettings()->m_streamingFolder;
-    case 2:
-    case 4: return &TheAudio->getAudioSettings()->m_soundsFolder;
-    case 3: return &TheAudio->getAudioSettings()->m_ambientStreamFolder;
-    case 5: return &AsciiString::TheEmptyString;
-    default: return &AsciiString::TheEmptyString;
-    }
-}
 
 // FUNCTION: BFME2 0x002DAAD5 size=29 name=?rva002DAAD5@AudioEventRTS@@QAEXXZ evidence=P:provisional (wb-file) tier=B hypothesis:mm1-held-object-same-path
