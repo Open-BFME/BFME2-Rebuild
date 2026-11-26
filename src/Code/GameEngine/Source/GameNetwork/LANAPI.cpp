@@ -528,6 +528,17 @@ void LANAPI::RequestChat(UnicodeString message, ChatType format, Int unused)
 }
 
 // FUNCTION: BFME2 0x0044A75D size=171 name=?RequestEnableMPSetupUI@LANAPI@@UAEX_N@Z evidence=N:ledger tier=A
+void LANAPI::RequestEnableMPSetupUI(Bool enable)
+{
+	LANMessage msg;
+	msg.LANMessageType = LANMessage::MSG_ENABLE_MPSETUP_UI;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.EnableMPSetupUI.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.EnableMPSetupUI.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	msg.EnableMPSetupUI.enable = enable;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+}
 
 // FUNCTION: BFME2 0x0044A808 size=249 name=?RequestGameOptions@LANAPI@@UAEXVAsciiString@@HI@Z evidence=N:ledger tier=A
 void LANAPI::RequestGameOptions(AsciiString gameOptions, Int isPublic, UnsignedInt ip)
