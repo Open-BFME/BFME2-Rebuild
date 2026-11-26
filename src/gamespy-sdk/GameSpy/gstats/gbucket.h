@@ -1,7 +1,7 @@
 /* GameSpy SDK (the snapshot retail BFME 2 links); GameSpy Industries' own copyright header is kept in each file.
    Used with the project owner's permission, see NOTICE. Retail linked the DLL CRT, so libc calls are __imp__ indirect
    (/MD makes those call sites byte-exact) and built the SDK __cdecl. Win32 declarations come from
-   include/upstream/gamespy-sdk/shims/. */
+   the Platform SDK. */
 /******
 gbucket.h
 GameSpy Stats/Tracking SDK 
