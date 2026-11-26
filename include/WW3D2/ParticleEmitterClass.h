@@ -15,7 +15,7 @@
 #include "WW3D2/RenderObjClass.h"
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/ParticlePropertyStruct.h"
-#include "WW3D2/w3d_emitter.h"
+#include "WW3D2/w3d_file.h"
 #include "WWMath/Quaternion.h"
 #include "WWMath/Vector2.h"
 #include "WWMath/Vector3.h"

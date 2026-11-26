@@ -709,6 +709,37 @@ REMOVE_FAKE_D3DX_HEADERS = {
         ),
     },
 }
+CONSOLIDATE_W3D_FILE_H = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/ww3d2/w3d_file.h",
+        "include/ww3d2/w3d_emitter.h",
+        "include/ww3d2/w3d_aggregate.h",
+        "include/ww3d2/aggregatedefclass.h",
+        "include/ww3d2/particlebufferclass.h",
+        "include/ww3d2/particleemitterclass.h",
+        "include/ww3d2/particleemitterdefclass.h",
+        "include/ww3d2/seglinerendererclass.h",
+        "include/ww3d2/streakrendererclass.h",
+    }),
+    "files": {
+        "include/WW3D2/w3d_emitter.h": (
+            "b17345d5f3bf4566948994eb93944bd4c78a7eef58cf55f4f7d29eb0260a6aa5",
+            None,
+        ),
+        "include/WW3D2/w3d_aggregate.h": (
+            "095830d7fa123904e1f76c828140a2bd9595a9bb9b88cd96e5a4e999a950a43f",
+            None,
+        ),
+    },
+}
+REMOVE_FAKE_D3DX_AND_W3D_FILE_H = {
+    "old_tus": REMOVE_FAKE_D3DX_HEADERS["old_tus"] | CONSOLIDATE_W3D_FILE_H["old_tus"],
+    "new_tus": REMOVE_FAKE_D3DX_HEADERS["new_tus"] | CONSOLIDATE_W3D_FILE_H["new_tus"],
+    "force_changed": REMOVE_FAKE_D3DX_HEADERS["force_changed"] | CONSOLIDATE_W3D_FILE_H["force_changed"],
+    "files": advance_graph(REMOVE_FAKE_D3DX_HEADERS["files"], CONSOLIDATE_W3D_FILE_H["files"]),
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -719,7 +750,9 @@ TU_MOVE_MIGRATIONS = (
     CUT17_AND_ISSUE20_LEDGER,
     ISSUE541_CUT17_AND_ISSUE20_LEDGER,
     ISSUE740_LIB_TRIG_HEADER,
+    REMOVE_FAKE_D3DX_AND_W3D_FILE_H,
     REMOVE_FAKE_D3DX_HEADERS,
+    CONSOLIDATE_W3D_FILE_H,
 )
 
 
