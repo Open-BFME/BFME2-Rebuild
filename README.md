@@ -2,7 +2,7 @@
 
 How much of the original game (version 1.06) has been rebuilt as source code that compiles back to the same machine code. Measured automatically after every change; nobody edits this page.
 
-Measured **26 November 2026**. The code figures describe commit [`e897cba172dd`](https://github.com/Open-BFME/BFME2-Rebuild/commit/e897cba172ddbb97ef624a67d7a73887875c38a9) (26 November 2026, 16:27 UTC); the build checks run every day.
+Measured **27 November 2026**. The code figures describe commit [`e897cba172dd`](https://github.com/Open-BFME/BFME2-Rebuild/commit/e897cba172ddbb97ef624a67d7a73887875c38a9) (26 November 2026, 16:27 UTC); the build checks run every day.
 
 ![Progress](progress.svg)
 
@@ -25,7 +25,7 @@ Functions that are proven, sit in a properly named source file, and belong to a 
 
 ## Does the rebuilt game run?
 
-Nightly build of commit [`9dd2e2d4ee8a`](https://github.com/Open-BFME/BFME2-Rebuild/commit/9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54) (26 November 2026): The nightly build failed.
+Nightly build of commit [`a7123daa62f7`](https://github.com/Open-BFME/BFME2-Rebuild/commit/a7123daa62f79955a42d41a2c33d989af9dbf36a) (27 November 2026): The nightly build failed.
 
 - Starts: not run yet
 - Reaches the main menu: not run yet

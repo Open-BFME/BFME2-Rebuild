@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="830" height="372" viewBox="0 0 830 372" role="img" aria-label="Battle for Middle-earth II rebuild, measured 26 November 2026: Byte match 27.8%, Linking 60.7%, Code proven 19.6%, Finished functions 26.7%">
+<svg xmlns="http://www.w3.org/2000/svg" width="830" height="372" viewBox="0 0 830 372" role="img" aria-label="Battle for Middle-earth II rebuild, measured 27 November 2026: Byte match 27.8%, Linking 60.7%, Code proven 19.6%, Finished functions 26.7%">
 <style>
 .bg{fill:#fcfcfb}.t1{fill:#0b0b0b}.t2{fill:#52514e}.track{fill:#e4e3df}.fill{fill:#2a78d6}
 .grid{stroke:#e4e3df;stroke-width:1}.s1{stroke:#2a78d6}.s2{stroke:#eb6834}.s3{stroke:#1baf7a}.s4{stroke:#eda100}
@@ -10,7 +10,7 @@ text{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif}
 </style>
 <rect class="bg" width="830" height="372" rx="8"/>
 <text class="t1" x="24" y="36" font-size="20" font-weight="600">Battle for Middle-earth II rebuild</text>
-<text class="t2" x="806" y="36" font-size="18" text-anchor="end">Measured 26 November 2026</text>
+<text class="t2" x="806" y="36" font-size="18" text-anchor="end">Measured 27 November 2026</text>
 <text class="t1" x="24" y="92" font-size="24" font-weight="600">Byte match</text>
 <text class="t1" x="806" y="92" font-size="30" font-weight="600" text-anchor="end">27.8%</text>
 <rect class="track" x="24" y="102" width="782" height="20" rx="10"/>
