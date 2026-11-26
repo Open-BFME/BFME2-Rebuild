@@ -449,6 +449,15 @@ int GameWindowManager::winDestroyAll()
 // FUNCTION: BFME2 0x002C12A0 size=60 name=?winUnsetModal@GameWindowManager@@UAEHPAVGameWindow@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x002C12DC size=51 name=?winSetLoneWindow@GameWindowManager@@UAEXPAVGameWindow@@@Z evidence=N:ledger
+void GameWindowManager::winSetLoneWindow(GameWindow *window)
+{
+	// Closing the previous lone window sends it GGM_CLOSE.
+	if (m_loneWindow == window)
+		return;
+	if (m_loneWindow)
+		TheWindowManager->winSendSystemMsg(m_loneWindow, 0x4005, 0, 0);
+	m_loneWindow = window;
+}
 
 // FUNCTION: BFME2 0x002C130F size=134 name=?gogoGadgetTabControl@TabWindowManagerView@@QAEPAVGameWindow@@PAVGadgetCreateView@@PAUTabControlDataView@@PAVGameFont@@_N@Z evidence=N:ledger
 
@@ -834,13 +843,6 @@ GameWindow *GameWindowManager::winGetWindowFromId(GameWindow *window,int id)
         window=window->m_next;
     }
     return 0;
-}
-void GameWindowManager::winSetLoneWindow(GameWindow *window)
-{
-    if(m_loneWindow!=window) {
-        if(m_loneWindow) TheWindowManager->winSendSystemMsg(m_loneWindow,0x4005,0,0);
-        m_loneWindow=window;
-    }
 }
 #include "GameClient/ModalWindow.h"
 int GameWindowManager::winSetModal(GameWindow *window)
