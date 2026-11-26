@@ -64,6 +64,11 @@ extern Real g_parseDurationMsecScale;
 // FUNCTION: BFME2 0x003E3C39 size=27 name=??1Rva003E3C39@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers+shared-data
 // FUNCTION: BFME2 0x003E3C54 size=18 name=??0ScriptConditionsInterface@@QAE@XZ evidence=X:proven (vptr-store) tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x003E3C66 size=35 name=?reset@ScriptConditions@@UAEXXZ evidence=N:ledger
+void ScriptConditions::reset()
+{
+	delete s_transportStatuses;
+	s_transportStatuses = NULL;
+}
 
 // FUNCTION: BFME2 0x003E3C89 size=135 name=?evaluateAllDestroyed@ScriptConditions@@IAE_NPAVParameter@@@Z evidence=N:ledger
 Bool ScriptConditions::evaluateAllDestroyed(Parameter *pPlayerParm)
