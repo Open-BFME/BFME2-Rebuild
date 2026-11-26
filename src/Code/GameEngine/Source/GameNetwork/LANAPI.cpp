@@ -512,6 +512,20 @@ void LANAPI::RequestHasMap()
 }
 
 // FUNCTION: BFME2 0x0044A652 size=267 name=?RequestChat@LANAPI@@UAEXVUnicodeString@@W4ChatType@LANAPIInterface@@H@Z evidence=N:ledger tier=A
+void LANAPI::RequestChat(UnicodeString message, ChatType format, Int unused)
+{
+	LANMessage msg;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.Chat.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.Chat.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	msg.LANMessageType = LANMessage::MSG_CHAT;
+	msg.Chat.chatType = format;
+	wcsncpy(msg.Chat.message, message.str(), 100);
+	msg.Chat.message[100] = 0;
+	sendMessage(&msg, 0);
+
+	OnChat(m_name, GetLocalAddress(), message, format);
+}
 
 // FUNCTION: BFME2 0x0044A75D size=171 name=?RequestEnableMPSetupUI@LANAPI@@UAEX_N@Z evidence=N:ledger tier=A
 
