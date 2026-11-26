@@ -981,13 +981,14 @@ void Weapon::prepareProjectileStreamForFiring()
 	if (streamName.isEmpty())
 		return;
 
-	Object *owner = TheGameLogic->findObjectByID(m_ownerID);
+	GameLogic *logic = TheGameLogic;
+	Object *owner = logic->findObjectByID(m_ownerID);
 	if (owner == NULL)
 	{
 		m_projectileStreamID = INVALID_ID;
 		return;
 	}
-	if (TheGameLogic->findObjectByID(m_projectileStreamID) != NULL)
+	if (logic->findObjectByID(m_projectileStreamID) != NULL)
 		return;
 
 	m_projectileStreamID = INVALID_ID;
