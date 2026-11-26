@@ -8,6 +8,8 @@
 #include "GameLogic/Map/PolygonTrigger.h"
 #include "Common/Coord3D.h"
 #include "GameLogic/TerrainLogic.h"
+#include "WWMath/FloatToLong.h"
+#include <math.h>
 // FUNCTION: BFME2 0x002E36B7 size=30 name=?rva002E36B7@PolygonTrigger@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x002E36D5 size=26 name=?Rva002E36D5Find@@YAPAXH@Z evidence=?:placeholder tier=B hypothesis:Z
@@ -82,6 +84,17 @@ void PolygonTrigger::getBounds(Region2D *bounds)
 }
 
 // FUNCTION: BFME2 0x002E3978 size=155 name=?getBounds@PolygonTrigger@@QAEXPAUIRegion2D@@@Z evidence=N:ledger tier=A
+void PolygonTrigger::getBounds(IRegion2D *bounds)
+{
+	if (bounds != NULL)
+	{
+		Region2D region = rva0007E03A();
+		bounds->lo.x = Float_To_Long(floor(region.lo.x));
+		bounds->lo.y = Float_To_Long(floor(region.lo.y));
+		bounds->hi.x = Float_To_Long(ceil(region.hi.x));
+		bounds->hi.y = Float_To_Long(ceil(region.hi.y));
+	}
+}
 
 // FUNCTION: BFME2 0x002E3A13 size=38 name=?pointInTrigger@PolygonTrigger@@QAE_NABUICoord3D@@@Z evidence=N:ledger tier=A
 Bool PolygonTrigger::pointInTrigger(const ICoord3D &position)
