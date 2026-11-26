@@ -6,6 +6,11 @@
 #include <stddef.h>
 // Reference object O00358914.
 // FUNCTION: BFME2 0x00358933 size=19 name=?removeLastChar@DisplayString@@UAEXXZ evidence=N:ledger
+void DisplayString::removeLastChar()
+{
+	m_textString.removeLastChar();
+	notifyTextChanged();
+}
 
 // FUNCTION: BFME2 0x00358946 size=17 name=?reset@DisplayString@@UAEXXZ evidence=N:ledger
 void DisplayString::reset()
@@ -50,10 +55,4 @@ void DisplayString::setText(UnicodeString text)
 		m_textString.set(text);
 		notifyTextChanged();
 	}
-}
-
-void DisplayString::removeLastChar()
-{
-	m_textString.removeLastChar();
-	notifyTextChanged();
 }
