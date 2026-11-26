@@ -406,6 +406,18 @@ void DX8Caps::Check_Bumpmap_Support(const D3DCAPS8 &caps)
 }
 
 // FUNCTION: BFME2 0x0012B4E0 size=98 name=?Check_Texture_Compression_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
+void DX8Caps::Check_Texture_Compression_Support(const D3DCAPS8 &caps)
+{
+	// The five DXT formats follow the 118 plain Direct3D formats in SupportTextureFormat.
+	bool dxt1 = SupportTextureFormat[118];
+	bool dxt2 = SupportTextureFormat[119];
+	bool dxt3 = SupportTextureFormat[120];
+	bool dxt4 = SupportTextureFormat[121];
+	bool dxt5 = SupportTextureFormat[122];
+	SupportDXTC = dxt1 | dxt2 | dxt3 | dxt4 | dxt5;
+	CapsWorkString.Format("Texture compression support: %s\r\n", SupportDXTC ? "Yes" : "No");
+	CapsLog += CapsWorkString;
+}
 
 // FUNCTION: BFME2 0x0012B550 size=95 name=?Check_Shader_Support@DX8Caps@@AAEXABU_D3DCAPS8@@@Z evidence=N:ledger tier=B hypothesis:K
 void DX8Caps::Check_Shader_Support(const D3DCAPS8 &caps)
