@@ -66,6 +66,8 @@ public:
 		MaxCorner.Update_Max(box.Center + box.Extent);
 	}
 	void Init_Empty(void);		// 0x007197D0
+	// Grows the box to enclose its own image under the transform.
+	void Transform(const Matrix3D &tm);
 
 	Vector3 MinCorner;		// +0x00
 	Vector3 MaxCorner;		// +0x0C
