@@ -22,6 +22,11 @@ NameKeyType SpecialEnemySenseUpdate::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x00499FA9 size=81 name=??0SpecialEnemySenseUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+SpecialEnemySenseUpdate::SpecialEnemySenseUpdate(Thing *thing, const ModuleData *moduleData) :
+	UpdateModule(thing, moduleData)
+{
+	setWakeFrame(getObject(), UPDATE_SLEEP_NONE);
+}
 
 // FUNCTION: BFME2 0x0049A016 size=33 name=?xfer@Rva00499F45@@MAEXPAVXfer@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 void SpecialEnemySenseUpdate::xfer(Xfer *xfer)
