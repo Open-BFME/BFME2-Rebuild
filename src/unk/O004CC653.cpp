@@ -39,6 +39,15 @@ void TemporarilyDefectUpdateModuleData::buildFieldParse(MultiIniFieldParse &pars
 }
 
 // FUNCTION: BFME2 0x004CC6AF size=97 name=??0TemporarilyDefectUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
+TemporarilyDefectUpdate::TemporarilyDefectUpdate(Thing *thing, const ModuleData *moduleData)
+	: UpdateModule(thing, moduleData)
+{
+	m_unk0x20 = 0;
+	m_unk0x24 = 0;
+	m_unk0x28 = INVALID_ID;
+	m_gap0x2C[0] = 0;
+	setWakeFrame(getObject(), UPDATE_SLEEP_FOREVER);
+}
 
 // FUNCTION: BFME2 0x004CC72C size=105 name=?xfer@Rva004CC63A@@MAEXPAVXfer@@@Z evidence=?:placeholder
 

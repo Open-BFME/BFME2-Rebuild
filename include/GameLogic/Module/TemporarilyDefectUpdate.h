@@ -28,9 +28,11 @@ class TemporarilyDefectUpdate : public UpdateModule
 {
 public:
 	TemporarilyDefectUpdate(Thing *thing, const ModuleData *moduleData);
+	virtual ~TemporarilyDefectUpdate();
 	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;
 	virtual const char *GetSnapshotName() const;
+	virtual DisabledMaskType getDisabledTypesToProcess() const;	// override: update slot 1 at +0x10 (0x004A2D67)
 	virtual UpdateSleepTime update();	// override: update slot 0 at +0x10 (0x004CC882)
 
 protected:
@@ -42,7 +44,7 @@ public:
 	ObjectID m_unk0x28;                            // +0x28; xfer ObjectID
 	UnsignedByte m_gap0x2C[0x4];
 protected:
-	virtual void loadPostProcess() { UpdateModule::loadPostProcess(); }	// retail slot 1 0x00497805: a jmp to UpdateModule's
+	virtual void loadPostProcess();	// retail slot 1 0x00497805: a jmp to UpdateModule's
 };
 // SIZE 0x30
 typedef char TemporarilyDefectUpdate_size[(sizeof(TemporarilyDefectUpdate) == 0x30) ? 1 : -1];
