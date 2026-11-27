@@ -36,4 +36,10 @@ Module *WeaponFireSpecialAbilityUpdate::friend_newModuleInstance(Thing *thing, c
 }
 
 // FUNCTION: BFME2 0x0024DB56 size=84 name=?friend_newModuleData@WeaponFireSpecialAbilityUpdateModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
-
+ModuleData *WeaponFireSpecialAbilityUpdateModuleData::friend_newModuleData(INI *ini)
+{
+	WeaponFireSpecialAbilityUpdateModuleData *data = new WeaponFireSpecialAbilityUpdateModuleData;
+	if (ini)
+		ini->initFromINIMultiProc(data, WeaponFireSpecialAbilityUpdateModuleData::buildFieldParse);
+	return data;
+}

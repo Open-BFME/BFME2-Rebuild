@@ -21,6 +21,7 @@ class WeaponFireSpecialAbilityUpdateModuleData : public SpecialAbilityUpdateModu
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
+	static ModuleData *friend_newModuleData(INI *ini);
 	AsciiString m_specialWeaponName;		// 0xC8
 	Int m_whichSpecialWeapon;				// 0xCC
 	Bool m_skipContinue;					// 0xD0
