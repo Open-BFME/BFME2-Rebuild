@@ -9,6 +9,7 @@
 #include "Common/Xfer.h"
 #include "GameNetwork/GameSlot.h"
 #include "GameNetwork/GameInfo.h"
+#include "GameNetwork/SkirmishGameInfo.h"
 #include "GameLogic/GameLogic.h"
 #include "GameClient/MapCache.h"
 #include "Common/File.h"
@@ -24,6 +25,7 @@ AsciiString GetAssetUsageFromMap(AsciiString path);	// 0x0044CF2F
 AsciiString GetReadmeFromMap(AsciiString path);		// 0x0044CFCE
 AsciiString GetArtPreviewFromMap(AsciiString path);	// 0x0044CB8A
 AsciiString GetPicPreviewFromMap(AsciiString path);	// 0x0044CC6E
+void xferMapName(Xfer *xfer, AsciiString *mapName);
 Int Rva00559EDCCompare(Int *defaults, Int *rules);
 UnsignedByte Rva0056BD91Pack(UnsignedByte kind, UnsignedByte first, char second, char third);	// 0x0056BD91 (packs a hero choice into the byte the lobby sends)
 Int NET_CRC_INTERVAL = 100;		// VA 0x00DBC800: frames between the network CRC checks
@@ -565,6 +567,35 @@ Bool GameInfo::isSkirmish()
 }
 
 // FUNCTION: BFME2 0x003FFA3C size=272 name=?xfer@SkirmishGameInfo@@UAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void SkirmishGameInfo::xfer(Xfer *xfer)
+{
+	if (xfer->IsLightCRC())
+		return;
+	xfer->Version1();
+	*xfer == m_crcInterval;
+	*xfer == m_inGame;
+	*xfer == m_inProgress;
+	*xfer == m_surrendered;
+	*xfer == m_gameID;
+
+	Int slotCount = MAX_SLOTS;
+	*xfer == slotCount;
+	for (slotCount = 0; slotCount < MAX_SLOTS; slotCount++)
+		m_slot[slotCount]->xfer(xfer);
+
+	xferMapName(xfer, &m_mapName);
+	*xfer == m_mapCRC;
+	*xfer == m_mapSize;
+	*xfer == (Int &)m_mapMask;
+	*xfer == m_seed;
+	*xfer == m_unk0x54;
+
+	Int rulesPreset = m_unk0x5C;
+	*xfer == rulesPreset;
+	for (Int i = 0; i < 10; ++i)
+		*xfer == m_gameRules[i];
+	*xfer == (UnsignedInt &)m_unk0x88;
+}
 
 // FUNCTION: BFME2 0x003FFB4C size=104 name=??0GameSlot@@QAE@XZ evidence=N:ledger tier=A
 GameSlot::GameSlot()

@@ -23,6 +23,11 @@ public:
 
 	const char *name() const;					// 0x0022C4D9
 
+protected:
+	virtual void xfer(Xfer *xfer);				// slot 3 (the map spells the shared body with this class)
+
+public:
+
 	GameSlot m_skirmishSlots[MAX_SLOTS];		// +0xDC
 };
 typedef char SkirmishGameInfoSize[(sizeof(SkirmishGameInfo) == 0xE3C) ? 1 : -1];
