@@ -119,3 +119,32 @@ void Matrix4x4::Get_Inverse(Matrix4x4 &inv) const
 
 // FUNCTION: BFME2 0x00715EB0 size=2071 name=?Inverse@Matrix4x4@@QBEXPAV1@@Z evidence=N:ledger tier=B hypothesis:Z
 
+void Matrix4x4::Inverse(Matrix4x4 *set_inverse) const
+{
+	Matrix4x4 a(*this);
+	set_inverse->Make_Identity();
+	Matrix4x4 &b = *set_inverse;
+	int i, j, i1;
+
+	for (j = 0; j < 4; j++) {
+		i1 = j;
+		for (i = j + 1; i < 4; i++) {
+			if (WWMath::Fabs(a[i][j]) > WWMath::Fabs(a[i1][j])) {
+				i1 = i;
+			}
+		}
+
+		Swap(a[i1], a[j]);
+		Swap(b[i1], b[j]);
+
+		b[j] /= a[j][j];
+		a[j] /= a[j][j];
+
+		for (i = 0; i < 4; i++) {
+			if (i != j) {
+				b[i] -= a[i][j] * b[j];
+				a[i] -= a[i][j] * a[j];
+			}
+		}
+	}
+}
