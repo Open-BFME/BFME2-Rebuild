@@ -63,6 +63,7 @@ public:
 	void teamForceMove(Int id, const Coord3D *point);	// 0x004ED257 (the map's name; rva004ED372 calls it per team)
 	void rva004ED342(void *point);		// 0x004ED342 (the map name)
 	void rva004ED372(const Coord3D *point);	// 0x004ED372 (the map name): rva004ED342's twin, teamForceMove for every team
+	void NotifyTeamCancelled(Team *team);	// 0x004EDD4D
 	virtual void vslot08();							// slot 8, row 0x004EDDAA
 
 	_STL::vector<TeamPrototype *> m_prototypes;	// +0x04
