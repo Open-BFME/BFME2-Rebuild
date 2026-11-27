@@ -82,6 +82,7 @@ public:
 		set_result->Y = a.Y - b.Y;
 		set_result->Z = a.Z - b.Z;
 	}
+	static void Lerp(const Vector3 &a, const Vector3 &b, Real alpha, Vector3 *set_result);
 	__forceinline Real Length2() const { return X * X + Y * Y + Z * Z; }
 	__forceinline Real Length() const { return WWMath::Sqrt(Length2()); }
 	__forceinline Vector3 &operator*=(Real k) { X *= k; Y *= k; Z *= k; return *this; }
