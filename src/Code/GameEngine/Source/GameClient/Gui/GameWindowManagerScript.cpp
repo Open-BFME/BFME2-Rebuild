@@ -166,6 +166,14 @@ int scanBool(const char *source, bool &value)
 	return ret;
 }
 // FUNCTION: BFME2 0x00314E6D size=41 name=?scanShort@@YAHPBDAAF@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+int scanShort(const char *source, short &value)
+{
+	int temp = 0;
+	int ret = sscanf(source, "%d", &temp);
+	value = (short)temp;
+
+	return ret;
+}
 // FUNCTION: BFME2 0x00314E96 size=23 name=?scanInt@@YAHPBDAAH@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
 int scanInt(const char *source, int &value)
 {
