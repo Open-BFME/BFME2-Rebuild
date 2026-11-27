@@ -17,6 +17,7 @@
 // Methods: every Team row of the map with the signature its decorated name
 // states, except rows that need placeholder (Rva/Bfme) or template types.
 #pragma once
+// Managed wide-header rehearsal.
 #ifndef BFME2_TEAM_H
 #define BFME2_TEAM_H
 
