@@ -4,6 +4,11 @@
 enum WindowMsgHandledType { MSG_IGNORED, MSG_HANDLED };
 // Window status bits (Zero Hour's WIN_STATUS values; findPrevLeaf 0x003139B3 tests 0x100 and winRepaint 0x003141AA tests 0x10).
 enum { WIN_STATUS_HIDDEN = 0x00000010, WIN_STATUS_TAB_STOP = 0x00000100 };
+// More of Zero Hour's status bits, as the push-button draws test them: enabled 0x8, centred word wrap 0x40000.
+enum { WIN_STATUS_ENABLED = 0x00000008, WIN_STATUS_WRAP_CENTERED = 0x00040000 };
+// Zero Hour's window state bits (WinInstanceData::m_state) and its "no colour" value, as the push-button draws use them.
+enum { WIN_STATE_HILITED = 0x00000002, WIN_STATE_SELECTED = 0x00000004 };
+enum { WIN_COLOR_UNDEFINED = 0x00FFFFFF };
 // Window messages (values proven by Mouse::processMouseEvent 0x001EE069 and the gadget system procedures; names are Zero Hour's).
 enum GameWindowMessage {
 	GWM_CREATE = 1,

@@ -29,6 +29,7 @@ public:
 	virtual VideoBuffer *createVideoBuffer(bool);													// 0x00044D7F
 	void rva0004D664(float, float, float, float, float, int);						// 0x0004D664: draws a line (start, end, width, colour); ShellMenuScheme::draw 0x00200506 calls it
 	void rva0004D6B3(Image *, float, float, float, float, int, int);								// 0x0004D6B3
+	void rva0008EEF0(float x, float y, float width, float height, float lineWidth, int color);	// 0x0008EEF0: the push buttons' border, one pixel outside the window
 	void takeScreenShot(const char *);																// 0x00049B3A
 	void updateAverageFPS();																		// 0x000437A1
 	void drawAnimStats();																			// 0x00043BF9
@@ -64,7 +65,7 @@ public:
 	virtual void drawImage(const Image *, float, float, float, float, unsigned int, int);
 	virtual void slot63();
 	virtual void slot64();
-	virtual void slot65(Image *, float, float, float, float, int);
+	virtual void drawVideoBuffer(VideoBuffer *, float, float, float, float, int);
 	virtual void slot76(int, int, int);
 	virtual void slot77();
 	virtual void setBorderShroudLevel(UnsignedByte alpha);
