@@ -2,3 +2,8 @@
 // object=G004B917B name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x004B917B size=42 name=??0ExperienceLevelCreate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+#include "GameLogic/Module/ExperienceLevelCreate.h"
+ExperienceLevelCreate::ExperienceLevelCreate(Thing *thing, const ModuleData *moduleData) :
+	CreateModule(thing, moduleData)
+{
+}
