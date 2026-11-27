@@ -11,6 +11,7 @@
 #include "GameLogic/PathfindLayer.h"
 #include "GameLogic/PathfindCell.h"
 #include "GameLogic/Map/PolygonTrigger.h"
+#include "Common/Coord2D.h"
 #include "Common/Xfer.h"
 void FreePooledNode(void *node);	// 0x00265488: returns a path node to its pool
 
@@ -66,6 +67,48 @@ Path::Path() : m_unk0x00(0), m_path(NULL), m_pathTail(NULL), m_isOptimized(false
 // FUNCTION: BFME2 0x00363DF9 size=199 name=?PeekPastClimbPortal@Path@@QAEPAVCoord3D@@PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x00363EC0 size=228 name=?computeFlightDistToGoal@Path@@QAEMPBVCoord3D@@AAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Real Path::computeFlightDistToGoal(const Coord3D *pos, Coord3D &goalPos)
+{
+	if (m_path == NULL)
+	{
+		goalPos.x = 0.0f;
+		goalPos.y = 0.0f;
+		goalPos.z = 0.0f;
+		return 0.0f;
+	}
+	const PathNode *curNode = m_path;
+	const PathNode *nextNode = curNode->m_next;
+	goalPos = *curNode->getPosition();
+	Real distance = 0;
+	Bool useNext = true;
+	while (nextNode)
+	{
+		if (useNext)
+			goalPos = *nextNode->getPosition();
+
+		Coord3D startPos = *curNode->getPosition();
+		Coord3D endPos = *nextNode->getPosition();
+
+		Coord2D posToGoalVector;
+		posToGoalVector.x = endPos.x - pos->x;
+		posToGoalVector.y = endPos.y - pos->y;
+
+		Coord2D pathVector;
+		pathVector.x = endPos.x - startPos.x;
+		pathVector.y = endPos.y - startPos.y;
+		pathVector.normalize();
+
+		Real dotProduct = posToGoalVector.x * pathVector.x + posToGoalVector.y * pathVector.y;
+		if (dotProduct >= 0)
+		{
+			distance += dotProduct;
+			useNext = false;
+		}
+		curNode = nextNode;
+		nextNode = curNode->m_next;
+	}
+	return distance;
+}
 
 // FUNCTION: BFME2 0x00363FA4 size=522 name=?optimizeGroundPath@Path@@QAEXH@Z evidence=N:ledger tier=A
 
