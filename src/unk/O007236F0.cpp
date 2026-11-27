@@ -4,5 +4,12 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "WWMath/AABoxClass.h"
 // FUNCTION: BFME2 0x007236F0 size=68 name=?Project_To_Axis@AABoxClass@@QBEMABVVector3@@@Z evidence=N:ledger tier=B hypothesis:name:invented
-
+float AABoxClass::Project_To_Axis(const Vector3 &axis) const
+{
+	float x = Extent[0] * axis[0];
+	float y = Extent[1] * axis[1];
+	float z = Extent[2] * axis[2];
+	return WWMath::Fabs(x) + WWMath::Fabs(y) + WWMath::Fabs(z);
+}

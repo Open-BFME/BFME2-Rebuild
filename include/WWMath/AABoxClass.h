@@ -24,6 +24,7 @@ public:
 
 	// 0x0071AFA0: whether a point lies inside the box (gridcull.cpp's leaf test).
 	bool Contains(const Vector3 &point) const;
+	float Project_To_Axis(const Vector3 &axis) const;
 	AABoxClass(const Vector3 &center, const Vector3 &extent) : Center(center), Extent(extent) {}
 
 	void Init(const Vector3 &center, const Vector3 &extent)
