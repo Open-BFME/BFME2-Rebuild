@@ -3,6 +3,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 #include "Common/INI.h"
 #include "Common/INI/FieldParse.h"
+#include "GameLogic/Module/GeometryUpgrade.h"
 #include "GameLogic/Module/GeometryUpgradeModuleData.h"
 #include "GameLogic/Module/UpgradeMuxData.h"
 static const FieldParse s_geometryUpgradeModuleDataFieldParse[] =
@@ -23,3 +24,8 @@ void GeometryUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x004B6A5E size=91 name=??0GeometryUpgrade@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+GeometryUpgrade::GeometryUpgrade(Thing *thing, const ModuleData *moduleData)
+	: UpgradeModule(thing, moduleData)
+{
+	m_unk0x1C.clear();
+}
