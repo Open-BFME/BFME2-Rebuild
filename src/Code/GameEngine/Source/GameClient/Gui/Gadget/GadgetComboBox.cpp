@@ -15,6 +15,13 @@
 #include "GameClient/GameWindow.h"
 #include "GameClient/GameWindowManager.h"
 #include "GameClient/GadgetTextEntry.h"
+#include "GameClient/Keyboard.h"
+#include "GameClient/KeyDefs.h"
+
+void OnComboBoxClick(GameWindow *comboBox);
+void Rva006CC9A0(int a, int b, int c);
+
+enum { GWM_WHEEL_UP = 19, GWM_WHEEL_DOWN = 20, GWM_CHAR = 21, GGM_LEFT_DRAG = 0x4000, GWS_MOUSE_TRACK = 0x400 };
 
 // FUNCTION: BFME2 0x00322430 size=51 name=?GadgetTextEntrySetTextColor@@YAXPAVGameWindow@@H@Z evidence=N:ledger tier=B hypothesis:K
 void GadgetTextEntrySetTextColor(GameWindow *g, int color)
@@ -333,6 +340,44 @@ void Rva003229C5Hide(GameWindow *comboBox)
 // FUNCTION: BFME2 0x00322A49 size=476 name=?OnComboBoxClick@@YAXPAVGameWindow@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00322C25 size=252 name=?GadgetComboBoxInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z evidence=N:ledger tier=A
+WindowMsgHandledType GadgetComboBoxInput(GameWindow *window, unsigned int msg, unsigned int mData1, unsigned int mData2)
+{
+	WinInstanceData *instData = window->winGetInstanceData();
+	GameWindow *editBox = GadgetComboBoxGetListBox(window);
+	switch (msg)
+	{
+	case GWM_LEFT_DOWN:
+		if (TheWindowManager->winGetLoneWindow() == window)
+			return MSG_IGNORED;
+		break;
+	case GWM_LEFT_UP:
+		OnComboBoxClick(window);
+		Rva006CC9A0(0, 1, 1);
+		break;
+	case GWM_LEFT_DRAG:
+		if (instData->m_style & GWS_MOUSE_TRACK)
+			TheWindowManager->winSendSystemMsg(window->winGetOwner(), GGM_LEFT_DRAG, (unsigned int)window, 0);
+		break;
+	case GWM_RIGHT_UP:
+	case GWM_WHEEL_UP:
+	case GWM_WHEEL_DOWN:
+		break;
+	case GWM_CHAR:
+		if (mData1 != KEY_TAB)
+			return TheWindowManager->winSendInputMsg(editBox, GWM_CHAR, mData1, mData2);
+		if (mData2 & KEY_STATE_DOWN)
+		{
+			if (TheKeyboard->m_modifiers & 0x10)
+				TheWindowManager->winPrevTab(window);
+			else
+				TheWindowManager->winNextTab(window);
+		}
+		break;
+	default:
+		return MSG_IGNORED;
+	}
+	return MSG_HANDLED;
+}
 
 // FUNCTION: BFME2 0x00322D21 size=66 name=?GadgetComboBoxGetText@@YA?AVUnicodeString@@PAVGameWindow@@@Z evidence=N:ledger tier=A
 
