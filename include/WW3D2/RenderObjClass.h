@@ -252,6 +252,7 @@ public:
 	// decodes it and stores -1).
 	int Get_Spatial_Cell() const { return SpatialCell; }
 	void Set_Spatial_Cell(int cell) { SpatialCell = cell; }
+	void Set_Unk_BD(bool value) { _bfme_unk_bd = value; }	// the byte at +0xBD (the prop buffer clears it inline on a freshly created model)
 
 protected:
 	virtual void Update_Cached_Bounding_Volumes() const;										// 127: 0x0013C190

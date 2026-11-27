@@ -53,6 +53,8 @@ protected:
 	virtual const char *GetSnapshotName() const;
 	virtual void xfer(Xfer *xfer);
 
+	Int addPropType(const AsciiString &modelName, Bool flag);	// 0x000EE822: loads the model and records its bounds; the type index, 0 when full, -1 when the model is missing
+
 private:
 	enum { MAX_PROPS = 4000, MAX_TYPES = 96 };
 

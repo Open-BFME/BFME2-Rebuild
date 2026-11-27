@@ -8,6 +8,7 @@
 #include "GameClient/W3DPropBuffer.h"
 #include "GameLogic/PartitionManager.h"
 #include "WW3D2/RenderObjClass.h"
+#include "WW3D2/AggregateDefClass.h"
 // FUNCTION: BFME2 0x000EA1DB size=24 name=?Rva000EA1DBTopple@@YAXPAVRva000EA1DBTarget@@H@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x000EA1F3 size=39 name=?rva000EA1F3@Rva000E6FC8@@QAEXXZ evidence=?:placeholder tier=A
@@ -117,6 +118,22 @@ void W3DPropBuffer::notifyShroudChanged()
 // FUNCTION: BFME2 0x000EE452 size=976 name=?drawProps@W3DPropBuffer@@QAEXAAVRenderInfoClass@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000EE822 size=223 name=?addPropType@W3DPropBuffer@@QAEHABVAsciiString@@_N@Z evidence=N:ledger tier=A
+Int W3DPropBuffer::addPropType(const AsciiString &modelName, Bool flag)
+{
+	if (m_numPropTypes >= MAX_TYPES)
+		return 0;
+
+	m_propTypes[m_numPropTypes].m_robj = Create_Render_Obj(modelName.str());
+	if (!m_propTypes[m_numPropTypes].m_robj)
+		return -1;
+	if (!flag)
+		m_propTypes[m_numPropTypes].m_robj->Set_Unk_BD(false);
+
+	m_propTypes[m_numPropTypes].m_robjName = modelName;
+	m_propTypes[m_numPropTypes].m_bounds = m_propTypes[m_numPropTypes].m_robj->Get_Bounding_Sphere();
+	m_numPropTypes++;
+	return m_numPropTypes - 1;
+}
 
 // FUNCTION: BFME2 0x000EE901 size=758 name=?xfer@W3DPropBuffer@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
 
