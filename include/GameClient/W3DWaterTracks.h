@@ -14,7 +14,7 @@
 #include "Common/AsciiString.h"
 #include "WW3D2/ShaderClass.h"
 #include "WW3D2/TextureAsset.h"
-#include "WWMath/AABoxClass.h"
+#include "Common/Region3D.h"
 #include "WWMath/SphereClass.h"
 #include "WWMath/Vector2.h"
 
@@ -33,12 +33,12 @@ class WaterTracksObj
 public:
 	virtual void Render(void) {}												// slot 0
 	virtual void Get_Obj_Space_Bounding_Sphere(SphereClass &sphere) const;
-	virtual void Get_Obj_Space_Bounding_Box(AABoxClass &aabox) const;
+	virtual void Get_Obj_Space_Bounding_Box(Region3D &box) const;
 
 protected:
 	TextureAsset m_stageZeroTexture;	// +0x04, 0x000FE8CF assigns through the texture asset operator
 	SphereClass m_boundingSphere;	// +0x08
-	AABoxClass m_boundingBox;		// +0x18
+	Region3D m_boundingBox;			// +0x18
 	waveType m_type;				// +0x30 used for render state sorting
 	int m_x;						// +0x34 vertex count
 	int m_y;						// +0x38 vertex count
@@ -85,6 +85,12 @@ public:
 	~WaterTracksRenderSystem(void);
 	WaterTracksObj *bindTrack(waveType type);		// Track object to be controlled by owner
 	void shutdown(void);
+	void ReAcquireResources(void);					// 0x000FE065: (re)creates the index and vertex buffers
+	void saveTracks(void);							// 0x000FF50D: writes the primary wave fronts next to the map
+	void unbindTrack(WaterTracksObj *mod);			// 0x000FE001: returns a track to the free list (the ZH releaseTrack)
+	void rva000FE188(void);							// 0x000FE188 (ZH reset)
+	void rva000FE1AC(void);							// 0x000FE1AC (ZH update)
+	WaterTracksObj *findTrack(Vector2 &start, Vector2 &end, waveType type);	// 0x000FE207
 
 protected:
 	VertexBufferClass *m_vertexBuffer;				// +0x00 vertex buffer used to draw all tracks
@@ -97,7 +103,7 @@ protected:
 	int m_stripSizeY;								// +0x1C resolution (vertex count) of wave strip
 	int m_batchStart;								// +0x20 start of unused vertices in vertex buffer
 	float m_level;									// +0x24 water level
-	AsciiString m_unk0x28;							// +0x28 string member (role not recovered; the destructor 0x000FF4D6 destroys it)
+	AsciiString m_fileName;							// +0x28 the map file name (saveTracks swaps its extension for .wak; the destructor 0x000FF4D6 destroys it)
 };
 
 extern WaterTracksRenderSystem *TheWaterTracksRenderSystem;	// 0x00DEC218
