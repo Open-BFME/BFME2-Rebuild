@@ -71,6 +71,16 @@ RenderInfoClass::RINFO_OVERRIDE_FLAGS &RenderInfoClass::Current_Override_Flags(v
 }
 
 // FUNCTION: BFME2 0x00142DF0 size=44 name=?Pop_Rendering_Method@RenderInfoClass@@QAEXXZ evidence=N:ledger tier=B hypothesis:Z
+void RenderInfoClass::Pop_Rendering_Method(void)
+{
+	if (RenderingMethodsFirst != RenderingMethodsLast) {
+		RenderingMethodsLast--;
+		RefCountClass *method = *RenderingMethodsLast;
+		if (method != NULL) {
+			method->Release_Ref();
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x00142EE0 size=256 name=??0RenderInfoClass@@QAE@AAVCameraClass@@@Z evidence=N:ledger tier=B hypothesis:K
 
