@@ -11,6 +11,14 @@
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
 // FUNCTION: BFME2 0x00461E58 size=72 name=??0GiantBirdSlowDeathBehavior@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+GiantBirdSlowDeathBehavior::GiantBirdSlowDeathBehavior(Thing *thing, const ModuleData *moduleData)
+	: SlowDeathBehavior(thing, moduleData)
+{
+	m_unk0x50 = 0;
+	m_unk0x60 = 0.0f;
+	m_unk0x64 = false;
+}
+
 // FUNCTION: BFME2 0x00461EA0 size=69 name=?getModuleNameKey@GiantBirdSlowDeathBehavior@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:name:invented
 NameKeyType GiantBirdSlowDeathBehavior::getModuleNameKey() const
 {

@@ -8,6 +8,11 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/RepairSpecialPower.h"
 // FUNCTION: BFME2 0x004C86B4 size=42 name=??0RepairSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+RepairSpecialPower::RepairSpecialPower(Thing *thing, const ModuleData *moduleData)
+	: SpecialPowerModule(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004C86DE size=6 name=?Rva004C86DEGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *RepairSpecialPower::GetSnapshotName() const
 {
