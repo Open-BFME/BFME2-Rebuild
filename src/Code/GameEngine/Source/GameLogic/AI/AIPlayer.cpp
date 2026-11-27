@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "Common/ThingFactory.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -356,6 +357,48 @@ AIPlayer::~AIPlayer()
 // FUNCTION: BFME2 0x004F09CF size=371 name=?findFactory@AIPlayer@@IAEPAVObject@@PBVThingTemplate@@_NPAH@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F0B42 size=323 name=?isPossibleToBuildTeam@AIPlayer@@IAE_NPAVTeamPrototype@@_NAA_N@Z evidence=N:ledger tier=A
+Bool AIPlayer::isPossibleToBuildTeam(TeamPrototype *proto, Bool requireIdleFactory, Bool &notEnoughMoney)
+{
+	// Skirmish AI players never refuse a team here.
+	if (TheSkirmishAIManager->rva002A8AB1(m_player))
+		return true;
+
+	Bool anyIdle = false;
+	Int cost = 0;
+	notEnoughMoney = false;
+	for (Int i = 0; i < proto->getTemplateInfo()->m_numUnitsInfo; i++)
+	{
+		const TCreateUnitsInfo *unitInfo = &proto->getTemplateInfo()->m_unitsInfo[0];
+		const ThingTemplate *thing = TheThingFactory->findTemplate(unitInfo[i].m_unitThingName);
+		if (thing)
+		{
+			if (NULL == findFactory(thing, true, NULL))
+				return false;
+			Int buildIndex;
+			if (NULL != findFactory(thing, false, &buildIndex))
+				anyIdle = true;
+			Int thingCost;
+			if (buildIndex == -1)
+				thingCost = thing->calcCostToBuild(m_player, 0, -1);
+			else
+				thingCost = m_player->m_unitRevivalTracker.getDiscountedCostToBuild(buildIndex, NULL);
+			if (thing->isKindOf(KINDOF_BUILD_FOR_FREE))
+				thingCost = 0;
+			cost += thingCost * ((unitInfo[i].m_maxUnits + unitInfo[i].m_minUnits) / 2.0f);
+		}
+	}
+	cost *= TheAI->getAiData()->m_teamResourcesToStart;
+	if (m_player->getMoney()->countMoney() < cost)
+	{
+		notEnoughMoney = true;
+		return false;
+	}
+	if (anyIdle)
+		return true;
+	if (!requireIdleFactory)
+		return true;
+	return false;
+}
 
 // FUNCTION: BFME2 0x004F0C85 size=345 name=?findDozer@AIPlayer@@MAEPAVObject@@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 Object *AIPlayer::findDozer(const Coord3D *pos)
