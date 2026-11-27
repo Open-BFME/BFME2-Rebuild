@@ -5,9 +5,33 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:name:Z, hypothesis:padding
+// dxsdk
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include "WW3D2/Render2DClass.h"
+#include "WWMath/RectClass.h"
+#include "WW3D2/WW3D.h"
+#include "WW3D2/dxwrapper.h"
 // FUNCTION: BFME2 0x00118810 size=129 name=?Rva00118810@@YAXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x001188A0 size=22 name=?Rva001188A0@@YAXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x001188C0 size=202 name=?Set_Coordinate_Range@Render2DClass@@QAEXABVRectClass@@@Z evidence=N:ledger tier=B hypothesis:name:Z
+void Render2DClass::Set_Coordinate_Range(const RectClass &range)
+{
+	// default range is (-1,1)-(1,-1)
+	CoordinateScale.X = 2 / range.Width();
+	CoordinateScale.Y = -2 / range.Height();
+	CoordinateOffset.X = -(CoordinateScale.X * range.Left) - 1;
+	CoordinateOffset.Y = -(CoordinateScale.Y * range.Top) + 1;
+
+	// Zero Hour's Update_Bias, applied to the offset itself.
+	if (WW3D::Is_Screen_UV_Biased()) {
+		unsigned int width = DXWrapper::Get_Device_Resolution_Width();
+		unsigned int height = DXWrapper::Get_Device_Resolution_Height();
+		Vector2 bias_add(-0.5f, -0.5f);
+		bias_add.X = bias_add.X / (width * 0.5f);
+		bias_add.Y = bias_add.Y / (height * -0.5f);
+		CoordinateOffset += bias_add;
+	}
+}
 
 // FUNCTION: BFME2 0x00118990 size=48 name=?Rva00118990@@YAXXZ evidence=?:placeholder tier=B hypothesis:Z
 
@@ -48,6 +72,9 @@
 // FUNCTION: BFME2 0x00119A80 size=78 name=??0BfmeRender2DBatch@@QAE@ABV0@@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00119D00 size=101 name=??1Render2DClass@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+Render2DClass::~Render2DClass()
+{
+}
 
 // FUNCTION: BFME2 0x00119F00 size=317 name=?Reset@Render2DClass@@QAEXXZ evidence=N:ledger tier=B hypothesis:K
 
@@ -58,4 +85,12 @@
 // FUNCTION: BFME2 0x0011C0F0 size=202 name=??0Render2DClass@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x0011C1C0 size=318 name=?Add_Outline@Render2DClass@@QAEXABVRectClass@@MK@Z evidence=N:ledger tier=B hypothesis:Z
+void Render2DClass::Add_Outline(const RectClass &rect, float width, unsigned long color)
+{
+	// The four sides of the rectangle as lines.
+	Add_Line(Vector2(rect.Left + 1, rect.Bottom), Vector2(rect.Left + 1, rect.Top + 1), width, color);
+	Add_Line(Vector2(rect.Left, rect.Top + 1), Vector2(rect.Right - 1, rect.Top + 1), width, color);
+	Add_Line(Vector2(rect.Right, rect.Top), Vector2(rect.Right, rect.Bottom - 1), width, color);
+	Add_Line(Vector2(rect.Right, rect.Bottom), Vector2(rect.Left + 1, rect.Bottom), width, color);
+}
 

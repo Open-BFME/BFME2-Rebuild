@@ -1,8 +1,10 @@
 // RectClass.h: WWMath's axis-aligned float rectangle (WWVegas/WWMath/rect.h): left, top, right,
 // bottom in that order. W3DDisplayString::setClipRegion 0x00105E9C builds one from the integer clip
 // region (stores the four converted floats at +0/+4/+8/+C of a stack object and passes its address
-// to Render2DSentenceClass::Set_Clipping_Rect 0x00105D96). Only the four-float constructor is
-// declared; the other members have no retail row yet.
+// to Render2DSentenceClass::Set_Clipping_Rect 0x00105D96). Width and Height are Zero Hour's inline
+// accessors: Render2DClass::Set_Coordinate_Range 0x001188C0 matches only with their expansion (the
+// later products load the rectangle's field and multiply by the member). The other members have no
+// retail row yet.
 #pragma once
 #ifndef BFME2_RECTCLASS_H
 #define BFME2_RECTCLASS_H
@@ -18,6 +20,8 @@ public:
 	RectClass() {}
 	RectClass(float left, float top, float right, float bottom) { Left = left; Top = top; Right = right; Bottom = bottom; }
 	RectClass &operator=(const RectClass &rhs);	// 0x0004254E, out of line in retail (copies the four floats and returns this)
+	float Width() const { return Right - Left; }
+	float Height() const { return Bottom - Top; }
 };
 // SIZE 0x10
 
