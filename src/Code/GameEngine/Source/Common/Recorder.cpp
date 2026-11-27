@@ -436,6 +436,77 @@ void RecorderClass::readNextFrame()
 }
 
 // FUNCTION: BFME2 0x0037B7F6 size=478 name=?appendNextCommand@RecorderClass@@IAEXXZ evidence=N:ledger tier=A
+void RecorderClass::appendNextCommand()
+{
+	GameMessage::Type type;
+	Int retcode = fread(&type, sizeof(type), 1, m_file);
+	if (retcode != 1)
+		return;
+
+	GameMessage *msg = new GameMessage(type);
+	if (type != GameMessage::MSG_BEGIN_NETWORK_MESSAGES && type != GameMessage::MSG_CLEAR_GAME_DATA && !m_doingAnalysis)
+		TheCommandList->appendMessage(msg);
+
+	Int playerIndex = -1;
+	fread(&playerIndex, sizeof(playerIndex), 1, m_file);
+	msg->friend_setPlayerIndex(playerIndex);
+
+	Int totalArgs = 0;
+	UnsignedByte numTypes = 0;
+	fread(&numTypes, sizeof(numTypes), 1, m_file);
+
+	GameMessageParser *parser = new GameMessageParser();
+	for (UnsignedByte i = 0; i < numTypes; ++i)
+	{
+		UnsignedByte argType = (UnsignedByte)ARGUMENTDATATYPE_UNKNOWN;
+		fread(&argType, sizeof(argType), 1, m_file);
+		UnsignedByte numArgs = 0;
+		fread(&numArgs, sizeof(numArgs), 1, m_file);
+		parser->addArgType((GameMessageArgumentDataType)argType, numArgs);
+		totalArgs += numArgs;
+	}
+
+	GameMessageParserArgumentType *parserArgType = parser->getFirstArgumentType();
+	GameMessageArgumentDataType lastType = ARGUMENTDATATYPE_UNKNOWN;
+	Int argsLeftForType = 0;
+	if (parserArgType != NULL)
+	{
+		lastType = parserArgType->getType();
+		argsLeftForType = parserArgType->getArgCount();
+	}
+	for (Int j = 0; j < totalArgs; ++j)
+	{
+		readArgument(lastType, msg);
+
+		--argsLeftForType;
+		if (argsLeftForType == 0)
+		{
+			if (parserArgType == NULL)
+				return;
+
+			parserArgType = parserArgType->getNext();
+			if (parserArgType != NULL)
+			{
+				argsLeftForType = parserArgType->getArgCount();
+				lastType = parserArgType->getType();
+			}
+		}
+	}
+
+	if (type == GameMessage::MSG_CLEAR_GAME_DATA || type == GameMessage::MSG_BEGIN_NETWORK_MESSAGES)
+	{
+		::delete msg;
+		msg = NULL;
+	}
+
+	if (m_doingAnalysis)
+	{
+		::delete msg;
+		msg = NULL;
+	}
+
+	::delete parser;
+}
 
 // FUNCTION: BFME2 0x0037B9D4 size=116 name=?Rva0037B9D4Get@@YA?AVUnicodeString@@XZ evidence=?:placeholder tier=A
 UnicodeString RecorderClass::getReplayDir()

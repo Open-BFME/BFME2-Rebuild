@@ -34,6 +34,8 @@ class GameMessageParser
 {
 public:
 	GameMessageParser(GameMessage *message);				// 0x0054D54A
+	GameMessageParser();										// 0x0054D54A (the same body: an empty parser)
+	void addArgType(GameMessageArgumentDataType type, Int argCount);	// 0x0054D5D3: appends a node, or widens the last one when its type repeats
 	virtual ~GameMessageParser();							// slot 0, 0x0054D5B7 (deleting)
 
 	GameMessageParserArgumentType *getFirstArgumentType() const { return m_first; }
