@@ -235,4 +235,45 @@ TerrainRoadType *TerrainRoadCollection::newRoad( AsciiString name )
 }
 
 // FUNCTION: BFME2 0x002DB64E size=564 name=?newBridge@TerrainRoadCollection@@QAEPAVTerrainRoadType@@VAsciiString@@@Z evidence=N:ledger tier=B hypothesis:K
+TerrainRoadType *TerrainRoadCollection::newBridge(AsciiString name)
+{
+	TerrainRoadType *bridge = new TerrainRoadType;
+
+	bridge->friend_setName(name);
+	bridge->friend_setID(m_idCounter++);
+	bridge->friend_setBridge(true);
+
+	TerrainRoadType *defaultBridge = findBridge(AsciiString("DefaultBridge"));
+	if (defaultBridge)
+	{
+		bridge->friend_setTexture(defaultBridge->getTexture());
+		bridge->m_bridgeScale = defaultBridge->getBridgeScale();
+		bridge->friend_setBridgeModelName(defaultBridge->getBridgeModel());
+		bridge->friend_setBridgeModelNameDamaged(defaultBridge->getBridgeModelNameDamaged());
+		bridge->friend_setBridgeModelNameReallyDamaged(defaultBridge->getBridgeModelNameReallyDamaged());
+		bridge->friend_setBridgeModelNameBroken(defaultBridge->getBridgeModelNameBroken());
+		bridge->friend_setTextureDamaged(defaultBridge->getTextureDamaged());
+		bridge->friend_setTextureReallyDamaged(defaultBridge->getTextureReallyDamaged());
+		bridge->friend_setTextureBroken(defaultBridge->getTextureBroken());
+		bridge->m_transitionEffectsHeight = defaultBridge->getTransitionEffectsHeight();
+		bridge->m_numFXPerType = defaultBridge->getNumFXPerType();
+		for (Int state = BODY_PRISTINE; state < BODYDAMAGETYPE_COUNT; state++)
+		{
+			bridge->friend_setDamageToSoundString((BodyDamageType)state, defaultBridge->getDamageToSoundString((BodyDamageType)state));
+			bridge->friend_setRepairedToSoundString((BodyDamageType)state, defaultBridge->getRepairedToSoundString((BodyDamageType)state));
+			for (Int i = 0; i < 3; i++)
+			{
+				bridge->friend_setDamageToOCLString((BodyDamageType)state, i, defaultBridge->getDamageToOCLString((BodyDamageType)state, i));
+				bridge->friend_setDamageToFXString((BodyDamageType)state, i, defaultBridge->getDamageToOCLString((BodyDamageType)state, i));
+				bridge->friend_setRepairedToOCLString((BodyDamageType)state, i, defaultBridge->getDamageToOCLString((BodyDamageType)state, i));
+				bridge->friend_setRepairedToFXString((BodyDamageType)state, i, defaultBridge->getDamageToOCLString((BodyDamageType)state, i));
+			}
+		}
+	}
+
+	bridge->friend_setNext(m_bridgeList);
+	m_bridgeList = bridge;
+
+	return bridge;
+}
 

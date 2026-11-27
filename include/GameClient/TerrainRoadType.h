@@ -23,7 +23,10 @@ public:
     RGBColor getRadarColor() { return m_radarColor; }
     AsciiString getBridgeModel();
     AsciiString getBridgeModelNameDamaged();
+    AsciiString getBridgeModelNameReallyDamaged();
     AsciiString getBridgeModelNameBroken();
+    AsciiString getTextureDamaged();
+    AsciiString getTextureBroken();
     AsciiString getTextureReallyDamaged();
     AsciiString getTowerObjectName(BridgeTowerType);
     const AudioEventInfoRef &getDamageToSoundString(BodyDamageType state) const { return m_damageToSoundString[state]; }
