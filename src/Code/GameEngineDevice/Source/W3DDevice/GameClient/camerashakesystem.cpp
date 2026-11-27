@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:Z, hypothesis:name:Z
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "GameClient/CameraShakeSystem.h"
+#include "WWMath/wwmath.h"
 
 DEFINE_AUTO_POOL(CameraShakeSystemClass::CameraShakerClass, 256)
 
@@ -21,6 +22,14 @@ CameraShakeSystemClass::~CameraShakeSystemClass()
 }
 
 // FUNCTION: BFME2 0x00065DAD size=116 name=?Add_Camera_Shake@CameraShakeSystemClass@@QAEXABVVector3@@MMM@Z evidence=N:ledger tier=B hypothesis:Z
+void CameraShakeSystemClass::Add_Camera_Shake(const Vector3 &position, float radius, float duration, float power)
+{
+	// power is in degrees of amplitude
+	power = power * (WWMATH_PI / 180.0f);
+
+	CameraShakerClass *shaker = new CameraShakerClass(position, radius, duration, power);
+	CameraShakerList.Add(shaker);
+}
 
 // FUNCTION: BFME2 0x00065E21 size=27 name=?rva00065E21@Rva00065E21@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:Z
 bool CameraShakeSystemClass::IsCameraShaking()
