@@ -309,7 +309,10 @@ void AI::parseAiDataDefinition(INI *ini)
 }
 
 // FUNCTION: BFME2 0x002FFFA3 size=39 name=?findClosestEnemy@AI@@QAEPAVObject@@PBV2@MIPBVAttackPriorityInfo@@PAVPartitionFilter@@H@Z evidence=N:ledger
-
+Object *AI::findClosestEnemy(const Object *me, Real range, UnsignedInt qualifiers, const AttackPriorityInfo *info, PartitionFilter *optionalFilter, Int searchFlags)
+{
+	return rva002FF07B(me, me->getPosition(), range, qualifiers, info, optionalFilter, searchFlags);
+}
 
 #include "GameLogic/AI.h"
 

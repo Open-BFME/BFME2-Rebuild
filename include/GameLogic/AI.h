@@ -31,6 +31,9 @@ class Pathfinder;
 class AIGroup;
 class Object;
 class Xfer;
+class AttackPriorityInfo;
+class PartitionFilter;
+class Coord3D;
 class INI;
 
 enum { MAX_AI_UPGRADES = 20 };
@@ -158,6 +161,8 @@ public:
 	void destroyGroup(AIGroup *group);	// 0x002FE712
 	Object *findClosestAlly(const Object *me, Real range, UnsignedInt flags);	// 0x002FDBC4
 	Object *findClosestRepulsor(const Object *me, Real range);	// 0x002FDC9A
+	Object *findClosestEnemy(const Object *me, Real range, UnsignedInt qualifiers, const AttackPriorityInfo *info, PartitionFilter *optionalFilter, Int searchFlags);	// 0x002FFFA3: searches from the object's own position
+	Object *rva002FF07B(const Object *me, const Coord3D *position, Real range, UnsignedInt qualifiers, const AttackPriorityInfo *info, PartitionFilter *optionalFilter, Int searchFlags);	// 0x002FF07B (not written)
 	static Real getAdjustedVisionRangeForObject(const Object *obj, Int flags);	// 0x002FDD0A
 	static Bool isTargetInWeaponRange(Object *source, Object *target);	// 0x002FE193 (map ?rva002FE193@AI@@SA_NPAVObject@@0@Z, ?:placeholder; AIGuardOuterState::onEnter 0x005439F2)
 
