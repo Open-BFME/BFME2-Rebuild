@@ -20,6 +20,8 @@ class WorldHeightMap;
 class W3DShroud;
 class W3DTaint;
 class RefRenderObjListIterator;
+class Vector3;
+enum Scorches;
 
 class BaseHeightMapRenderObjClass : public RenderObjClass, public DX8_CleanupHook, public Snapshot
 {
@@ -55,6 +57,7 @@ public:
 	virtual Real getMaxCellHeight(Real x, Real y) const;
 	virtual Int vslot147() = 0;
 
+	void addScorch(Vector3 location, Real radius, Scorches type);	// 0x00067EA3
 	Bool isClearLineOfSight(const Coord3D &start, const Coord3D &end) const;
 	Bool isCliffCell(Real x, Real y);
 	UnsignedByte rva0006B187(Real x, Real y);
