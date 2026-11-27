@@ -12,8 +12,13 @@
 #include "GameLogic/Module/OCLSpecialPowerModuleData.h"
 #include "GameLogic/ObjectCreationList.h"
 
-int Rva004C30BC(ObjectCreationList *ocl, void *a, void *b);
 // FUNCTION: BFME2 0x004C30BC size=28 name=?Rva004C30BC@@YAHPAVObjectCreationList@@PAX1@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
+int Rva004C30BC(ObjectCreationList *ocl, void *obj, void *pos)
+{
+	if (ocl == 0)
+		return 0;
+	return ocl->rva001F0434(static_cast<Object *>(obj), static_cast<const Coord3D *>(pos));
+}
 // FUNCTION: BFME2 0x004C30D8 size=42 name=??0OCLSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 OCLSpecialPower::OCLSpecialPower(Thing *thing, const ModuleData *moduleData) :
 	SpecialPowerModule(thing, moduleData)
