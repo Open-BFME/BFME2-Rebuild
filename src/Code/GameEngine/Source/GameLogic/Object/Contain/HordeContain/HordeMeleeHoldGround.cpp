@@ -81,3 +81,7 @@ void HordeMeleeHoldGround::startMeleeAttack(Object *unit)
 }
 
 // FUNCTION: BFME2 0x005839F5 size=18 name=?rva005839F5@HordeMeleeHoldGround@@QAEXH@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-neighbour-pointers-mixed
+void HordeMeleeHoldGround::meleeSlot02(UnsignedInt count)
+{
+	m_unitStates.resize(count);
+}
