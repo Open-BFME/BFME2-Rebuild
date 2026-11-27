@@ -555,6 +555,40 @@ bool Team::hasAnyObjects(bool flag)
 // FUNCTION: BFME2 0x0039E0D0 size=141 name=?rva0039E0D0@Team@@QAE_NXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0039E15D size=176 name=?didAllEnter@Team@@QAE_NPAVPolygonTrigger@@I@Z evidence=N:ledger tier=A
+bool Team::didAllEnter(PolygonTrigger *trigger, unsigned int whichToConsider)
+{
+	if (!m_unk0x5C[0])
+		return false;
+
+	bool entered = false;
+	bool outside = false;
+	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance())
+	{
+		AIUpdateInterface *ai = iter.cur()->getAI();
+		if (ai) {
+			if (!(ai->m_locomotorSet.m_validLocomotorSurfaces & (1 << whichToConsider)))
+				continue;
+		} else {
+			if (!((UnsignedByte)(1 << whichToConsider) & 1))
+				continue;
+		}
+
+		if (iter.cur()->isEffectivelyDead())
+			continue;
+
+		if (iter.cur()->getTemplate()->isKindOf(KINDOF_INERT))
+			continue;
+
+		if (iter.cur()->didEnter(trigger)) {
+			entered = true;
+		} else {
+			if (!iter.cur()->isInside(trigger)) {
+				outside = true;
+			}
+		}
+	}
+	return entered && !outside;
+}
 
 // FUNCTION: BFME2 0x0039E20D size=123 name=?didPartialEnter@Team@@QAE_NPAVPolygonTrigger@@I@Z evidence=N:ledger tier=A
 bool Team::didPartialEnter(PolygonTrigger *trigger, unsigned int whichToConsider)
@@ -615,6 +649,46 @@ bool Team::didPartialExit(PolygonTrigger *trigger, unsigned int whichToConsider)
 }
 
 // FUNCTION: BFME2 0x0039E303 size=197 name=?didAllExit@Team@@QAE_NPAVPolygonTrigger@@I@Z evidence=N:ledger tier=A
+bool Team::didAllExit(PolygonTrigger *trigger, unsigned int whichToConsider)
+{
+	if (!m_unk0x5C[0])
+		return false;
+
+	bool anyConsidered = false;
+	bool exited = false;
+	bool inside = false;
+	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance())
+	{
+		AIUpdateInterface *ai = iter.cur()->getAI();
+		if (ai) {
+			if (!(ai->m_locomotorSet.m_validLocomotorSurfaces & (1 << whichToConsider)))
+				continue;
+		} else {
+			if (!((UnsignedByte)(1 << whichToConsider) & 1))
+				continue;
+		}
+
+		if (iter.cur()->isEffectivelyDead())
+			continue;
+
+		if (iter.cur()->getTemplate()->isKindOf(KINDOF_INERT))
+			continue;
+
+		if (iter.cur()->getTemplate()->isKindOf(KINDOF_MOVE_ONLY))
+			continue;
+
+		if (iter.cur()->didExit(trigger)) {
+			exited = true;
+		} else {
+			if (iter.cur()->isInside(trigger)) {
+				inside = true;
+			}
+		}
+
+		anyConsidered = true;
+	}
+	return anyConsidered && exited && !inside;
+}
 
 // FUNCTION: BFME2 0x0039E3C8 size=172 name=?allInside@Team@@QAE_NPAVPolygonTrigger@@I@Z evidence=N:ledger tier=A
 bool Team::allInside(PolygonTrigger *trigger, unsigned int whichToConsider)
