@@ -36,6 +36,7 @@ public:
 	void openSaveScreen(const char *);						// 0x0051E3C3: opens the save screen for the finished game
 	void OnButtonContinue(const char *);							// The continue button
 	void rva0051ED7E();
+	int rva0051E2FB();										// 0x0051E2FB: when the first step has started, resets the transitions handler and clears the state; answers 1
 
 	int m_state;											// +0x27C (bfmeGo1020M 0x0051E3A3 sets it to 1)
 	unsigned char m_gap280[0x288 - 0x280];						// +0x280 not recovered
