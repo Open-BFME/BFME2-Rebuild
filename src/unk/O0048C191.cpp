@@ -25,5 +25,13 @@ void OilSpillUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x0048C16C size=37 name=??0OilSpillUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+OilSpillUpdateModuleData::OilSpillUpdateModuleData()
+{
+	m_ignitionWeaponSpacing = 0.0f;
+	m_oilSpillFX = 0;
+}
 // FUNCTION: BFME2 0x0048C191 size=74 name=??1OilSpillUpdateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+OilSpillUpdateModuleData::~OilSpillUpdateModuleData()
+{
+}
 
