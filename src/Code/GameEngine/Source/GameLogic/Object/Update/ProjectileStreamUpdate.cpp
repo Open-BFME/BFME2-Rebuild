@@ -109,6 +109,32 @@ Bool ProjectileStreamUpdate::considerDying()
 }
 
 // FUNCTION: BFME2 0x0033F090 size=143 name=?getAllPoints@ProjectileStreamUpdate@@QAEXPAVVector3@@PAH@Z evidence=N:ledger
+void ProjectileStreamUpdate::getAllPoints(Vector3 *points, Int *count)
+{
+	Int pointCount = 0;
+	Int pointIndex = m_firstValidIndex;
+	while (pointIndex != m_nextFreeIndex)
+	{
+		Object *projectile = TheGameLogic->findObjectByID(m_projectileIDs[pointIndex]);
+		Drawable *drawable = projectile ? projectile->getDrawable() : NULL;
+		if (drawable)
+		{
+			const Coord3D *position = drawable->getPosition();
+			points[pointCount].X = position->x;
+			points[pointCount].Y = position->y;
+			points[pointCount].Z = position->z;
+		}
+		else
+		{
+			points[pointCount].X = 0;
+			points[pointCount].Y = 0;
+			points[pointCount].Z = 0;
+		}
+		pointCount++;
+		pointIndex = (pointIndex + 1) % MAX_PROJECTILE_STREAM;
+	}
+	*count = pointCount;
+}
 
 // FUNCTION: BFME2 0x0033F11F size=45 name=?update@ProjectileStreamUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
 UpdateSleepTime ProjectileStreamUpdate::update()
