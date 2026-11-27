@@ -28,6 +28,10 @@ void WeaponChangeSpecialPowerModule::doSpecialPowerAtObject(Object *object, unsi
 }
 
 // FUNCTION: BFME2 0x004C4069 size=12 name=?doSpecialPowerUsingWaypoints@WeaponChangeSpecialPowerModule@@UAEXPAXMH@Z evidence=N:ledger
+void WeaponChangeSpecialPowerModule::doSpecialPowerUsingWaypoints(const Coord3D *location, const Waypoint *waypoint, unsigned int commandOptions)
+{
+	doSpecialPower(commandOptions);
+}
 
 // FUNCTION: BFME2 0x004C4075 size=69 name=?getModuleNameKey@WeaponChangeSpecialPowerModule@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
 NameKeyType WeaponChangeSpecialPowerModule::getModuleNameKey() const
