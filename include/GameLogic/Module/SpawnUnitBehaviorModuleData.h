@@ -27,7 +27,9 @@ public:
 
 	AsciiString m_unitName;                                // +0x8 UnitName
 	AsciiString m_unitCommand;                             // +0xC UnitCommand
-	UnsignedByte m_unk0x10[0xC];
+	Int m_unk0x10;
+	Real m_unk0x14;
+	Real m_unk0x18;
 	Bool m_spawnOnce;                                      // +0x1C SpawnOnce
 };
 // SIZE 0x20

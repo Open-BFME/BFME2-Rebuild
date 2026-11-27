@@ -8,6 +8,16 @@
 #include "GameLogic/Module/SpawnUnitBehaviorModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x0025598C size=101 name=??0SpawnUnitBehaviorModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+SpawnUnitBehaviorModuleData::SpawnUnitBehaviorModuleData()
+	: m_unitName(), m_unitCommand()
+{
+	m_unitName.set("");
+	m_unitCommand.set("");
+	m_unk0x10 = 0;
+	m_unk0x14 = 0.0f;
+	m_unk0x18 = 0.0f;
+	m_spawnOnce = false;
+}
 
 // FUNCTION: BFME2 0x002559F1 size=81 name=?friend_newModuleData@SpawnUnitBehaviorModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *SpawnUnitBehaviorModuleData::friend_newModuleData(INI *ini)
