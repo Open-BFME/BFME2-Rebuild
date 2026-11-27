@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:Z
 #include "GameLogic/Module/InactiveBody.h"
 #include "Common/NameKeyGenerator.h"
+#include "Common/Coord2D.h"
 #include "Common/Xfer.h"
 #include "GameLogic/Damage.h"
 #include "GameLogic/Object.h"
@@ -61,6 +62,13 @@ NameKeyType InactiveBody::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x004BD8A2 size=27 name=?rva004BD8A2@Rva004BD8A2@@UAE?AUBodyZeroPair004BD8A2@@XZ evidence=?:placeholder tier=B hypothesis:cohesion
+Coord2D InactiveBody::getGrabOffset()
+{
+	Coord2D offset;
+	offset.x = 0.0f;
+	offset.y = 0.0f;
+	return offset;
+}
 
 // FUNCTION: BFME2 0x004BD8BD size=83 name=??0InactiveBody@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 InactiveBody::InactiveBody(Thing *thing, const ModuleData *moduleData)
