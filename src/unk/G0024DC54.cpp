@@ -3,6 +3,8 @@
 // object=G0024DC54 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 #include "Common/INI.h"
+#include "GameLogic/Module/SpecialPowerModule.h"
+#include "GameLogic/Module/WeaponModeSpecialPowerUpdate.h"
 #include "GameLogic/Module/WeaponModeSpecialPowerUpdateModuleData.h"
 // Module creators. Retail registers each module class with a static friend_newModuleInstance that allocates the
 // module for a thing and its module data, and each module data class with a static friend_newModuleData that
@@ -11,7 +13,18 @@
 // buildFieldParse declaration, or did not compile with its current header (the usual cause is a pure virtual that
 // the header does not override yet); its row stays unwritten.
 // FUNCTION: BFME2 0x0024DC54 size=56 name=?friend_newModuleInstance@SpecialPowerModule@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Module *SpecialPowerModule::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new SpecialPowerModule(thing, moduleData);
+}
 // FUNCTION: BFME2 0x0024DC8C size=81 name=?friend_newModuleData@SpecialPowerModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+ModuleData *SpecialPowerModuleData::friend_newModuleData(INI *ini)
+{
+	SpecialPowerModuleData *data = new SpecialPowerModuleData;
+	if (ini)
+		ini->initFromINIMultiProc(data, SpecialPowerModuleData::buildFieldParse);
+	return data;
+}
 // FUNCTION: BFME2 0x0024DCDD size=6 name=?Rva0024DCDDGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // No retail code or data refers to this function. It follows the creators of SpecialPower and returns the bit set 0x100, which looks like a module interface mask;
 // nothing ties it to SpecialPower, so it keeps its ledger name.
@@ -27,6 +40,10 @@ int Rva0024DCE3Get()
 	return 257;
 }
 // FUNCTION: BFME2 0x0024DCE9 size=56 name=?friend_newModuleInstance@WeaponModeSpecialPowerUpdate@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Module *WeaponModeSpecialPowerUpdate::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new WeaponModeSpecialPowerUpdate(thing, moduleData);
+}
 // FUNCTION: BFME2 0x0024DD21 size=81 name=?friend_newModuleData@WeaponModeSpecialPowerUpdateModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 ModuleData *WeaponModeSpecialPowerUpdateModuleData::friend_newModuleData(INI *ini)
 {

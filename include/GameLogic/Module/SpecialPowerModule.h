@@ -30,6 +30,7 @@
 
 template <int N> class BitFlags;
 class FXList;
+class INI;
 class MultiIniFieldParse;
 class Object;
 class Rva002390CB;
@@ -76,6 +77,7 @@ class SpecialPowerModuleData : public ModuleData
 public:
 	SpecialPowerModuleData();											// 0x004930A0
 	static void buildFieldParse(MultiIniFieldParse &parse);				// 0x00493207
+	static ModuleData *friend_newModuleData(INI *ini);					// 0x0024DC8C
 
 	const SpecialPowerTemplate *m_specialPowerTemplate;					// 0x08 SpecialPowerTemplate
 	Bool m_updateModuleStartsAttack;									// 0x0C UpdateModuleStartsAttack
@@ -119,6 +121,7 @@ class SpecialPowerModule : public BehaviorModule, public SpecialPowerModuleInter
 {
 public:
 	SpecialPowerModule(Thing *thing, const ModuleData *moduleData);		// 0x00493C5A
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);	// 0x0024DC54
 
 	// BehaviorModuleInterface slot 8 returns the special-power interface at +0x10.
 	virtual SpecialPowerModuleInterface *getSpecialPower() { return this; }

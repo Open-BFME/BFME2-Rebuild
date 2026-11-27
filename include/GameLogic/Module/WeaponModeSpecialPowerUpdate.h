@@ -18,6 +18,7 @@ class WeaponModeSpecialPowerUpdate : public SpecialPowerUpdateModule
 {
 public:
 	WeaponModeSpecialPowerUpdate(Thing *thing, const ModuleData *moduleData);
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);	// 0x0024DCE9
 	virtual NameKeyType getModuleNameKey() const;
 	virtual bool isActive() const { return m_active; }
 	virtual UpdateSleepTime update();								// 0x00494AF3
