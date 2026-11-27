@@ -4,14 +4,13 @@
 // Offsets are the table entries'; each type is what the entry's parse function stores
 // (INI::parseReal -> Real, parseDurationUnsignedInt -> UnsignedInt, ...);
 // names are the INI tokens. Byte gaps are bytes no table entry writes.
-// Unresolved (byte storage up to the next member, named after the token):
-//   m_upgrade +0xC: Rva0026F28BParse 0x0026F28B
 #pragma once
 #ifndef BFME2_INHERIT_UPGRADE_CREATE_MODULE_DATA_H
 #define BFME2_INHERIT_UPGRADE_CREATE_MODULE_DATA_H
 
 #include <stddef.h>
 #include "Common/GameType.h"
+#include "Common/UpgradeMaskType.h"
 #include "GameLogic/Module/ModuleData.h"
 #include "GameLogic/ObjectFilter.h"
 
@@ -26,7 +25,7 @@ public:
 	static ModuleData *friend_newModuleData(INI *ini);
 
 	Real m_radius;                                         // +0x8 Radius
-	UnsignedByte m_upgrade[0x80];                          // +0xC Upgrade; unresolved: Rva0026F28BParse
+	UpgradeMaskType m_upgrade;
 	ObjectFilter m_objectFilter;                           // +0x8C ObjectFilter
 };
 // SIZE 0x90
