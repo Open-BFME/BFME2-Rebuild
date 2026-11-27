@@ -76,6 +76,7 @@ public:
 
 	const char *Get_User_Text(void) const;
 	int Is_Skin(void) const;							// 0x0014A0B0 (role name: the model carries the skin flag)
+	void Set_Fog_Color(const Vector3 &color);					// 0x001492B0: stores the colour at +0x314
 	int Get_W3D_Flags(void);							// 0x00149960 (the model's attribute word)
 	void Replace_VertexMaterial(VertexMaterialClass *vmat, VertexMaterialClass *new_vmat);	// 0x00149C00
 	MeshModelClass *Get_Model(void);
