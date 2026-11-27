@@ -35,6 +35,7 @@ public:
 	Bool DoAdvanceAlongPath(const Coord3D *pos, Bool flag);
 	void skipNonPortalNodes();												// 0x00363A78 (provisional name): +0x10 moves along +8 links until the next node has a portal id
 	Int GetNextPortalID();
+	Coord3D *PeekPastClimbPortal(Coord3D *out);
 	void SetLastNodePortal(Int id);
 	Real computeFlightDistToGoal(const Coord3D *pos, Coord3D &goal);
 	void optimizeGroundPath(Int flag);

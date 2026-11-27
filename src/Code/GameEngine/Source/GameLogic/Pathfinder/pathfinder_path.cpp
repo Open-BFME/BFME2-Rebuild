@@ -36,6 +36,18 @@ void Path::skipNonPortalNodes()
 }
 
 // FUNCTION: BFME2 0x00363AA8 size=47 name=?GetNextPortalID@Path@@QAEHXZ evidence=N:ledger tier=A
+Int Path::GetNextPortalID()
+{
+	if (!m_path || !m_unk0x10)
+		return 0x7FFFFFFF;
+	PathNode *node = m_unk0x10;
+	while (node && node->m_id == 0x7FFFFFFF)
+		node = node->m_next;
+	if (node)
+		return node->m_id;
+	return 0x7FFFFFFF;
+}
+
 // FUNCTION: BFME2 0x00363AD7 size=77 name=?rva00363AD7@Rva003638BA@@QAE_NXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00363B24 size=17 name=?SetLastNodePortal@Path@@QAEXH@Z evidence=N:ledger tier=A
@@ -64,6 +76,39 @@ Path::Path() : m_unk0x00(0), m_path(NULL), m_pathTail(NULL), m_isOptimized(false
 }
 
 // FUNCTION: BFME2 0x00363DF9 size=199 name=?PeekPastClimbPortal@Path@@QAEPAVCoord3D@@PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Coord3D *Path::PeekPastClimbPortal(Coord3D *out)
+{
+	if (!m_path)
+	{
+		out->x = 0.0f;
+		out->y = 0.0f;
+		out->z = 0.0f;
+		return out;
+	}
+	PathNode *cur = m_unk0x10;
+	if (!cur)
+	{
+		*out = m_path->m_pos;
+		return out;
+	}
+	PathNode *next = cur->m_next;
+	if (!next)
+	{
+		*out = cur->m_pos;
+		return out;
+	}
+	Coord3D result = next->m_pos;
+	PathNode *following = next->m_next;
+	if (following)
+	{
+		result = following->m_pos;
+		PathNode *last = following->m_next;
+		if (last && last->m_id != 0x7FFFFFFF)
+			result = last->m_pos;
+	}
+	*out = result;
+	return out;
+}
 
 // FUNCTION: BFME2 0x00363EC0 size=228 name=?computeFlightDistToGoal@Path@@QAEMPBVCoord3D@@AAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
