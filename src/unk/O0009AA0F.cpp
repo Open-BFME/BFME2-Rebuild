@@ -5,9 +5,17 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:invented
+#include "WWMath/Vector3.h"
 // FUNCTION: BFME2 0x0009AA2D size=27 name=?subtractPoints@@YA?AUGapIPair@@U1@ABU1@@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0009AA48 size=85 name=?Lerp@Vector3@@SAXABV1@0MPAV1@@Z evidence=N:ledger tier=B hypothesis:K
+
+void Vector3::Lerp(const Vector3 &a, const Vector3 &b, Real alpha, Vector3 *set_result)
+{
+	set_result->X = a.X + (b.X - a.X) * alpha;
+	set_result->Y = a.Y + (b.Y - a.Y) * alpha;
+	set_result->Z = a.Z + (b.Z - a.Z) * alpha;
+}
 
 // FUNCTION: BFME2 0x0009AA9D size=7 name=?get@Rva0009AA9DDwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:K
 
