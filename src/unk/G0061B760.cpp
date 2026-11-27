@@ -2,3 +2,7 @@
 // object=G0061B760 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0061B760 size=29 name=_XMP_Set_Bit evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+extern "C" void XMP_Set_Bit(unsigned long *r, unsigned bit)
+{
+	r[bit >> 5] |= 1UL << (bit & 31);
+}
