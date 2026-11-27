@@ -1,7 +1,16 @@
 // Object boundaries may be unproven.
 // FUNCTION: BFME2 0x004AE7A7 size=6 name=?GetSnapshotName@DetachableRiderUpdate@@MBEPBDXZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+const char *DetachableRiderUpdate::GetSnapshotName() const
+{
+	return "DetachableRiderUpdate";
+}
 // FUNCTION: BFME2 0x004AE7AD size=72 name=?xfer@DetachableRiderUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x004AE832 size=69 name=?getModuleNameKey@DetachableRiderUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+NameKeyType DetachableRiderUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheDetachableRiderUpdateNameKey = TheNameKeyGenerator->nameToKey("DetachableRiderUpdate");
+	return TheDetachableRiderUpdateNameKey;
+}
 // FUNCTION: BFME2 0x004AE883 size=91 name=??0DetachableRiderUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x004AE8FA size=15 name=?rva004AE8FA@DetachableRiderUpdate@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x004AE909 size=12 name=?get@Rva004AE909ImulAddField@@QBEHH@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
