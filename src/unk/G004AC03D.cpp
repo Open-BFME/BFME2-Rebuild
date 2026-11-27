@@ -2,6 +2,7 @@
 // stlport46
 #include "Common/INI.h"
 #include "GameLogic/Module/RainOfFireUpdate.h"
+#include "GameLogic/GameLogic.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G004AC03D name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
@@ -42,3 +43,17 @@ void RainOfFireUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x004AC0A8 size=135 name=??0RainOfFireUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+RainOfFireUpdate::RainOfFireUpdate(Thing *thing, const ModuleData *moduleData) :
+	UpdateModule(thing, moduleData)
+{
+	m_startFrame = 0x3FFFFFFF;
+	m_darkness = 0.0f;
+	m_scale = 1.0f;
+	m_pending = 0.0f;
+	m_ramp = 0.0f;
+	const RainOfFireUpdateModuleData *data = getRainOfFireUpdateModuleData();
+	if (data) {
+		m_startFrame = TheGameLogic->getFrame();
+		m_ramp = (data->m_rampup == 0.0f) ? 1.0f : 0.0f;
+	}
+}
