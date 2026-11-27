@@ -11,6 +11,7 @@
 #include "WWMath/Vector3.h"
 
 class Matrix3D;
+class Quaternion;
 class OBBoxIntersectionTestClass;
 
 class Matrix3
@@ -35,14 +36,23 @@ public:
 		Row[2] = r2;
 	}
 
+	Matrix3(float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33);	// 0x00716820
+
 	Matrix3 &operator=(const Matrix3D &m);
 
 	Matrix3 Transpose(void) const;								// 0x00713ED0
 	void Rotate_AABox_Extent(const Vector3 &extent, Vector3 *set_extent);			// 0x00149310 (pushes an axis-aligned box's extent through the absolute-value matrix)
+	void Make_Identity(void);								// 0x007167E0
+	void Set(const Quaternion &q);							// 0x00716950
 	void Set(const Matrix3D &m);								// 0x007168F0 (the rotation part of a transform: OBBoxRenderObjClass::update_cached_box 0x001758C0)
 
 	// Zero Hour's out-of-line Multiply(Matrix3D, Matrix3x3): OBBoxClass::Transform 0x000B2A4C calls it.
 	static void Multiply(const Matrix3D &a, const Matrix3 &b, Matrix3 *res);			// 0x00716A20
+	static void Multiply(const Matrix3 &a, const Matrix3D &b, Matrix3 *res);			// 0x00716BB0
+	static void Multiply(const Matrix3 &a, const Matrix3 &b, Matrix3 *res);			// 0x00716D40
+
+	int Is_Orthogonal(void) const;								// 0x00716F30
+	void Re_Orthogonalize(void);								// 0x00717110
 
 	// WWMath's point rotations; the output may alias the input (retail copies the input first then).
 	static void Rotate_Vector(const Matrix3 &A, const Vector3 &in, Vector3 *out);			// 0x00714C00
