@@ -4,5 +4,9 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "WW3D2/VertexMaterialClass.h"
 // FUNCTION: BFME2 0x0012D2B0 size=4 name=?Get_Lighting@VertexMaterialClass@@QBE_NXZ evidence=N:ledger tier=B hypothesis:name:invented
-
+bool VertexMaterialClass::Get_Lighting(void) const
+{
+	return UseLighting;
+}

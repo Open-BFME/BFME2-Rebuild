@@ -112,6 +112,7 @@ public:
 
 	// Copy 0x0006E18D (map: Set_Lighting@VertexMaterialClass); Init 0x0013D9B0
 	// expands it (CRC-dirty byte, then +0x69).
+	bool Get_Lighting(void) const;							// 0x0012D2B0
 	void Set_Lighting(bool lighting) { CRCDirty = true; UseLighting = lighting; }
 	unsigned long Get_CRC(void) const { if (CRCDirty) { CRC = Compute_CRC(); CRCDirty = false; } return CRC; }	// out-of-line copy 0x001432B0; Equal_Material 0x00143910 expands it
 
