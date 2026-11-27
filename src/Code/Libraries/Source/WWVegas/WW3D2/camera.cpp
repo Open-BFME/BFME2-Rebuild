@@ -179,7 +179,8 @@ void CameraClass::Update_Frustum(void) const
 	float znear, zfar;
 	float znear_dist, zfar_dist;
 
-	Matrix3D cam_mat = Get_Transform();
+	Matrix3D cam_mat;
+	cam_mat = Get_Transform();
 	Get_View_Plane(vpmin, vpmax);	// normalised view plane at a depth of 1
 	Get_Clip_Planes(znear_dist, zfar_dist);
 
