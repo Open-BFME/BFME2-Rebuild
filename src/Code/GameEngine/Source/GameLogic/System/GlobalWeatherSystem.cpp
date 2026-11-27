@@ -6,6 +6,9 @@
 #include "Common/INI.h"
 #include "Common/INIException.h"
 #include "GameLogic/GlobalWeatherSystem.h"
+#include "Common/GameAudio.h"
+#include "GameLogic/GameLogic.h"
+#include "GameLogic/Object.h"
 
 GlobalWeatherSystem *TheGlobalWeatherSystem;
 
@@ -50,7 +53,6 @@ void GlobalWeatherSystem::parseWeatherData(INI *ini)
 // FUNCTION: BFME2 0x0031860D size=6 name=?name@Rva0031860DNamed@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 
 // FUNCTION: BFME2 0x00318637 size=110 name=??1GlobalWeatherSystem@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
-
 // FUNCTION: BFME2 0x003186A5 size=73 name=?reset@GlobalWeatherSystem@@UAEXXZ evidence=X:proven (vtable+position) tier=B hypothesis:mm1-held-object-same-path
 
 // FUNCTION: BFME2 0x003186EE size=43 name=?rva003186EE@GlobalWeatherSystem@@QAEXHHH@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-held-object-same-path
@@ -58,6 +60,13 @@ void GlobalWeatherSystem::parseWeatherData(INI *ini)
 // FUNCTION: BFME2 0x00318719 size=79 name=?rva00318719@GlobalWeatherSystem@@QAEXXZ evidence=P:provisional (wb-file) tier=B hypothesis:mm1-held-object-same-path
 
 // FUNCTION: BFME2 0x00318768 size=56 name=?rva00318768@GlobalWeatherSystem@@QAEXXZ evidence=P:provisional (wb-file) tier=B hypothesis:mm1-held-object-same-path
+void GlobalWeatherSystem::update()
+{
+	if (m_unk0x2C-- != 0 && m_unk0x2C == 0)
+		rva00318719();
+	if (m_unk0x28-- != 0 && m_unk0x28 == 0)
+		rva003186EE(0, 0, 0);
+}
 
 // FUNCTION: BFME2 0x003187A8 size=95 name=?rva003187A8@Rva003187A8Owner@@QAEXPAVRva003187A8Xfer@@@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 
