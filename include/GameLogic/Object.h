@@ -175,6 +175,7 @@ public:
     int rva0028B511() const;
     Bool rva0028B35B(const Object *other) const;	// 0x0028B35B (CollisionShouldCollide 0x0028C0E3 forwards to it)
     void *rva0028BD5D(int) const;
+    PathfindLayerEnum getLayer() const;
     void setLayer(PathfindLayerEnum);
     void setDestinationLayer(PathfindLayerEnum layer);	// 0x0028B525 (Zero Hour's name: a plain store to +0x40C; AIUpdateInterface::loadPostProcess 0x002686A4 restores it after re-registering the goal)
     bool rva0028F518();
