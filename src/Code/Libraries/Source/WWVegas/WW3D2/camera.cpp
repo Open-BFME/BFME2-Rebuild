@@ -170,6 +170,64 @@ void CameraClass::Get_View_Plane(Vector2 &set_min, Vector2 &set_max) const
 }
 
 // FUNCTION: BFME2 0x001340B0 size=1434 name=?Update_Frustum@CameraClass@@IBEXXZ evidence=N:ledger tier=B hypothesis:K
+void CameraClass::Update_Frustum(void) const
+{
+	if (FrustumValid)
+		return;
+
+	Vector2 vpmin, vpmax;
+	float znear, zfar;
+	float znear_dist, zfar_dist;
+
+	Matrix3D cam_mat = Get_Transform();
+	Get_View_Plane(vpmin, vpmax);	// normalised view plane at a depth of 1
+	Get_Clip_Planes(znear_dist, zfar_dist);
+
+	// Forward is negative Z in view space.
+	znear = -znear_dist;
+	zfar = -zfar_dist;
+
+	bool ortho = (Projection != PERSPECTIVE);
+	Frustum.Init(cam_mat, vpmin, vpmax, znear, zfar, ortho);
+	ViewSpaceFrustum.Init(Matrix3D(true), vpmin, vpmax, znear, zfar, ortho);
+	FrustumValid = true;
+
+	// The box around the near clip rectangle.
+	cam_mat.mulVector3(Vector3(0.0f, 0.0f, znear), NearClipBBox.Center);
+	NearClipBBox.Extent.X = (vpmax.X - vpmin.X) * (-znear) * 0.5f;
+	NearClipBBox.Extent.Y = (vpmax.Y - vpmin.Y) * (-znear) * 0.5f;
+	NearClipBBox.Extent.Z = 0.01f;
+	NearClipBBox.Basis.Set(cam_mat);
+
+	Transform.Get_Inverse(CameraInvTransform);
+
+	// Matrix4x4's Init_Perspective and Init_Ortho, expanded in place as the
+	// original object does.
+	Matrix4x4 &proj = ProjectionTransform;
+	if (Projection == PERSPECTIVE) {
+		proj.Make_Identity();
+		float left = vpmin.X * znear_dist;
+		float right = vpmax.X * znear_dist;
+		float bottom = vpmin.Y * znear_dist;
+		float top = vpmax.Y * znear_dist;
+		proj[0][0] = 2.0 * znear_dist / (right - left);
+		proj[0][2] = (right + left) / (right - left);
+		proj[1][1] = 2.0 * znear_dist / (top - bottom);
+		proj[1][2] = (top + bottom) / (top - bottom);
+		proj[2][2] = -(zfar_dist + znear_dist) / (zfar_dist - znear_dist);
+		proj[2][3] = -(2.0 * zfar_dist * znear_dist) / (zfar_dist - znear_dist);
+		proj[3][2] = -1.0f;
+		proj[3][3] = 0.0f;
+	} else {
+		proj.Make_Identity();
+		proj[0][0] = 2.0f / (vpmax.X - vpmin.X);
+		proj[0][3] = -(vpmax.X + vpmin.X) / (vpmax.X - vpmin.X);
+		proj[1][1] = 2.0f / (vpmax.Y - vpmin.Y);
+		proj[1][3] = -(vpmax.Y + vpmin.Y) / (vpmax.Y - vpmin.Y);
+		proj[2][2] = -2.0f / (zfar_dist - znear_dist);
+		proj[2][3] = -(zfar_dist + znear_dist) / (zfar_dist - znear_dist);
+	}
+}
 
 // FUNCTION: BFME2 0x00134650 size=215 name=?Device_To_View_Space@CameraClass@@QAEXABVVector2@@PAVVector3@@@Z evidence=N:ledger tier=B hypothesis:K
 void CameraClass::Device_To_View_Space(const Vector2 &device_coord, Vector3 *set_view)
