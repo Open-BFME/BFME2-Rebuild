@@ -10,6 +10,11 @@
 #include "GameClient/W3DQuadrupedDraw.h"
 
 // FUNCTION: BFME2 0x000CA0A4 size=42 name=??0W3DQuadrupedDraw@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+W3DQuadrupedDraw::W3DQuadrupedDraw(Thing *thing, const ModuleData *moduleData)
+	: W3DScriptedModelDraw(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x000CA0CE size=69 name=?getModuleNameKey@W3DQuadrupedDraw@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:name:invented
 NameKeyType W3DQuadrupedDraw::getModuleNameKey() const
 {
