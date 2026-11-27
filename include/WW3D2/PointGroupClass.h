@@ -36,6 +36,7 @@ public:
 	virtual ~PointGroupClass();
 
 	void Set_Point_Size(float size);
+	void Set_Point_Mode(PointModeEnum mode);
 	void Set_Point_Color(Vector3 color);
 	void Set_Arrays(ShareBufferClass<Vector3> *locs, ShareBufferClass<Vector4> *diffuse = 0, ShareBufferClass<unsigned int> *apt = 0, ShareBufferClass<float> *sizes = 0, ShareBufferClass<unsigned char> *orientations = 0, ShareBufferClass<unsigned char> *frames = 0, int active_point_count = -1, float vpxmin = 0.0f, float vpymin = 0.0f, float vpxmax = 0.0f, float vpymax = 0.0f);
 	void Set_Point_Alpha(float alpha);

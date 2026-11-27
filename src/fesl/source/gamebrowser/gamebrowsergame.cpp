@@ -1,3 +1,4 @@
+#include "WW3D2/PointGroupClass.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=O0066D5A0 name-evidence=F
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
@@ -37,6 +38,11 @@
 // FUNCTION: BFME2 0x0066D740 size=30 name=?assertFailed@Rva008013F0Browser@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:mm1-file-string-path
 // FUNCTION: BFME2 0x0066D780 size=18 name=?clearFields@Rva00801430Owner@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-file-string-path
 // FUNCTION: BFME2 0x0066D7A0 size=10 name=?Set_Point_Mode@PointGroupClass@@QAEXW4PointModeEnum@1@@Z evidence=N:ledger tier=B hypothesis:mm1-file-string-path
+void PointGroupClass::Set_Point_Mode(PointModeEnum mode)
+{
+	PointMode = mode;
+}
+
 // FUNCTION: BFME2 0x0066D7B0 size=22 name=?set@Rva0066D7B0Holder@@QAEXPBD@Z evidence=?:placeholder tier=B hypothesis:mm1-file-string-path
 // FUNCTION: BFME2 0x0066D7D0 size=4 name=?get@Rva0066D7D0LeaField@@QBEPAXXZ evidence=?:placeholder tier=B hypothesis:mm1-file-string-path
 // FUNCTION: BFME2 0x0066D7E0 size=25 name=?set@Rva0066D7E0Holder@@QAEXPBD@Z evidence=?:placeholder tier=B hypothesis:mm1-file-string-path
