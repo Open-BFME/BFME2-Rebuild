@@ -24,6 +24,8 @@ static unsigned overlapping_polygon_count = 0;
 static unsigned overlapping_vertex_count = 0;
 static const unsigned MAX_OVERLAPPING_NODES = 4096;
 static SortingNodeStruct *overlapping_nodes[MAX_OVERLAPPING_NODES];
+static TempIndexStruct *temp_index_array;
+static unsigned temp_index_array_count;
 
 // FUNCTION: BFME2 0x0012D2D0 size=17 name=?SetMinVertexBufferSize@SortingRendererClass@@SAXI@Z evidence=N:ledger tier=B hypothesis:name:invented
 void SortingRendererClass::SetMinVertexBufferSize(unsigned val)
@@ -48,6 +50,17 @@ bool operator >=(const TempIndexStruct &l, const TempIndexStruct &r) { return l.
 bool operator ==(const TempIndexStruct &l, const TempIndexStruct &r) { return l.z == r.z; }
 
 // FUNCTION: BFME2 0x0012D390 size=61 name=?Get_Temp_Index_Array@@YAPAUTempIndexStruct@@I@Z evidence=N:ledger tier=B hypothesis:Z
+TempIndexStruct *Get_Temp_Index_Array(unsigned count)
+{
+	if (count < DEFAULT_SORTING_POLY_COUNT)
+		count = DEFAULT_SORTING_POLY_COUNT;
+	if (count > temp_index_array_count) {
+		delete[] temp_index_array;
+		temp_index_array = new TempIndexStruct[count];
+		temp_index_array_count = count;
+	}
+	return temp_index_array;
+}
 
 // FUNCTION: BFME2 0x0012D3D0 size=170 name=?Release_Refs@@YAXPAVSortingNodeStruct@@@Z evidence=N:ledger tier=B hypothesis:Z
 void Release_Refs(SortingNodeStruct *state)
