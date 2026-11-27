@@ -31,6 +31,11 @@ void RadarMarkerClientUpdateModuleData::buildFieldParse(MultiIniFieldParse &pars
 }
 
 // FUNCTION: BFME2 0x004C9BCD size=32 name=??0RadarMarkerClientUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:K
+RadarMarkerClientUpdate::RadarMarkerClientUpdate(Thing *thing, const ModuleData *moduleData)
+	: Rva00362EC7(thing, moduleData),
+	m_unk0xC(0)
+{
+}
 
 // FUNCTION: BFME2 0x004C9BED size=6 name=?Rva004C9BEDGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *RadarMarkerClientUpdate::GetSnapshotName() const
