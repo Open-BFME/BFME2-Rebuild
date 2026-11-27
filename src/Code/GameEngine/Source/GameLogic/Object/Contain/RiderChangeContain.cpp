@@ -2,6 +2,9 @@
 // stlport46
 // bfmealloc_alloconly
 #include <list>
+#include <stddef.h>
+#include "Common/INI.h"
+#include "Common/BitFlags.h"
 #include "GameLogic/Module/RiderChangeContain.h"
 #include "GameLogic/Module/RiderChangeContainModuleData.h"
 #include "Common/NameKeyGenerator.h"
@@ -58,6 +61,27 @@ RiderChangeContainModuleData::RiderSlot::~RiderSlot()
 // FUNCTION: BFME2 0x0047E3E1 size=150 name=?parseRiderInfo@RiderChangeContainModuleData@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0047E477 size=119 name=?buildFieldParse@RiderChangeContainModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:K
+void RiderChangeContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
+{
+	SiegeEngineContainModuleData::buildFieldParse(parse);
+
+	static const FieldParse dataFieldParse[] =
+	{
+		{ "Rider1", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[0]) },
+		{ "Rider2", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[1]) },
+		{ "Rider3", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[2]) },
+		{ "Rider4", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[3]) },
+		{ "Rider5", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[4]) },
+		{ "Rider6", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[5]) },
+		{ "Rider7", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[6]) },
+		{ "Rider8", parseRiderInfo, 0, offsetof(RiderChangeContainModuleData, m_riders[7]) },
+		{ "ScuttleDelay", INI::parseDurationUnsignedInt, 0, offsetof(RiderChangeContainModuleData, m_scuttleDelay) },
+		{ "ScuttleStatus", INI::parseIndexList, BitFlags<591>::s_bitNameList, offsetof(RiderChangeContainModuleData, m_scuttleStatus) },
+		{ "KillRiderWhenVehicleDies", INI::parseBool, 0, offsetof(RiderChangeContainModuleData, m_killRiderWhenVehicleDies) },
+		{ 0, 0, 0, 0 }
+	};
+	parse.add(dataFieldParse, 0);
+}
 
 // FUNCTION: BFME2 0x0047E4EE size=17 name=?getContainMax@RiderChangeContain@@UBEHXZ evidence=N:ledger tier=B hypothesis:K
 Int RiderChangeContain::getContainMax() const
