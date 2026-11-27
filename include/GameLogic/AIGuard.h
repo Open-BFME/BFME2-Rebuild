@@ -97,6 +97,8 @@ protected:
 	virtual const char *GetSnapshotName() const;	// 0x00542D58
 	virtual void xfer(Xfer *xfer);				// (AITNGuardIdleState's slot 3 folds to it)
 
+	AIGuardMachine *getGuardMachine() const { return static_cast<AIGuardMachine *>(getMachine()); }
+
 	UnsignedInt m_nextEnemyScanTime;			// +0x20 (Zero Hour name; onEnter sets it from the AI data's guard scan rate)
 	Coord3D m_guardeePos;						// +0x24 (Zero Hour name; the ctor zeroes it, xfer transfers it)
 };
@@ -114,6 +116,8 @@ protected:
 	virtual const char *GetSnapshotName() const;	// 0x00542E5C
 	virtual void xfer(Xfer *xfer);
 
+	AIGuardMachine *getGuardMachine() const { return static_cast<AIGuardMachine *>(getMachine()); }
+
 	ExitConditions m_exitConditions;			// +0x20
 	AIAttackState *m_attackState;				// +0x3C (xfer transfers the state when there is one)
 	Bool m_scanForEnemy;						// +0x40 (Zero Hour name; the ctor clears it)
@@ -129,6 +133,8 @@ public:
 
 protected:
 	virtual const char *GetSnapshotName() const;	// 0x00542EAB
+
+	AIGuardMachine *getGuardMachine() const { return static_cast<AIGuardMachine *>(getMachine()); }
 
 	ExitConditions m_exitConditions;			// +0x20
 	AIAttackState *m_attackState;				// +0x3C
