@@ -21,6 +21,7 @@ public:
 	void writeFileEnd();
 
 private:
+	friend class Money;
 	void createFileName();
 	void writeStatInfo();
 	void writeInitialFileInfo();
