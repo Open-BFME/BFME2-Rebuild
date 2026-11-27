@@ -11,6 +11,8 @@
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
 #include "GameLogic/Object.h"
+#include "WWMath/Vector3.h"
+#include "WWMath/Matrix3D.h"
 
 // Retail 0x004A0403: the rally point an object override asks for, or null.
 Object *bfmeQueryRallyOverride(Object *object, const Coord3D *position);
@@ -138,6 +140,24 @@ ExitDoorType QueueProductionExitUpdate::reserveDoorForExit(const ThingTemplate *
 }
 
 // FUNCTION: BFME2 0x004A027A size=393 name=?getNaturalRallyPoint@QueueProductionExitUpdate@@UBE_NAAVCoord3D@@_N@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+Bool QueueProductionExitUpdate::getNaturalRallyPoint(Coord3D &rallyPoint, Bool offset) const
+{
+	const QueueProductionExitUpdateModuleData *data = static_cast<const QueueProductionExitUpdateModuleData *>(m_moduleData);
+	Vector3 p(data->m_naturalRallyPoint.x, data->m_naturalRallyPoint.y, data->m_naturalRallyPoint.z);
+	if (offset)
+	{
+		Vector3 push = p;
+		push.Normalize();
+		push *= 20.0f;
+		p += push;
+	}
+	const Matrix3D *transform = getObject()->getTransformMatrix();
+	Matrix3D::Transform_Vector(*transform, p, &p);
+	rallyPoint.x = p.X;
+	rallyPoint.y = p.Y;
+	rallyPoint.z = p.Z;
+	return true;
+}
 
 // FUNCTION: BFME2 0x004A0403 size=280 name=?bfmeQueryRallyOverride@@YAPAVObject@@PAV1@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 
