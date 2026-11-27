@@ -102,6 +102,11 @@ void TunnelContain::iterateContained(ContainIterateFunc func, void *userData, Un
 }
 
 // FUNCTION: BFME2 0x0047DD0F size=30 name=?rva0047DD0F@TunnelContain@@UAE?AVRva0036AE51ListView@@XZ evidence=?:placeholder tier=A
+ContainmentListView TunnelContain::tunnelSlot33()
+{
+	Player *player = getObject()->getControllingPlayer();
+	return player->m_tunnelSystem->getContainedItemsList();
+}
 
 // FUNCTION: BFME2 0x0047DD2D size=117 name=?onRemoving@TunnelContain@@UAEXPAVObject@@@Z evidence=N:ledger tier=A
 void TunnelContain::onRemoving(Object *obj)
