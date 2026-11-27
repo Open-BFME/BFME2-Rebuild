@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "Common/ThingFactory.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -696,6 +697,129 @@ void WorkOrder::validateFactory(Player *player)
 // FUNCTION: BFME2 0x004F37B0 size=1537 name=?queueSupplyTruck@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F3DB1 size=985 name=?selectTeamToReinforce@AIPlayer@@MAE_NH@Z evidence=N:ledger tier=A
+Bool AIPlayer::selectTeamToReinforce(Int minPriority)
+{
+	// Find a high production priority team that needs reinforcements.
+	Team *curTeam = NULL;
+	Int curPriority = minPriority;
+	const ThingTemplate *curThing = NULL;
+	Int curExperience = -1;
+	for (PlayerTeamList::const_iterator t = m_player->m_playerTeamPrototypes.begin(); t != m_player->m_playerTeamPrototypes.end(); ++t)
+	{
+		TeamPrototype *proto = *t;
+		Bool busy = false;
+		for (DLINK_ITERATOR<TeamInQueue> buildIter = iterate_TeamBuildQueue(); !buildIter.done(); buildIter.advance())
+		{
+			TeamInQueue *team = buildIter.cur();
+			if (team->m_team->getPrototype() == proto) {
+				busy = true;
+			}
+		}
+		if (busy)
+			continue;
+		if (proto->getTemplateInfo()->m_automaticallyReinforce && proto->getTemplateInfo()->m_productionPriority > curPriority) {
+			// Check the team instances.
+			for (DLINK_ITERATOR<Team> iter = proto->iterate_TeamInstanceList(); !iter.done(); iter.advance())
+			{
+				Team *team = iter.cur();
+				if (team->hasAnyUnits() == false)
+				{
+					continue;
+				}
+				const TCreateUnitsInfo *unitInfo = &team->getPrototype()->getTemplateInfo()->m_unitsInfo[0];
+				for (Int i = 0; i < team->getPrototype()->getTemplateInfo()->m_numUnitsInfo; i++)
+				{
+					if (unitInfo[i].m_maxUnits < 1)
+						continue;
+					const ThingTemplate *thing = TheThingFactory->findTemplate(unitInfo[i].m_unitThingName);
+					if (thing == NULL)
+						continue;
+					Int count = 0;
+					team->countObjectsByThingTemplate(1, &thing, false, &count, true);
+					if (count < unitInfo[i].m_maxUnits)
+					{
+						// See if there is a factory available.
+						if (NULL != findFactory(thing, false, NULL))
+						{
+							curTeam = team;
+							curPriority = proto->getTemplateInfo()->m_productionPriority;
+							curThing = thing;
+							curExperience = unitInfo[i].m_unk0x14;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (curTeam && curThing)
+	{
+		TeamInQueue *teamQ = NULL;
+		WorkOrder *order = NULL;
+		if (!TheSkirmishAIManager->rva002A8AB1(m_player))
+		{
+			teamQ = new TeamInQueue;
+			prependTo_TeamBuildQueue(teamQ);
+			teamQ->m_priorityBuild = false;
+			teamQ->m_reinforcement = true;
+
+			order = new WorkOrder;
+			order->m_thing = curThing;
+			order->m_factoryID = INVALID_ID;
+			order->m_numRequired = 1;
+			order->m_required = true;
+			order->m_next = NULL;
+			teamQ->m_workOrders = order;
+			teamQ->m_frameStarted = TheGameLogic->getFrame();
+			teamQ->m_team = curTeam;
+
+			AsciiString teamName = curTeam->getPrototype()->getName();
+			teamName.concat(" - AutoReinforcing one ");
+			teamName.concat(curThing->getName());
+			TheScriptEngine->AppendDebugMessage(teamName, false);
+		}
+
+		// Recruit from the team's home, or from where its first member stands.
+		Coord3D origin = curTeam->getPrototype()->getTemplateInfo()->m_homeLocation;
+		if (curTeam->m_dlinkhead_TeamMemberList)
+		{
+			origin = curTeam->m_dlinkhead_TeamMemberList->m_cachedPos;
+		}
+		Object *unit = curTeam->tryToRecruit(curThing, &origin, TheAI->getAiData()->m_maxRecruitRadius, curExperience, 0, 0);
+		if (unit)
+		{
+			if (order)
+				order->m_numCompleted = 1;
+
+			AsciiString teamStr = "Team '";
+			teamStr.concat(curTeam->getPrototype()->getName());
+			teamStr.concat("' recruits ");
+			teamStr.concat(curThing->getName());
+			teamStr.concat(" from team '");
+			teamStr.concat(unit->getTeam()->getPrototype()->getName());
+			teamStr.concat("'");
+			TheScriptEngine->AppendDebugMessage(teamStr, false);
+
+			unit->setTeam(curTeam);
+
+			if (teamQ)
+				teamQ->m_reinforcementID = unit->getID();
+
+			AIUpdateInterface *ai = unit->getAIUpdateInterface();
+			if (ai)
+			{
+				ai->aiIdle(CMD_FROM_AI);
+			}
+		}
+		else if (!TheSkirmishAIManager->rva002A8AB1(m_player))
+		{
+			TeamPrototype *proto = teamQ->m_team->getPrototype();
+			startTraining(order, teamQ->m_priorityBuild, proto ? proto->getName() : AsciiString::TheEmptyString);
+		}
+		m_teamDelay = 0;
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x004F418A size=500 name=?updateBridgeRepair@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
 
