@@ -8,6 +8,11 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/DarknessSpecialPower.h"
 // FUNCTION: BFME2 0x004C4DB9 size=42 name=??0DarknessSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+DarknessSpecialPower::DarknessSpecialPower(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerModule(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004C4DE3 size=6 name=?Rva004C4DE3Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *DarknessSpecialPower::GetSnapshotName() const
 {
