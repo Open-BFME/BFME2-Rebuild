@@ -9,6 +9,7 @@
 #include "GameLogic/BuildListInfo.h"
 #include "GameLogic/AI.h"
 #include "Common/GlobalData.h"
+#include "Common/RandomValue.h"
 #include <math.h>
 #include "WWMath/FloatToLong.h"
 #include "Common/SpecialPowerTemplate.h"
@@ -692,6 +693,86 @@ void WorkOrder::validateFactory(Player *player)
 // FUNCTION: BFME2 0x004F33EC size=441 name=?onStructureProduced@AIPlayer@@UAEXPAVObject@@0@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F35A5 size=523 name=?selectTeamToBuild@AIPlayer@@MAE_NXZ evidence=N:ledger tier=A
+Bool AIPlayer::selectTeamToBuild()
+{
+	// find the highest priority of all teams
+	const Int invalidPri = -99999;
+	Int hiPri = invalidPri;
+	// collect all teams that are possible to build
+	PlayerTeamList candidateList1;
+	for (PlayerTeamList::const_iterator t = m_player->m_playerTeamPrototypes.begin(); t != m_player->m_playerTeamPrototypes.end(); ++t)
+	{
+		if (isAGoodIdeaToBuildTeam(*t))
+		{
+			candidateList1.push_back(*t);
+			Int pri = (*t)->getTemplateInfo()->m_productionPriority;
+
+			if (pri > hiPri)
+			{
+				hiPri = pri;
+			}
+		}
+	}
+
+	if (selectTeamToReinforce(hiPri)) {
+		return true;
+	}
+
+	// check if no team prototypes are valid for production
+	if (hiPri == invalidPri)
+		return false;
+
+	if (TheWritableGlobalData->m_debugAI) {
+		TheScriptEngine->AppendDebugMessage("**AI** Selecting team to build", false);
+	}
+
+	// collect all teams at the highest priority
+	PlayerTeamList candidateList;
+	Int count = 0;
+	for (PlayerTeamList::const_iterator t = candidateList1.begin(); t != candidateList1.end(); ++t)
+	{
+		if ((*t)->getTemplateInfo()->m_productionPriority == hiPri)
+		{
+			candidateList.push_back(*t);
+			count++;
+		}
+	}
+
+	// pick a random team from the hi-priority set
+	Int which = GetGameLogicRandomValue(0, count - 1, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIPlayer.cpp", 0x731);
+
+	TeamPrototype *teamProto = NULL;
+	Int i = 0;
+	for (PlayerTeamList::const_iterator t = candidateList.begin(); t != candidateList.end(); ++t)
+	{
+		if (i == which)
+		{
+			teamProto = *t;
+			break;
+		}
+
+		i++;
+	}
+	if (teamProto) {
+		if (!teamProto->getTemplateInfo()->m_hasHomeLocation && !isSkirmishAI()) {
+			AsciiString teamStr = "Error : team '";
+			teamStr.concat(teamProto->getName());
+			teamStr.concat("' has no Home Position (or Origin).");
+			TheScriptEngine->AppendDebugMessage(teamStr, false);
+		}
+		// Build it at low priority, as we have selected it automagically.
+		buildSpecificAITeam(teamProto, false);
+		m_readyToBuildTeam = false;
+		m_teamTimer = m_teamSeconds * BfmeLogicFramesPerSecond;
+		if (m_player->getMoney()->countMoney() < TheAI->getAiData()->m_poor) {
+			m_teamTimer = m_teamTimer / TheAI->getAiData()->m_teamsPoorRate;
+		} else if (m_player->getMoney()->countMoney() > TheAI->getAiData()->m_wealthy) {
+			m_teamTimer = m_teamTimer / TheAI->getAiData()->m_teamsWealthyRate;
+		}
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x004F37B0 size=1537 name=?queueSupplyTruck@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
 
