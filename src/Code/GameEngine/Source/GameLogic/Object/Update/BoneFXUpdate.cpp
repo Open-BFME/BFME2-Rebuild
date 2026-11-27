@@ -19,6 +19,11 @@
 // FUNCTION: BFME2 0x00487877 size=111 name=??1BoneFXUpdateModuleData@@UAE@XZ evidence=N:ledger
 // FUNCTION: BFME2 0x004878E6 size=307 name=??0BoneFXUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x00487A19 size=69 name=?getModuleNameKey@BoneFXUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType BoneFXUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheBoneFXUpdateNameKey = TheNameKeyGenerator->nameToKey("BoneFXUpdate");
+	return TheBoneFXUpdateNameKey;
+}
 // FUNCTION: BFME2 0x00487A5E size=6 name=?name@Rva00487A5ENamed@@QBEPBDXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x00487A64 size=49 name=?killRunningParticleSystems@BoneFXUpdate@@IAEXXZ evidence=N:ledger
 // FUNCTION: BFME2 0x00487A95 size=42 name=?stopAllBoneFX@BoneFXUpdate@@QAEXXZ evidence=N:ledger
