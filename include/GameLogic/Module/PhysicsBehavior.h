@@ -50,6 +50,7 @@ public:
 	void rva00390FAF();									// 0x00390FAF, the end of a flight
 	void rva00390E36(Int source, Int weapon);			// 0x00390E36
 	void consume(void *force, Int source, Int weapon);	// 0x003909FA
+	void setIgnoreCollisionsWith(const Object *obj);	// 0x0053EC42
 
 	PhysicsElementVector m_elements;					// 0x20
 	Coord3D m_bfme2C;									// 0x2C
