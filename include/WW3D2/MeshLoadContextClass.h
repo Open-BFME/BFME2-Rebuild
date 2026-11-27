@@ -51,6 +51,7 @@ private:
 
 	int Add_Shader(ShaderClass shader);
 	int Add_Vertex_Material(VertexMaterialClass *vmat);
+	int Add_Texture(TextureClass *tex);
 
 	ShaderClass Peek_Shader(int index);
 	VertexMaterialClass *Peek_Vertex_Material(int index);
