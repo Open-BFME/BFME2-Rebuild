@@ -8,6 +8,7 @@ struct IRegion2D
 {
     ICoord2D lo; // 0x0
     ICoord2D hi; // 0x8
+    void expandBy(const ICoord2D &point);
 };
 typedef char IRegion2DSize[(sizeof(IRegion2D) == 0x10) ? 1 : -1];
 typedef char IRegion2DHiOffset[(offsetof(IRegion2D,hi) == 8) ? 1 : -1];

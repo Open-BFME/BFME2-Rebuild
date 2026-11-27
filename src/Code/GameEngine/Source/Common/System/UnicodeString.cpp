@@ -8,6 +8,8 @@
 #include "Common/Coord2D.h"
 #include "Common/Region2D.h"
 #include "Common/Region3D.h"
+#include "Common/IRegion2D.h"
+#include "Common/IRegion3D.h"
 #include "Common/Coord3D.h"
 #include "Common/RealRange.h"
 #include "Common/IntRange.h"
@@ -311,6 +313,11 @@ void Region2D::expandBy(const Coord2D &point)
 }
 
 // FUNCTION: BFME2 0x00006469 size=44 name=?expandBy@IRegion2D@@QAEXABUICoord2D@@@Z evidence=N:ledger tier=B hypothesis:K
+void IRegion2D::expandBy(const ICoord2D &point)
+{
+	expandRange(&lo.x, point.x, &hi.x);
+	expandRange(&lo.y, point.y, &hi.y);
+}
 
 // FUNCTION: BFME2 0x00006495 size=103 name=?expandBy@Region3D@@QAEXABVCoord3D@@@Z evidence=N:ledger tier=B hypothesis:K
 void Region3D::expandBy(const Coord3D &point)
@@ -341,6 +348,12 @@ void Region3D::expandBy(const Coord3D &point)
 }
 
 // FUNCTION: BFME2 0x000064FC size=60 name=?expandBy@IRegion3D@@QAEXABUICoord3D@@@Z evidence=N:ledger tier=B hypothesis:K
+void IRegion3D::expandBy(const ICoord3D &point)
+{
+	expandRange(&lo.x, point.x, &hi.x);
+	expandRange(&lo.y, point.y, &hi.y);
+	expandRange(&lo.z, point.z, &hi.z);
+}
 
 // FUNCTION: BFME2 0x0000654A size=18 name=??0AsciiString@@QAE@PBD@Z evidence=N:ledger tier=B hypothesis:K
 
