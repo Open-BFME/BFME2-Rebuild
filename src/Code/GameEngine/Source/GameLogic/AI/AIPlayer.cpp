@@ -25,6 +25,7 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/Player.h"
+#include "Common/PlayerList.h"
 #include "GameLogic/Module/BodyModule.h"
 #include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/Module/DozerAIUpdate.h"
@@ -468,6 +469,52 @@ const char *WorkOrder::GetSnapshotName() const
 // FUNCTION: BFME2 0x004F1138 size=286 name=?isSupplySourceAttacked@AIPlayer@@QAE_NXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F1256 size=386 name=?getPlayerSuperweaponValue@AIPlayer@@KAHPAVCoord3D@@HM@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+// The pathfinder's cell size in world units.
+static const Real PATHFIND_CELL_SIZE_F = 10.0f;
+
+Int AIPlayer::getPlayerSuperweaponValue(Coord3D *center, Int playerNdx, Real radius)
+{
+	if (radius < 4 * PATHFIND_CELL_SIZE_F) {
+		radius = 4 * PATHFIND_CELL_SIZE_F;
+	}
+	Real cash = 0;
+	Real radSqr = radius * radius;
+
+	Player *pPlayer = ThePlayerList->getNthPlayer(playerNdx);
+	if (pPlayer == NULL)
+		return 0;
+	for (PlayerTeamList::const_iterator it = pPlayer->m_playerTeamPrototypes.begin(); it != pPlayer->m_playerTeamPrototypes.end(); ++it) {
+		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> objIter = team->iterate_TeamMemberList(); !objIter.done(); objIter.advance()) {
+				Object *pObj = objIter.cur();
+				if (!pObj)
+					continue;
+				if (pObj->isKindOf(KINDOF_AIRCRAFT)) {
+					if (pObj->isSignificantlyAboveTerrain())
+						continue;
+				}
+				Real dx = center->x - pObj->getPosition()->x;
+				Real dy = center->y - pObj->getPosition()->y;
+				if (dx * dx + dy * dy < radSqr) {
+					Real dist = sqrt(dx * dx + dy * dy);
+					Real factor = 1.0f - (dist / (2 * radius));
+					Real value = pObj->getTemplate()->calcCostToBuild(pPlayer, 0, -1);
+					if (pObj->isKindOf(KINDOF_COMMANDCENTER)) {
+						value = value / 10;
+					}
+					if (value > 3000) {
+						value = value / 10;
+					}
+					cash += factor * value;
+				}
+			}
+		}
+	}
+	return cash;
+}
 
 // FUNCTION: BFME2 0x004F13D8 size=398 name=?rva004F13D8@AIPlayer@@IAE_NPAVTeamPrototype@@@Z evidence=?:placeholder tier=A
 
