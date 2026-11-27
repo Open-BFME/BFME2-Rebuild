@@ -7,6 +7,7 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:padding
 #include "GameClient/WorldHeightMap.h"
+#include "Common/GlobalData.h"
 // FUNCTION: BFME2 0x000ABD00 size=25 name=?rva000ABD00@Rva000ABD00@@QAEHI@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000ABD19 size=54 name=?rva000ABD19@Rva000ABD19@@QAE_NHH@Z evidence=?:placeholder tier=B hypothesis:K
@@ -28,6 +29,45 @@
 // FUNCTION: BFME2 0x000AC2F6 size=279 name=?getUVForNdx@WorldHeightMap@@QAEXHPAM000_N@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000AC40D size=185 name=?setDrawOrg@WorldHeightMap@@QAE_NHH@Z evidence=N:ledger tier=B hypothesis:K
+Bool WorldHeightMap::setDrawOrg(Int xOrg, Int yOrg)
+{
+	Int newX = xOrg;
+	Int newY = yOrg;
+	Int newWidth = m_drawWidthX;
+	Int newHeight = m_drawHeightY;
+	const GlobalData *globalData = TheWritableGlobalData;
+
+	if (globalData && globalData->m_stretchTerrain) {
+		newWidth = STRETCH_DRAW_WIDTH;
+		newHeight = STRETCH_DRAW_HEIGHT;
+	}
+	if (globalData && globalData->m_drawEntireTerrain) {
+		newWidth = m_width;
+		newHeight = m_height;
+	}
+	if (newWidth > m_width)
+		newWidth = m_width;
+	if (newHeight > m_height)
+		newHeight = m_height;
+	if (newX > m_width - newWidth)
+		newX = m_width - newWidth;
+	if (newX < 0)
+		newX = 0;
+	if (newY > m_height - newHeight)
+		newY = m_height - newHeight;
+	if (newY < 0)
+		newY = 0;
+
+	if (m_drawOriginX != newX || m_drawOriginY != newY ||
+		m_drawWidthX != newWidth || m_drawHeightY != newHeight) {
+		m_drawOriginX = newX;
+		m_drawOriginY = newY;
+		m_drawWidthX = newWidth;
+		m_drawHeightY = newHeight;
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x000AC4C6 size=78 name=?rva000AC4C6@WorldHeightMap@@QAEHH@Z evidence=?:placeholder tier=B hypothesis:K
 
