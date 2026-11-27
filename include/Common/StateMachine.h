@@ -77,7 +77,8 @@ enum StateExitType
 };
 
 // A transition test (AIDockMachine::ableToAdvance 0x005440F6 is one).
-typedef Bool (*StateTransFuncPtr)(State *state, void *userData);
+typedef Bool StateTransFunc(State *state, void *userData);
+typedef StateTransFunc *StateTransFuncPtr;
 
 // SIZE 0xC: rva004D7127 walks the array in 12-byte steps until test is null.
 struct StateConditionInfo

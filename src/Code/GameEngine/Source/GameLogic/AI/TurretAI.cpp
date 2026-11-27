@@ -7,6 +7,7 @@
 #define DEFINE_WEAPONSLOTTYPE_NAMES
 #include "GameLogic/WeaponTemplateSet.h"
 #include "GameLogic/Module/AIUpdate.h"
+#include "GameLogic/AIStates.h"
 #include "Common/INI.h"
 #include "Common/INI/FieldParse.h"
 #include "Common/Team.h"
@@ -17,6 +18,9 @@
 #include <math.h>
 
 Real normalizeAngle(Real angle);	// 0x00238954 (map: ?normalizeAngle@@YAMM@Z)
+
+// The weapon-range transition test shared with the attack states (retail row 0x00343F8A).
+StateTransFunc outOfWeaponRangeObject;
 
 void XferTurretTargetType(Xfer *xfer, Int *value);	// 0x00305DCA (map: ?XferTurretTargetType@@YAXPAVXfer@@PAH@Z)
 #include "Common/RandomValue.h"
@@ -148,6 +152,23 @@ static StateReturnType frameToSleepTime(UnsignedInt a, UnsignedInt b, UnsignedIn
 }
 
 // FUNCTION: BFME2 0x004D7CE6 size=373 name=??0TurretStateMachine@@QAE@PAVTurretAI@@PAVObject@@I@Z evidence=N:ledger tier=A
+TurretStateMachine::TurretStateMachine(TurretAI *tai, Object *owner, UnsignedInt name) : StateMachine(owner, name, false), m_turretAI(tai)
+{
+	static const StateConditionInfo fireConditions[] =
+	{
+		{ outOfWeaponRangeObject, TURRETAI_AIM, NULL },
+		{ NULL, 0, NULL }
+	};
+
+	// order matters: the first state is the default state
+	defineState(TURRETAI_IDLE, new TurretAIIdleState(this), TURRETAI_IDLE, TURRETAI_IDLESCAN);
+	defineState(TURRETAI_IDLESCAN, new TurretAIIdleScanState(this), TURRETAI_HOLD, TURRETAI_HOLD);
+	defineState(TURRETAI_AIM, new TurretAIAimTurretState(this), TURRETAI_FIRE, TURRETAI_HOLD);
+	NotifyWeaponFiredInterface *notify = tai;
+	defineState(TURRETAI_FIRE, new AIAttackFireWeaponState(this, (Int)notify), TURRETAI_AIM, TURRETAI_AIM, fireConditions);
+	defineState(TURRETAI_RECENTER, new TurretAIRecenterTurretState(this), TURRETAI_IDLE, TURRETAI_IDLE);
+	defineState(TURRETAI_HOLD, new TurretAIHoldTurretState(this), TURRETAI_RECENTER, TURRETAI_RECENTER);
+}
 
 // FUNCTION: BFME2 0x004D7E5B size=6 name=?Rva004D7E5BGet@@YAHXZ evidence=?:placeholder tier=A
 const char *TurretStateMachine::GetSnapshotName() const
