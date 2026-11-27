@@ -9,6 +9,7 @@
 #include <d3dx9effect.h>
 #include "WW3D2/FXShaderParameterSourceNamespaceWW3D.h"
 #include "WW3D2/WW3D.h"
+#include "WW3D2/dxwrapper.h"
 
 // FUNCTION: BFME2 0x0018BD89 size=23 name=?Rva0018BD89IsRenderingOverbright@@YAXPAUID3DXEffect@@PBD@Z evidence=?:placeholder tier=B hypothesis:K
 void Apply_Shader_Overbright(ID3DXEffect *effect, const char *parameter)
@@ -23,11 +24,33 @@ void FXShaderParameterSourceNamespaceWW3D::Apply_Opacity_Override(ID3DXEffect *e
 }
 
 // FUNCTION: BFME2 0x0018BDB8 size=23 name=?Rva0018BDB8FogIsEnabled@@YAXPAUID3DXEffect@@PBD@Z evidence=?:placeholder tier=B hypothesis:K
+void Apply_Fog_Enabled(ID3DXEffect *effect, const char *parameter)
+{
+	effect->SetBool(parameter, DXWrapper::FogEnable);
+}
+
 // FUNCTION: BFME2 0x0018BDCF size=125 name=?Rva0018BDCFFogColor@@YAXPAUID3DXEffect@@PBD@Z evidence=?:placeholder tier=B hypothesis:K
+void Apply_Fog_Color(ID3DXEffect *effect, const char *parameter)
+{
+	D3DXVECTOR4 color;
+	color.x = ((DXWrapper::FogColor >> 16) & 0xFF) * (1.0f / 255.0f);
+	color.y = ((DXWrapper::FogColor >> 8) & 0xFF) * (1.0f / 255.0f);
+	color.z = (DXWrapper::FogColor & 0xFF) * (1.0f / 255.0f);
+	color.w = (DXWrapper::FogColor >> 24) * (1.0f / 255.0f);
+	effect->SetVector(parameter, &color);
+}
 
 // FUNCTION: BFME2 0x0018BE4C size=25 name=?Rva0018BE4CFogRangeStart@@YAXPAUID3DXEffect@@PBD@Z evidence=?:placeholder tier=B hypothesis:K
+void Apply_Fog_Range_Start(ID3DXEffect *effect, const char *parameter)
+{
+	effect->SetFloat(parameter, DXWrapper::FogStart);
+}
 
 // FUNCTION: BFME2 0x0018BE65 size=25 name=?Rva0018BE65FogRangeEnd@@YAXPAUID3DXEffect@@PBD@Z evidence=?:placeholder tier=B hypothesis:K
+void Apply_Fog_Range_End(ID3DXEffect *effect, const char *parameter)
+{
+	effect->SetFloat(parameter, DXWrapper::FogEnd);
+}
 
 // FUNCTION: BFME2 0x0018BE87 size=64 name=??1FXShaderParameterSourceNamespaceWW3D@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
 FXShaderParameterSourceNamespaceWW3D::~FXShaderParameterSourceNamespaceWW3D()
