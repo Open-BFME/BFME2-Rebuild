@@ -6,7 +6,9 @@
 #include "GameLogic/Module/FireWeaponWhenDeadBehavior.h"
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
+#include "Common/Player.h"
 #include "GameLogic/Object.h"
+#include "GameLogic/WeaponStore.h"
 #include "GameLogic/Module/FireWeaponWhenDeadBehaviorModuleData.h"
 // FUNCTION: BFME2 0x00482BB9 size=34 name=?update@FireWeaponWhenDeadBehavior@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
 UpdateSleepTime FireWeaponWhenDeadBehavior::update()
@@ -51,6 +53,42 @@ static const UnsignedInt &largerOf(const UnsignedInt &a, const UnsignedInt &b)
 }
 
 // FUNCTION: BFME2 0x00482C4A size=310 name=?onDie@FireWeaponWhenDeadBehavior@@UAEXPBVDamageInfo@@@Z evidence=N:ledger
+void FireWeaponWhenDeadBehavior::onDie(const DamageInfo *damageInfo)
+{
+	const ModuleData *moduleData = getModuleData();
+	const FireWeaponWhenDeadBehaviorModuleData *data = static_cast<const FireWeaponWhenDeadBehaviorModuleData *>(moduleData);
+	if (m_delayFrames > 0)
+	{
+		// A delayed death weapon remembers the killing blow and wakes the update to count down.
+		m_deathDamage = *damageInfo;
+		setWakeFrame(getObject(), UPDATE_SLEEP_NONE);
+		return;
+	}
+	if (!isAlreadyUpgraded() && !data->m_startsActive)
+		return;
+	if (!data->m_dieMuxData.isDieApplicable(getObject(), damageInfo))
+		return;
+	Object *obj = getObject();
+	if (obj->testStatus(OBJECT_STATUS_BUILD_BEING_CANCELED))
+		return;
+	if (!data->m_activeDuringConstruction && obj->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+		return;
+	UpgradeMaskType activation;
+	UpgradeMaskType conflicting;
+	getUpgradeActivationMasks(activation, conflicting);
+	obj = getObject();
+	if (obj->m_upgrades.rva00406F9C(&conflicting))
+		return;
+	if (obj->getControllingPlayer()->m_upgradesCompleted.rva00406F9C(&conflicting))
+		return;
+	if (data->m_deathWeapon)
+	{
+		Coord3D position;
+		getObject()->transformPoint(&data->m_weaponOffset, &position);
+		TheWeaponStore->createAndFireTempWeapon(data->m_deathWeapon, getObject(), &position);
+	}
+}
+
 // FUNCTION: BFME2 0x00482D80 size=203 name=??0FireWeaponWhenDeadBehavior@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 FireWeaponWhenDeadBehavior::FireWeaponWhenDeadBehavior(Thing *thing, const ModuleData *moduleData)
 	: UpdateModule(thing, moduleData)
