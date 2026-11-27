@@ -599,6 +599,48 @@ void TeamInQueue::xfer(Xfer *xfer)
 // FUNCTION: BFME2 0x004F2464 size=1064 name=?buildSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@_N@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F288C size=349 name=?queueDozer@AIPlayer@@MAEXXZ evidence=N:ledger tier=A
+void AIPlayer::queueDozer()
+{
+	if (dozerInQueue())
+		return;
+
+	// If we need a dozer, turn on unit building for a moment.
+	Bool canBuildUnits = m_player->m_canBuildUnits;
+	m_player->m_canBuildUnits = true;
+	const ThingTemplate *tTemplate = TheThingFactory->firstTemplate();
+	while (tTemplate)
+	{
+		if (tTemplate->isKindOf(KINDOF_DOZER))
+		{
+			Object *factory = findFactory(tTemplate, true, NULL);
+			if (factory)
+			{
+				WorkOrder *order = new WorkOrder;
+				order->m_thing = tTemplate;
+				order->m_factoryID = INVALID_ID;
+				order->m_numRequired = 1;
+				order->m_required = true;
+				order->m_isResourceGatherer = false;
+				order->m_next = NULL;
+				TeamInQueue *team = new TeamInQueue;
+				prependTo_TeamBuildQueue(team);
+				team->m_priorityBuild = true;
+				team->m_workOrders = order;
+				team->m_frameStarted = TheGameLogic->getFrame();
+				team->m_team = m_player->getDefaultTeam();
+				AsciiString teamName = "DOZER - building one at the ";
+				teamName.concat(factory->getTemplate()->getName());
+				TheScriptEngine->AppendDebugMessage(teamName, false);
+				m_teamDelay = 0;
+				TeamPrototype *proto = team->m_team->getPrototype();
+				startTraining(order, team->m_priorityBuild, proto ? proto->getName() : AsciiString::TheEmptyString);
+				break;
+			}
+		}
+		tTemplate = tTemplate->friend_getNextTemplate();
+	}
+	m_player->m_canBuildUnits = canBuildUnits;
+}
 
 // FUNCTION: BFME2 0x004F29E9 size=211 name=?checkForSupplyCenter@AIPlayer@@IAEXPAVBuildListInfo@@PAVObject@@@Z evidence=N:ledger tier=A
 
