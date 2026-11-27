@@ -17,6 +17,7 @@ public:
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000CE9EE
 	virtual void doDrawModule(const Matrix3D *transformMtx);				// 11: 0x000CE3E3
 	virtual void setHidden(Bool hidden);									// 16: 0x000CE129
+	void rva000CE0EA();
 	virtual void setFullyObscuredByShroud(Bool fullyObscured);				// 35: 0x000CE147
 	virtual void onRenderObjRecreated();									// 63: 0x000CE3DE, a jump to updateTreadObjects
 

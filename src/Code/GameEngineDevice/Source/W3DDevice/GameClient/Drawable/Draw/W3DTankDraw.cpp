@@ -51,6 +51,12 @@ void W3DTankDraw::xfer(Xfer *xfer)
 // FUNCTION: BFME2 0x000CE0EA size=63 name=?rva000CE0EA@W3DTankDraw@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x000CE129 size=30 name=?setHidden@W3DTankDraw@@UAEX_N@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DTankDraw::setHidden(Bool hidden)
+{
+	W3DScriptedModelDraw::setHidden(hidden);
+	if (hidden)
+		rva000CE0EA();
+}
 
 // FUNCTION: BFME2 0x000CE147 size=35 name=?setFullyObscuredByShroud@W3DTankDraw@@UAEX_N@Z evidence=N:ledger tier=B hypothesis:cohesion
 
