@@ -769,6 +769,23 @@ Object *ScriptEngine::getUnitNamed(AsciiString unitName)
 }
 
 // FUNCTION: BFME2 0x00358853 size=148 name=?createNamedMapReveal@ScriptEngine@@QAEPAUBfmeStringRecord00204A30@@ABVAsciiString@@0M0H@Z evidence=N:ledger tier=B hypothesis:Z
+NamedMapRevealRecord *ScriptEngine::createNamedMapReveal(const AsciiString &revealName, const AsciiString &waypointName, Real radius, const AsciiString &playerName, Int permanent)
+{
+	UnsignedInt key = Rva003ECA13Get(revealName);
+	for (_STL::vector<NamedMapRevealRecord>::iterator it = m_namedMapReveals.begin(); it != m_namedMapReveals.end(); ++it)
+	{
+		if ((*it).m_key == key)
+			return &*it;
+	}
+
+	NamedMapRevealRecord reveal;
+	reveal.m_playerName = playerName;
+	reveal.m_radius = radius;
+	reveal.m_key = key;
+	reveal.m_name = waypointName;
+	reveal.m_kind = permanent;
+	m_namedMapReveals.push_back(reveal);
+}
 
 // FUNCTION: BFME2 0x003588E7 size=76 name=?getUnitNamed@ScriptEngine@@QAEPAVObject@@PAVParameter@@@Z evidence=N:ledger tier=B hypothesis:Z
 Object *ScriptEngine::getUnitNamed(Parameter *pUnitParm)
