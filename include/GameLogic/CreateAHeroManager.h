@@ -234,7 +234,8 @@ public:
 
 	unsigned char m_pad00[0x14C];		// +0x00..+0x14B, not yet recovered
 	ClassArray m_classes;				// +0x14C (first, last)
-	unsigned char m_unk0x154[0x08];		// +0x154..+0x15B
+	UnsignedInt m_unk0x154;				// +0x154
+	UnsignedInt m_unk0x158;				// +0x158 (decodeHero bounds a stored hero index by it)
 	BlingArray m_bling;				// +0x15C
 	unsigned char m_unk0x164[0x04];		// +0x164..+0x167
 	BinderArray m_binder;				// +0x168

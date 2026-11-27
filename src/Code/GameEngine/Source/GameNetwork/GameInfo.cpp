@@ -17,6 +17,7 @@
 #include "Common/PlayerTemplate.h"
 #include "Common/GlobalData.h"
 #include "GameClient/GameText.h"
+#include "GameLogic/CreateAHeroManager.h"
 extern MultiplayerSettings *TheMultiplayerSettings;
 AsciiString GetStrFileFromMap(AsciiString path);		// 0x0044CDF1
 AsciiString GetSoloINIFromMap(AsciiString path);		// 0x0044CE90
@@ -25,6 +26,7 @@ AsciiString GetReadmeFromMap(AsciiString path);		// 0x0044CFCE
 AsciiString GetArtPreviewFromMap(AsciiString path);	// 0x0044CB8A
 AsciiString GetPicPreviewFromMap(AsciiString path);	// 0x0044CC6E
 Int Rva00559EDCCompare(Int *defaults, Int *rules);
+void Rva0056BDA5Split(UnsignedByte packed, char firstMin, char secondMin, UnsignedByte *firstOut, UnsignedByte *secondOut);	// 0x0056BDA5
 UnsignedByte Rva0056BD91Pack(UnsignedByte kind, UnsignedByte first, char second, char third);	// 0x0056BD91 (packs a hero choice into the byte the lobby sends)
 Int NET_CRC_INTERVAL = 100;		// VA 0x00DBC800: frames between the network CRC checks
 extern "C" __declspec(dllimport) unsigned long __stdcall GetTickCount(void);	// IAT 0x00BBA294
@@ -519,6 +521,51 @@ void GameSlot::unAccept() { if (isHuman()) m_isAccepted = false; }
 void GameSlot::setMapAvailability(bool hasMap) { if (isHuman()) m_hasMap = hasMap; }
 
 // FUNCTION: BFME2 0x003FF8B0 size=215 name=?decodeHero@GameSlot@@QAE_NE@Z evidence=N:ledger tier=A
+Bool GameSlot::decodeHero(UnsignedByte packed)
+{
+	m_heroKind = 0;
+	m_unk0x54 = 0;
+	m_unk0x58 = 0;
+	if (packed == 0)
+	{
+		m_heroKind = 0;
+		return true;
+	}
+	if (packed == 1)
+	{
+		m_heroKind = 1;
+		return true;
+	}
+
+	UnsignedByte kind;
+	UnsignedByte index;
+	Rva0056BDA5Split(packed, 0, 0, &kind, &index);
+	if (kind == 1)
+	{
+		m_heroKind = 2;
+		if (index >= TheCreateAHeroManager->m_unk0x158)
+			return false;
+		m_unk0x5C = index;
+		CreateAHeroData *hero = TheCreateAHeroManager->rva0021F797()->rva0040A32F(m_unk0x5C);
+		if (hero != 0)
+		{
+			m_unk0x54 = hero->getHeroClass();
+			m_unk0x58 = hero->getHeroSubclass();
+		}
+		return true;
+	}
+
+	UnsignedInt heroClass = kind - 2;
+	if (heroClass >= TheCreateAHeroManager->m_classes.size())
+		return false;
+	Int subclassCount = TheCreateAHeroManager->rva00219D52(heroClass);
+	if (index >= (UnsignedInt)subclassCount)
+		return false;
+	m_heroKind = 3;
+	m_unk0x54 = heroClass;
+	m_unk0x58 = index;
+	return true;
+}
 
 // FUNCTION: BFME2 0x003FF987 size=45 name=?getNumOpenOrOccupiedSlots@GameInfo@@QBEHXZ evidence=N:ledger tier=A
 Int GameInfo::getNumOpenOrOccupiedSlots() const
