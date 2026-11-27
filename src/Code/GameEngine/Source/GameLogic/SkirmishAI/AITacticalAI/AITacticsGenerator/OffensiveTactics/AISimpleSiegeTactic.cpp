@@ -8,6 +8,9 @@
 // Edges: left=rests-on:name right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K
 // FUNCTION: BFME2 0x005A9CB3 size=11 name=??1AISimpleSiegeTactic@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
+AISimpleSiegeTactic::~AISimpleSiegeTactic()
+{
+}
 
 // FUNCTION: BFME2 0x005A9CBE size=67 name=?canRun@AISimpleSiegeTactic@@UAE_NPAX@Z evidence=N:ledger tier=A
 
