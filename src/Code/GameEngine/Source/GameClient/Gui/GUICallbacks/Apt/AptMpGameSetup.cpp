@@ -51,6 +51,11 @@ int Rva0043DDBE(void);
 
 // FUNCTION: BFME2 0x0043DB3D size=10 name=?Rva0043DB3DSet@@YAXE@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x0043DB47 size=15 name=?enable@AptMpGameSetup@@QAEXXZ evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-shared-data
+void AptMpGameSetup::enable()
+{
+	m_flag2B9 = true;
+	m_flag2BA = true;
+}
 // FUNCTION: BFME2 0x0043DB56 size=8 name=?enable@Rva0043DB56ByteOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0043DB5E size=8 name=?enable@Rva0043DB5EByteOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0043DB66 size=8 name=?enable@Rva0043DB66ByteOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
