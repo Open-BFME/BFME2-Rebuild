@@ -41,6 +41,10 @@ int LZHLDecompress(void *handle, unsigned char *destination, unsigned int *desti
 }
 
 // FUNCTION: BFME2 0x0068ED20 size=9 name=?Rva0068ED20ResetDecompressor@@YAXPAX@Z evidence=?:placeholder tier=L hypothesis:name:L
+void Rva0068ED20ResetDecompressor(void *handle)
+{
+	static_cast<LZHLDecompressor *>(handle)->resetTables();
+}
 
 // FUNCTION: BFME2 0x0068ED50 size=13 name=?LZHLCompressorCalcMaxBuf@@YAII@Z evidence=N:ledger tier=L hypothesis:name:L
 unsigned int LZHLCompressorCalcMaxBuf(unsigned int rawSize)
