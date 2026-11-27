@@ -2019,6 +2019,31 @@ template <class T> void ScriptTable<T>::popVersion(Int index)
 }
 
 // FUNCTION: BFME2 0x003B70CA size=116 name=?cleanup@NestedAt0C@@QAEXXZ evidence=N:ledger tier=A
+template <class T> void ScriptTable<T>::settle()
+{
+	for (Int i = m_liveHead; i != -1;)
+	{
+		Entry &entry = m_entries[i];
+		Int next = entry.m_next;
+		if (entry.m_flagged)
+		{
+			popVersion(i);
+		}
+		else
+		{
+			Version *newest = static_cast<Version *>(entry.m_versions);
+			while (newest->m_older)
+			{
+				ScriptTableVersion *rest = newest->m_older->m_older;
+				Version *old = static_cast<Version *>(newest->m_older);
+				delete old;
+				newest->m_older = rest;
+			}
+			entry.m_depth = 1;
+		}
+		i = next;
+	}
+}
 // FUNCTION: BFME2 0x003B713E size=41 name=?destroyRva003B713ERange@@YAXPAURva003B713ERange@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x003B71B4 size=52 name=?rva003B71B4@Rva003B573E@@QAEXH@Z evidence=?:placeholder tier=A
