@@ -10,6 +10,8 @@
 #include "GameClient/Shell.h"
 #include "GameClient/LanguageFilter.h"
 #include "GameClient/MapCache.h"
+#include "GameClient/MapMetaData.h"
+#include "GameClient/MapUtil.h"
 #include "Common/MultiplayerSettings.h"
 #include "Common/MultiplayerColorDefinition.h"
 #include "WWLib/systimer.h"
@@ -333,6 +335,47 @@ void LANAPI::OnGameStart(void)
 }
 
 // FUNCTION: BFME2 0x002498FA size=526 name=?OnHasMap@LANAPI@@UAEXPBUBfmeNetAddress@@_N@Z evidence=N:ledger tier=B hypothesis:cohesion
+void LANAPI::OnHasMap(const BfmeNetAddress *address, Bool hasMap)
+{
+	Int isHost = AmIHost();
+	if (!(unsigned char)isHost)
+		return;
+
+	Int slot = 0;
+	for (; slot < MAX_SLOTS; ++slot)
+	{
+		if (m_currentGame->m_LANSlot[slot].m_address.Rva00248CBF(address))
+		{
+			const LANGameSlot *gameSlot = m_currentGame->getLANSlot(slot);
+			const_cast<LANGameSlot *>(gameSlot)->setMapAvailability(hasMap);
+			break;
+		}
+	}
+	if (slot == MAX_SLOTS)
+		return;
+
+	UnicodeString mapDisplayName;
+	const MapMetaData *mapData = TheMapCache->findMap(m_currentGame->getMap());
+	Bool willTransfer = Rva00300E42Check(m_currentGame);
+	if (mapData)
+	{
+		MapMetaData *displayData = const_cast<MapMetaData *>(mapData);
+		mapDisplayName.format(L"%ls", displayData->bfme_getDisplayName(true).str());
+	}
+	else
+		mapDisplayName.format(L"%hs", m_currentGame->getMap().str());
+
+	if (!hasMap)
+	{
+		UnicodeString text;
+		if (willTransfer)
+			text.format(TheGameText->fetchPtr("GUI:PlayerNoMapWillTransfer", 0), m_currentGame->getLANSlot(slot)->m_name.str(), mapDisplayName.str());
+		else
+			text.format(TheGameText->fetchPtr("GUI:PlayerNoMap", 0), m_currentGame->getLANSlot(slot)->m_name.str(), mapDisplayName.str());
+		OnChat(UnicodeString(L"SYSTEM"), GetLocalAddress(), text, LANCHAT_SYSTEM);
+	}
+	Rva00248D84Enable();
+}
 
 // FUNCTION: BFME2 0x00249B08 size=574 name=?rva00249B08@LANAPI@@UAEXPAVLivingWorldBattle@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
