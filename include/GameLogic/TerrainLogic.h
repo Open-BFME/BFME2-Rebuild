@@ -28,6 +28,7 @@
 #include <stddef.h>
 #include "Common/GameType.h"
 #include "Common/AsciiString.h"
+#include "Common/Coord3D.h"
 #include "Common/Snapshot.h"
 #include "Common/SubsystemInterface.h"
 #include "GameLogic/Map/AreaSet.h"
@@ -49,9 +50,14 @@ class RiverArea;
 class StandingWaterArea;
 class StandingWaveArea;
 class WaterArea;
-class Coord3D;
 struct Region3D;
 enum PathfindLayerEnum;
+
+struct TBridgeAttackInfo
+{
+	Coord3D attackPoint1;
+	Coord3D attackPoint2;
+};
 
 class TerrainLogic : public Snapshot, public SubsystemInterface,
 	public AreaSetObserver<StandingWaterArea>, public AreaSetObserver<RiverArea>
@@ -113,6 +119,7 @@ public:
 	virtual void addLandmarkBridgeToLogic(Object *bridgeObj);		// slot 47, 0x0028125C
 	virtual void deleteBridge(Bridge *bridge);					// slot 48, 0x00281F7F
 	virtual void updateBridgeDamageStates();					// slot 49, 0x00281EA5
+	void getBridgeAttackPoints(const Object *bridge, TBridgeAttackInfo *attackInfo);
 	virtual Bool rva00063082(const Coord3D *pos) const = 0;		// slot 50, __purecall (W3DTerrainLogic 0x00063082, which asks slot 11)
 
 	// SubsystemInterface (table 0x00BFB28C)
