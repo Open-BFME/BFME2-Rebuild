@@ -702,6 +702,72 @@ void WorkOrder::validateFactory(Player *player)
 // FUNCTION: BFME2 0x004F437E size=811 name=?recruitSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x004F46A9 size=559 name=?queueUnits@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
+void AIPlayer::queueUnits()
+{
+	queueSupplyTruck();
+
+	// For each member of the current team to build, try to find a faction building to build it.
+	for (DLINK_ITERATOR<TeamInQueue> iter = iterate_TeamBuildQueue(); !iter.done(); iter.advance())
+	{
+		TeamInQueue *team = iter.cur();
+		for (WorkOrder *order = team->m_workOrders; order; order = order->m_next)
+		{
+			// Recruit an existing unit instead of building one, when there is one near enough.
+			Coord3D home = team->m_team->getPrototype()->getTemplateInfo()->m_homeLocation;
+			Bool hasHome = false;
+			if (team->m_team->getPrototype()->getTemplateInfo()->m_hasHomeLocation) {
+				hasHome = true;
+			} else {
+				hasHome = getBaseCenter(&home);
+			}
+			while (order->m_numCompleted < order->m_numRequired)
+			{
+				Object *unit = team->m_team->tryToRecruit(order->m_thing, &home,
+					hasHome ? TheAI->getAiData()->m_maxRecruitRadius : 999999.0f, order->m_unk0x2C, 0, 0);
+				if (unit)
+				{
+					order->m_numCompleted++;
+
+					AsciiString teamStr = "Team '";
+					teamStr.concat(team->m_team->getPrototype()->getName());
+					teamStr.concat("' recruits ");
+					teamStr.concat(order->m_thing->getName());
+					teamStr.concat(" from team '");
+					teamStr.concat(unit->getTeam()->getPrototype()->getName());
+					teamStr.concat("'");
+					TheScriptEngine->AppendDebugMessage(teamStr, false);
+
+					unit->setTeam(team->m_team);
+
+					AIUpdateInterface *ai = unit->getAIUpdateInterface();
+					if (ai) {
+						if (hasHome) {
+							ai->aiMoveToPosition(&home, CMD_FROM_AI);
+						} else {
+							ai->aiIdle(CMD_FROM_AI);
+						}
+					}
+					team->m_team->setActive();
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (order->m_numCompleted < order->m_numRequired && !order->m_unk0x29)
+			{
+				// start the creation of a new unit
+				startTraining(order, team->m_priorityBuild,
+					team->m_team->getPrototype() ? team->m_team->getPrototype()->getName() : AsciiString::TheEmptyString);
+			}
+			else if (!TheSkirmishAIManager->rva002A8AB1(m_player))
+			{
+				// the order is under construction: verify the factory still exists
+				order->validateFactory(m_player);
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x004F48D8 size=79 name=?rva004F48D8@AIPlayer@@UAEXXZ evidence=?:placeholder tier=A
 void AIPlayer::doTeamBuilding()
