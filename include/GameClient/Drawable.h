@@ -206,6 +206,8 @@ public:
  Rva002390CB getSoundEnter();	// 0x00462D95, index 0x2F
  Rva002390CB getSoundExit();	// 0x00462DAE, index 0x30
  Rva002390CB getSoundFalling();	// 0x00462DC7, index 0x34
+ Rva002390CB rva00374389();	// the stealth-on sound (StealthUpdate), index 42 by the donor order
+ Rva002390CB rva003743A2();	// the stealth-off sound, index 43 by the donor order
  Rva002390CB getSoundOnDamaged();	// 0x004BE120, index 0x2D
  Rva002390CB getSoundOnReallyDamaged();	// 0x004BE139, index 0x2E
  Rva002390CB getSoundPromotedVeteran();	// 0x004BE152, index 0x31

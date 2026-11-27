@@ -26,6 +26,7 @@
 #include "Common/Team.h"
 #include "Common/Upgrade.h"
 #include "GameClient/Drawable.h"
+#include "Common/Rva002390CB.h"
 #include "GameClient/ControlBar.h"
 #include "Common/INI.h"
 #include "Common/BitFlags.h"
@@ -291,8 +292,16 @@ StealthLookType StealthUpdate::calcStealthedStatusForPlayer(const Object *obj, c
 }
 
 // FUNCTION: BFME2 0x00374389 size=25 name=?rva00374389@Drawable@@QAE?AVRva002390CB@@XZ evidence=?:placeholder tier=A
+Rva002390CB Drawable::rva00374389()
+{
+	return rva0027675F(0x2a);
+}
 
 // FUNCTION: BFME2 0x003743A2 size=25 name=?rva003743A2@Drawable@@QAE?AVRva002390CB@@XZ evidence=?:placeholder tier=A
+Rva002390CB Drawable::rva003743A2()
+{
+	return rva0027675F(0x2b);
+}
 
 // FUNCTION: BFME2 0x003743BB size=20 name=?setStatusCallback@@YAXPAVObject@@PAX@Z evidence=N:ledger tier=A
 
