@@ -342,6 +342,163 @@ BattlePlanUpdate::BattlePlanUpdate(Thing *thing, const ModuleData *moduleData) :
 }
 
 // FUNCTION: BFME2 0x00497FF3 size=1241 name=?setStatus@BattlePlanUpdate@@IAEXW4TransitionStatus@@@Z evidence=N:ledger tier=A
+void BattlePlanUpdate::setStatus(TransitionStatus newStatus)
+{
+	const ModuleData *moduleData = getModuleData();
+	const BattlePlanUpdateModuleData *data = static_cast<const BattlePlanUpdateModuleData *>(moduleData);
+	Object *obj = m_object;
+	if (m_status == newStatus)
+		return;
+	TransitionStatus oldStatus = (TransitionStatus)m_status;
+
+	// The door conditions, by plan, for the unpack / active / pack stages.
+	enum { BOMBARDMENT_OPENING = 21, BOMBARDMENT_CLOSING = 22, BOMBARDMENT_WAITING = 24,
+		HOLDTHELINE_OPENING = 25, HOLDTHELINE_CLOSING = 26, HOLDTHELINE_WAITING = 28,
+		SEARCHANDDESTROY_OPENING = 29, SEARCHANDDESTROY_CLOSING = 30, SEARCHANDDESTROY_WAITING = 32 };
+
+	TheAudio->removeAudioEvent(m_audioHandle);
+	m_audioHandle = 1;
+
+	switch (oldStatus) {
+	case TRANSITIONSTATUS_IDLE:
+		break;
+	case TRANSITIONSTATUS_UNPACKING:
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->clearModelConditionState(BOMBARDMENT_OPENING);
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->clearModelConditionState(HOLDTHELINE_OPENING);
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->clearModelConditionState(SEARCHANDDESTROY_OPENING);
+			break;
+		}
+		break;
+	case TRANSITIONSTATUS_ACTIVE:
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->clearModelConditionState(BOMBARDMENT_WAITING);
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->clearModelConditionState(HOLDTHELINE_WAITING);
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->clearModelConditionState(SEARCHANDDESTROY_WAITING);
+			break;
+		}
+		break;
+	case TRANSITIONSTATUS_PACKING:
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->clearModelConditionState(BOMBARDMENT_CLOSING);
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->clearModelConditionState(HOLDTHELINE_CLOSING);
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->clearModelConditionState(SEARCHANDDESTROY_CLOSING);
+			break;
+		}
+		break;
+	}
+
+	UnsignedInt now = TheGameLogic->getFrame();
+
+	switch (newStatus) {
+	case TRANSITIONSTATUS_IDLE:
+		m_currentPlan = 0;
+		m_nextReadyFrame = data->m_transitionIdleTime + now;
+		break;
+	case TRANSITIONSTATUS_UNPACKING: {
+		TheRadar->createPlayerEvent(obj->getControllingPlayer(), obj->getPosition(), (RadarEventType)7, 4.0f);
+		createVisionObject();
+		UnsignedInt animationTime;
+		const AsciiString *messageLabel;
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->setModelConditionState((ModelConditionFlagType)BOMBARDMENT_OPENING);
+			animationTime = data->m_bombardmentPlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			messageLabel = &data->m_bombardmentMessageLabel;
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->setModelConditionState((ModelConditionFlagType)HOLDTHELINE_OPENING);
+			animationTime = data->m_holdTheLinePlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			messageLabel = &data->m_holdTheLineMessageLabel;
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->setModelConditionState((ModelConditionFlagType)SEARCHANDDESTROY_OPENING);
+			animationTime = data->m_searchAndDestroyPlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			messageLabel = &data->m_searchAndDestroyMessageLabel;
+			break;
+		}
+		m_nextReadyFrame = animationTime + now;
+		TheInGameUI->message(TheGameText->fetch(*messageLabel, 0));
+		if (m_unk0x44[m_currentPlan].get()) {
+			AudioEventRTS unpackEvent(m_unk0x44[m_currentPlan], obj->getID());
+			unpackEvent.setPlayerIndex(obj->getControllingPlayer()->getPlayerIndex());
+			m_audioHandle = TheAudio->addAudioEvent(&unpackEvent);
+		}
+		if (m_unk0x44[m_currentPlan + 8].get()) {
+			AudioEventRTS announcement(m_unk0x44[m_currentPlan + 8], obj->getID());
+			announcement.setPlayerIndex(obj->getControllingPlayer()->getPlayerIndex());
+			TheAudio->addAudioEvent(&announcement);
+		}
+		break;
+	}
+	case TRANSITIONSTATUS_ACTIVE:
+		rva00497AE8((BattlePlanStatus)m_currentPlan);
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->setModelConditionState((ModelConditionFlagType)BOMBARDMENT_WAITING);
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->setModelConditionState((ModelConditionFlagType)HOLDTHELINE_WAITING);
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->setModelConditionState(SEARCHANDDESTROY_WAITING);
+			break;
+		}
+		if (m_unk0x44[m_currentPlan + 12].get()) {
+			AudioEventRTS idleEvent(m_unk0x44[m_currentPlan + 12], obj->getID());
+			idleEvent.setPlayerIndex(obj->getControllingPlayer()->getPlayerIndex());
+			m_audioHandle = TheAudio->addAudioEvent(&idleEvent);
+		}
+		break;
+	case TRANSITIONSTATUS_PACKING: {
+		rva00497AE8((BattlePlanStatus)0);
+		UnsignedInt animationTime;
+		switch (m_currentPlan) {
+		case PLANSTATUS_BOMBARDMENT:
+			obj->setModelConditionState((ModelConditionFlagType)BOMBARDMENT_CLOSING);
+			animationTime = data->m_bombardmentPlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			break;
+		case PLANSTATUS_HOLDTHELINE:
+			obj->setModelConditionState((ModelConditionFlagType)HOLDTHELINE_CLOSING);
+			animationTime = data->m_holdTheLinePlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			break;
+		case PLANSTATUS_SEARCHANDDESTROY:
+			obj->setModelConditionState((ModelConditionFlagType)SEARCHANDDESTROY_CLOSING);
+			animationTime = data->m_searchAndDestroyPlanAnimationTime;
+			obj->getDrawable()->setAnimationLoopDuration(animationTime);
+			break;
+		}
+		m_nextReadyFrame = animationTime + now;
+		if (m_unk0x44[m_currentPlan + 4].get()) {
+			AudioEventRTS packEvent(m_unk0x44[m_currentPlan + 4], obj->getID());
+			packEvent.setPlayerIndex(obj->getControllingPlayer()->getPlayerIndex());
+			m_audioHandle = TheAudio->addAudioEvent(&packEvent);
+		}
+		break;
+	}
+	}
+	m_status = newStatus;
+}
 
 // FUNCTION: BFME2 0x004984CC size=75 name=?cleanUp@SpectreGunshipUpdate@@QAEXXZ evidence=N:ledger tier=A
 void BattlePlanUpdate::onDelete()
