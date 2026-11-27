@@ -5,6 +5,7 @@
 #include <list>
 #include "GameLogic/AI.h"
 #include "GameLogic/AIPathfind.h"
+#include "GameClient/GameClient.h"
 // stlport46
 #include <list>
 #include <algorithm>
@@ -91,6 +92,12 @@ void AI::update()
 // FUNCTION: BFME2 0x002FDB44 size=25 name=?addSideInfo@AI@@QAEXPAVRva002FE620@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x002FDB5D size=10 name=?allocDrawableID@GameClient@@IAE?AW4DrawableID@@XZ evidence=N:ledger
+DrawableID GameClient::allocDrawableID()
+{
+	DrawableID id = m_nextDrawableID;
+	m_nextDrawableID = (DrawableID)((UnsignedInt)m_nextDrawableID + 1);
+	return id;
+}
 
 // FUNCTION: BFME2 0x002FDB93 size=49 name=?Rva002FDB93Callback@@YAXPAVObject@@PAX@Z evidence=?:placeholder
 
