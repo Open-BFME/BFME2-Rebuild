@@ -1078,6 +1078,12 @@ TextureMapperClass *BumpEnvTextureMapperClass::Clone(void) const
 
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // FUNCTION: BFME2 0x00187660 size=44 name=?Clone@GridWSEnvironmentMapperClass@@UBEPAVTextureMapperClass@@XZ evidence=N:ledger tier=B hypothesis:mm1-fragment-path-elsewhere
+TextureMapperClass *GridWSEnvironmentMapperClass::Clone(void) const
+{
+	return new GridWSEnvironmentMapperClass(static_cast<const GridWSEnvMapperClass &>(*this));
+}
+
+
 // FUNCTION: BFME2 0x00187690 size=433 name=?Convert_To_FXShader@ScaleTextureMapperClass@@UAE_NPAVFXShaderParameterList@@@Z evidence=X:map request tier=B hypothesis:mm1-fragment-path-elsewhere
 // FUNCTION: BFME2 0x00187850 size=634 name=?Convert_To_FXShader@LinearOffsetTextureMapperClass@@UAE_NPAVFXShaderParameterList@@@Z evidence=X:map request tier=B hypothesis:mm1-fragment-path-elsewhere
 // FUNCTION: BFME2 0x00187AD0 size=475 name=?Convert_To_FXShader@GridTextureMapperClass@@UAE_NPAVFXShaderParameterList@@@Z evidence=X:map request tier=B hypothesis:mm1-fragment-path-elsewhere
