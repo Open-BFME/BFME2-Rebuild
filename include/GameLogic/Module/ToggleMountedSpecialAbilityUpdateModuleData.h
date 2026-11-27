@@ -20,6 +20,7 @@ class ToggleMountedSpecialAbilityUpdateModuleData : public SpecialAbilityUpdateM
 {
 public:
 	ToggleMountedSpecialAbilityUpdateModuleData();
+	virtual ~ToggleMountedSpecialAbilityUpdateModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
