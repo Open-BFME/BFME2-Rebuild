@@ -21,6 +21,10 @@
 #include "Common/ThingTemplate.h"
 #include "Common/Player.h"
 #include "Common/KindOf.h"
+#include "GameClient/Drawable.h"
+#include "GameLogic/Module/BodyModule.h"
+#include "Common/MessageStream.h"
+#include "GameClient/InGameUI.h"
 
 // 0x004A1828 (map: ?Rva004A1828Get@@YAHPAURva004A1828Owner@@@Z): a test on an object the slave walk applies before its callback.
 int Rva004A1828Get(Object *object);
@@ -417,6 +421,101 @@ Int SpawnBehavior::rva0045FE4A(Int (*callback)(Object *, void *), void *userData
 }
 
 // FUNCTION: BFME2 0x0045FE9A size=731 name=?computeAggregateStates@SpawnBehavior@@QAEXXZ evidence=N:ledger
+void SpawnBehavior::computeAggregateStates()
+{
+	if (!m_unk0x51)
+		return;
+
+	const ModuleData *moduleData = getModuleData();
+	const SpawnBehaviorModuleData *data = static_cast<const SpawnBehaviorModuleData *>(moduleData);
+	Object *obj = m_object;
+
+	Int spawnCount = 0;
+	Int spawnCountMax = data->m_spawnNumber;
+	Coord3D avgSpawnPos;
+	avgSpawnPos.x = 0.0f;
+	avgSpawnPos.y = 0.0f;
+	avgSpawnPos.z = 0.0f;
+	Real health = 0.0f;
+	Real avgHealthMax = 0.0f;
+	Bool somebodyIsSelected = false;
+	Bool somebodyIsNotSelected = false;
+
+	m_unk0x58 = 0;
+
+	for (_STL::list<Int>::iterator slaveId = m_slaves.begin(); slaveId != m_slaves.end(); ++slaveId) {
+		Object *slave = TheGameLogic->findObjectByID((ObjectID)*slaveId);
+		if (slave) {
+			for (BehaviorModule **module = slave->m_behaviors; *module; ++module) {
+				SlavedUpdateInterface *slaved = (*module)->getSlavedUpdateInterface();
+				if (slaved) {
+					m_unk0x58 += slaved->isSelfTasking();
+					break;
+				}
+			}
+
+			avgSpawnPos.x += slave->m_cachedPos.x;
+			avgSpawnPos.y += slave->m_cachedPos.y;
+			avgSpawnPos.z += slave->m_cachedPos.z;
+
+			BodyModuleInterface *body = slave->m_body;
+			health += body->getHealth();
+			avgHealthMax += body->getMaxHealth();
+
+			if (slave->getDrawable()->m_selected)
+				somebodyIsSelected = true;
+			else
+				somebodyIsNotSelected = true;
+
+			spawnCount++;
+		}
+	}
+
+	// If any spawn is selected, select them all (and the spawner) as one group.
+	if (somebodyIsSelected && (!obj->getDrawable()->m_selected || somebodyIsNotSelected)) {
+		GameMessage *teamMsg = TheMessageStream->appendMessage(GameMessage::MSG_CREATE_SELECTED_GROUP);
+		teamMsg->appendBooleanArgument(false);
+
+		if (somebodyIsNotSelected) {
+			for (_STL::list<Int>::iterator slaveId = m_slaves.begin(); slaveId != m_slaves.end(); ++slaveId) {
+				Object *slave = TheGameLogic->findObjectByID((ObjectID)*slaveId);
+				if (slave) {
+					Drawable *spawnDraw = slave->getDrawable();
+					if (!spawnDraw->m_selected) {
+						TheInGameUI->selectDrawable(spawnDraw);
+						TheInGameUI->setDisplayedMaxWarning(false);
+						teamMsg->appendBooleanArgument(false);
+						teamMsg->appendObjectIDArgument(slave->m_id);
+					}
+				}
+			}
+		}
+		if (!obj->getDrawable()->m_selected) {
+			TheInGameUI->selectDrawable(obj->getDrawable());
+			TheInGameUI->setDisplayedMaxWarning(false);
+			teamMsg->appendBooleanArgument(false);
+			teamMsg->appendObjectIDArgument(obj->m_id);
+		}
+	}
+
+	// Draw the health box at the centre of the spawns.
+	Real scale = 1.0f / spawnCount;
+	avgSpawnPos.x = avgSpawnPos.x * scale - obj->m_cachedPos.x;
+	avgSpawnPos.y = avgSpawnPos.y * scale - obj->m_cachedPos.y;
+	avgSpawnPos.z = avgSpawnPos.z * scale - obj->m_cachedPos.z;
+	obj->m_healthBoxOffset = avgSpawnPos;
+
+	// The spawner's health is the aggregate of its spawns'.
+	if (spawnCount) {
+		avgHealthMax *= scale;
+		Real perfectTotalHealth = avgHealthMax * spawnCountMax;
+		obj->m_body->setInitialHealth(100.0f * (health / perfectTotalHealth), false);
+	} else {
+		obj->m_body->setInitialHealth(0.0f, false);
+	}
+
+	obj->maskObject(true);
+}
 
 // FUNCTION: BFME2 0x00460175 size=87 name=?rva00460175@SpawnBehavior@@QAEXH@Z evidence=?:placeholder
 void SpawnBehavior::rva00460175(Int limit)
