@@ -901,10 +901,27 @@ void ScriptActions::doAmbientSoundsPause(Bool pause)
 }
 
 // FUNCTION: BFME2 0x003BBC81 size=50 name=?Rva003BBC81Set@ScriptActions@@QAEX_N0H@Z evidence=?:placeholder tier=B hypothesis:cohesion
+void ScriptActions::Rva003BBC81Set(Bool a, Bool b, Int musicSystem)
+{
+	Int transition = !a;
+	Int resume = !b;
+	TheAudio->popMusicEvent(0, musicSystem, transition, resume);
+}
 
 // FUNCTION: BFME2 0x003BBCB3 size=31 name=?Rva003BBCB3Set@ScriptActions@@QAEX_N@Z evidence=?:placeholder tier=B hypothesis:cohesion
+void ScriptActions::Rva003BBCB3Set(Bool a)
+{
+	Int transition = !a;
+	TheAudio->pushMusicSystem(0, 1, transition);
+}
 
 // FUNCTION: BFME2 0x003BBCD2 size=48 name=?Rva003BBCD2Set@ScriptActions@@QAEX_N0@Z evidence=?:placeholder tier=B hypothesis:cohesion
+void ScriptActions::Rva003BBCD2Set(Bool a, Bool b)
+{
+	Int transition = !a;
+	Int resume = !b;
+	TheAudio->popMusicSystem(0, 1, transition, resume);
+}
 
 // FUNCTION: BFME2 0x003BBD02 size=55 name=?doNamedEnableCameraFading@ScriptActions@@IAEXPAVParameter@@_N@Z evidence=N:ledger tier=B hypothesis:cohesion
 void ScriptActions::doNamedEnableCameraFading(Parameter *unit, Bool enable)
@@ -974,8 +991,16 @@ void ScriptActions::doLetterBoxMode(Bool immediate)
 }
 
 // FUNCTION: BFME2 0x003BBE32 size=9 name=?Rva003BBE32HideControlBar@@YAXXZ evidence=?:placeholder tier=A
+void Rva003BBE32HideControlBar()
+{
+	HideControlBar(true);
+}
 
 // FUNCTION: BFME2 0x003BBE3B size=9 name=?Rva003BBE3BShowControlBar@@YAXXZ evidence=?:placeholder tier=A
+void Rva003BBE3BShowControlBar()
+{
+	ShowControlBar(false);
+}
 
 // FUNCTION: BFME2 0x003BBE44 size=77 name=?doBlackWhiteMode@ScriptActions@@QAEX_NH@Z evidence=N:ledger tier=A
 void ScriptActions::doBlackWhiteMode(Bool startBWMode, Int frames)
@@ -1680,6 +1705,10 @@ void ScriptActions::doSetUnitReferenceToHomeBaseOfPlayer(const AsciiString &play
 // FUNCTION: BFME2 0x003BCFC9 size=11 name=?Rva003BCFC9Set@ScriptActions@@QAEX_N@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x003BCFD4 size=19 name=?Rva003BCFD4Set@ScriptActions@@QAEX_N@Z evidence=?:placeholder tier=A
+void ScriptActions::Rva003BCFD4Set(Bool value)
+{
+	TheGameClient->m_unk0xC0[0] = value;
+}
 
 // FUNCTION: BFME2 0x003BCFE7 size=14 name=?Rva003BCFE7Forward@ScriptActions@@QAEX_N@Z evidence=?:placeholder tier=A
 void ScriptActions::doTacticalViewFlag1(Bool flag)
@@ -1706,6 +1735,10 @@ void ScriptActions::doTacticalViewFlag4(Bool flag)
 }
 
 // FUNCTION: BFME2 0x003BD01F size=19 name=?Rva003BD01FSet@ScriptActions@@QAEX_N@Z evidence=?:placeholder tier=A
+void ScriptActions::Rva003BD01FSet(Bool value)
+{
+	TheGameClient->m_unk0xC0[1] = value;
+}
 
 // FUNCTION: BFME2 0x003BD032 size=48 name=?Rva003BD032Set@ScriptActions@@QAEXPAVParameter@@PAX@Z evidence=?:placeholder tier=A
 void ScriptActions::doNamedSetWeaponSetFlag17(Parameter *unit, Parameter *enabledParm)

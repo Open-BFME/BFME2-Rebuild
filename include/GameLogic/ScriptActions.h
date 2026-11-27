@@ -116,6 +116,11 @@ public:
   void doExcludeAudioEventFromVolumeEnvelope(const AsciiString &);	// 0x003BA9AF
   void doIncludeAudioEventInVolumeEnvelope(const AsciiString &);	// 0x003BA9CA
   void doAmbientSoundsPause(Bool);	// 0x003BBC61
+  void Rva003BBC81Set(Bool, Bool, Int);	// 0x003BBC81
+  void Rva003BBCB3Set(Bool);	// 0x003BBCB3
+  void Rva003BBCD2Set(Bool, Bool);	// 0x003BBCD2
+  void Rva003BCFD4Set(Bool);	// 0x003BCFD4
+  void Rva003BD01FSet(Bool);	// 0x003BD01F
 public:
   void doAudioSetVolumeEnvelope(Real, Real, Real, Real, Real);	// 0x003BA96F
   void doPlayerGrantScience(const AsciiString &, const AsciiString &);	// 0x003BC6D9
