@@ -2,9 +2,18 @@
 // Object boundaries may be unproven.
 // FUNCTION: BFME2 0x00495C48 size=32 name=??1AutoPickUpUpdate@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00495C68 size=6 name=?GetSnapshotName@AutoPickUpUpdate@@MBEPBDXZ evidence=N:ledger
+const char *AutoPickUpUpdate::GetSnapshotName() const
+{
+	return "AutoPickUpUpdate";
+}
 // FUNCTION: BFME2 0x00495C6E size=9 name=?rva00495C6E@AutoPickUpUpdate@@UAEXXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x00495C77 size=89 name=?xfer@AutoPickUpUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x00495CEC size=69 name=?getModuleNameKey@AutoPickUpUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType AutoPickUpUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheAutoPickUpUpdateNameKey = TheNameKeyGenerator->nameToKey("AutoPickUpUpdate");
+	return TheAutoPickUpUpdateNameKey;
+}
 // FUNCTION: BFME2 0x00495D31 size=121 name=??0AutoPickUpUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x00495DC6 size=7 name=?get@Rva00495DC6PtrChaseField@@QBEHXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x00495DCD size=7 name=?get@Rva00495DCDByteChaseField@@QBEEXZ evidence=?:placeholder
