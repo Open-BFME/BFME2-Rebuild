@@ -11,6 +11,7 @@
 #include "Common/INI/FieldParse.h"
 #include "GameLogic/Module/AttachUpdateModuleData.h"
 #include "GameClient/Eva.h"
+#include "Common/Xfer.h"
 // FUNCTION: BFME2 0x004918A6 size=6 name=?name@Rva004918A6Named@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *AttachUpdate::GetSnapshotName() const
 {
@@ -18,6 +19,20 @@ const char *AttachUpdate::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x004918AC size=102 name=?xfer@AttachUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void AttachUpdate::xfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 3);
+	*xfer == version;
+	UpdateModule::xfer(xfer);
+	XferObjectID(xfer, &m_unk0x20);
+	if (version.m_minimum < 2)
+	{
+		bool legacy = false;
+		*xfer == legacy;
+	}
+	if (version.m_minimum >= 3)
+		TheEva->xferEvaEventID(xfer, &m_unk0x24);
+}
 
 // FUNCTION: BFME2 0x00491912 size=69 name=?getModuleNameKey@AttachUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 NameKeyType AttachUpdate::getModuleNameKey() const

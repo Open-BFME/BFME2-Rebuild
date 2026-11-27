@@ -37,12 +37,13 @@ protected:
 
 public:
 	ObjectID m_unk0x20;                            // +0x20; xfer ObjectID
-	UnsignedByte m_gap0x24[0x4];
+	Int m_unk0x24;                                 // +0x24; xfer Eva event id (version 3 and later)
 protected:
 	virtual void loadPostProcess() { UpdateModule::loadPostProcess(); }	// retail slot 1 0x00497805: a jmp to UpdateModule's
 };
 // SIZE 0x28
 typedef char AttachUpdate_size[(sizeof(AttachUpdate) == 0x28) ? 1 : -1];
 typedef char AttachUpdate_off_m_unk0x20[(offsetof(AttachUpdate, m_unk0x20) == 0x20) ? 1 : -1];
+typedef char AttachUpdate_off_m_unk0x24[(offsetof(AttachUpdate, m_unk0x24) == 0x24) ? 1 : -1];
 
 #endif
