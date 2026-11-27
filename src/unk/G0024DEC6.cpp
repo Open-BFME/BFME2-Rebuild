@@ -14,6 +14,7 @@
 #include "GameLogic/Module/CommandButtonHuntUpdate.h"
 #include "GameLogic/Module/AutoPickUpUpdate.h"
 #include "GameLogic/Module/AutoFindHealingUpdate.h"
+#include "GameLogic/Module/GateOpenAndCloseBehavior.h"
 #include "GameLogic/Module/BannerCarrierUpdateModuleData.h"
 // Module creators. Retail registers each module class with a static friend_newModuleInstance that allocates the
 // module for a thing and its module data, and each module data class with a static friend_newModuleData that
@@ -115,5 +116,9 @@ ModuleData *BattlePlanUpdateModuleData::friend_newModuleData(INI *ini)
 	return data;
 }
 // FUNCTION: BFME2 0x0024E28B size=65 name=?friend_newModuleInstance@GateOpenAndCloseBehavior@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Module *GateOpenAndCloseBehavior::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new GateOpenAndCloseBehavior(thing, moduleData);
+}
 // FUNCTION: BFME2 0x0024E2CC size=53 name=??0GateProxyBehavior@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0024E301 size=13 name=?Rva0024E301Adjust@@YIPAXPAX@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit

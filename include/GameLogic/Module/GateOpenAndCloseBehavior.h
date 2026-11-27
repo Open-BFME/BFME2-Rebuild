@@ -45,6 +45,7 @@ class GateOpenAndCloseBehavior : public GatePrimary, public UpdateModule
 {
 public:
 	GateOpenAndCloseBehavior(Thing *thing, const ModuleData *moduleData);	// 0x0049889C
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual ~GateOpenAndCloseBehavior();
 	virtual NameKeyType getModuleNameKey() const;
 	virtual void onObjectCreated();
