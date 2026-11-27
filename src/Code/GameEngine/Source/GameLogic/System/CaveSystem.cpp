@@ -104,3 +104,27 @@ void CaveSystem::registerNewCave(Int theIndex)
 }
 
 // FUNCTION: BFME2 0x00427738 size=216 name=?DoXfer@CaveSystem@@UAEXPAVXfer@@@Z evidence=N:ledger
+void CaveSystem::xfer(Xfer *xfer)
+{
+	xfer->Version1();
+
+	UnsignedShort count = m_tunnelTrackerVector.size();
+	*xfer == count;
+	if (xfer->IsStoring())
+	{
+		for (std::vector<TunnelTracker *>::iterator it = m_tunnelTrackerVector.begin(); it != m_tunnelTrackerVector.end(); ++it)
+			*xfer == **it;
+	}
+	else
+	{
+		if (!m_tunnelTrackerVector.empty())
+			throw XferException(5, 0);
+
+		for (UnsignedShort i = 0; i < count; ++i)
+		{
+			TunnelTracker *tracker = new TunnelTracker;
+			*xfer == *tracker;
+			m_tunnelTrackerVector.push_back(tracker);
+		}
+	}
+}
