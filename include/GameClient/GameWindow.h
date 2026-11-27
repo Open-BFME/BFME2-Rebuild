@@ -6,10 +6,13 @@ enum WindowMsgHandledType { MSG_IGNORED, MSG_HANDLED };
 enum { WIN_STATUS_HIDDEN = 0x00000010, WIN_STATUS_TAB_STOP = 0x00000100 };
 // Window messages (values proven by Mouse::processMouseEvent 0x001EE069 and the gadget system procedures; names are Zero Hour's).
 enum GameWindowMessage {
+	GWM_NONE = 0,
 	GWM_CREATE = 1,
 	GWM_LEFT_DOWN = 5, GWM_LEFT_UP = 6, GWM_LEFT_DOUBLE_CLICK = 7, GWM_LEFT_DRAG = 8,
 	GWM_MIDDLE_DOWN = 9, GWM_MIDDLE_UP = 10, GWM_MIDDLE_DOUBLE_CLICK = 11, GWM_MIDDLE_DRAG = 12,
-	GWM_RIGHT_DOWN = 13, GWM_RIGHT_UP = 14, GWM_RIGHT_DOUBLE_CLICK = 15, GWM_RIGHT_DRAG = 16
+	GWM_RIGHT_DOWN = 13, GWM_RIGHT_UP = 14, GWM_RIGHT_DOUBLE_CLICK = 15, GWM_RIGHT_DRAG = 16,
+	GWM_WHEEL_UP = 19, GWM_WHEEL_DOWN = 20,
+	GWM_MOUSE_POS = 24
 };
 class GameWindow;
 class GameFont;
