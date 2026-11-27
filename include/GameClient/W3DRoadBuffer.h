@@ -132,6 +132,7 @@ public:
 	void updateLighting();									// Updates the diffuse lighting in the buffers.
 
 protected:
+	void freeRoadBuffers(void);
 	RoadType *m_roadTypes;			// +0x00
 	RoadSegment *m_roads;			// +0x04 the road buffer. All roads are stored here.
 	int m_numRoads;					// +0x08 number of roads used in m_roads.
