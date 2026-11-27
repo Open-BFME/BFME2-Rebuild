@@ -41,6 +41,11 @@ static const FieldParse s_mineshaftPortalBehaviourModuleDataFieldParse[] =
 // FUNCTION: BFME2 0x00372DAB size=13 name=?rva00372DAB@Rva00372DAB@@QAEXPAX@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00372DB8 size=32 name=??0MineshaftPortalBehaviourModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+MineshaftPortalBehaviourModuleData::MineshaftPortalBehaviourModuleData()
+{
+	m_allowEnemies = false;
+	m_allowNonSkirmishAIUnits = false;
+}
 
 // FUNCTION: BFME2 0x00372DD8 size=34 name=?buildFieldParse@MineshaftPortalBehaviourModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:K
 void MineshaftPortalBehaviourModuleData::buildFieldParse(MultiIniFieldParse &parse)
