@@ -1,13 +1,9 @@
-// cl: /O1 /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /D_STLP_BFME_COPY_TRIVIAL_EXTERN /D_STLP_NO_EXCEPTIONS /EHs /EHc- /D_CRTIMP=
+// cl: /O1 /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /D_STLP_BFME_COPY_TRIVIAL_EXTERN /D_STLP_NO_EXCEPTIONS /EHs /EHc-
 // stlport46
 // bfmealloc_alloconly
-#undef _CRTIMP
-#define _CRTIMP __declspec(dllimport)
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#undef _CRTIMP
-#define _CRTIMP
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "GameClient/InGameUI.h"
 #include "Common/MessageStream.h"
@@ -60,8 +56,6 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 InGameUI *TheInGameUI = NULL;
 GameWindow *InGameUI::m_replayWindow = NULL;	// .bss 0x00DFEDF4, right after TheInGameUI 0x00DFEDF0
 typedef unsigned short WideChar;
-// msvcr71's counted vswprintf (?vswprintf@@YAHPAGIPBGPAD@Z).
-__declspec(dllimport) int __cdecl vswprintf(unsigned short *, unsigned int, const unsigned short *, va_list);
 // The engine error code the formatters throw when the buffer overflows (retail stores 0xDEAD0002).
 enum ErrorCode
 {

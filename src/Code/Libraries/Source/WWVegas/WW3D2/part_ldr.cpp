@@ -1,14 +1,8 @@
-// cl: /O2 /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// cl: /O2 /D_STLP_USE_STATIC_LIB
 // stlport46
 // bfmealloc_alloconly
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
-// Normalize_Filename uses the CRT import, while the string setters use
-// the game's own duplicateString and freeBlock (Common/GameMemory.h).
-#pragma push_macro("_CRTIMP")
-#undef _CRTIMP
-#define _CRTIMP __declspec(dllimport)
 #include <string.h>
-#pragma pop_macro("_CRTIMP")
 #include "Common/GameMemory.h"
 
 #include <memory>
