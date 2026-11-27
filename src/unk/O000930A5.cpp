@@ -4,7 +4,16 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include <math.h>
+
 // FUNCTION: BFME2 0x000930A5 size=27 name=?Rva000930A5@@YAMMM@Z evidence=?:placeholder tier=B hypothesis:name:invented
+float Rva000930A5(float base, float exponent)
+{
+	return (float)pow((double)base, (double)exponent);
+}
 
 // FUNCTION: BFME2 0x000930C0 size=25 name=?Rva000930C0@@YAMMM@Z evidence=?:placeholder tier=B hypothesis:K
-
+float Rva000930C0(float base, float exponent)
+{
+	return Rva000930A5(base, exponent);
+}
