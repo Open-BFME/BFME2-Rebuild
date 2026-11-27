@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "GameLogic/Script.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -675,6 +676,68 @@ void AIPlayer::repairStructure(ObjectID structure)
 
 
 // FUNCTION: BFME2 0x004F2FC4 size=498 name=?checkReadyTeams@AIPlayer@@MAEXXZ evidence=N:ledger tier=A
+void AIPlayer::checkReadyTeams()
+{
+	// See if any ready teams are gathered at their rally point
+	for (DLINK_ITERATOR<TeamInQueue> iter = iterate_TeamReadyQueue(); !iter.done(); iter.advance())
+	{
+		TeamInQueue *team = iter.cur();
+		// If 60 seconds passed, start anyway.
+		Bool timeExpired = team->m_frameStarted + 60 * BfmeLogicFramesPerSecond < TheGameLogic->getFrame();
+		Bool allIdle = true;
+		Bool anyIdle = false;
+		if (team->m_reinforcement) {
+			Object *obj = TheGameLogic->findObjectByID(team->m_reinforcementID);
+			if (obj && obj->getAIUpdateInterface()) {
+				allIdle = obj->getAIUpdateInterface()->isIdle();
+				anyIdle = allIdle;
+			}
+		} else {
+			allIdle = team->m_team->isIdle();
+			for (DLINK_ITERATOR<Object> objIter = team->m_team->iterate_TeamMemberList(); !objIter.done(); objIter.advance()) {
+				Object *obj = objIter.cur();
+				if (obj->getAIUpdateInterface() && obj->getAIUpdateInterface()->isIdle()) {
+					anyIdle = true;
+				}
+			}
+		}
+		if (anyIdle && team->m_team->getPrototype()->getTemplateInfo()->m_executeActions) {
+			TeamPrototype *proto = team->m_team->getPrototype();
+			const Script *script = TheScriptEngine->findScriptInScope(proto ? proto->getName() : AsciiString::TheEmptyString,
+				team->m_team->getPrototype()->getTemplateInfo()->m_productionCondition, NULL);
+			if (script && script->m_actions[0]) {
+				// we have a start action, so don't wait for everyone to idle: the team may be guarding
+				allIdle = true;
+			}
+		}
+		if (timeExpired)
+			allIdle = true;
+		if (allIdle) {
+			if (!team->m_sentToStartLocation) {
+				team->m_sentToStartLocation = true;
+			}
+			// Start the team up.
+			removeFrom_TeamReadyQueue(team);
+			team->m_team->rva0039D889(false);
+			if (team->m_reinforcement) {
+				Object *obj = TheGameLogic->findObjectByID(team->m_reinforcementID);
+				if (obj && obj->getAIUpdateInterface()) {
+					obj->getAIUpdateInterface()->joinTeam();
+				}
+			} else {
+				// mark our completed team as active; this runs any OnCreate scripts
+				team->m_team->setActive();
+				if (TheWritableGlobalData->m_debugAI) {
+					AsciiString teamName = team->m_team->getPrototype()->getName();
+					teamName.concat(" - team activated.");
+					TheScriptEngine->AppendDebugMessage(teamName, false);
+				}
+			}
+			::delete team;
+			iter = iterate_TeamReadyQueue();
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x004F31B6 size=519 name=?doUpgradesAndSkills@AIPlayer@@MAEXXZ evidence=N:ledger tier=A
 
