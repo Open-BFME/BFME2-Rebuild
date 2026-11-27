@@ -181,6 +181,24 @@ int GadgetListBoxData::getTopVisibleEntry()
 }
 
 // FUNCTION: BFME2 0x00323F9C size=61 name=?Rva00323F9C@@YIHPAU_ListboxData@@@Z evidence=?:placeholder tier=B hypothesis:K
+int GadgetListBoxData::getBottomVisibleEntry()
+{
+	Int last = m_numEntries - 1;
+	Int bottom = m_clientHeight + m_scrollTop;
+	for (Int entry = last; entry >= 0; entry--)
+	{
+		Int top = m_entries[entry].m_top;
+		if (top == bottom)
+			return entry;
+		if (top < bottom)
+		{
+			if (entry != last)
+				entry++;
+			return entry;
+		}
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00323FD9 size=40 name=?removeSelection@@YAXPAU_ListboxData@@H@Z evidence=N:ledger tier=B hypothesis:K
 
