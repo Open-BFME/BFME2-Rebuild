@@ -32,6 +32,11 @@ public:
 	RadiusDecalTemplate();
 	~RadiusDecalTemplate();
 
+	void assign(const RadiusDecalTemplate &that);	// 0x00330CDD
+	Real getRadiusForUnitCount(UnsignedInt count);	// 0x00330D3E: the radius that grows from MinRadius towards MaxRadius with the selected unit count (the map holds it as rva00330D3E)
+	Bool equals(const RadiusDecalTemplate &that) const;	// 0x00331578: every member but OnlyVisibleToOwningPlayer matches (the map holds it as rva00331578)
+	void createSelectionRadiusDecal(Coord3D pos, UnsignedInt unitCount, Int color, RadiusDecal *result, Real scale);	// 0x0033121F
+	void createDeathDecal(const Coord3D *pos, Real angle, const UnsignedInt *color, RadiusDecal *result);	// 0x0033132D
 	void xferRadiusDecalTemplate(Xfer *xfer);
 	void createRadiusDecal(const Coord3D &pos, Real radius, const Player *owningPlayer, RadiusDecal &result) const;
 

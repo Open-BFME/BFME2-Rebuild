@@ -28,6 +28,7 @@ public:
 	void update();					// 0x00330F98
 	void setPosition(const Coord3D &pos);
 	void setOpacity(Real opacity);
+	void setDirection(const Coord3D &direction);	// 0x00330E15
 	void xferRadiusDecal(Xfer *xfer);	// 0x00330F7D (Zero Hour's name: RadiusDecalTemplate::xferRadiusDecalTemplate 0x00330EE0 sits just before it)
 
 	const void *m_template;			// 0x0

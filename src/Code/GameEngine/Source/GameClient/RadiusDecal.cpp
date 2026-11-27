@@ -14,6 +14,8 @@
 #include "Common/PlayerList.h"
 #include "Common/INI/FieldParse.h"
 
+extern Real SECONDS_PER_CLIENTFRAME_REAL;
+
 // The bit names parseBitString32 reads for Style (VA 0x00DBE6F0): sixteen names
 // in bit order, then NULL.
 static const char *s_radiusDecalStyleNames[] =
@@ -47,8 +49,32 @@ static const FieldParse s_radiusDecalTemplateFieldParse[] =
 };
 
 // FUNCTION: BFME2 0x00330CDD size=97 name=?rva00330CDD@RadiusDecalTemplate@@QAEXABV1@@Z evidence=?:placeholder
+void RadiusDecalTemplate::assign(const RadiusDecalTemplate &that)
+{
+	m_style = that.m_style;
+	m_opacityMin = that.m_opacityMin;
+	m_opacityMax = that.m_opacityMax;
+	m_opacityThrobTime = that.m_opacityThrobTime;
+	m_color = that.m_color;
+	m_onlyVisibleToOwningPlayer = that.m_onlyVisibleToOwningPlayer;
+	m_texture = that.m_texture;
+	m_texture2 = that.m_texture2;
+	m_maxRadius = that.m_maxRadius;
+	m_minRadius = that.m_minRadius;
+	m_maxSelectedUnits = that.m_maxSelectedUnits;
+	m_rotationsPerMinute = that.m_rotationsPerMinute;
+	m_spiralAcceleration = that.m_spiralAcceleration;
+}
 
 // FUNCTION: BFME2 0x00330D3E size=83 name=?rva00330D3E@RadiusDecalTemplate@@QAEMI@Z evidence=?:placeholder
+Real RadiusDecalTemplate::getRadiusForUnitCount(UnsignedInt count)
+{
+	Real radius = (m_maxRadius - m_minRadius) / (Real)m_maxSelectedUnits * (Real)(count - 1) + m_minRadius;
+	if (radius > m_maxRadius)
+		radius = m_maxRadius;
+	return radius;
+}
+
 
 // FUNCTION: BFME2 0x00330D91 size=19 name=?parseRadiusDecalTemplate@RadiusDecalTemplate@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger
 void RadiusDecalTemplate::parseRadiusDecalTemplate(INI *ini, void *formal, void *store, const void *userData)
@@ -96,10 +122,19 @@ RadiusDecal::~RadiusDecal()
 }
 
 // FUNCTION: BFME2 0x00330E15 size=24 name=?Rva00330E15@RadiusDecal@@QAEXABUCoord3D@@@Z evidence=?:placeholder
+void RadiusDecal::setDirection(const Coord3D &direction)
+{
+	if (m_decal)
+		m_decal->m_direction = direction;
+}
 
 // FUNCTION: BFME2 0x00330E2D size=31 name=?rva00330E2D@Rva00330E2DFrameOpacity@@QAEXI@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x00330E4C size=17 name=?rva00330E4C@@YAMM@Z evidence=?:placeholder
+Real convertDegreesPerSecondToRadiansPerClientFrame(Real degreesPerSecond)
+{
+	return SECONDS_PER_CLIENTFRAME_REAL * 0.017453292f * degreesPerSecond;
+}
 
 // FUNCTION: BFME2 0x00330E5D size=131 name=??0RadiusDecalTemplate@@QAE@XZ evidence=N:ledger
 RadiusDecalTemplate::RadiusDecalTemplate() :
@@ -151,8 +186,66 @@ void RadiusDecal::xferRadiusDecal(Xfer *xfer)
 // FUNCTION: BFME2 0x00330F98 size=647 name=?update@RadiusDecal@@QAEXXZ evidence=N:ledger
 
 // FUNCTION: BFME2 0x0033121F size=270 name=?createSelectionRadiusDecal@RadiusDecalTemplate@@QAEXUCoord3D@@IHPAVRadiusDecal@@M@Z evidence=N:ledger
+void RadiusDecalTemplate::createSelectionRadiusDecal(Coord3D pos, UnsignedInt unitCount, Int color, RadiusDecal *result, Real scale)
+{
+	if (m_texture.isEmpty() == true || unitCount == 0 || m_minRadius == 0.0f || m_maxRadius == 0.0f)
+		return;
+	result->clear();
+	result->m_empty = false;
+	Shadow::ShadowTypeInfo info;
+	info.m_texture = m_texture;
+	info.m_texture2 = m_texture2;
+	info.m_allowUpdates = false;
+	info.m_allowWorldAlign = true;
+	info.m_type = m_style;
+	Real radius = getRadiusForUnitCount(unitCount);
+	info.m_sizeX = radius;
+	info.m_sizeY = radius;
+	info.m_offsetX = 0.0f;
+	info.m_offsetY = 0.0f;
+	info.m_scale = scale;
+	result->m_decal = TheProjectedShadowManager->addDecal(&info);
+	if (result->m_decal)
+	{
+		result->m_decal->setAngle(0.0f);
+		result->m_decal->setColor(color);
+		result->m_decal->setPosition(pos);
+		result->m_template = this;
+	}
+}
+
 
 // FUNCTION: BFME2 0x0033132D size=300 name=?createDeathDecal@RadiusDecalTemplate@@QAEXPBUCoord3D@@MPBIPAVRadiusDecal@@@Z evidence=N:ledger
+void RadiusDecalTemplate::createDeathDecal(const Coord3D *pos, Real angle, const UnsignedInt *color, RadiusDecal *result)
+{
+	if (m_texture.isEmpty() == true || pos == NULL || m_minRadius == 0.0f || m_maxRadius == 0.0f)
+		return;
+	result->clear();
+	result->m_empty = false;
+	Shadow::ShadowTypeInfo info;
+	info.m_texture = m_texture;
+	info.m_texture2 = m_texture2;
+	info.m_sizeX = m_maxRadius;
+	info.m_sizeY = m_maxRadius;
+	info.m_type = m_style;
+	info.m_allowUpdates = true;
+	info.m_allowWorldAlign = true;
+	info.m_offsetX = 0.0f;
+	info.m_offsetY = 0.0f;
+	result->m_decal = TheProjectedShadowManager->addDecal(&info);
+	if (result->m_decal)
+	{
+		result->m_decal->setAngle(angle);
+		result->m_decal->setColor(*color);
+		Coord3D position;
+		position.x = pos->x + info.m_offsetX;
+		position.y = pos->y + info.m_offsetY;
+		position.z = pos->z;
+		result->m_decal->setPosition(position);
+		result->m_template = this;
+	}
+}
+
 
 // FUNCTION: BFME2 0x00331459 size=287 name=?createRadiusDecal@RadiusDecalTemplate@@QBEXABUCoord3D@@MPBVPlayer@@AAVRadiusDecal@@@Z evidence=N:ledger
 
@@ -187,3 +280,18 @@ void RadiusDecalTemplate::createRadiusDecal(const Coord3D &pos, Real radius,
 }
 
 // FUNCTION: BFME2 0x00331578 size=179 name=?rva00331578@RadiusDecalTemplate@@QBE_NABV1@@Z evidence=?:placeholder
+Bool RadiusDecalTemplate::equals(const RadiusDecalTemplate &that) const
+{
+	return m_style == that.m_style
+		&& m_opacityMin == that.m_opacityMin
+		&& m_opacityMax == that.m_opacityMax
+		&& m_opacityThrobTime == that.m_opacityThrobTime
+		&& m_color == that.m_color
+		&& m_texture.compare(that.m_texture) == 0
+		&& m_texture2.compare(that.m_texture2) == 0
+		&& m_maxRadius == that.m_maxRadius
+		&& m_minRadius == that.m_minRadius
+		&& m_maxSelectedUnits == that.m_maxSelectedUnits
+		&& m_rotationsPerMinute == that.m_rotationsPerMinute
+		&& m_spiralAcceleration == that.m_spiralAcceleration;
+}
