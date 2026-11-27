@@ -13,6 +13,8 @@
 #include "Common/SubsystemInterface.h"
 #include "GameLogic/RankInfo.h"
 
+class INI;
+
 class RankInfoStore : public SubsystemInterface
 {
 public:
@@ -21,6 +23,8 @@ public:
 	virtual void update();									// slot 10, the folded empty body 0x000B3FD0
 
 	RankInfo *getRankInfo(Int rank) const;					// 0x002000D7: the final override of the 1-based rank, or NULL
+
+	static void friend_parseRankDefinition(INI *ini);		// one Rank block of the rank table INI
 
 	_STL::vector<RankInfo *> m_rankInfos;					// +0xC
 };
