@@ -7,7 +7,11 @@
 // Tier B; object=O0035C972 evidence=Z flags=align=U;ehform=EH_prolog
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unknown-rows right=unknown-rows
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include <stdio.h>
 #include "GameLogic/CrateSystem.h"
+#include "Common/INI.h"
+#include "Common/INIException.h"
 // FUNCTION: BFME2 0x0035C959 size=6 name=?Rva0035C959Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 int Rva0035C959Get()
 {
@@ -80,6 +84,24 @@ CrateSystem::~CrateSystem()
 // FUNCTION: BFME2 0x0035CCCA size=89 name=??1CrateTemplate@@MAE@XZ evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035CD23 size=188 name=?parseCrateCreationEntry@CrateTemplate@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger
+void CrateTemplate::parseCrateCreationEntry(INI *ini, void *instance, void *, const void *)
+{
+	CrateTemplate *self = static_cast<CrateTemplate *>(instance);
+
+	const char *token = ini->getNextToken();
+	AsciiString crateName = token;
+
+	token = ini->getNextToken();
+	Real crateValue;
+	if (sscanf(token, "%f", &crateValue) != 1)
+		throw INIException(3, "Floating point value expected instead of '%s'", token);
+
+	crateCreationEntry newEntry;
+	newEntry.crateName = crateName;
+	newEntry.crateChance = crateValue;
+
+	self->m_possibleCrates.push_back(newEntry);
+}
 
 // FUNCTION: BFME2 0x0035CE52 size=84 name=??4CrateTemplate@@QAEAAV0@ABV0@@Z evidence=N:ledger
 
@@ -88,3 +110,22 @@ CrateSystem::~CrateSystem()
 // FUNCTION: BFME2 0x0035CF2C size=190 name=?newCrateTemplate@CrateSystem@@QAEPAVCrateTemplate@@VAsciiString@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035CFEA size=173 name=?parseCrateTemplateDefinition@CrateSystem@@SAXPAVINI@@@Z evidence=N:ledger
+void CrateSystem::parseCrateTemplateDefinition(INI *ini)
+{
+	AsciiString name;
+	name.set(ini->getNextToken());
+
+	CrateTemplate *crateTemplate = TheCrateSystem->friend_findCrateTemplate(name);
+	if (crateTemplate == NULL)
+	{
+		crateTemplate = TheCrateSystem->newCrateTemplate(name);
+		if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES)
+			crateTemplate->markAsOverride();
+	}
+	else if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES || ini->getLoadType() == 4)
+	{
+		crateTemplate = TheCrateSystem->newCrateTemplateOverride(crateTemplate);
+	}
+
+	ini->initFromINI(crateTemplate, CrateTemplate::TheCrateTemplateFieldParseTable);
+}
