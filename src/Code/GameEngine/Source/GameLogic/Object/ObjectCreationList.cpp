@@ -13,6 +13,7 @@
 #include "Common/BitFlags.h"
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Object.h"
+#include "Common/ModuleInfo.h"
 #include "GameLogic/Weapon.h"
 #include "GameLogic/WeaponTemplate.h"
 #include "GameLogic/WeaponStore.h"
@@ -461,6 +462,12 @@ GenericObjectCreationNugget::GenericObjectCreationNugget() :
 // FUNCTION: BFME2 0x001F1010 size=719 name=?canCreate@GenericObjectCreationNugget@@UAE_NPAVObject@@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x001F12DF size=64 name=?getNthName@ModuleInfo@@QBE?AVAsciiString@@H@Z evidence=N:ledger tier=A
+AsciiString ModuleInfo::getNthName(Int i) const
+{
+	if (i >= 0 && i < m_info.size())
+		return m_info[i].first;
+	return AsciiString::TheEmptyString;
+}
 
 // FUNCTION: BFME2 0x001F131F size=407 name=?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z evidence=N:ledger tier=A
 

@@ -35,6 +35,7 @@ public:
 
 	Int getCount() const { return m_info.size(); }			// Zero Hour's
 	const ModuleData *getNthData(Int i) const;				// 0x0033ACE8
+	AsciiString getNthName(Int i) const;					// 0x001F12DF
 	void setCopiedFromDefault(Bool copied);					// 0x0033B18A
 	const Nugget *getNuggetWithTag(const AsciiString &tag) const;	// 0x0033C21C
 	Bool clearModuleDataWithTag(const AsciiString &tagToClear, AsciiString &clearedModuleNameOut);	// 0x0033C807
