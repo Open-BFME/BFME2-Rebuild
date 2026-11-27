@@ -35,6 +35,7 @@ public:
 	static bool Set_Any_Render_Device(void);					// 0x00116F00
 	static void Get_Render_Target_Resolution(int &set_w, int &set_h, int &set_bits, bool &set_windowed);	// 0x00116FF0
 	static bool Set_Device_Resolution(int w = -1, int h = -1, int bits = -1, int windowed = -1, bool resize_window = false);	// 0x00116FC0
+	static void Get_Device_Resolution(int &set_w, int &set_h, int &set_bits, bool &set_windowed);	// 0x00117000: a jump to DX8Wrapper's function of the same name
 
 	static void Sync(unsigned int sync_time);					// 0x00117490
 	static void Normalize_Coordinates(int x, int y, float &fx, float &fy);	// 0x001184D0: pixel coordinates to 0..1 screen coordinates
