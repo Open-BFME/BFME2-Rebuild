@@ -75,7 +75,10 @@ protected:
 public:
 	UnsignedByte m_unk0xCC[0x36F4];
 	WorldHeightMap *m_map;
-	UnsignedByte m_unk0x37C4[0x20];
+	UnsignedByte m_unk0x37C4[0x14];
+	Real m_minHeight;
+	Real m_maxHeight;
+	UnsignedByte m_unk0x37E0[0x4];
 	Real m_transparentWaterDepth;
 	Real m_minWaterOpacity;
 	UnsignedByte m_unk0x37EC[0x8C];
@@ -86,6 +89,8 @@ public:
 
 typedef char BaseHeightMapSize[(sizeof(BaseHeightMapRenderObjClass) == 0x3884) ? 1 : -1];
 typedef char BaseHeightMapMapOffset[(offsetof(BaseHeightMapRenderObjClass, m_map) == 0x37C0) ? 1 : -1];
+typedef char BaseHeightMapMinHeightOffset[(offsetof(BaseHeightMapRenderObjClass, m_minHeight) == 0x37D8) ? 1 : -1];
+typedef char BaseHeightMapMaxHeightOffset[(offsetof(BaseHeightMapRenderObjClass, m_maxHeight) == 0x37DC) ? 1 : -1];
 typedef char BaseHeightMapWaterDepthOffset[(offsetof(BaseHeightMapRenderObjClass, m_transparentWaterDepth) == 0x37E4) ? 1 : -1];
 typedef char BaseHeightMapWaterOpacityOffset[(offsetof(BaseHeightMapRenderObjClass, m_minWaterOpacity) == 0x37E8) ? 1 : -1];
 typedef char BaseHeightMapShroudOffset[(offsetof(BaseHeightMapRenderObjClass, m_shroud) == 0x3878) ? 1 : -1];

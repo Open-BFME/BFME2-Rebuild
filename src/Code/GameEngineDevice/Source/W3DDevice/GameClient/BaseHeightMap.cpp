@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
+#include "WWMath/AABoxClass.h"
 #include "GameClient/BaseHeightMapRenderObjClass.h"
 #include "GameClient/WorldHeightMap.h"
 #include "WW3D2/SceneClass.h"
@@ -258,6 +259,23 @@ bool PlaneClass::Compute_Intersection(const Vector3 &p0, const Vector3 &p1, floa
 // FUNCTION: BFME2 0x00069AF5 size=215 name=?Get_Obj_Space_Bounding_Sphere@BaseHeightMapRenderObjClass@@UBEXAAVSphereClass@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00069BCC size=147 name=?Get_Obj_Space_Bounding_Box@BaseHeightMapRenderObjClass@@UBEXAAVAABoxClass@@@Z evidence=N:ledger tier=A
+void BaseHeightMapRenderObjClass::Get_Obj_Space_Bounding_Box(AABoxClass &box) const
+{
+	Int x = 0;
+	Int y = 0;
+	if (m_map) {
+		x = m_map->getXExtent();
+		y = m_map->getYExtent();
+	}
+
+	const Real mapXYFactor = 10.0f;
+	Vector3 minPoint(0.0f, 0.0f, m_minHeight);
+	Vector3 maxPoint(x * mapXYFactor, y * mapXYFactor, m_maxHeight);
+	MinMaxAABoxClass bounds;
+	bounds.MinCorner = minPoint;
+	bounds.MaxCorner = maxPoint;
+	box.Init(bounds);
+}
 
 // FUNCTION: BFME2 0x00069C5F size=135 name=?rva00069C5F@BaseHeightMapRenderObjClass@@QAEXVVector3@@M@Z evidence=?:placeholder tier=A
 
