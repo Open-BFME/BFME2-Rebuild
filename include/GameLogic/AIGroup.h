@@ -79,6 +79,7 @@ public:
 	void groupHunt(CommandSourceType cmdSource);
 	void groupIdle(CommandSourceType cmdSource);	// map: ?groupIdle@AIGroup@@QAEXW4CommandSourceType@@@Z
 	Bool getCenter(Coord3D *center);	// map: ?getCenter@AIGroup@@QAE_NPAVCoord3D@@@Z
+	Bool getMinMaxAndCenter(Coord2D *min, Coord2D *max, Coord3D *center);
 	void groupEvacuate(CommandSourceType cmdSource);	// map: ?groupEvacuate@AIGroup@@QAEXW4CommandSourceType@@@Z
 	void groupAttackPosition(const Coord3D *pos, Int maxShotsToFire, CommandSourceType cmdSource);	// 0x0036FF74 (Zero Hour's): passengers allowed to fire, slaves, then the member attack pos (a null pos: each member's own position)
 	void groupAttackTeam(const Team *team, Int maxShots, CommandSourceType cmdSource);	// map: ?groupAttackTeam@AIGroup@@QAEXPBVTeam@@HW4CommandSourceType@@@Z
