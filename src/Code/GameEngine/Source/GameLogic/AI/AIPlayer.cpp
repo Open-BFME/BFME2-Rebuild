@@ -63,6 +63,10 @@ void AIPlayer::selectSkillset(Int skillset)
 // FUNCTION: BFME2 0x004F0315 size=7 name=?get@Rva004F0315ByteField@@QBEEXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x004F031C size=7 name=?getLayer@Object@@QBE?AW4PathfindLayerEnum@@XZ evidence=N:ledger tier=A
+PathfindLayerEnum Object::getLayer() const
+{
+	return m_layer;
+}
 
 // FUNCTION: BFME2 0x004F0323 size=7 name=?get@Rva004F0323DwordField@@QBEHXZ evidence=?:placeholder tier=A
 
