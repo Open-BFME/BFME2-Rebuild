@@ -427,6 +427,19 @@ Bool ModuleInfo::clearAiModuleInfo()
 // FUNCTION: BFME2 0x0033C8B5 size=51 name=?rva0033C8B5@ModuleInfo@@QAE_NXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0033C8E8 size=113 name=?removeModuleInfo@Rva0033C8E8@@QAE_NABVAsciiString@@AAV2@@Z evidence=?:placeholder tier=A
+Bool ThingTemplate::removeModuleInfo(const AsciiString &moduleToRemove, AsciiString &clearedModuleNameOut)
+{
+	Bool removed = false;
+	if (m_behaviorModuleInfo.clearModuleDataWithTag(moduleToRemove, clearedModuleNameOut))
+		removed = true;
+	if (m_drawModuleInfo.clearModuleDataWithTag(moduleToRemove, clearedModuleNameOut))
+		removed = true;
+	if (m_clientUpdateModuleInfo.clearModuleDataWithTag(moduleToRemove, clearedModuleNameOut))
+		removed = true;
+	if (m_clientBehaviorModuleInfo.clearModuleDataWithTag(moduleToRemove, clearedModuleNameOut))
+		removed = true;
+	return removed;
+}
 
 // FUNCTION: BFME2 0x0033C965 size=284 name=?rva0033C965@Rva0033C965@@QAEXHH@Z evidence=?:placeholder tier=A
 

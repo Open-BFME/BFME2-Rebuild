@@ -59,6 +59,7 @@ class ThingTemplate : public Overridable
 public:
 	ThingTemplate();	// 0x0033E1B8
 	void copyFrom(const ThingTemplate *other);	// 0x0033EBEB
+	Bool removeModuleInfo(const AsciiString &moduleToRemove, AsciiString &clearedModuleNameOut);	// 0x0033C8E8 (the map files it under the placeholder class Rva0033C8E8)
 	void resolveNames();	// 0x0033C2C2
 	unsigned short getTemplateID() const { return m_templateID; }
 	const AsciiString &getName() const { return m_name; }
