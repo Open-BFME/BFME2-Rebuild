@@ -21,6 +21,8 @@
 #include "WW3D2/W3dUtilityClass.h"
 #define REF_PTR_RELEASE(x) { if (x) { (x)->Release_Ref(); (x) = NULL; } }
 
+TextureAsset Load_Texture(ChunkLoadClass &cload);
+
 // FUNCTION: BFME2 0x00188180 size=49 name=?read_per_face_texcoord_ids@MeshModelClass@@IAE_NAAVChunkLoadClass@@PAVMeshLoadContextClass@@@Z evidence=N:ledger tier=B hypothesis:Z
 bool MeshModelClass::read_per_face_texcoord_ids(ChunkLoadClass &cload, MeshLoadContextClass *context)
 {
@@ -571,6 +573,15 @@ bool MeshModelClass::read_vertex_materials(ChunkLoadClass &cload, MeshLoadContex
 }
 
 // FUNCTION: BFME2 0x0018AE50 size=284 name=?read_textures@MeshModelClass@@IAE_NAAVChunkLoadClass@@PAVMeshLoadContextClass@@@Z evidence=N:ledger tier=A
+bool MeshModelClass::read_textures(ChunkLoadClass &cload, MeshLoadContextClass *context)
+{
+	TextureAsset tex = Load_Texture(cload);
+	while (tex.Has_Factory()) {
+		context->TextureHandles.Add(tex);
+		tex = Load_Texture(cload);
+	}
+	return true;
+}
 
 // FUNCTION: BFME2 0x0018AF70 size=272 name=?read_fx_shaders@MeshModelClass@@IAE_NAAVChunkLoadClass@@PAVMeshLoadContextClass@@@Z evidence=N:ledger tier=A
 
