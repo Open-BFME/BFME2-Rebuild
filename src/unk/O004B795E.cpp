@@ -5,5 +5,8 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "GameLogic/Module/ReplaceSelfUpgradeModuleData.h"
 // FUNCTION: BFME2 0x004B797A size=51 name=??1ReplaceSelfUpgradeModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
-
+ReplaceSelfUpgradeModuleData::~ReplaceSelfUpgradeModuleData()
+{
+}
