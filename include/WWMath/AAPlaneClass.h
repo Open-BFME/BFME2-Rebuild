@@ -10,15 +10,17 @@
 class AAPlaneClass
 {
 public:
-	enum AxisType
+	enum AxisEnum
 	{
 		XNORMAL = 0,
 		YNORMAL = 1,
 		ZNORMAL = 2
 	};
+	typedef AxisEnum AxisType;
 
 	AAPlaneClass(void) {}
 	AAPlaneClass(AxisType normal, Real dist) : Normal(normal), Dist(dist) {}
+	void Set(AxisEnum normal, Real dist);
 
 	int Normal;		// +0x00: axis index
 	Real Dist;		// +0x04
