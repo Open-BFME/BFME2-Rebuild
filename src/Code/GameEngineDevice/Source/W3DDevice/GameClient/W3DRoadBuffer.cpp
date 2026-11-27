@@ -925,6 +925,26 @@ void RoadSegment::GetRoadSegInfo(TRoadSegInfo *pInfo)
 // FUNCTION: BFME2 0x000D943F size=1222 name=?loadCurve@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1M@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000D9905 size=344 name=?preloadRoadSegment@W3DRoadBuffer@@IAEXPAVRoadSegment@@@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::preloadRoadSegment(RoadSegment *pRoad)
+{
+	Vector2 roadVector = pRoad->m_pt2.loc - pRoad->m_pt1.loc;
+	Vector2 roadNormal(-roadVector.Y, roadVector.X);
+
+	Real uOffset = 0.0f;
+	Real vOffset = (85.0f / 512.0f);
+
+	Real roadHeight = pRoad->m_widthInTexture * pRoad->m_scale / 2.0f;
+	roadNormal.Normalize();
+	roadNormal *= roadHeight;
+
+	Vector2 corners[NUM_CORNERS];
+	corners[bottomLeft] = pRoad->m_pt1.bottom;
+	corners[topLeft] = pRoad->m_pt1.top;
+	corners[bottomRight] = pRoad->m_pt2.bottom;
+	corners[topRight] = pRoad->m_pt2.top;
+	loadFloat4PtSection(pRoad, pRoad->m_pt1.loc, roadNormal, roadVector, corners, uOffset, vOffset,
+		pRoad->m_scale, pRoad->m_scale);
+}
 
 // FUNCTION: BFME2 0x000D9B48 size=218 name=?moveRoadSegTo@W3DRoadBuffer@@IAEXHH@Z evidence=N:ledger tier=B hypothesis:K
 void W3DRoadBuffer::moveRoadSegTo(Int fromNdx, Int toNdx)
