@@ -52,6 +52,7 @@ private:
 	bool m_unk0x150;
 
 	friend struct AptPalantirLayout;
+	friend class RadarWindowOverrideSource;
 };
 
 struct AptPalantirLayout
