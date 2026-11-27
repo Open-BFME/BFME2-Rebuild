@@ -29,6 +29,3 @@ W3DTornadoDrawModuleData::W3DTornadoDrawModuleData()
 }
 
 // FUNCTION: BFME2 0x000D1713 size=48 name=??1W3DTornadoDrawModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-W3DTornadoDrawModuleData::~W3DTornadoDrawModuleData()
-{
-}
