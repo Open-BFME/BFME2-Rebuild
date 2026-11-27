@@ -8,6 +8,7 @@
 #ifndef BFME2_W3DSUPPLYDRAW_H
 #define BFME2_W3DSUPPLYDRAW_H
 
+#include <stddef.h>
 #include "GameClient/W3DScriptedModelDraw.h"
 
 class W3DSupplyDraw : public W3DScriptedModelDraw
@@ -23,6 +24,11 @@ protected:
 	virtual void loadPostProcess();											// 1: 0x000CA132
 	virtual const char *GetSnapshotName() const;							// 2: 0x000CAEC0
 	virtual void xfer(Xfer *xfer);											// 3: 0x000CAEDF
+	Int m_totalBones;
+	Int m_lastNumberShown;
 };
+
+typedef char W3DSupplyDrawTotalBonesOffset[(offsetof(W3DSupplyDraw, m_totalBones) == 0x2E8) ? 1 : -1];
+typedef char W3DSupplyDrawLastNumberShownOffset[(offsetof(W3DSupplyDraw, m_lastNumberShown) == 0x2EC) ? 1 : -1];
 
 #endif
