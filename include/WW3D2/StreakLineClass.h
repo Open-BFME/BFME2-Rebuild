@@ -58,6 +58,11 @@ public:
 	int Is_Sorting_Disabled();
 	int Are_End_Caps_Enabled();
 
+	void Reset_Line();											// 0x00741730
+	TextureAsset Get_Texture() throw();							// 0x00741750
+	ShaderClass Get_Shader();									// 0x00741780
+	void Get_Color(Vector3 &color);								// 0x00741790
+	float Get_Opacity();										// 0x007417C0
 	void Set_Texture(TextureClass *texture);
 	void Set_Shader(ShaderClass shader);
 	void Set_Width(float width);
