@@ -25,6 +25,12 @@ struct BfmeE8	// the map's name for the 8-byte vertex type of the polygon's vert
 	Real y;
 };
 
+struct Rva0030B6A6Range
+{
+	const BfmeE8 *begin;
+	const BfmeE8 *end;
+};	// a vertex range, the operands of the vertex-vector equality
+
 struct Rva0030B7C2Point	// the point argument of the containment test (two floats)
 {
 	Real x;

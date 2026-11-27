@@ -6,12 +6,26 @@
 // Hypothesis rules: hypothesis:K
 #include "Common/AreaPolygon.h"
 // FUNCTION: BFME2 0x0030B395 size=60 name=?Rva0030B395Equal@@YA_NPBM00@Z evidence=?:placeholder tier=B hypothesis:K
+Bool Rva0030B395Equal(const Real *first, const Real *last, const Real *other)
+{
+	for (; first != last; first += 2, other += 2) {
+		if (first[0] != other[0] || first[1] != other[1])
+			return false;
+	}
+	return true;
+}
 
 // FUNCTION: BFME2 0x0030B3D1 size=478 name=?rva0030B3D1@AreaPolygonBase@@QAEXXZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0030B5AF size=233 name=?rva0030B5AF@@YA_NPBURva0030B7C2Point@@PAVAreaPolygonBase@@@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0030B6A6 size=61 name=?Rva0030B6A6Equal@@YAHPBURva0030B6A6Range@@0@Z evidence=?:placeholder tier=B hypothesis:K
+Int Rva0030B6A6Equal(const Rva0030B6A6Range *a, const Rva0030B6A6Range *b)
+{
+	if (a->end - a->begin != b->end - b->begin)
+		return 0;
+	return Rva0030B395Equal(&a->begin->x, &a->end->x, &b->begin->x) ? 1 : 0;
+}
 
 // FUNCTION: BFME2 0x0030B6E3 size=35 name=?rva0030B6E3@AreaPolygonBase@@QAE?AURegion2D@@XZ evidence=?:placeholder tier=A
 Region2D AreaPolygonBase::rva0030B6E3()
@@ -38,6 +52,15 @@ Real AreaPolygonBase::getRadius() const
 }
 
 // FUNCTION: BFME2 0x0030B72C size=67 name=?rva0030B72C@AreaPolygonBase@@QBE?AURva0030B72CPoint@@XZ evidence=?:placeholder tier=B hypothesis:K
+Rva0030B72CPoint AreaPolygonBase::rva0030B72C() const
+{
+	if (m_boundsDirty)
+		const_cast<AreaPolygonBase *>(this)->rva0030B3D1();
+	Rva0030B72CPoint center;
+	center.x = (m_bounds.hi.x + m_bounds.lo.x) * 0.5f;
+	center.y = (m_bounds.hi.y + m_bounds.lo.y) * 0.5f;
+	return center;
+}
 
 // FUNCTION: BFME2 0x0030B76F size=78 name=?rva0030B76F@Rva0030B76F@@QAEXPAU1@@Z evidence=?:placeholder tier=B hypothesis:K
 template <class T>
