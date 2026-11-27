@@ -7,6 +7,12 @@
 // Hypothesis rules: none; hard membership, hypothetical extent
 #include "GameLogic/ArmySummary.h"
 #include "Common/Xfer.h"
+#include "Common/GlobalData.h"
+#include "GameLogic/GameLogic.h"
+
+// Logic frames per second as a real (VA 0x00DBA4F4, after the msec-per-frame factor).
+extern Real LOGICFRAMES_PER_SECONDS_REAL;
+
 // FUNCTION: BFME2 0x0040C94A size=35 name=?Rva0040C94ALookup@@YAPAVPlayer@@H@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0040C96D size=24 name=?XferReinforcementState@@YAXPAVXfer@@PAX@Z evidence=N:ledger tier=A
@@ -16,16 +22,48 @@ void XferReinforcementState(Xfer *xfer, void *value)
 }
 
 // FUNCTION: BFME2 0x0040C985 size=31 name=?rva0040C985@ArmySummary@@QAEXH@Z evidence=?:placeholder tier=A
+void ArmySummary::rva0040C985(Int frame)
+{
+	if (m_reinforcementState == 0)
+	{
+		m_reinforcementState = 2;
+		m_engageStartFrame = frame;
+		m_engageEndFrame = m_reinforcementDelayFrames + frame;
+	}
+}
 
 // FUNCTION: BFME2 0x0040C9A4 size=80 name=?rva0040C9A4@ArmySummary@@QAEMXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0040C9F4 size=21 name=?rva0040C9F4@ArmySummary@@QAEHXZ evidence=?:placeholder tier=A
+Int ArmySummary::rva0040C9F4()
+{
+	Int now = TheGameLogic->m_frame;
+	if (now < m_engageEndFrame)
+		return m_engageEndFrame - now;
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0040CA09 size=27 name=?rva0040CA09@ArmySummary@@QAEXXZ evidence=?:placeholder tier=A
+void ArmySummary::rva0040CA09()
+{
+	if (TheGameLogic->m_frame >= (UnsignedInt)m_engageEndFrame && m_reinforcementState == 2)
+		m_reinforcementState = 3;
+}
 
 // FUNCTION: BFME2 0x0040CA24 size=22 name=?rva0040CA24@ArmySummary@@QAEHXZ evidence=?:placeholder tier=A
+Int ArmySummary::rva0040CA24()
+{
+	if (TheWritableGlobalData->m_timeOfDay == TIME_OF_DAY_NIGHT)
+		return m_unk0x28;
+	return m_unk0x24;
+}
 
 // FUNCTION: BFME2 0x0040CA3A size=28 name=?rva0040CA3A@ArmySummary@@QAEXH@Z evidence=?:placeholder tier=A
+void ArmySummary::rva0040CA3A(Int seconds)
+{
+	m_reinforcementState = 0;
+	m_reinforcementDelayFrames = (Int)(seconds * LOGICFRAMES_PER_SECONDS_REAL);
+}
 
 // FUNCTION: BFME2 0x0040CA56 size=11 name=?rva0040CA56@Rva004047CE@@QAEXXZ evidence=?:placeholder tier=A
 

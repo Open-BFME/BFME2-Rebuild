@@ -23,6 +23,14 @@ public:
 	virtual ~ArmySummary();
 	virtual const char *GetSnapshotName() const;
 
+	// The reinforcement and engagement timers (the names are the ledger's placeholders).
+	void rva0040C985(Int frame);			// 0x0040C985: start engaging at the frame, due after the reinforcement delay
+	Real rva0040C9A4();						// 0x0040C9A4: engagement progress, 0..1
+	Int rva0040C9F4();						// 0x0040C9F4: frames left until the engagement ends
+	void rva0040CA09();						// 0x0040CA09: engaged -> finished once the end frame is reached
+	Int rva0040CA24();						// 0x0040CA24: the night variant of +0x24 when it is night
+	void rva0040CA3A(Int seconds);			// 0x0040CA3A: sets the reinforcement delay in logic frames and resets the state
+
 protected:
 	virtual void loadPostProcess() {}	// slot 1, empty 0x000B3FD0
 	virtual void xfer(Xfer *xfer);
