@@ -22,6 +22,14 @@ void *Rva006CB9D0(const char *szValue)
 }
 
 // FUNCTION: BFME2 0x006CBA40 size=140 name=?createArray@@YAPAVAptValue@@HPAPAVBfmeAptValue006DCD20@@@Z evidence=N:ledger tier=A
+AptValue *createArray(int nLength, AptValue **ppValues)
+{
+    if (!(ppValues != 0)) {
+        g_bfmeAptAssertAtE17734("pAptValue != NULL", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptValueFactory.cpp", 0xac);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+    return new AptArray(nLength, ppValues);
+}
 
 // FUNCTION: BFME2 0x006CBAD0 size=80 name=?Rva006CBAD0Format@@YAPAXPBDZZ evidence=?:placeholder tier=A
 void *Rva006CBAD0Format(const char *szFormat, ...)
