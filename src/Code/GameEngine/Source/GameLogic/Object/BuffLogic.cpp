@@ -11,6 +11,10 @@
 BuffLogic *TheBuffLogic = NULL;
 
 // FUNCTION: BFME2 0x00306782 size=66 name=??0GODupBase@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+BuffLogic::BuffLogic()
+{
+}
+
 // FUNCTION: BFME2 0x003067C4 size=6 name=?name@Rva003067C4Named@@QBEPBDXZ evidence=?:placeholder tier=A
 const char *BuffLogic::GetSnapshotName() const
 {
