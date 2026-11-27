@@ -185,7 +185,16 @@ CreateObjectDieModuleData::CreateObjectDieModuleData()
 
 
 // FUNCTION: BFME2 0x00485DDA size=63 name=??1CreateObjectDieModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+CreateObjectDieModuleData::~CreateObjectDieModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x00485E19 size=55 name=??0CreateObjectDieIfEldestKindofModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+CreateObjectDieIfEldestKindofModuleData::CreateObjectDieIfEldestKindofModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x00485E88 size=59 name=??1CreateObjectDieIfEldestKindofModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
+CreateObjectDieIfEldestKindofModuleData::~CreateObjectDieIfEldestKindofModuleData()
+{
+}

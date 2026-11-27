@@ -24,6 +24,7 @@ class CreateObjectDieIfEldestKindofModuleData : public CreateObjectDieModuleData
 {
 public:
 	CreateObjectDieIfEldestKindofModuleData();
+	virtual ~CreateObjectDieIfEldestKindofModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
