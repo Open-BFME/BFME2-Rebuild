@@ -268,6 +268,45 @@ ObjectTypes *ScriptEngine::getObjectTypes(const AsciiString &listName)
 }
 
 // FUNCTION: BFME2 0x0035768D size=333 name=?getQualifiedTriggerAreaByName@ScriptEngine@@QAEPAVPolygonTrigger@@VAsciiString@@@Z evidence=N:ledger tier=A
+PolygonTrigger *ScriptEngine::getQualifiedTriggerAreaByName(AsciiString name)
+{
+	if (name == "[Skirmish]MyInnerPerimeter" || name == "[Skirmish]MyOuterPerimeter")
+	{
+		if (m_currentPlayer)
+		{
+			Int ndx = m_currentPlayer->m_mpStartIndex + 1;
+			if (name == "[Skirmish]MyInnerPerimeter")
+				name.format("%s%d", "InnerPerimeter", ndx);
+			else
+				name.format("%s%d", "OuterPerimeter", ndx);
+		}
+		else
+			return 0;
+	}
+	else if (name == "[Skirmish]EnemyInnerPerimeter" || name == "[Skirmish]EnemyOuterPerimeter")
+	{
+		Int mpNdx = -1;
+		if (m_currentPlayer)
+		{
+			Player *enemy = getCurrentPlayer()->getCurrentEnemy();
+			if (enemy)
+				mpNdx = enemy->m_mpStartIndex + 1;
+		}
+		if (name == "[Skirmish]EnemyInnerPerimeter")
+			name.format("%s%d", "InnerPerimeter", mpNdx);
+		else
+			name.format("%s%d", "OuterPerimeter", mpNdx);
+	}
+	PolygonTrigger *trig = TheTerrainLogic->getTriggerAreaByName(name);
+	if (trig == 0)
+	{
+		AsciiString msg = "!!!WARNING!!! Trigger area '";
+		msg.concat(name);
+		msg.concat("' not found.");
+		AppendDebugMessage(msg, true);
+	}
+	return trig;
+}
 
 // FUNCTION: BFME2 0x003577DA size=195 name=?doNamedMapReveal@ScriptEngine@@QAEXABVAsciiString@@@Z evidence=N:ledger tier=A
 void ScriptEngine::doNamedMapReveal(const AsciiString &revealName)
