@@ -38,6 +38,16 @@ class AABTreeClass;
 class RayCollisionTestClass;
 class OBBoxIntersectionTestClass;
 
+// Three-int key with a lexicographic operator<.
+struct Gen_p12pod
+{
+	int a;
+	int b;
+	int c;
+};
+
+bool operator<(const Gen_p12pod &lhs, const Gen_p12pod &rhs);
+
 class MeshGeometryClass : public RefCountClass, public MultiListObjectClass
 {
 public:
