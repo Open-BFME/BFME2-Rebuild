@@ -13,6 +13,7 @@
 #include "Common/BitFlags.h"
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Object.h"
+#include "WWMath/Matrix3D.h"
 #include "GameLogic/Weapon.h"
 #include "GameLogic/WeaponTemplate.h"
 #include "GameLogic/WeaponStore.h"
@@ -510,6 +511,20 @@ Bool GenericObjectCreationNugget::rva001F1513(const Object *obj) const
 // FUNCTION: BFME2 0x001F22A8 size=3075 name=?doStuffToObj@GenericObjectCreationNugget@@IBEXPAVObject@@ABVAsciiString@@PBVCoord3D@@PBVMatrix3D@@MPBV2@IH@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x001F2EAB size=99 name=?adjustVector@@YAXPAVCoord3D@@PBVMatrix3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void adjustVector(Coord3D *vec, const Matrix3D *mtx)
+{
+	if (mtx)
+	{
+		Vector3 vectmp;
+		vectmp.X = vec->x;
+		vectmp.Y = vec->y;
+		vectmp.Z = vec->z;
+		vectmp = mtx->Rotate_Vector(vectmp);
+		vec->x = vectmp.X;
+		vec->y = vectmp.Y;
+		vec->z = vectmp.Z;
+	}
+}
 
 // FUNCTION: BFME2 0x001F2F0E size=525 name=?create@GenericObjectCreationNugget@@QBEXPBVObject@@PBVCoord3D@@1I@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
