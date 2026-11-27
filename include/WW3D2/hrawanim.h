@@ -58,6 +58,7 @@ public:
 	virtual bool Has_Rotation(int pivot);
 	virtual bool Has_Visibility(int pivot);
 	virtual bool Has_VisibilityF(int pivot);
+	NodeMotionStruct *Get_Node_Motion_Array() { return NodeMotion; }	// HTreeClass::Anim_Update 0x00163A80 reads the records directly
 
 private:
 	bool read_channel(ChunkLoadClass &cload, MotionChannelClass **newchan, bool pre30);

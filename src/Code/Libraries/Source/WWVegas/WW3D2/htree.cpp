@@ -10,6 +10,8 @@
 #include <new>
 #include <string.h>
 #include "WW3D2/htree.h"
+#include "WW3D2/hrawanim.h"
+#include "WWMath/FloatToLong.h"
 #include "WWMath/Matrix3D.h"
 #include "WW3D2/w3d_file.h"
 #include "WWLib/chunkio.h"
@@ -177,6 +179,70 @@ int HTreeClass::Capture_Update(int pivot_index)
 // FUNCTION: BFME2 0x00162BB0 size=3785 name=?Anim_Update@HTreeClass@@QAEXABVMatrix3D@@PAVHAnimClass@@M@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00163A80 size=2850 name=?Anim_Update@HTreeClass@@QAEXABVMatrix3D@@PAVHRawAnimClass@@M@Z evidence=N:ledger tier=B hypothesis:K
+void HTreeClass::Anim_Update(const Matrix3D &root, HRawAnimClass *motion, float frame)
+{
+	Pivot[0].Current = root;
+	Pivot[0].IsVisible = true;
+	Pivot[0].Fade = 1.0f;
+
+	int iframe = Float_To_Long(frame);
+	if (iframe >= motion->Get_Num_Frames()) {
+		iframe = 0;
+	}
+
+	NodeMotionStruct *nodeMotion = motion->Get_Node_Motion_Array() + 1;
+	PivotClass *pivot = &Pivot[1];
+	PivotClass *endpivot = pivot + (NumPivots - 1);
+	PivotClass *lastAnimPivot = &Pivot[motion->Get_Num_Pivots()];
+	int next_captured = Get_First_Captured_Bone();
+
+	for (; pivot < endpivot; pivot++, nodeMotion++) {
+		PivotTransform::Multiply(pivot->Parent->Current, pivot->Base, &pivot->Current);
+
+		if (pivot < lastAnimPivot) {
+			Vector3 trans(0.0f, 0.0f, 0.0f);
+			if (nodeMotion->X != NULL) {
+				nodeMotion->X->Get_Vector(iframe, &(trans[0]));
+			}
+			if (nodeMotion->Y != NULL) {
+				nodeMotion->Y->Get_Vector(iframe, &(trans[1]));
+			}
+			if (nodeMotion->Z != NULL) {
+				nodeMotion->Z->Get_Vector(iframe, &(trans[2]));
+			}
+
+			if (ScaleFactor != 1.0f) {
+				trans *= ScaleFactor;
+			}
+			Vector3 rotated;
+			pivot->Current.Rotation.Rotate_Vector(trans, &rotated);
+			pivot->Current.Translation += rotated;
+
+			if (nodeMotion->Q != NULL) {
+				Quaternion q;
+				nodeMotion->Q->Get_Vector_As_Quat(iframe, q);
+				pivot->Current.Rotation.PostMultiply(q);
+			}
+
+			float fade = 1.0f;
+			if (nodeMotion->Fade != NULL) {
+				nodeMotion->Fade->Get_Vector(iframe, &fade);
+			}
+			pivot->Fade = fade;
+
+			const BitChannelClass *visibility = nodeMotion->Vis;
+			if (visibility != NULL) {
+				pivot->IsVisible = (visibility->Get_Bit(iframe) == 1);
+			} else {
+				pivot->IsVisible = true;
+			}
+		}
+
+		if (pivot->Index == next_captured) {
+			next_captured = Capture_Update(pivot->Index);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x001645B0 size=4715 name=?Blend_Update@HTreeClass@@QAEXABVMatrix3D@@PAVHAnimClass@@M1MM@Z evidence=N:ledger tier=B hypothesis:K
 
