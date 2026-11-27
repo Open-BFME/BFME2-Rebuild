@@ -36,7 +36,7 @@
 // Edges: left=rests-on:name+veto right=rests-on:name; proof_first=false
 // Hypothesis rules: hypothesis:cohesion
 // The GameDifficulty transfer AIPlayer::xfer calls (retail 0x00305BEA, no map name yet).
-void XferGameDifficulty(Xfer *xfer, GameDifficulty *difficulty);
+void XferGameDifficulty(Xfer *xfer, Int *difficulty);
 
 // Two bodies the linker folded away (no row of their own): AIPlayer's slot 26 points at
 // AISkirmishPlayer's identical processTeamBuilding 0x004EF4A1, and slot 15 at the identical
@@ -430,6 +430,101 @@ Object *AIPlayer::findDozer(const Coord3D *pos)
 
 
 // FUNCTION: BFME2 0x004F0DDE size=740 name=?xfer@AIPlayer@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void AIPlayer::xfer(Xfer *xfer)
+{
+	if (xfer->IsLightCRC())
+		return;
+
+	Xfer::Version version(1, 2);
+	*xfer == version;
+	XferObjectID(xfer, &m_attackedSupplyCenter);
+
+	// team build queue
+	UnsignedShort teamBuildQueueCount = 0;
+	for (DLINK_ITERATOR<TeamInQueue> buildCount = iterate_TeamBuildQueue(); !buildCount.done(); buildCount.advance())
+		teamBuildQueueCount++;
+	*xfer == teamBuildQueueCount;
+
+	TeamInQueue *teamInQueue;
+	if (xfer->IsStoring())
+	{
+		for (DLINK_ITERATOR<TeamInQueue> buildIt = iterate_TeamBuildQueue(); !buildIt.done(); buildIt.advance())
+		{
+			teamInQueue = buildIt.cur();
+			*xfer == *teamInQueue;
+		}
+	}
+	else
+	{
+		if (m_dlinkhead_TeamBuildQueue.m_head != NULL)
+			throw XferException(5, 0);
+		for (UnsignedShort i = 0; i < teamBuildQueueCount; ++i)
+		{
+			teamInQueue = new TeamInQueue;
+			prependTo_TeamBuildQueue(teamInQueue);
+			*xfer == *teamInQueue;
+		}
+		reverse_TeamBuildQueue();
+	}
+
+	// team ready queue
+	UnsignedShort teamReadyQueueCount = 0;
+	for (DLINK_ITERATOR<TeamInQueue> readyCount = iterate_TeamReadyQueue(); !readyCount.done(); readyCount.advance())
+		teamReadyQueueCount++;
+	*xfer == teamReadyQueueCount;
+
+	if (xfer->IsStoring())
+	{
+		for (DLINK_ITERATOR<TeamInQueue> readyIt = iterate_TeamReadyQueue(); !readyIt.done(); readyIt.advance())
+		{
+			teamInQueue = readyIt.cur();
+			*xfer == *teamInQueue;
+		}
+	}
+	else
+	{
+		if (m_dlinkhead_TeamReadyQueue.m_head != NULL)
+			throw XferException(5, 0);
+		for (UnsignedShort i = 0; i < teamReadyQueueCount; ++i)
+		{
+			teamInQueue = new TeamInQueue;
+			prependTo_TeamReadyQueue(teamInQueue);
+			*xfer == *teamInQueue;
+		}
+		flip();
+	}
+
+	// the owning player's index, only as a sanity check
+	Int playerIndex = m_player->getPlayerIndex();
+	*xfer == playerIndex;
+	if (playerIndex != m_player->getPlayerIndex())
+		throw XferException(5, 0);
+
+	*xfer == m_readyToBuildTeam;
+	*xfer == m_readyToBuildStructure;
+	*xfer == m_teamTimer;
+	*xfer == m_structureTimer;
+	*xfer == m_buildDelay;
+	*xfer == m_teamDelay;
+	*xfer == m_teamSeconds;
+	XferObjectID(xfer, &m_curWarehouseID);
+	*xfer == m_frameLastBuildingBuilt;
+	XferGameDifficulty(xfer, &m_difficulty);
+	*xfer == m_skillsetSelector;
+	*xfer == m_baseCenter;
+	*xfer == m_baseCenterSet;
+	*xfer == m_baseRadius;
+	for (Int i = 0; i < MAX_STRUCTURES_TO_REPAIR; ++i)
+		XferObjectID(xfer, &m_structuresToRepair[i]);
+	XferObjectID(xfer, &m_repairDozer);
+	*xfer == m_structuresInQueue;
+	*xfer == m_dozerQueuedForRepair;
+	*xfer == m_dozerIsRepairing;
+	*xfer == m_bridgeTimer;
+	*xfer == m_repairDozerOrigin;
+	if (version.m_minimum >= 2)
+		*xfer == m_supplySourceAttackCheckFrame;
+}
 
 
 // FUNCTION: BFME2 0x004F10C2 size=36 name=?includesADozer@TeamInQueue@@QAE_NXZ evidence=N:ledger tier=A

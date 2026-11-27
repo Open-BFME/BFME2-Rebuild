@@ -166,7 +166,7 @@ protected:
 	Int m_buildDelay;							// +0x20
 	Int m_teamDelay;							// +0x24
 	Int m_frameLastBuildingBuilt;				// +0x28
-	GameDifficulty m_difficulty;				// +0x2C (TheScriptEngine's global difficulty)
+	Int m_difficulty;							// +0x2C a GameDifficulty (TheScriptEngine's global difficulty); xfer passes it to XferGameDifficulty as an int *
 	Int m_skillsetSelector;						// +0x30 (constructor -1)
 	Coord3D m_baseCenter;						// +0x34
 	Bool m_baseCenterSet;						// +0x40
