@@ -4,5 +4,11 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "WW3D2/hanim.h"
 // FUNCTION: BFME2 0x001007B0 size=37 name=?Set_HAnim@HAnimComboDataClass@@QAEXPAVHAnimClass@@@Z evidence=N:ledger tier=B hypothesis:name:invented
-
+void HAnimComboDataClass::Set_HAnim(HAnimClass *motion)
+{
+	if (motion != 0) motion->Add_Ref();
+	if (HAnim != 0) HAnim->Release_Ref();
+	HAnim = motion;
+}

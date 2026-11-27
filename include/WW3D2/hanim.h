@@ -116,6 +116,7 @@ public:
 	void Copy(const HAnimComboDataClass *src);						// 0x00196220
 	void Clear();										// 0x001962B0
 	void Set_Pivot_Map(PivotMapClass *map);							// 0x00196310
+	void Set_HAnim(HAnimClass *motion);							// 0x001007B0
 
 	HAnimClass *HAnim;									// +0x00
 	float Frame;										// +0x04
