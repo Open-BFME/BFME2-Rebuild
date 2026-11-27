@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "Common/ThingFactory.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -700,6 +701,97 @@ void WorkOrder::validateFactory(Player *player)
 // FUNCTION: BFME2 0x004F418A size=500 name=?updateBridgeRepair@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F437E size=811 name=?recruitSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void AIPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recruitRadius, const Coord3D *pos)
+{
+	if (recruitRadius < 1)
+		recruitRadius = 99999.0f;
+	if (teamProto)
+	{
+		if (teamProto->getIsSingleton()) {
+			Team *singletonTeam = TheTeamFactory->findTeam(teamProto->m_ownerName, teamProto->getName());
+			if (singletonTeam && singletonTeam->hasAnyObjects(false)) {
+				AsciiString teamStr = "Unable to recruit singleton team '";
+				teamStr.concat("' because team already exists.");
+				TheScriptEngine->AppendDebugMessage(teamStr, false);
+				return;
+			}
+		}
+		// create an inactive team to place members into as they are recruited
+		Team *theTeam = TheTeamFactory->createInactiveTeam(teamProto->m_ownerName, teamProto->getName());
+		AsciiString teamName = teamProto->getName();
+		teamName.concat(" - Recruiting.");
+		TheScriptEngine->AppendDebugMessage(teamName, false);
+		const TCreateUnitsInfo *unitInfo = &teamProto->getTemplateInfo()->m_unitsInfo[0];
+		Int i;
+		Int unitsRecruited = 0;
+		for (i = 0; i < teamProto->getTemplateInfo()->m_numUnitsInfo; i++)
+		{
+			const ThingTemplate *thing = TheThingFactory->findTemplate(unitInfo[i].m_unitThingName);
+			if (thing)
+			{
+				Int count = unitInfo[i].m_maxUnits;
+				while (count > 0) {
+					Object *unit = theTeam->tryToRecruit(thing, pos ? pos : &teamProto->getTemplateInfo()->m_homeLocation,
+						recruitRadius, unitInfo[i].m_unk0x14, 0, 0);
+					if (unit)
+					{
+						unitsRecruited++;
+
+						AsciiString teamStr = "Team '";
+						teamStr.concat(theTeam->getPrototype()->getName());
+						teamStr.concat("' recruits ");
+						teamStr.concat(thing->getName());
+						teamStr.concat(" from team '");
+						teamStr.concat(unit->getTeam()->getPrototype()->getName());
+						teamStr.concat("'");
+						TheScriptEngine->AppendDebugMessage(teamStr, false);
+
+						unit->setTeam(theTeam);
+
+						AIUpdateInterface *ai = unit->getAIUpdateInterface();
+						if (ai)
+						{
+							Coord3D home;
+							theTeam->rva0039DA2A(&home);
+							if (pos == NULL) {
+								if (teamProto->getTemplateInfo()->m_hasHomeLocation)
+									home = teamProto->getTemplateInfo()->m_homeLocation;
+								ai->aiMoveToPosition(&home, CMD_FROM_AI);
+							} else {
+								ai->aiMoveToPosition(pos, CMD_FROM_AI);
+							}
+						}
+					} else {
+						break;
+					}
+					count--;
+				}
+			}
+		}
+		if (unitsRecruited > 0)
+		{
+			// We have something to build.
+			TeamInQueue *team = new TeamInQueue;
+			prependTo_TeamReadyQueue(team);
+			team->m_priorityBuild = false;
+			team->m_workOrders = NULL;
+			team->m_frameStarted = TheGameLogic->getFrame();
+			team->m_team = theTeam;
+			AsciiString finishedName = teamProto->getName();
+			finishedName.concat(" - Finished recruiting.");
+			TheScriptEngine->AppendDebugMessage(finishedName, false);
+		} else {
+			// disband
+			if (!theTeam->getPrototype()->getIsSingleton()) {
+				::delete theTeam;
+				theTeam = NULL;
+			}
+			AsciiString emptyName = teamProto->getName();
+			emptyName.concat(" - Recruited 0 units, disbanding.");
+			TheScriptEngine->AppendDebugMessage(emptyName, false);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x004F46A9 size=559 name=?queueUnits@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
 
