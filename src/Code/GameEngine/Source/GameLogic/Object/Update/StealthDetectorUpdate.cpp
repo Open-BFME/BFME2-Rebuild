@@ -4,6 +4,11 @@
 // FUNCTION: BFME2 0x004A2BF0 size=64 name=?allow@Rva004A2BF0@@QAE_NPAVObject@@@Z evidence=?:placeholder
 // FUNCTION: BFME2 0x004A2C30 size=68 name=?xfer@StealthDetectorUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x004A2C74 size=69 name=?getModuleNameKey@StealthDetectorUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType StealthDetectorUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheStealthDetectorUpdateNameKey = TheNameKeyGenerator->nameToKey("StealthDetectorUpdate");
+	return TheStealthDetectorUpdateNameKey;
+}
 // FUNCTION: BFME2 0x004A2CB9 size=116 name=??0StealthDetectorUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x004A2D49 size=30 name=?rva004A2D49@Rva004A2D49@@QAEX_N@Z evidence=?:placeholder
 // FUNCTION: BFME2 0x004A2D82 size=17 name=?buildFieldParse@StealthDetectorUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger
