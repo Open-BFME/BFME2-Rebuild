@@ -138,6 +138,8 @@ public:
 protected:
   void doTeamAvailableForRecruitment(const AsciiString &, Bool);
 protected:
+  void doResetMusicScripting(Bool);
+protected:
   void doTeamSetRecruitableFlags(const AsciiString &, Int);	// 0x003C0F09
 public:
   void doNamedApplyAttackPrioritySet(Parameter *, const AsciiString &);	// 0x003BB1FF
