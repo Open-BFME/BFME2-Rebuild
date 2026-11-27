@@ -4,7 +4,21 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented
+#include "WWMath/Matrix3D.h"
+#include "WWMath/Vector3.h"
+
 // FUNCTION: BFME2 0x000423DB size=128 name=?Set@Matrix3D@@QAEXABVVector3@@000@Z evidence=N:ledger tier=B hypothesis:name:invented
+void Matrix3D::Set(const Vector3 &x, const Vector3 &y, const Vector3 &z, const Vector3 &pos)
+{
+	Row[0].Set(x.X, y.X, z.X, pos.X);
+	Row[1].Set(x.Y, y.Y, z.Y, pos.Y);
+	Row[2].Set(x.Z, y.Z, z.Z, pos.Z);
+}
 
 // FUNCTION: BFME2 0x0004245B size=91 name=?Set@Matrix3D@@QAEXABVVector3@@@Z evidence=N:ledger tier=B hypothesis:Z
-
+void Matrix3D::Set(const Vector3 &pos)
+{
+	Row[0].Set(1.0f, 0.0f, 0.0f, pos.X);
+	Row[1].Set(0.0f, 1.0f, 0.0f, pos.Y);
+	Row[2].Set(0.0f, 0.0f, 1.0f, pos.Z);
+}

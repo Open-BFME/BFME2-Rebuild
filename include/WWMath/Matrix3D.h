@@ -81,6 +81,8 @@ public:
 	int Is_Orthogonal() const;											// 0x00712D90
 	static bool Solve_Linear_System(Matrix3D &system);					// 0x00712F30
 	void Set(const Quaternion &rot, const Vector3 &pos);				// 0x00713260
+	void Set(const Vector3 &x, const Vector3 &y, const Vector3 &z, const Vector3 &pos);	// 0x004423DB
+	void Set(const Vector3 &pos);										// 0x0044245B
 	void Get_Inverse(Matrix3D &set_inverse) const;						// 0x00713290
 	static void Multiply(const Matrix3D &a, const Matrix3D &b, Matrix3D *res);	// 0x00713540
 	void Re_Orthogonalize();											// 0x00713810
