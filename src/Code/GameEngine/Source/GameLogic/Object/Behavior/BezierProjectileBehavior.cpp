@@ -31,6 +31,7 @@
 
 #include "GameLogic/Module/BezierProjectileBehavior.h"
 #include "Common/INI.h"
+#include "Common/NameKeyGenerator.h"
 #include "Common/INI/FieldParse.h"
 #include "GameLogic/Module/BezierProjectileBehaviorModuleData.h"
 #include "GameLogic/Module/EmotionNugget.h"
@@ -42,6 +43,11 @@ const char *BezierProjectileBehavior::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x0045BFD9 size=69 name=?getModuleNameKey@BezierProjectileBehavior@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType BezierProjectileBehavior::getModuleNameKey() const
+{
+	static NameKeyType TheBezierProjectileBehaviorNameKey = TheNameKeyGenerator->nameToKey("BezierProjectileBehavior");
+	return TheBezierProjectileBehaviorNameKey;
+}
 
 // FUNCTION: BFME2 0x0045C026 size=512 name=?rva0045C026@BezierProjectileBehavior@@QAEXXZ evidence=?:placeholder
 
