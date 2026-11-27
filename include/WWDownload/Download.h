@@ -26,29 +26,7 @@ class IDownload
 class CDownload
 {
 public:
-	CDownload(IDownload *listener) :
-		Listener(listener)
-	{
-		m_Status			= DOWNLOADSTATUS_NONE;
-		m_TimeStarted		= 0;
-		m_StartPosition		= 0;
-		m_FileSize			= 0;
-		m_BytesRead			= 0;
-		m_Server[ 0 ]		= '\0';
-		m_Login[ 0 ]		= '\0';
-		m_Password[ 0 ]		= '\0';
-		m_File[ 0 ]			= '\0';
-		m_LocalFile[ 0 ]	= '\0';
-		m_RegKey[ 0 ]		= '\0';
-		m_Ftp				= new( Cftp );
-		m_TryResume = false;
-
-		m_predictions = 0;
-		for (int i=0; i<8; ++i)
-		{
-			m_predictionTimes[i] = 0;
-		}
-	}
+	CDownload(IDownload *listener);	// 0x006C9640
 	~CDownload();
 
 public:

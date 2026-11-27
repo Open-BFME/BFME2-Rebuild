@@ -19,6 +19,30 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:padding
 // FUNCTION: BFME2 0x006C9640 size=229 name=??0CDownload@@QAE@PAVIDownload@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+CDownload::CDownload(IDownload *listener) :
+	Listener(listener)
+{
+	m_Status			= DOWNLOADSTATUS_NONE;
+	m_TimeStarted		= 0;
+	m_StartPosition		= 0;
+	m_FileSize			= 0;
+	m_BytesRead			= 0;
+	m_Server[ 0 ]		= '\0';
+	m_Login[ 0 ]		= '\0';
+	m_Password[ 0 ]		= '\0';
+	m_File[ 0 ]			= '\0';
+	m_LocalFile[ 0 ]	= '\0';
+	m_RegKey[ 0 ]		= '\0';
+	m_Ftp				= new( Cftp );
+	m_TryResume = false;
+
+	m_predictions = 0;
+	for (int i=0; i<8; ++i)
+	{
+		m_predictionTimes[i] = 0;
+	}
+}
+
 // FUNCTION: BFME2 0x006C9730 size=40 name=??1CDownload@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
 CDownload::~CDownload()
 {
