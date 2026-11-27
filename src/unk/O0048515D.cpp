@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
 #include "GameLogic/Module/AnnounceBirthAndDeathBehavior.h"
 #include "Common/NameKeyGenerator.h"
+#include "GameClient/InGameUI.h"
 // FUNCTION: BFME2 0x0048515D size=6 name=?Rva0048515DGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *AnnounceBirthAndDeathBehavior::GetSnapshotName() const
 {
@@ -22,5 +23,15 @@ NameKeyType AnnounceBirthAndDeathBehavior::getModuleNameKey() const
 
 
 // FUNCTION: BFME2 0x004851AD size=26 name=?onCreate@AnnounceBirthAndDeathBehavior@@UAEXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+pointers-mixed
+void AnnounceBirthAndDeathBehavior::onCreate()
+{
+	if (TheInGameUI && getObject())
+		TheInGameUI->rva002A123F(getObject());
+}
 
 // FUNCTION: BFME2 0x004851C7 size=28 name=?onDie@AnnounceBirthAndDeathBehavior@@UAEXPBVDamageInfo@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+pointers-mixed
+void AnnounceBirthAndDeathBehavior::onDie(const DamageInfo *)
+{
+	if (TheInGameUI && getObject())
+		TheInGameUI->rva002A1261(getObject());
+}
