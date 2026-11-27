@@ -7,6 +7,9 @@
 #include "GameLogic/Module/DoCommandUpgradeModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x00255795 size=32 name=??0DoCommandUpgradeModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+DoCommandUpgradeModuleData::DoCommandUpgradeModuleData() throw()
+{
+}
 
 // FUNCTION: BFME2 0x002557B5 size=52 name=?friend_newModuleData@DoCommandUpgradeModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *DoCommandUpgradeModuleData::friend_newModuleData(INI *ini)
