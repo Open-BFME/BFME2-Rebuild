@@ -5,6 +5,11 @@
 // FUNCTION: BFME2 0x0048B067 size=253 name=??0DynamicShroudClearingRangeUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x0048B164 size=6 name=?Rva0048B164Get@@YAHXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x0048B16A size=69 name=?getModuleNameKey@DynamicShroudClearingRangeUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType DynamicShroudClearingRangeUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheDynamicShroudClearingRangeUpdateNameKey = TheNameKeyGenerator->nameToKey("DynamicShroudClearingRangeUpdate");
+	return TheDynamicShroudClearingRangeUpdateNameKey;
+}
 // FUNCTION: BFME2 0x0048B1AF size=95 name=??1DynamicShroudClearingRangeUpdate@@UAE@XZ evidence=N:ledger
 // FUNCTION: BFME2 0x0048B20E size=72 name=?createGridDecals@DynamicShroudClearingRangeUpdate@@QAEXABVRadiusDecalTemplate@@MABUCoord3D@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x0048B256 size=233 name=?rva0048B256@DynamicShroudClearingRangeUpdate@@QAEXXZ evidence=?:placeholder
