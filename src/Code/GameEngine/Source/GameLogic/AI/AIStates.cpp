@@ -45,6 +45,8 @@ extern bool BfmeAIExitDoorFlag;		// 0x00A03624: set around ExitInterface::exitOb
 #include "GameLogic/TerrainLogic.h"
 #include "GameLogic/Waypoint.h"
 #include "GameLogic/PathNode.h"
+#include "GameLogic/AIGroup.h"
+#include "Common/Region3D.h"
 // cl: /O1
 NameKeyType Rva0045EE2CGet();	// 0x0045EE2C: the StancesBehavior module name key
 Real normalizeAngle(Real angle);	// 0x00238954 (GameCommon.cpp)
@@ -2335,6 +2337,70 @@ const char *AIAttackMoveToState::GetSnapshotName() const
 
 
 // FUNCTION: BFME2 0x00345D00 size=545 name=?computeGoal@AIFollowWaypointPathState@@QAEX_N@Z evidence=N:ledger tier=A
+void AIFollowWaypointPathState::computeGoal(Bool useGroupOffsets)
+{
+	if (m_currentWaypoint == NULL)
+		return;
+
+	Object *obj = getMachine()->getOwner();
+	AIUpdateInterface *ai = obj->getAI();
+	Coord3D dest = m_currentWaypoint->m_location;
+
+	m_goalLayer = LAYER_GROUND;
+	ai->setPathExtraDistance(calcExtraPathDistance());
+
+	if (m_currentWaypoint->m_numLinks > 0)
+	{
+		if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
+			theLogicRandomLogFile->addLine("CritterDesync: setAdjustDestination(FALSE) 51");
+		m_adjustDestinations = false;
+	}
+	else
+	{
+		if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
+			theLogicRandomLogFile->addLine("CritterDesync: setAdjustDestination(TRUE) 52");
+		m_adjustDestinations = true;
+		if (obj->isKindOf(KINDOF_PROJECTILE))
+		{
+			if (ai && ai->m_curLocomotor)
+				ai->m_curLocomotor->m_flags |= (1 << Locomotor::PRECISE_Z_POS);
+		}
+	}
+
+	Coord2D groupOffset = m_groupOffset;
+	if (obj->m_formationID != 0)
+	{
+		Coord3D end = dest;
+		Coord3D start = dest;
+		start.x -= 1.0f;
+		if (m_priorWaypoint)
+		{
+			start = m_priorWaypoint->m_location;
+		}
+		else if (m_currentWaypoint->getLink(0))
+		{
+			start = end;
+			end = m_currentWaypoint->getLink(0)->m_location;
+		}
+		AIGroup::rotateOffset(&start, &end, &groupOffset);
+	}
+
+	m_goalPosition = dest;
+	m_goalPosition.x += groupOffset.x;
+	m_goalPosition.y += groupOffset.y;
+	m_goalPosition.z = TheTerrainLogic->getGroundHeight(m_goalPosition.x, m_goalPosition.y);
+
+	Region3D extent;
+	TheTerrainLogic->getMaximumPathfindExtent(&extent);
+	if (!extent.isInRegionNoZ(&m_goalPosition))
+	{
+		if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
+			theLogicRandomLogFile->addLine("CritterDesync: setAdjustDestination(FALSE) 53");
+		m_adjustDestinations = false;
+		ai->m_curLocomotor->m_flags |= 2;
+		m_appendGoalPosition = true;
+	}
+}
 
 // FUNCTION: BFME2 0x00345F70 size=6 name=?name@Rva00345F70Named@@QBEPBDXZ evidence=?:placeholder tier=A
 const char *AIAttackFollowWaypointPathState::GetSnapshotName() const
