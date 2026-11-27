@@ -61,6 +61,9 @@ public:
 
 	unsigned int Get_FVF(void) const { return FVF; }
 
+	// The vertex format a model needs: the dynamic format when it sorts, else built from its colour and UV arrays.
+	static unsigned int Define_FVF(MeshModelClass *mmc, bool enable_lighting);	// 0x00144240
+
 protected:
 	bool Render_Procedural_Material_Passes(void);				// 0x00146130
 	void Generate_Texture_Categories(Vertex_Split_Table &split_table, unsigned int vertex_offset);	// 0x00146BA0

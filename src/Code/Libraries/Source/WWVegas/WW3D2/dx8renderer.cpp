@@ -25,6 +25,7 @@
 #include "WW3D2/DX8RigidFVFCategoryContainer.h"
 #include "WW3D2/DX8SkinFVFCategoryContainer.h"
 #include "WW3D2/Vertex_Split_Table.h"
+#include "WW3D2/VertexFormats.h"
 #include "WW3D2/DX8MeshRendererClass.h"
 #include "WW3D2/WW3D.h"
 #include "WW3D2/dxwrapper.h"
@@ -197,6 +198,52 @@ void DX8TextureCategoryClass::Add_Polygon_Renderer(DX8PolygonRendererClass *rend
 }
 
 // FUNCTION: BFME2 0x00144240 size=208 name=?Define_FVF@DX8FVFCategoryContainer@@SAIPAVMeshModelClass@@_N@Z evidence=N:ledger tier=A
+unsigned int DX8FVFCategoryContainer::Define_FVF(MeshModelClass *mmc, bool enable_lighting)
+{
+	enum {
+		FVF_SPECULAR = 0x080,
+		FVF_TEX3 = 0x300,
+		FVF_TEX4 = 0x400,
+		FVF_TEX5 = 0x500,
+		FVF_TEX6 = 0x600,
+		FVF_TEX7 = 0x700,
+		FVF_TEX8 = 0x800
+	};
+
+	if (mmc->Get_Flag(MeshGeometryClass::SORT) && WW3D::Is_Sorting_Enabled()) {
+		return DX8_FVF_XYZNDUV2;
+	}
+
+	unsigned int fvf = BFME_D3DFVF_XYZ;
+
+	int tex_coord_count = mmc->Get_UV_Array_Count();
+
+	if (mmc->Get_Color_Array(0, false)) {
+		fvf |= BFME_D3DFVF_DIFFUSE;
+	}
+	if (mmc->Get_Color_Array(1, false)) {
+		fvf |= FVF_SPECULAR;
+	}
+
+	switch (tex_coord_count) {
+	default:
+	case 0:
+		break;
+	case 1: fvf |= BFME_D3DFVF_TEX1; break;
+	case 2: fvf |= BFME_D3DFVF_TEX2; break;
+	case 3: fvf |= FVF_TEX3; break;
+	case 4: fvf |= FVF_TEX4; break;
+	case 5: fvf |= FVF_TEX5; break;
+	case 6: fvf |= FVF_TEX6; break;
+	case 7: fvf |= FVF_TEX7; break;
+	case 8: fvf |= FVF_TEX8; break;
+	}
+
+	if (mmc->Needs_Vertex_Normals()) {
+		fvf |= BFME_D3DFVF_NORMAL;
+	}
+	return fvf;
+}
 
 // FUNCTION: BFME2 0x00144330 size=9 name=?Get_Vertex_Array@Vertex_Split_Table@@QBEPBVVector3@@XZ evidence=N:ledger tier=A
 const Vector3 *Vertex_Split_Table::Get_Vertex_Array(void) const

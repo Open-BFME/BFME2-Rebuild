@@ -69,6 +69,7 @@ public:
 	ShaderClass Get_Single_Shader(int pass = 0) const { return CurMatDesc->Get_Single_Shader(pass); }
 	bool Has_Material_Array(int pass = 0) const { return CurMatDesc->Has_Material_Array(pass); }
 	unsigned int *Get_Color_Array(int array, bool create = true) { return CurMatDesc->Get_Color_Array(array, create); }
+	int Get_UV_Array_Count(void) { return CurMatDesc->Get_UV_Array_Count(); }	// expanded by DX8FVFCategoryContainer::Define_FVF 0x00144240
 	Vector2 *Get_UV_Array_By_Index(int index, bool create = true) { return CurMatDesc->Get_UV_Array_By_Index(index, create); }
 	VertexMaterialClass *Peek_Material(int vidx, int pass = 0) const { return CurMatDesc->Peek_Material(vidx, pass); }
 	VertexMaterialClass *Peek_Single_Material(int pass = 0) const { return CurMatDesc->Peek_Single_Material(pass); }
