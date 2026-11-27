@@ -2,4 +2,9 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0050BB0E name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameLogic/WeaponEffects/SpawnAndFadeNugget.h"
 // FUNCTION: BFME2 0x0050BB0E size=88 name=??0SpawnAndFadeNugget@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+SpawnAndFadeNugget::SpawnAndFadeNugget()
+{
+	m_spawnOffset.zero();
+}
