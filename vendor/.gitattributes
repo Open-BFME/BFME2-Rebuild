@@ -1,0 +1,2 @@
+# The vendored releases are kept byte for byte as their archives ship them.
+stlport-4.6/** -text
