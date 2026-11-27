@@ -60,6 +60,7 @@ public:
 	void Make_UV_Array_Unique(int pass, int stage);					// 0x00171760
 	void Make_Color_Array_Unique(int array);					// 0x00171770
 	int Get_Pass_Count(void) const { return CurMatDesc->Get_Pass_Count(); }
+	void Set_Single_Shader(ShaderClass shader, int pass = 0);				// 0x00149520
 	// Forwarders through CurMatDesc (+0x94): W3DBuffBuffer's copy 0x000D204B.
 	Vector2 *Get_UV_Array(int index);							// 0x000D204B
 	// Forwarders through CurMatDesc (+0x94), expanded by MeshClass::Load_W3D 0x00149CC0.

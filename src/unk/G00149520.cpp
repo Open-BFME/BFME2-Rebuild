@@ -1,4 +1,10 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G00149520 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "WW3D2/MeshModelClass.h"
+#include "WW3D2/MeshMatDescClass.h"
 // FUNCTION: BFME2 0x00149520 size=28 name=?Set_Single_Shader@MeshModelClass@@QAEXVShaderClass@@H@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+void MeshModelClass::Set_Single_Shader(ShaderClass shader, int pass)
+{
+	CurMatDesc->Set_Single_Shader(shader, pass);
+}

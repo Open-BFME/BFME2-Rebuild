@@ -4,5 +4,13 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "Common/GameAudio.h"
+
+float LookupFocusChannelVolume(int channel);
 // FUNCTION: BFME2 0x0035D2F7 size=47 name=?regainFocus@AudioManager@@QAEXXZ evidence=N:ledger tier=B hypothesis:name:invented
+void AudioManager::regainFocus()
+{
+	for (int channel = 0; channel < 3; ++channel)
+		TheAudio->setVolume(LookupFocusChannelVolume(channel), 1 << channel);
+}
 

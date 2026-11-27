@@ -43,6 +43,7 @@ class AudioManager : public SubsystemInterface, public Snapshot
 public:
     AudioManager();
     virtual ~AudioManager();
+    void regainFocus();
     virtual void resetForViews(unsigned int viewMask) = 0; // +0x038: name: 61C87 clears requests, music stacks, per-view volumes and overrides; inferred
     virtual void stopAudio(int affect) = 0; // +0x03C: name: donor (ZH); Miles 0x00054284 stops selected audio
     virtual void pauseAudio(unsigned int affect, unsigned int views, int flags) = 0; // +0x040: name: donor (ZH); 0x000583BA sets pause masks, pauses samples/streams
