@@ -32,6 +32,9 @@ void AIStartWoTRBattleTactic::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x005AB1B4 size=79 name=??0AIStartWoTRBattleTactic@@QAE@XZ evidence=N:ledger tier=A
+AIStartWoTRBattleTactic::AIStartWoTRBattleTactic() : Rva005DCC24(AsciiString("AIStartWoTRBattleTactic"))
+{
+}
 
 // FUNCTION: BFME2 0x005AB203 size=50 name=?create@AIStartWoTRBattleTactic@@UAEPAVAITactic@@XZ evidence=N:ledger tier=A
 AITactic *AIStartWoTRBattleTactic::create()
