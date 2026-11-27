@@ -64,6 +64,17 @@ W3dTexCoordStruct *MeshLoadContextClass::Get_Texcoord_Array(void)
 }
 
 // FUNCTION: BFME2 0x00188670 size=67 name=?Disable_Backface_Culling@MeshMatDescClass@@IAEXXZ evidence=N:ledger tier=B hypothesis:K
+void MeshMatDescClass::Disable_Backface_Culling(void)
+{
+	for (int pass = 0; pass < PassCount; pass++) {
+		Shader[pass].Set_Cull_Mode(ShaderClass::CULL_MODE_DISABLE);
+		if (ShaderArray[pass]) {
+			for (int i = 0; i < ShaderArray[pass]->Get_Count(); i++) {
+				ShaderArray[pass]->Get_Array()[i].Set_Cull_Mode(ShaderClass::CULL_MODE_DISABLE);
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x001886C0 size=22 name=?Peek_Shader@MeshLoadContextClass@@AAE?AVShaderClass@@H@Z evidence=N:ledger tier=B hypothesis:K
 ShaderClass MeshLoadContextClass::Peek_Shader(int index)
