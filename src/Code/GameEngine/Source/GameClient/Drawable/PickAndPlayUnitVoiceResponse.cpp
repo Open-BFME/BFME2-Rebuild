@@ -5,6 +5,10 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K
+#include "Common/Rva004D94A5DivMovField.h"
+#include "Common/Rva004D94EEDivMovField.h"
+#include "Common/Rva004D9645SubImm32Field.h"
+#include "Common/Rva004D99F4.h"
 // FUNCTION: BFME2 0x004D93F7 size=92 name=?countsAsMoveIntoCamp@@YAEIPBUBfmePointFD@@0@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x004D9453 size=76 name=?getVictimAndEnterMessage@@YAXPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@PAPAVObject@@PAW423@PA_N@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x004D949F size=6 name=?Rva004D949FGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
@@ -14,7 +18,15 @@ int Rva004D949FGet()
 	return 0x80000000;
 }
 // FUNCTION: BFME2 0x004D94A5 size=14 name=?get@Rva004D94A5DivMovField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+int Rva004D94A5DivMovField::get() const
+{
+	return m_finish - m_start;
+}
 // FUNCTION: BFME2 0x004D94EE size=14 name=?get@Rva004D94EEDivMovField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:K
+int Rva004D94EEDivMovField::get() const
+{
+	return m_end - m_start;
+}
 
 // FUNCTION: BFME2 0x004D94FC size=61 name=?rva004D94FC@@YA_NPAVObject@@@Z evidence=?:placeholder tier=B hypothesis:K
 
@@ -23,6 +35,10 @@ int Rva004D949FGet()
 // FUNCTION: BFME2 0x004D9596 size=28 name=?rva004D9596@Rva004D9596@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x004D9645 size=9 name=?get@Rva004D9645SubImm32Field@@QBEHXZ evidence=?:placeholder tier=B hypothesis:K
+int Rva004D9645SubImm32Field::get() const
+{
+	return m_value - 0x154;
+}
 
 // FUNCTION: BFME2 0x004D968D size=45 name=?rva004D968D@Rva004D968D@@QAEXPAURva004D968DNode@@@Z evidence=?:placeholder tier=B hypothesis:K
 
@@ -41,6 +57,12 @@ int Rva004D949FGet()
 // FUNCTION: BFME2 0x004D990E size=230 name=?Rva004D990E@@YAXHPAVObject@@PAVRva004D97B0@@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x004D99F4 size=11 name=?rva004D99F4@Rva004D99F4@@QAEPAV1@XZ evidence=?:placeholder tier=B hypothesis:K
+Rva004D99F4 *Rva004D99F4::rva004D99F4()
+{
+	m_unk0x18 = 0;
+	m_unk0x1C = 0;
+	return this;
+}
 
 // FUNCTION: BFME2 0x004D9A35 size=7 name=?clear@Rva004D9A35Fields@@QAEPAU1@XZ evidence=?:placeholder tier=B hypothesis:K
 
