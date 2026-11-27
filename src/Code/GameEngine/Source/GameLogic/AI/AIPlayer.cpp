@@ -25,6 +25,7 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/Player.h"
+#include "Common/PlayerList.h"
 #include "GameLogic/Module/BodyModule.h"
 #include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/Module/DozerAIUpdate.h"
@@ -588,6 +589,55 @@ void TeamInQueue::xfer(Xfer *xfer)
 
 
 // FUNCTION: BFME2 0x004F1B8C size=400 name=?getPlayerStructureBounds@AIPlayer@@SAXPAURegion2D@@H@Z evidence=N:ledger tier=A
+void AIPlayer::getPlayerStructureBounds(Region2D *bounds, Int playerNdx)
+{
+	Bool firstObject = true;
+	Bool firstStructure = true;
+	bounds->hi.x = bounds->lo.x = bounds->hi.y = bounds->lo.y = 0;
+	Region2D objBounds;
+	objBounds.hi.x = objBounds.lo.x = objBounds.hi.y = objBounds.lo.y = 0;
+
+	Player *pPlayer = ThePlayerList->getNthPlayer(playerNdx);
+	if (pPlayer == 0)
+		return;
+	for (PlayerTeamList::const_iterator it = pPlayer->m_playerTeamPrototypes.begin(); it != pPlayer->m_playerTeamPrototypes.end(); ++it) {
+		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> objIter = team->iterate_TeamMemberList(); !objIter.done(); objIter.advance()) {
+				Object *pObj = objIter.cur();
+				if (!pObj)
+					continue;
+				if (pObj->isKindOf(KINDOF_STRUCTURE)) {
+					Coord3D pos = *pObj->getPosition();
+					if (firstObject) {
+						objBounds.lo.x = objBounds.hi.x = pos.x;
+						objBounds.lo.y = objBounds.hi.y = pos.y;
+						firstObject = false;
+					} else {
+						if (objBounds.lo.x > pos.x) objBounds.lo.x = pos.x;
+						if (objBounds.lo.y > pos.y) objBounds.lo.y = pos.y;
+						if (objBounds.hi.x < pos.x) objBounds.hi.x = pos.x;
+						if (objBounds.hi.y < pos.y) objBounds.hi.y = pos.y;
+					}
+					if (firstStructure) {
+						bounds->lo.x = bounds->hi.x = pos.x;
+						bounds->lo.y = bounds->hi.y = pos.y;
+						firstStructure = false;
+					} else {
+						if (bounds->lo.x > pos.x) bounds->lo.x = pos.x;
+						if (bounds->lo.y > pos.y) bounds->lo.y = pos.y;
+						if (bounds->hi.x < pos.x) bounds->hi.x = pos.x;
+						if (bounds->hi.y < pos.y) bounds->hi.y = pos.y;
+					}
+				}
+			}
+		}
+	}
+	if (!firstStructure)
+		*bounds = objBounds;
+}
 
 // FUNCTION: BFME2 0x004F1D38 size=811 name=?computeSuperweaponTarget@AIPlayer@@UAEXPBVSpecialPowerTemplate@@PAVCoord3D@@HM@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
