@@ -55,6 +55,46 @@ Vector3 LineSegClass::Find_Point_Closest_To(const Vector3 &pos) const
 }
 
 // FUNCTION: BFME2 0x007192A0 size=790 name=?Find_Intersection@LineSegClass@@QBE_NABV1@PAVVector3@@PAM12@Z evidence=N:ledger tier=B hypothesis:Z
+bool LineSegClass::Find_Intersection(const LineSegClass &other_line, Vector3 *p1, float *fraction1, Vector3 *p2, float *fraction2) const
+{
+	bool retval = false;
+
+	Vector3 cross1, cross2, cross3, cross4;
+
+	Vector3::Cross_Product(Dir, other_line.Dir, &cross1);
+	Vector3::Cross_Product(other_line.P0 - P0, other_line.Dir, &cross2);
+	float top1 = Vector3::Dot_Product(cross2, cross1);
+	float bottom1 = Vector3::Dot_Product(cross1, cross1);
+
+	Vector3::Cross_Product(other_line.Dir, Dir, &cross3);
+	Vector3::Cross_Product(P0 - other_line.P0, Dir, &cross4);
+	float top2 = Vector3::Dot_Product(cross4, cross3);
+	float bottom2 = Vector3::Dot_Product(cross3, cross3);
+
+	// If either of the divisors are 0, then the lines are parallel
+	if (bottom1 != 0 && bottom2 != 0) {
+		float length1 = top1 / bottom1;
+		float length2 = top2 / bottom2;
+
+		// Closest points on both lines; if they coincide, the lines intersect.
+		Vector3 offset1(Dir.X * length1, Dir.Y * length1, Dir.Z * length1);
+		Vector3 offset2(other_line.Dir.X * length2, other_line.Dir.Y * length2, other_line.Dir.Z * length2);
+		(*p1) = P0 + offset1;
+		(*p2) = other_line.P0 + offset2;
+
+		if (fraction1 != NULL) {
+			(*fraction1) = length1 / Length;
+		}
+
+		if (fraction2 != NULL) {
+			(*fraction2) = length2 / Length;
+		}
+
+		retval = true;
+	}
+
+	return retval;
+}
 
 // FUNCTION: BFME2 0x007195C0 size=363 name=?Set_Random@LineSegClass@@QAEXABVVector3@@0@Z evidence=N:ledger tier=B hypothesis:Z
 void LineSegClass::Set_Random(const Vector3 &min, const Vector3 &max)
