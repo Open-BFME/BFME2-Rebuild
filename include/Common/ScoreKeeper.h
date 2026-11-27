@@ -103,6 +103,7 @@ public:
 	void unhookAllScoredKillTrackers();	// 0x0039C09C
 	void reset(int);	// 0x0039C5FD
 	void addObjectBuilt(Object *, int);	// 0x0039CBCE
+	void addMoneySpent(const ThingTemplate *thingTemplate, Int amount);	// 0x0039BAD2: structures (+0x14 or +0x18 by the template's kind flag) or others (+0x1C), and the total at +0x1E0
 	void addObjectCaptured(const Object *obj);	// Zero Hour's; Object::onCapture 0x002966A0 calls the shared `ret 4` body 0x0047A69C (BFME 2 keeps no capture count)
 	void setEnabled(Bool enabled);		// 0x0039B780 (the ledger names the folded body W3DBridge::setEnabled; stores the flag at +0x110; LifetimeUpdate::update 0x003A4BFD)
 	void addObjectDestroyed(Object const *);	// 0x0039CDF0

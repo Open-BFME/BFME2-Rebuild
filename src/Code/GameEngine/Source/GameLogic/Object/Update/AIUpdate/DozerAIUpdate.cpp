@@ -894,6 +894,34 @@ void DozerAIUpdate::onDelete()
 }
 
 // FUNCTION: BFME2 0x00489D09 size=200 name=?destroyPhantomStructure@DozerAIUpdate@@UAEXXZ evidence=N:ledger tier=A
+void DozerAIUpdate::destroyPhantomStructure()
+{
+	if (m_phantomStructureID == INVALID_ID)
+		return;
+
+	Object *phantom = TheGameLogic->findObjectByID(m_phantomStructureID);
+	if (phantom != 0)
+	{
+		Player *player = phantom->getControllingPlayer();
+		ScoreKeeper *scoreKeeper = player->getScoreKeeper();
+		if (!m_unk0x40C)
+		{
+			Int cost = (Int)phantom->m_paidBuildCost;
+			player->getMoney()->deposit(cost, scoreKeeper, true);
+			scoreKeeper->addMoneySpent(phantom->getTemplate(), -cost);
+			scoreKeeper->addObjectBuilt(phantom, -1);
+		}
+		TheGameLogic->destroyObject(phantom);
+		TheInGameUI->removeLocalPhantomStructureID(m_phantomStructureID);
+		if (m_object != 0)
+		{
+			Player *owner = m_object->getControllingPlayer();
+			if (owner != 0)
+				owner->removePhantomStructureID(m_phantomStructureID);
+		}
+	}
+	m_phantomStructureID = INVALID_ID;
+}
 
 // FUNCTION: BFME2 0x00489DD1 size=18 name=?rva00489DD1@DozerAIUpdate@@UAEPAVObject@@XZ evidence=?:placeholder tier=A
 Object *DozerAIUpdate::getPhantomStructure()
