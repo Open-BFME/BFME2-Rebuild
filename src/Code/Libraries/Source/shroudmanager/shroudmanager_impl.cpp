@@ -12,8 +12,19 @@
 // FUNCTION: BFME2 0x0073B6B0 size=26 name=?advance@Rva0073B670Stepper@@QAEHXZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0073B6D0 size=20 name=?Rva0073B6D0NextIndex@@YAHHH@Z evidence=?:placeholder tier=B hypothesis:K
+int Rva0073B6D0NextIndex(int index, int count)
+{
+	++index;
+	return index & ((index == count) - 1);
+}
 
 // FUNCTION: BFME2 0x0073B6F0 size=14 name=?Rva0073B6F0PrevIndex@@YAHHH@Z evidence=?:placeholder tier=B hypothesis:K
+int Rva0073B6F0PrevIndex(int index, int count)
+{
+	if (index == 0)
+		index = count;
+	return --index;
+}
 
 // FUNCTION: BFME2 0x0073B750 size=140 name=?bfmeStepsEU@BfmeHostEU@@QAEHPBVBfmeShapeEU@@@Z evidence=N:ledger tier=A
 
