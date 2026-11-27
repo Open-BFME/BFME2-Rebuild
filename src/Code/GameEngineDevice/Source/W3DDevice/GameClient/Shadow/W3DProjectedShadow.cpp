@@ -103,8 +103,21 @@ void W3DDualProjectedShadow::getDecalOffset(Int index, Real *offsetX, Real *offs
 // FUNCTION: BFME2 0x00108B93 size=33 name=?Rva00108B93Make@@YA?AVRva000B3F84Pair@@PBD@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00108BB4 size=244 name=??0W3DShadowTexture@@QAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+W3DShadowTexture::W3DShadowTexture()
+{
+	m_namebuf[0] = 0;
+	m_lastLightPosition.Set(0.0f, 0.0f, 0.0f);
+	m_lastObjectOrientation[0].Set(1.0f, 0.0f, 0.0f);
+	m_lastObjectOrientation[1].Set(0.0f, 1.0f, 0.0f);
+	m_lastObjectOrientation[2].Set(0.0f, 0.0f, 1.0f);
+	m_shadowUV[0].Set(1.0f, 0.0f, 0.0f);
+	m_shadowUV[1].Set(0.0f, -1.0f, 0.0f);
+}
 
 // FUNCTION: BFME2 0x00108CC4 size=75 name=??1W3DShadowTexture@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+W3DShadowTexture::~W3DShadowTexture()
+{
+}
 
 // FUNCTION: BFME2 0x00108DBC size=108 name=?rva00108DBC@W3DProjectedShadowManager@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:cohesion
 

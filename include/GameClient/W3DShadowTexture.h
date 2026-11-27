@@ -22,6 +22,7 @@ class W3DShadowTexture : public RefCountClass, public HashableClass
 {
 public:
 	W3DShadowTexture();
+	virtual ~W3DShadowTexture();
 	virtual const char *Get_Key() { return m_namebuf; }						// 0x005C4AD5 (folded)
 
 	void setLightPosHistory(Vector3 &pos);
