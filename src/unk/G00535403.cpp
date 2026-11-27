@@ -1,10 +1,8 @@
-// cl: /O1 /EHsc /D_CRTIMP=
+// cl: /O1 /EHsc
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/AsciiString.h"
 #include "Common/UnicodeString.h"
-namespace Msvcr71 {
-	extern "C" __declspec(dllimport) __declspec(nothrow) int __cdecl isalnum(int);
-}
+#include <ctype.h>
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G00535403 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
@@ -36,7 +34,7 @@ AsciiString UnicodeStringToQuotedPrintable(UnicodeString original)
 	int i = 0;
 	while (!(src[0] == '\0' && src[1] == '\0') && i < 1021)
 	{
-		if (!Msvcr71::isalnum(*src))
+		if (!isalnum(*src))
 		{
 			dest[i++] = '_';
 			dest[i++] = intToHexDigit(((unsigned char)*src) >> 4);
@@ -47,7 +45,7 @@ AsciiString UnicodeStringToQuotedPrintable(UnicodeString original)
 			dest[i++] = *src;
 		}
 		src++;
-		if (!Msvcr71::isalnum(*src))
+		if (!isalnum(*src))
 		{
 			dest[i++] = '_';
 			dest[i++] = intToHexDigit(((unsigned char)*src) >> 4);
@@ -70,7 +68,7 @@ AsciiString AsciiStringToQuotedPrintable(AsciiString original)
 	int i = 0;
 	while (*src != '\0' && i < 1021)
 	{
-		if (!Msvcr71::isalnum(*src))
+		if (!isalnum(*src))
 		{
 			dest[i++] = '_';
 			dest[i++] = intToHexDigit(((unsigned char)*src) >> 4);
