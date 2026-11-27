@@ -24,6 +24,7 @@ public:
 	InheritUpgradeCreateModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
+	virtual ~InheritUpgradeCreateModuleData();
 
 	Real m_radius;                                         // +0x8 Radius
 	UnsignedByte m_upgrade[0x80];                          // +0xC Upgrade; unresolved: Rva0026F28BParse
