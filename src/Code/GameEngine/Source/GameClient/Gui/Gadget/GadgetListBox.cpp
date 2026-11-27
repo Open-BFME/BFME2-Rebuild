@@ -32,6 +32,11 @@ class BfmeObjEBN;
 char bfmeGoEBNb(BfmeObjEBN *);
 void computeTotalHeight(GameWindow *);
 
+static inline GadgetListBoxData *getListboxData(GameWindow *window)
+{
+	return (GadgetListBoxData *)window->winGetUserData();
+}
+
 // FUNCTION: BFME2 0x00323D86 size=23 name=?GadgetSliderGetEnabledSelectedThumbBorderColor@@YAHPAVGameWindow@@@Z evidence=N:ledger tier=B hypothesis:K
 int GadgetSliderGetEnabledSelectedThumbBorderColor(GameWindow *slider)
 {
@@ -376,7 +381,7 @@ int Rva00324807(GameWindow *listbox)
 {
 	if (!listbox)
 		return 0;
-	_ListboxData *data = (_ListboxData *)listbox->winGetUserData();
+	_ListboxData *data = getListboxData(listbox);
 	if (!data)
 		return 0;
 	return Rva00323F9C(data);
@@ -699,6 +704,49 @@ void GadgetListBoxAddMultiSelect(GameWindow *listbox)
 }
 
 // FUNCTION: BFME2 0x003251F4 size=246 name=?GadgetListBoxUpdateColumnWidths@@YAXPAVGameWindow@@@Z evidence=N:ledger tier=A
+void GadgetListBoxUpdateColumnWidths(GameWindow *listbox)
+{
+	if (listbox == 0)
+		return;
+	GadgetListBoxData *list = getListboxData(listbox);
+	if (list == 0)
+		return;
+
+	Int width, height;
+	listbox->winGetSize(&width, &height);
+	if (list->m_numColumns == 1)
+	{
+		list->m_columnWidths = new Int[1];
+		list->m_columnWidths[0] = width;
+		if (list->m_slider)
+		{
+			Int sliderWidth, sliderHeight;
+			list->m_slider->winGetSize(&sliderWidth, &sliderHeight);
+			list->m_columnWidths[0] += -2 - sliderWidth;
+		}
+	}
+	else if (list->m_columnPercent == 0)
+	{
+		GadgetListBoxSetColumnWidths(listbox, list->m_numColumns, 0);
+	}
+	else
+	{
+		if (list->m_columnWidths)
+		{
+			delete[] list->m_columnWidths;
+			list->m_columnWidths = 0;
+		}
+		list->m_columnWidths = new Int[list->m_numColumns];
+		if (list->m_slider)
+		{
+			Int sliderWidth, sliderHeight;
+			list->m_slider->winGetSize(&sliderWidth, &sliderHeight);
+			width += -2 - sliderWidth;
+		}
+		for (Int i = 0; i < list->m_numColumns; i++)
+			list->m_columnWidths[i] = list->m_columnPercent[i] * width / 100;
+	}
+}
 
 // FUNCTION: BFME2 0x003252EA size=158 name=?GadgetListBoxSetColumnWidths@@YAXPAVGameWindow@@HPAH@Z evidence=N:ledger tier=A
 void GadgetListBoxSetColumnWidths(GameWindow *listbox, int columns, int *widths)
