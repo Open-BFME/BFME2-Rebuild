@@ -14,15 +14,22 @@ class AsciiString;
 class UnicodeString;
 class GameFont;
 class Image;
+class DisplayString;
 
 // One column cell of a list box entry: 28 bytes; the justification is at +0x4.
 struct GadgetListBoxCell
 {
 	Int m_cellType;		// +0x0: 1 text, 2 image (computeTotalHeight 0x00324C61)
 	Int m_justify;		// +0x4
-	unsigned char m_gap0x8[0x4];
-	void *m_data;		// +0xC: the DisplayString of a text cell
-	unsigned char m_gap0x10[0x8];
+	Int m_color;		// +0x8
+	union
+	{
+		void *m_data;		// +0xC
+		DisplayString *m_string;	// +0xC: the DisplayString of a text cell
+		const Image *m_image;	// +0xC: the image of an image cell
+	};
+	unsigned char m_gap0x10[0x4];
+	Int m_width;		// +0x14: the width of an image cell
 	Int m_height;		// +0x18: the height of an image cell
 };
 

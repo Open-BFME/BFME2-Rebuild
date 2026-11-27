@@ -2,6 +2,7 @@
 // stlport46
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "GameClient/GameWindow.h"
+#include "Common/GlobalData.h"
 #include "GameClient/SliderData.h"
 class BfmeThingDEA;
 class BfmeThingDEB;
@@ -31,6 +32,11 @@ void Rva003249D2(GameWindow *, bool);
 class BfmeObjEBN;
 char bfmeGoEBNb(BfmeObjEBN *);
 void computeTotalHeight(GameWindow *);
+
+static inline GadgetListBoxData *getListboxData(GameWindow *window)
+{
+	return (GadgetListBoxData *)window->winGetUserData();
+}
 
 // FUNCTION: BFME2 0x00323D86 size=23 name=?GadgetSliderGetEnabledSelectedThumbBorderColor@@YAHPAVGameWindow@@@Z evidence=N:ledger tier=B hypothesis:K
 int GadgetSliderGetEnabledSelectedThumbBorderColor(GameWindow *slider)
@@ -376,7 +382,7 @@ int Rva00324807(GameWindow *listbox)
 {
 	if (!listbox)
 		return 0;
-	_ListboxData *data = (_ListboxData *)listbox->winGetUserData();
+	_ListboxData *data = getListboxData(listbox);
 	if (!data)
 		return 0;
 	return Rva00323F9C(data);
@@ -678,6 +684,44 @@ void computeTotalHeight(GameWindow *window)
 }
 
 // FUNCTION: BFME2 0x00324D84 size=270 name=?addImageEntry@@YAHPBVImage@@HHHPAVGameWindow@@HH@Z evidence=N:ledger tier=A
+int addImageEntry(const Image *image, int color, int row, int column, GameWindow *window, int width, int height)
+{
+	GadgetListBoxData *list = getListboxData(window);
+	width = TheWritableGlobalData->m_xResolution * width / 1024;
+	height = TheWritableGlobalData->m_yResolution * height / 768;
+
+	if (column >= list->m_numColumns || row >= list->m_listLength)
+		return -1;
+
+	// Adding at the bottom: take the insert position.
+	if (row == -1)
+	{
+		row = list->m_insertPos;
+		list->m_insertPos++;
+		list->m_numEntries++;
+	}
+	if (column == -1)
+		column = 0;
+
+	GadgetListBoxEntry *entry = &list->m_entries[row];
+	if (!entry->m_cells)
+	{
+		entry->m_cells = new GadgetListBoxCell[list->m_numColumns];
+		memset(entry->m_cells, 0, list->m_numColumns * sizeof(GadgetListBoxCell));
+	}
+	if (entry->m_cells[column].m_cellType == 1)
+		TheDisplayStringManager->freeDisplayString(entry->m_cells[column].m_string);
+
+	entry->m_cells[column].m_cellType = 2;
+	entry->m_cells[column].m_justify = 0;
+	entry->m_cells[column].m_image = image;
+	entry->m_cells[column].m_color = color;
+	entry->m_cells[column].m_height = height;
+	entry->m_cells[column].m_width = width;
+
+	computeTotalHeight(window);
+	return row;
+}
 
 // FUNCTION: BFME2 0x00324E92 size=775 name=?GadgetListBoxMultiInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z evidence=N:ledger tier=A
 
