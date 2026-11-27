@@ -8,6 +8,20 @@
 // FUNCTION: BFME2 0x0025F406 size=589 name=?ClipLine2D@@YA_NPAUICoord2D@@000PAUIRegion2D@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0025F653 size=274 name=?IntersectLine2D@@YA_NPBVCoord2D@@000PAV1@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0025F765 size=89 name=?PointInsideArea2D@@YA_NPBVCoord2D@@0H@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+Bool IntersectLine2D(const Coord2D *a, const Coord2D *b, const Coord2D *c, const Coord2D *d, Coord2D *intersection);
+
+Bool PointInsideArea2D(const Coord2D *point, const Coord2D *area, Int count)
+{
+	const Coord2D farPoint = { 1000000.0f, 1000000.0f };
+	Int intersections = 0;
+	for (Int i = 0; i < count; ++i) {
+		if (IntersectLine2D(point, &farPoint, &area[i], &area[(i + 1) % count], NULL)) {
+			++intersections;
+		}
+	}
+	return intersections % 2 == 1;
+}
+
 // FUNCTION: BFME2 0x0025F7BE size=58 name=?Coord3DInsideRect2D@@YA_NPBVCoord3D@@PBVCoord2D@@1@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:mm1-gap-unit
 Bool Coord3DInsideRect2D(const Coord3D *inputPoint, const Coord2D *tl, const Coord2D *br)
 {
