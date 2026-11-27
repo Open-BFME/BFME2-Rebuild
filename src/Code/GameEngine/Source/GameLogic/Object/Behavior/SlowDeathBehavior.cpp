@@ -17,6 +17,11 @@
 #include "GameClient/FXListStore.h"
 #include "GameLogic/ObjectCreationListStore.h"
 #include "GameLogic/WeaponStore.h"
+#include "Common/RandomValue.h"
+#include "Common/GameAudio.h"
+#include "Common/AudioEventRTS.h"
+#include "Common/OpaqueRefElement4.h"
+#include "GameLogic/FXList.h"
 #include "Common/AsciiString.h"
 #include "Common/INIException.h"
 #include "Common/BitFlags.h"
@@ -158,6 +163,53 @@ ModelConditionFlags ModelConditionFlags::complement() const
 }
 
 // FUNCTION: BFME2 0x0045D97A size=401 name=?doPhaseStuff@SlowDeathBehavior@@IAEXW4SlowDeathPhaseType@@@Z evidence=N:ledger
+void SlowDeathBehavior::doPhaseStuff(SlowDeathPhaseType sdphase)
+{
+	const SlowDeathBehaviorModuleData *d = (const SlowDeathBehaviorModuleData *)getModuleData();
+	Int idx, listSize;
+
+	if (!d->m_hasLists)
+		return;
+
+	listSize = d->m_fx[sdphase].size();
+	if (listSize > 0)
+	{
+		idx = GetGameClientRandomValue(0, listSize - 1, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Behavior\\SlowDeathBehavior.cpp", 0x213);
+		const FXList *fxl = d->m_fx[sdphase][idx];
+		FXList::doFXObj(fxl, getObject(), NULL);
+	}
+
+	listSize = d->m_ocl[sdphase].size();
+	if (listSize > 0)
+	{
+		idx = GetGameLogicRandomValue(0, listSize - 1, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Behavior\\SlowDeathBehavior.cpp", 0x21D);
+		const ObjectCreationList *ocl = d->m_ocl[sdphase][idx];
+		if (ocl)
+			const_cast<ObjectCreationList *>(ocl)->create(getObject(), 0, 0);
+	}
+
+	listSize = d->m_weapons[sdphase].size();
+	if (listSize > 0)
+	{
+		idx = GetGameLogicRandomValue(0, listSize - 1, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Behavior\\SlowDeathBehavior.cpp", 0x227);
+		const WeaponTemplate *wt = d->m_weapons[sdphase][idx];
+		if (wt)
+			TheWeaponStore->createAndFireTempWeapon(wt, getObject(), getObject()->getPosition());
+	}
+
+	listSize = d->m_sounds[sdphase].size();
+	if (listSize > 0)
+	{
+		idx = GetGameClientRandomValue(0, listSize - 1, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Behavior\\SlowDeathBehavior.cpp", 0x234);
+		OpaqueRefElement4 sound(reinterpret_cast<const OpaqueRefElement4 &>(d->m_sounds[sdphase][idx]));
+		if (sound.referent && TheAudio)
+		{
+			AudioEventRTS event(sound, getObject()->getID());
+			TheAudio->addAudioEvent(&event);
+		}
+	}
+}
+
 
 // FUNCTION: BFME2 0x0045DB0B size=858 name=?update@SlowDeathBehavior@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
 

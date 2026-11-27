@@ -83,6 +83,14 @@ static const char *TheSlowDeathPhaseNames[] =
 };
 #endif
 
+enum SlowDeathPhaseType
+{
+	SDPHASE_INITIAL = 0,
+	SDPHASE_MIDPOINT,
+	SDPHASE_FINAL,
+	SDPHASE_HIT_GROUND
+};
+
 class Thing;
 class ModuleData;
 class Xfer;
@@ -110,6 +118,7 @@ public:
 protected:
 	virtual const char *GetSnapshotName() const;
 	virtual void xfer(Xfer *xfer);
+	void doPhaseStuff(SlowDeathPhaseType sdphase);	// 0x0045D97A
 
 public:
 	UnsignedInt m_unk0x28;                         // +0x28; xfer UnsignedInt
