@@ -7,6 +7,9 @@
 #include "GameLogic/Module/AttributeModifierUpgradeModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x002557E9 size=25 name=??0AttributeModifierUpgradeModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+AttributeModifierUpgradeModuleData::AttributeModifierUpgradeModuleData() throw()
+{
+}
 
 // FUNCTION: BFME2 0x00255802 size=52 name=?friend_newModuleData@AttributeModifierUpgradeModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *AttributeModifierUpgradeModuleData::friend_newModuleData(INI *ini)
