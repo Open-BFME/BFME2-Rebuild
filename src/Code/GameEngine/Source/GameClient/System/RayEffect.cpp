@@ -85,4 +85,8 @@ void RayEffectSystem::init(void)
 }
 
 // FUNCTION: BFME2 0x002CEE96 size=80 name=??0RayEffectSystem@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
+RayEffectSystem::RayEffectSystem(void)
+{
+	init();
+}
 
