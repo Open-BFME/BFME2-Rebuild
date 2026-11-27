@@ -1729,6 +1729,67 @@ Bool ScriptConditions::evaluateSkirmishNamedAreaExists(Parameter *pPlayerParm, P
 }
 
 // FUNCTION: BFME2 0x003E782D size=386 name=?evaluateSkirmishPlayerHasUnitsInArea@ScriptConditions@@IAE_NPAVCondition@@PAVParameter@@1@Z evidence=N:ledger
+Bool ScriptConditions::evaluateSkirmishPlayerHasUnitsInArea(Condition *pCondition, Parameter *pSkirmishPlayerParm, Parameter *pTriggerParm)
+{
+	PolygonTrigger *trigger = TheScriptEngine->getQualifiedTriggerAreaByName(pTriggerParm->getString());
+	if (!trigger)
+		return false;
+	if (pCondition->getCustomData() != 0 &&
+	    TheScriptEngine->m_frameObjectCountChanged <= pCondition->getCustomFrame() &&
+	    TheScriptEngine->m_unk0x1A160 <= pCondition->getCustomFrame())
+	{
+		if (pCondition->getCustomData() == -1)
+			return false;
+		if (pCondition->getCustomData() == 1)
+			return true;
+	}
+	Int mask = TheScriptEngine->rva00357B82(pSkirmishPlayerParm);
+	while (mask)
+	{
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (!player)
+			continue;
+		Int count = 0;
+		typedef _STL::list<TeamPrototype *> ProtoList;
+		for (ProtoList::iterator it = player->m_playerTeamPrototypes.begin(); it != player->m_playerTeamPrototypes.end(); ++it)
+		{
+			TeamPrototype *proto = *it;
+			for (DLINK_ITERATOR<Team> teamIter = proto->iterate_TeamInstanceList(); !teamIter.done(); teamIter.advance())
+			{
+				Team *team = teamIter.cur();
+				if (!team)
+					continue;
+				for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance())
+				{
+					Object *obj = iter.cur();
+					if (obj->getTemplate()->isKindOf(KINDOF_INERT))
+						continue;
+					if (obj->getTemplate()->isKindOf(KINDOF_MOVE_ONLY))
+						continue;
+					if (obj->getTemplate()->isKindOf(KINDOF_TAINT))
+						continue;
+					if (obj->getTemplate()->isKindOf(KINDOF_TAINTEFFECT))
+						continue;
+					if (!obj->isInside(trigger))
+						continue;
+					if (obj->isEffectivelyDead())
+						continue;
+					if (obj->getTemplate()->isKindOf(KINDOF_PROJECTILE))
+						continue;
+					count++;
+				}
+			}
+		}
+		pCondition->setCustomFrame(TheScriptEngine->m_frameObjectCountChanged);
+		if (count > 0)
+		{
+			pCondition->setCustomData(1);
+			return true;
+		}
+	}
+	pCondition->setCustomData(-1);
+	return false;
+}
 
 // FUNCTION: BFME2 0x003E79AF size=70 name=?evaluateSkirmishPlayerIsOutsideArea@ScriptConditions@@IAE_NPAVCondition@@PAVParameter@@1@Z evidence=N:ledger
 Bool ScriptConditions::evaluateSkirmishPlayerIsOutsideArea(Condition *pCondition, Parameter *pSkirmishPlayerParm, Parameter *pTriggerParm)
