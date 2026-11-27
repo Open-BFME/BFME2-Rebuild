@@ -1,5 +1,7 @@
 // cl: /O1
 #include "GameLogic/SkirmishAI/AITactic.h"
+#include "GameLogic/SkirmishAI/SkirmishAIManager.h"
+#include "GameLogic/GameLogic.h"
 #include "Common/RandomValue.h"
 #include "Common/Team.h"
 #include "GameLogic/AIGroup.h"
@@ -79,6 +81,15 @@ void AITactic::cohereTeams()
 // FUNCTION: BFME2 0x004ED10F size=37 name=?Rva004ED10FFill@@YAPAVModelNodeClass@HLodClass@@PAV12@IPBV12@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x004ED134 size=53 name=?isTeamIdle@AITactic@@QAE_NH@Z evidence=N:ledger tier=A
+Bool AITactic::isTeamIdle(Int teamIndex)
+{
+	const AITacticTeamRecord *record = rva004ECF05(teamIndex);
+	if (record == NULL)
+		return true;
+
+	const Real idleFrames = BfmeLogicFramesPerSecond * TheSkirmishAIManager->m_teamTimeUntilConsideredIdle;
+	return static_cast<Real>(record->m_value) >= idleFrames;
+}
 
 // FUNCTION: BFME2 0x004ED169 size=56 name=?rva004ED169@AITactic@@QAEEXZ evidence=?:placeholder tier=A
 unsigned char AITactic::rva004ED169()
