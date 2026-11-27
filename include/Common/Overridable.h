@@ -21,6 +21,9 @@ class Overridable
 public:
 	Overridable() : m_nextOverride(0), m_isOverride(false), m_reloadState(-1) {}
 	virtual ~Overridable();											// 0x001E3624
+	// Out of line and empty: derived assignments call it first and never copy the chain
+	// fields (+4/+8/+0xC); retail's shared copy is 0x001FD28E (`mov eax,ecx; ret 4`).
+	Overridable &operator=(const Overridable &that);					// 0x001FD28E
 
 	// Zero Hour's inline recursion; retail inlines the +4 test at call sites and calls
 	// the out-of-line loop below for the rest.

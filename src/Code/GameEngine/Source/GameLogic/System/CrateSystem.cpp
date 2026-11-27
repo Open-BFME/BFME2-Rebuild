@@ -8,6 +8,11 @@
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unknown-rows right=unknown-rows
 #include "GameLogic/CrateSystem.h"
+#include "Common/INI.h"
+
+// The override-copy guard byte: written around every override copy, never
+// read; the map still names it by address.
+extern unsigned char g_00E01EA8;
 // FUNCTION: BFME2 0x0035C959 size=6 name=?Rva0035C959Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 int Rva0035C959Get()
 {
@@ -76,15 +81,94 @@ CrateSystem::~CrateSystem()
 }
 
 // FUNCTION: BFME2 0x0035CC36 size=148 name=??0CrateTemplate@@QAE@XZ evidence=N:ledger
+CrateTemplate::CrateTemplate()
+{
+	m_name.set("");
+	m_creationChance = 0;
+	m_killedByTypeKindof.clear();
+	m_killerScience = SCIENCE_INVALID;
+	m_veterancyLevel = 5;
+	m_possibleCrates.clear();
+	m_isOwnedByMaker = false;
+}
 
 // FUNCTION: BFME2 0x0035CCCA size=89 name=??1CrateTemplate@@MAE@XZ evidence=N:ledger
+CrateTemplate::~CrateTemplate()
+{
+	m_possibleCrates.clear();
+}
 
 // FUNCTION: BFME2 0x0035CD23 size=188 name=?parseCrateCreationEntry@CrateTemplate@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035CE52 size=84 name=??4CrateTemplate@@QAEAAV0@ABV0@@Z evidence=N:ledger
+CrateTemplate &CrateTemplate::operator=(const CrateTemplate &that)
+{
+	Overridable::operator=(that);
+	m_name = that.m_name;
+	m_creationChance = that.m_creationChance;
+	m_veterancyLevel = that.m_veterancyLevel;
+	m_killedByTypeKindof = that.m_killedByTypeKindof;
+	m_killerScience = that.m_killerScience;
+	m_possibleCrates = that.m_possibleCrates;
+	m_isOwnedByMaker = that.m_isOwnedByMaker;
+	return *this;
+}
 
 // FUNCTION: BFME2 0x0035CEA6 size=106 name=?newCrateTemplateOverride@CrateSystem@@QAEPAVCrateTemplate@@PAV2@@Z evidence=N:ledger
+CrateTemplate *CrateSystem::newCrateTemplateOverride(CrateTemplate *crateToOverride)
+{
+	if (crateToOverride == NULL)
+		return NULL;
+
+	CrateTemplate *newOverride = new CrateTemplate;
+	g_00E01EA8 = 1;
+	*newOverride = *crateToOverride;
+	g_00E01EA8 = 0;
+
+	newOverride->markAsOverride();
+	crateToOverride->setNextOverride(newOverride);
+	return newOverride;
+}
 
 // FUNCTION: BFME2 0x0035CF2C size=190 name=?newCrateTemplate@CrateSystem@@QAEPAVCrateTemplate@@VAsciiString@@@Z evidence=N:ledger
+CrateTemplate *CrateSystem::newCrateTemplate(AsciiString name)
+{
+	if (name.isEmpty())
+		return NULL;
+
+	CrateTemplate *ct = new CrateTemplate;
+
+	// The default template, when present, seeds the new one.
+	const CrateTemplate *defaultCT = friend_findCrateTemplate(AsciiString("DefaultCrate"));
+	if (defaultCT)
+	{
+		g_00E01EA8 = 1;
+		*ct = *defaultCT;
+		g_00E01EA8 = 0;
+	}
+
+	ct->setName(name);
+	m_crateTemplateVector.push_back(ct);
+	return ct;
+}
 
 // FUNCTION: BFME2 0x0035CFEA size=173 name=?parseCrateTemplateDefinition@CrateSystem@@SAXPAVINI@@@Z evidence=N:ledger
+void CrateSystem::parseCrateTemplateDefinition(INI *ini)
+{
+	AsciiString name;
+	name.set(ini->getNextToken());
+
+	CrateTemplate *crateTemplate = TheCrateSystem->friend_findCrateTemplate(name);
+	if (crateTemplate == NULL)
+	{
+		crateTemplate = TheCrateSystem->newCrateTemplate(name);
+		if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES)
+			crateTemplate->markAsOverride();
+	}
+	else if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES || ini->getLoadType() == 4)
+	{
+		crateTemplate = TheCrateSystem->newCrateTemplateOverride(crateTemplate);
+	}
+
+	ini->initFromINI(crateTemplate, CrateTemplate::TheCrateTemplateFieldParseTable);
+}
