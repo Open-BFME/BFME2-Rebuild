@@ -3,6 +3,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <list>
 #include <new>
+#include <stddef.h>
 #include "Common/AsciiString.h"
 #include "Common/Coord2D.h"
 #include "Common/ICoord2D.h"
@@ -142,7 +143,25 @@ void ControlBarScheme::drawBackground(Coord2D multi, ICoord2D offset)
 	}
 }
 
+
+static const char *const AnimTypeNames[] = { "SLIDE_RIGHT", NULL };
+
 // FUNCTION: BFME2 0x0031FA40 size=78 name=?Rva0031FA40Create@@YAXPAVINI@@PAURva0031FA40Out@@@Z evidence=?:placeholder
+void ParseControlBarSchemeAnimatingPartImage(INI *ini, ControlBarSchemeAnimation *animation)
+{
+	static const FieldParse imageFieldParse[] =
+	{
+		{ "Position", INI::parseICoord2D, NULL, offsetof(ControlBarSchemeImage, m_position) },
+		{ "Size", INI::parseICoord2D, NULL, offsetof(ControlBarSchemeImage, m_size) },
+		{ "ImageName", INI::parseMappedImage, NULL, offsetof(ControlBarSchemeImage, m_image) },
+		{ "Layer", INI::parseInt, NULL, offsetof(ControlBarSchemeImage, m_layer) },
+		{ NULL, NULL, NULL, 0 }
+	};
+
+	ControlBarSchemeImage *schemeImage = new ControlBarSchemeImage;
+	ini->initFromINI(schemeImage, imageFieldParse);
+	animation->m_animImage = schemeImage;
+}
 
 // FUNCTION: BFME2 0x0031FA8E size=12 name=?rva0031FA8E@Rva0031FA8E@@QAEXXZ evidence=?:placeholder
 void ControlBarSchemeManager::update()
@@ -490,8 +509,40 @@ ControlBarSchemeManager::ControlBarSchemeManager()
 }
 
 // FUNCTION: BFME2 0x00320158 size=81 name=?Rva00320158Parse@@YAXPAVINI@@PAVRva003200BC@@@Z evidence=?:placeholder
+void ParseControlBarSchemeImagePart(INI *ini, ControlBarScheme *scheme)
+{
+	static const FieldParse imageFieldParse[] =
+	{
+		{ "Position", INI::parseICoord2D, NULL, offsetof(ControlBarSchemeImage, m_position) },
+		{ "Size", INI::parseICoord2D, NULL, offsetof(ControlBarSchemeImage, m_size) },
+		{ "ImageName", INI::parseMappedImage, NULL, offsetof(ControlBarSchemeImage, m_image) },
+		{ "Layer", INI::parseInt, NULL, offsetof(ControlBarSchemeImage, m_layer) },
+		{ NULL, NULL, NULL, 0 }
+	};
+
+	ControlBarSchemeImage *schemeImage = new ControlBarSchemeImage;
+	ini->initFromINI(schemeImage, imageFieldParse);
+	scheme->addImage(schemeImage);
+}
 
 // FUNCTION: BFME2 0x003201A9 size=92 name=?Rva003201A9Parse@@YAXPAVINI@@PAX@Z evidence=?:placeholder
+void ParseControlBarSchemeAnimatingPart(INI *ini, ControlBarScheme *scheme)
+{
+	static const FieldParse animationFieldParse[] =
+	{
+		{ "Name", INI::parseAsciiString, NULL, offsetof(ControlBarSchemeAnimation, m_name) },
+		{ "Animation", INI::parseLookupList, AnimTypeNames, offsetof(ControlBarSchemeAnimation, m_animType) },
+		{ "Duration", INI::parseDurationUnsignedInt, NULL, offsetof(ControlBarSchemeAnimation, m_animDuration) },
+		{ "FinalPos", INI::parseICoord2D, NULL, offsetof(ControlBarSchemeAnimation, m_finalPos) },
+		{ "ImagePart", (INIFieldParseProc)ParseControlBarSchemeAnimatingPartImage, NULL, 0 },
+		{ NULL, NULL, NULL, 0 }
+	};
+
+	ControlBarSchemeAnimation *schemeAnim = new ControlBarSchemeAnimation;
+	ini->initFromINI(schemeAnim, animationFieldParse);
+	scheme->addAnimation(schemeAnim);
+	scheme->addImage(schemeAnim->m_animImage);
+}
 
 // FUNCTION: BFME2 0x00320205 size=140 name=?init@ControlBarSchemeManager@@QAEXXZ evidence=N:ledger
 void ControlBarSchemeManager::init()
