@@ -772,3 +772,154 @@ AptValue *AptDate::objectMemberLookup(AptValue *const self, const EAStringC *con
 
 
 // FUNCTION: BFME2 0x006F64D0 size=782 name=?CleanNativeFunctions@AptDate@@SAXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+void AptDate::CleanNativeFunctions()
+{
+    if (gapDateMethodValues[0]) {
+        gapDateMethodValues[0]->Release();
+        gapDateMethodValues[0] = 0;
+    }
+    if (gapDateMethodValues[1]) {
+        gapDateMethodValues[1]->Release();
+        gapDateMethodValues[1] = 0;
+    }
+    if (gapDateMethodValues[2]) {
+        gapDateMethodValues[2]->Release();
+        gapDateMethodValues[2] = 0;
+    }
+    if (gapDateMethodValues[3]) {
+        gapDateMethodValues[3]->Release();
+        gapDateMethodValues[3] = 0;
+    }
+    if (gapDateMethodValues[4]) {
+        gapDateMethodValues[4]->Release();
+        gapDateMethodValues[4] = 0;
+    }
+    if (gapDateMethodValues[5]) {
+        gapDateMethodValues[5]->Release();
+        gapDateMethodValues[5] = 0;
+    }
+    if (gapDateMethodValues[6]) {
+        gapDateMethodValues[6]->Release();
+        gapDateMethodValues[6] = 0;
+    }
+    if (gapDateMethodValues[7]) {
+        gapDateMethodValues[7]->Release();
+        gapDateMethodValues[7] = 0;
+    }
+    if (gapDateMethodValues[8]) {
+        gapDateMethodValues[8]->Release();
+        gapDateMethodValues[8] = 0;
+    }
+    if (gapDateMethodValues[9]) {
+        gapDateMethodValues[9]->Release();
+        gapDateMethodValues[9] = 0;
+    }
+    if (gapDateMethodValues[10]) {
+        gapDateMethodValues[10]->Release();
+        gapDateMethodValues[10] = 0;
+    }
+    if (gapDateMethodValues[11]) {
+        gapDateMethodValues[11]->Release();
+        gapDateMethodValues[11] = 0;
+    }
+    if (gapDateMethodValues[12]) {
+        gapDateMethodValues[12]->Release();
+        gapDateMethodValues[12] = 0;
+    }
+    if (gapDateMethodValues[13]) {
+        gapDateMethodValues[13]->Release();
+        gapDateMethodValues[13] = 0;
+    }
+    if (gapDateMethodValues[14]) {
+        gapDateMethodValues[14]->Release();
+        gapDateMethodValues[14] = 0;
+    }
+    if (gapDateMethodValues[15]) {
+        gapDateMethodValues[15]->Release();
+        gapDateMethodValues[15] = 0;
+    }
+    if (gapDateMethodValues[16]) {
+        gapDateMethodValues[16]->Release();
+        gapDateMethodValues[16] = 0;
+    }
+    if (gapDateMethodValues[17]) {
+        gapDateMethodValues[17]->Release();
+        gapDateMethodValues[17] = 0;
+    }
+    if (gapDateMethodValues[18]) {
+        gapDateMethodValues[18]->Release();
+        gapDateMethodValues[18] = 0;
+    }
+    if (gapDateMethodValues[19]) {
+        gapDateMethodValues[19]->Release();
+        gapDateMethodValues[19] = 0;
+    }
+    if (gapDateMethodValues[20]) {
+        gapDateMethodValues[20]->Release();
+        gapDateMethodValues[20] = 0;
+    }
+    if (gapDateMethodValues[21]) {
+        gapDateMethodValues[21]->Release();
+        gapDateMethodValues[21] = 0;
+    }
+    if (gapDateMethodValues[22]) {
+        gapDateMethodValues[22]->Release();
+        gapDateMethodValues[22] = 0;
+    }
+    if (gapDateMethodValues[23]) {
+        gapDateMethodValues[23]->Release();
+        gapDateMethodValues[23] = 0;
+    }
+    if (gapDateMethodValues[24]) {
+        gapDateMethodValues[24]->Release();
+        gapDateMethodValues[24] = 0;
+    }
+    if (gapDateMethodValues[25]) {
+        gapDateMethodValues[25]->Release();
+        gapDateMethodValues[25] = 0;
+    }
+    if (gapDateMethodValues[26]) {
+        gapDateMethodValues[26]->Release();
+        gapDateMethodValues[26] = 0;
+    }
+    if (gapDateMethodValues[27]) {
+        gapDateMethodValues[27]->Release();
+        gapDateMethodValues[27] = 0;
+    }
+    if (gapDateMethodValues[28]) {
+        gapDateMethodValues[28]->Release();
+        gapDateMethodValues[28] = 0;
+    }
+    if (gapDateMethodValues[29]) {
+        gapDateMethodValues[29]->Release();
+        gapDateMethodValues[29] = 0;
+    }
+    if (gapDateMethodValues[30]) {
+        gapDateMethodValues[30]->Release();
+        gapDateMethodValues[30] = 0;
+    }
+    if (gapDateMethodValues[31]) {
+        gapDateMethodValues[31]->Release();
+        gapDateMethodValues[31] = 0;
+    }
+    if (gapDateMethodValues[32]) {
+        gapDateMethodValues[32]->Release();
+        gapDateMethodValues[32] = 0;
+    }
+    if (gapDateMethodValues[33]) {
+        gapDateMethodValues[33]->Release();
+        gapDateMethodValues[33] = 0;
+    }
+    if (gapDateMethodValues[34]) {
+        gapDateMethodValues[34]->Release();
+        gapDateMethodValues[34] = 0;
+    }
+    if (gapDateMethodValues[35]) {
+        gapDateMethodValues[35]->Release();
+        gapDateMethodValues[35] = 0;
+    }
+    if (gapDateMethodValues[36]) {
+        gapDateMethodValues[36]->Release();
+        gapDateMethodValues[36] = 0;
+    }
+}
