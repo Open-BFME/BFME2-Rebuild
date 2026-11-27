@@ -4,5 +4,10 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
-// FUNCTION: BFME2 0x002DABF7 size=7 name=?Get_Additional_Model_Count@HLodClass@@QBEHXZ evidence=N:ledger tier=B hypothesis:name:invented
+#include "WW3D2/HLodClass.h"
 
+// FUNCTION: BFME2 0x002DABF7 size=7 name=?Get_Additional_Model_Count@HLodClass@@QBEHXZ evidence=N:ledger tier=B hypothesis:name:invented
+int HLodClass::Get_Additional_Model_Count(void) const
+{
+	return AdditionalModels.Count();
+}

@@ -113,6 +113,7 @@ public:
 	virtual void Set_Position(const Vector3 &v);						// 22: 0x0019B760
 	virtual void Notify_Added(SceneClass *scene);						// 26: 0x0019CA80
 	virtual void Notify_Removed(SceneClass *scene);						// 27: 0x0019CB00
+	int Get_Additional_Model_Count(void) const;
 	virtual int Get_Num_Sub_Objects(void) const;						// 28: 0x0019CB90
 	virtual int _bfme_ro_v28(void) const;							// 29: 0x0019CBA0 (models over all levels)
 	virtual RenderObjClass *Get_Sub_Object(int index) const;				// 30: 0x0019CBC0
