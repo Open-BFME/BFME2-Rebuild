@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "GameLogic/AIPathfind.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -698,6 +699,91 @@ void WorkOrder::validateFactory(Player *player)
 // FUNCTION: BFME2 0x004F3DB1 size=985 name=?selectTeamToReinforce@AIPlayer@@MAE_NH@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F418A size=500 name=?updateBridgeRepair@AIPlayer@@IAEXXZ evidence=N:ledger tier=A
+void AIPlayer::updateBridgeRepair()
+{
+	if (m_structuresInQueue == 0)
+		return;
+	// Check once a second.
+	m_bridgeTimer--;
+	if (m_bridgeTimer > 0)
+		return;
+	m_bridgeTimer = BfmeLogicFramesPerSecond;
+	Object *bridgeObj = NULL;
+	while (bridgeObj == NULL && m_structuresInQueue > 0) {
+		bridgeObj = TheGameLogic->findObjectByID(m_structuresToRepair[0]);
+		if (bridgeObj == NULL) {
+			Int i;
+			for (i = 0; i < m_structuresInQueue - 1; i++) {
+				m_structuresToRepair[i] = m_structuresToRepair[i + 1];
+			}
+			m_structuresInQueue--;
+		}
+	}
+	if (m_structuresInQueue == 0)
+		return;
+
+	// Got a bridge to repair.
+	Object *dozer = NULL;
+	Coord3D bridgePos = *bridgeObj->getPosition();
+	BodyDamageType bridgeState = bridgeObj->getBodyModule()->getDamageState();
+	if (m_repairDozer == INVALID_ID) {
+		m_dozerIsRepairing = false;
+		// Need a dozer.
+		if (m_dozerQueuedForRepair)
+			return;
+		dozer = findDozer(&bridgePos);
+		if (dozer) {
+			m_repairDozer = dozer->getID();
+			m_repairDozerOrigin = *dozer->getPosition();
+			dozer->getAIUpdateInterface()->rva0036F19B(bridgeObj, CMD_FROM_AI);
+			m_dozerIsRepairing = true;
+			return;
+		}
+		queueDozer();
+		m_dozerQueuedForRepair = true;
+		return;
+	}
+
+	dozer = TheGameLogic->findObjectByID(m_repairDozer);
+	if (dozer == NULL) {
+		m_repairDozer = INVALID_ID;
+		m_bridgeTimer = 0;
+		return;
+	}
+
+	DozerAIInterface *dozerAI = dozer->getAIUpdateInterface()->getDozerAIInterface();
+	if (dozerAI == NULL)
+		return;
+	if (m_dozerIsRepairing) {
+		if (!dozerAI->isAnyTaskPending()) {
+			// should be done repairing.
+			if (bridgeState == BODY_PRISTINE) {
+				Int i;
+				for (i = 0; i < m_structuresInQueue - 1; i++) {
+					m_structuresToRepair[i] = m_structuresToRepair[i + 1];
+				}
+				m_structuresInQueue--;
+				m_dozerIsRepairing = false;
+				if (m_structuresInQueue == 0) {
+					// Go home.
+					Coord3D pos = m_baseCenter;
+					if (!m_baseCenterSet) {
+						pos = m_repairDozerOrigin;
+					}
+					AIUpdateInterface *ai = dozer->getAIUpdateInterface();
+					TheAI->pathfinder()->adjustToPossibleDestination(dozer, ai->m_locomotorSet, &pos);
+					dozer->getAIUpdateInterface()->aiMoveToPosition(&pos, CMD_FROM_AI);
+					return;
+				}
+			}
+		} else {
+			// dozer should be working on the bridge.
+			return;
+		}
+	}
+	dozer->getAIUpdateInterface()->rva0036F19B(bridgeObj, CMD_FROM_AI);
+	m_dozerIsRepairing = true;
+}
 
 // FUNCTION: BFME2 0x004F437E size=811 name=?recruitSpecificAITeam@AIPlayer@@UAEXPAVTeamPrototype@@MPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
