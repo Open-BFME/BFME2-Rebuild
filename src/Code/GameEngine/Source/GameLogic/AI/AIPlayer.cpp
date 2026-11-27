@@ -1,6 +1,7 @@
 // cl: /O1
 // Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/KindOf.h"
+#include "Common/ThingFactory.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/TeamInQueue.h"
 #include "Common/Team.h"
@@ -470,6 +471,63 @@ const char *WorkOrder::GetSnapshotName() const
 // FUNCTION: BFME2 0x004F1256 size=386 name=?getPlayerSuperweaponValue@AIPlayer@@KAHPAVCoord3D@@HM@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x004F13D8 size=398 name=?rva004F13D8@AIPlayer@@IAE_NPAVTeamPrototype@@@Z evidence=?:placeholder tier=A
+Bool AIPlayer::rva004F13D8(TeamPrototype *proto)
+{
+	Bool possible = true;
+	Real cost = 0.0f;
+	for (Int i = 0; i < proto->getTemplateInfo()->m_numUnitsInfo; i++)
+	{
+		const TCreateUnitsInfo *unitInfo = &proto->getTemplateInfo()->m_unitsInfo[i];
+		const ThingTemplate *thing = TheThingFactory->findTemplate(unitInfo->m_unitThingName);
+		if (unitInfo->m_maxUnits > 0)
+		{
+			Int available = 0;
+			for (Object *obj = TheGameLogic->getFirstObject(); obj; obj = obj->getNextObject())
+			{
+				if (!obj->getTemplate()->isEquivalentTo(thing))
+					continue;
+				if (obj->getControllingPlayer() != m_player)
+					continue;
+				Team *team = obj->getTeam();
+				Bool recruitable = (team == m_player->getDefaultTeam());
+				if (!team->isActive())
+					continue;
+				if (team->getPrototype()->getTemplateInfo()->m_isAIRecruitable)
+					recruitable = true;
+				if (team->m_unk0x110[0])
+					recruitable = team->m_unk0x110[1];
+				if (!recruitable)
+					continue;
+				if (obj->m_ai && !obj->m_ai->m_isRecruitable)
+					continue;
+				if (obj->isDisabledByType((DisabledType)3))
+					continue;
+				available++;
+			}
+			if (available < unitInfo->m_minUnits)
+			{
+				Int buildIndex;
+				if (NULL == findFactory(thing, false, &buildIndex))
+				{
+					possible = false;
+					break;
+				}
+				Int thingCost;
+				if (buildIndex == -1)
+					thingCost = thing->calcCostToBuild(m_player, 0, -1);
+				else
+					thingCost = m_player->m_unitRevivalTracker.getDiscountedCostToBuild(buildIndex, NULL);
+				cost += (unitInfo->m_minUnits - available) * thingCost;
+				if (cost > m_player->getMoney()->countMoney())
+				{
+					possible = false;
+					break;
+				}
+			}
+		}
+	}
+	return possible;
+}
 
 // FUNCTION: BFME2 0x004F1566 size=237 name=?isAGoodIdeaToBuildTeam@AIPlayer@@MAE_NPAVTeamPrototype@@@Z evidence=N:ledger tier=A
 Bool AIPlayer::isAGoodIdeaToBuildTeam(TeamPrototype *proto)
