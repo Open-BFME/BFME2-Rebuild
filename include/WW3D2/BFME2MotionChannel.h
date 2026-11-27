@@ -12,6 +12,17 @@ class ChunkLoadClass;
 class Quaternion;
 class Vector3;
 
+// The 8-byte header that precedes a motion channel chunk (Load_BFME2MotionChannel reads it first).
+struct BFME2MotionChannelHeader
+{
+	unsigned char reserved;			// must be zero
+	unsigned char encoding;			// 0, 1 or 2: selects the channel class
+	unsigned char components;
+	unsigned char type;
+	unsigned short count;
+	unsigned short pivot;
+};
+
 class BFME2MotionChannel
 {
 public:
