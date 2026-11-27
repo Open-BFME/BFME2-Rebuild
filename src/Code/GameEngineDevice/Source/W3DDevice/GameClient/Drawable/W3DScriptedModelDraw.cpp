@@ -23,12 +23,58 @@ void rva000C48DB(void*,void*,void*,void*);
 #include "WW3D2/VertexMaterialClass.h"
 // FUNCTION: BFME2 0x000B2B3B size=7 name=?get@LivingWorldBuildPlotIconSubObject@@UBEHXZ evidence=X:proven (vtable) tier=B hypothesis:mm1-neighbour-pointers-mixed
 // FUNCTION: BFME2 0x000B2B42 size=58 name=?Rva000B2B42Clamp@@YAXPAH0H@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
+void Rva000B2B42Clamp(int *start, int *count, int limit)
+{
+	int end = *start + *count;
+	if (*start < 0)
+		*start = 0;
+	else if (*start > limit)
+		*start = limit;
+	if (end < *start)
+		end = *start;
+	else if (end > limit)
+		end = limit;
+	*count = end - *start;
+}
 // FUNCTION: BFME2 0x000B2B7C size=11 name=?millisecondsToSeconds@@YAMM@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
+float millisecondsToSeconds(float milliseconds)
+{
+	return milliseconds * 0.001f;
+}
 // FUNCTION: BFME2 0x000B2B87 size=14 name=?Rva000B2B87FloatMin@@YAMMM@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x000B2B95 size=14 name=?Rva000B2B95FloatMax@@YAMMM@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x000B2BA3 size=66 name=?Rva000B2BA3Get@@YAHPBURva000B2BE5Src@@PA_N@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000B2BE5 size=26 name=?Rva000B2BE5Get@@YAHPBURva000B2BE5Src@@H@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000B2BFF size=190 name=?Rva000B2BFFClamp@@YAXPAMM@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
+void Rva000B2BFFClamp(float *angle, float target)
+{
+	const float PI = 3.14159265f;
+	const float STEP = 0.1f;
+	if (*angle > target)
+	{
+		float difference = *angle - target;
+		if (difference > PI)
+			*angle = *angle + STEP;
+		else if (difference > STEP)
+			*angle = *angle - STEP;
+		else
+			*angle = target;
+	}
+	else if (target > *angle)
+	{
+		float difference = target - *angle;
+		if (difference > PI)
+			*angle = *angle - STEP;
+		else if (difference > STEP)
+			*angle = *angle + STEP;
+		else
+			*angle = target;
+	}
+	if (*angle > PI)
+		*angle = *angle - 2.0f * PI;
+	if (-PI > *angle)
+		*angle = *angle + 2.0f * PI;
+}
 // FUNCTION: BFME2 0x000B2CBD size=40 name=?Rva000B2CBDGet@@YAHXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x000B2D3A size=19 name=?rva000B2D3A@@YAXPAUGapWord15C@@H@Z evidence=?:placeholder tier=A
@@ -413,6 +459,10 @@ template void BitFlags<591>::parseFromINI(INI *ini, void *instance, void *store,
 // FUNCTION: BFME2 0x000B980E size=44 name=?rva000B980E@Rva000B980E@@QAEXPADHH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x000B9856 size=16 name=?NAMEKEY@@YA?AW4NameKeyType@@ABVAsciiString@@@Z evidence=N:ledger tier=A
+NameKeyType NAMEKEY(const AsciiString &name)
+{
+	return TheNameKeyGenerator->nameToKey(name);
+}
 
 // FUNCTION: BFME2 0x000B9887 size=165 name=?Rva000B9887Init@@YAXPAXPAUBfmePod32@@@Z evidence=?:placeholder tier=A
 
