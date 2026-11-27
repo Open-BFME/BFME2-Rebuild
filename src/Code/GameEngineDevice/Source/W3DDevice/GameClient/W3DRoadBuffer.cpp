@@ -889,6 +889,20 @@ Bool W3DRoadBuffer::insertY(Vector2 loc, Int index1, Real scale)
 }
 
 // FUNCTION: BFME2 0x000D7753 size=91 name=?freeRoadBuffers@W3DRoadBuffer@@IAEXXZ evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::freeRoadBuffers(void)
+{
+	DX8DeviceLock device_lock;
+	if (m_roadTypes) {
+		delete[] m_roadTypes;
+		m_roadTypes = 0;
+	}
+	if (m_roads) {
+		delete[] m_roads;
+		m_roads = 0;
+	}
+	m_roadTexture.Clear();
+	m_initialized = false;
+}
 
 // FUNCTION: BFME2 0x000D77AE size=404 name=?allocateRoadBuffers@W3DRoadBuffer@@IAEXXZ evidence=N:ledger tier=B hypothesis:K
 
