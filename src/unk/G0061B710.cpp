@@ -2,3 +2,9 @@
 // object=G0061B710 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0061B710 size=33 name=_XMP_Bits_To_Mask evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+extern "C" unsigned long XMP_Bits_To_Mask(int bits)
+{
+	if (!bits)
+		return 0;
+	return 1 << ((bits - 1) % 32);
+}
