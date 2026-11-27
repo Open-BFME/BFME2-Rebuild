@@ -45,6 +45,10 @@ public:
     virtual Bool vslot10() const { return true; } // native 0x0050B5C6
 	// Whether the owning side has siege weapons that are not busy.
     Bool sideHasIdleSiegeWeapons();
+	Bool isWallBreached();	// 0x005DC93B (a team member's object is a breach or gate, and the target is in reach)
+	Bool findWallTarget();	// 0x005DC9C8
+	Object *rva005DCAE5();	// 0x005DCAE5 (the logic object with the id at +0x58; the map holds it as rva005DCAE5)
+	Bool rva005DCAF4();	// 0x005DCAF4 (no wall target object, or it has the flag +0x438 bit 0 set)
 
 protected:
     ObjectID m_unk0x58; // 0x005DC903 transfers this through XferObjectID

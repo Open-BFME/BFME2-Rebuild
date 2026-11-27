@@ -51,6 +51,7 @@ public:
 	virtual void run() = 0;							// slot 6 (pure)
 	virtual void update() = 0;						// slot 7 (pure)
 
+	Team *rva004ECECD(Int index);	// 0x004ECECD (the map holds it as rva004ECECD): the team of the index-th record, or null
 	unsigned char rva004ED169();		// 0x008ED169 (the map name; the base test the update uses)
 	void end(Bool first, Bool second);	// 0x008ED748
 	Bool anyTeamMembersInCombat();		// 0x004ECF41: true when a member of any of the tactic's teams has a victim

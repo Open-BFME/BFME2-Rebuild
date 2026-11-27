@@ -15,10 +15,46 @@ AISiegeGatesTactic::~AISiegeGatesTactic()
 // FUNCTION: BFME2 0x005A9AD8 size=72 name=?canRun@AISiegeGatesTactic@@UAE_NPAX@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x005A9B20 size=37 name=?rva005A9B20@AISiegeGatesTactic@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:cohesion
+Bool AISiegeGatesTactic::rva005A9B20()
+{
+	if (!findWallTarget())
+		return false;
+	teamAttackObject(0, rva005DCAE5());
+	return true;
+}
 
 // FUNCTION: BFME2 0x005A9B61 size=33 name=?run@AISiegeGatesTactic@@UAEXXZ evidence=N:ledger tier=A
+void AISiegeGatesTactic::run()
+{
+	if (rva004ECECD(0))
+		rva005A9B20();
+	else
+		end(false, false);
+}
 
 // FUNCTION: BFME2 0x005A9B82 size=112 name=?update@AISiegeGatesTactic@@UAEXXZ evidence=N:ledger tier=A
+void AISiegeGatesTactic::update()
+{
+	if (!m_active)
+		return;
+	if (!rva004ECECD(0))
+	{
+		end(false, false);
+		return;
+	}
+	if (!m_unk0x5C)
+	{
+		if (isWallBreached())
+		{
+			rva004ED342(&m_owner20->m_position);
+			m_unk0x5C = true;
+		}
+		else if (rva005DCAF4() || rva004ED169())
+			rva005A9B20();
+	}
+	else if (rva004ED169())
+		end(true, false);
+}
 
 // FUNCTION: BFME2 0x005A9BF2 size=44 name=?xfer@AISiegeGatesTactic@@UAEXPAVXfer@@@Z evidence=N:ledger tier=A
 void AISiegeGatesTactic::xfer(Xfer *xfer)
@@ -29,6 +65,11 @@ void AISiegeGatesTactic::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x005A9C1E size=83 name=??0AISiegeGatesTactic@@QAE@XZ evidence=N:ledger tier=A
+AISiegeGatesTactic::AISiegeGatesTactic()
+	: AITacticSiege(AsciiString("SiegeGates"))
+{
+	m_unk0x5C = false;
+}
 
 // FUNCTION: BFME2 0x005A9C71 size=50 name=?create@AISiegeGatesTactic@@UAEPAVAITactic@@XZ evidence=N:ledger tier=A
 AITactic *AISiegeGatesTactic::create()
