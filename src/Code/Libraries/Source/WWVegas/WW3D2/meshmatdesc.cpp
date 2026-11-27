@@ -483,6 +483,11 @@ void MeshMatDescClass::Install_UV_Array(int pass, int stage, Vector2 *uvs, int c
 // FUNCTION: BFME2 0x0015CAE0 size=430 name=?Compute_Ram_Size@MeshMatDescClass@@QAEHXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0015D080 size=62 name=??0TexBufferClass@@QAE@HPBD@Z evidence=N:ledger tier=A
+TexBufferClass::TexBufferClass(int count, const char *msg) :
+	ShareBufferClass<TextureAsset>(count, msg, 0)
+{
+	Clear();
+}
 
 
 // FUNCTION: BFME2 0x0015D0C0 size=25 name=??0TexBufferClass@@QAE@ABV0@@Z evidence=N:ledger tier=A
