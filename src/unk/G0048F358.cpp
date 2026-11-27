@@ -1,4 +1,9 @@
+#include "Common/Rva0048F358ByteSlot.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0048F358 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0048F358 size=13 name=?set@Rva0048F358ByteSlot@@QAEXE@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+void Rva0048F358ByteSlot::set(unsigned char value)
+{
+	m_value = value;
+}

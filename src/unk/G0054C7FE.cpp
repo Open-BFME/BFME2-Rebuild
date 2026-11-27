@@ -1,4 +1,9 @@
+#include "Common/Rva0054C7FEByteField.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0054C7FE name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0054C7FE size=7 name=?get@Rva0054C7FEByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+unsigned char Rva0054C7FEByteField::get() const
+{
+	return m_value;
+}

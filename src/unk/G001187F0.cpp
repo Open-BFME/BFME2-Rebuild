@@ -1,4 +1,9 @@
+#include "Common/Rva001187F0DwordField.h"
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G001187F0 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x001187F0 size=7 name=?get@Rva001187F0DwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+int Rva001187F0DwordField::get() const
+{
+	return m_value;
+}
