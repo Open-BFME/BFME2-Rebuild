@@ -1,6 +1,7 @@
 // cl: /O2 /G6 /MD /D_CRTIMP=
 #include "Apt/AptValue.h"
 #include "Apt/Assert.h"
+#include <math.h>
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G006E03A0 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
@@ -14,3 +15,15 @@ bool AptValue::isLevelInst() const
 	return getVtblIndex() == 0x13 && !isUndefined();
 }
 // FUNCTION: BFME2 0x006E03F0 size=67 name=?wrapAngle@@YAMM@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+float wrapAngle(float angle)
+{
+	const float pi = 3.1415927f;
+	const float halfPi = 1.5707964f;
+
+	angle = fmod(angle, pi);
+	if (angle >= halfPi)
+		angle -= pi;
+	if (angle < -halfPi && angle <= -pi)
+		angle += pi;
+	return angle;
+}
