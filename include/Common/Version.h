@@ -44,6 +44,7 @@ public:
 	UnicodeString getUnicodeBuildTime();							// 0x00238215
 	UnicodeString getUnicodeBuildLocation();						// 0x00238318 (Version:BuildMachine)
 	UnicodeString getUnicodeBuildUser();							// 0x002383F0 (Version:BuildUser)						// 0x00238215
+	UnicodeString getUnicodeBuildGuid();						// 0x002384C8 (the GUID text widened)
 	AsciiString *getBuildGuid() { return &m_buildGuid; }		// 0x0009AA0B (folded lea getter)
 
 	UnsignedInt m_major;										// +0x00

@@ -140,6 +140,12 @@ UnicodeString Version::getUnicodeBuildUser()
 }
 
 // FUNCTION: BFME2 0x002384C8 size=84 name=?rva002384C8@Rva002384C8@@QAE?AVUnicodeString@@XZ evidence=?:placeholder tier=B hypothesis:K
+UnicodeString Version::getUnicodeBuildGuid()
+{
+	UnicodeString guid;
+	guid.translate(m_buildGuid);
+	return guid;
+}
 
 // FUNCTION: BFME2 0x0023851C size=100 name=?rva0023851C@Rva0023851C@@QAE?AVAsciiString@@XZ evidence=?:placeholder tier=B hypothesis:K
 AsciiString Version::getAsciiVersionNumbers()
