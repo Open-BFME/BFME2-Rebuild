@@ -10,6 +10,9 @@ extern AsciiString AIReturnTheRingTactic_IsRunning;
 // Edges: left=rests-on:name right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:init-votes
 // FUNCTION: BFME2 0x005AB309 size=11 name=??1AIReturnTheRingTactic@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
+AIReturnTheRingTactic::~AIReturnTheRingTactic()
+{
+}
 
 // FUNCTION: BFME2 0x005AB314 size=36 name=?cleanUp@AIReturnTheRingTactic@@UAEXXZ evidence=N:ledger tier=A
 void AIReturnTheRingTactic::cleanUp()
