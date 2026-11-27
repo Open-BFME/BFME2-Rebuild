@@ -13,7 +13,10 @@
 #include "Common/Xfer.h"
 #include "GameLogic/Object.h"
 #include "GameClient/Drawable.h"
+#include "GameLogic/GameLogic.h"
 void iniParseObjectFilter(INI *ini, void *instance, void *store, const void *userData);
+Int __cdecl GetGameLogicRandomValue(Int low, Int high, const char *file, Int line);
+#define LARGE_GROUP_BONUS_FILE "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\LargeGroupBonusUpdate.cpp"	// retail passes the __FILE__ literal
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00C4D1A8), read back
 // entry by entry from the image.
@@ -74,6 +77,18 @@ void LargeGroupBonusUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x004900B1 size=143 name=??0LargeGroupBonusUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=A
+LargeGroupBonusUpdate::LargeGroupBonusUpdate(Thing *thing, const ModuleData *moduleData)
+	: UpdateModule(thing, moduleData)
+{
+	const ModuleData *base = getModuleData();
+	const LargeGroupBonusUpdateModuleData *data = static_cast<const LargeGroupBonusUpdateModuleData *>(base);
+	m_unk0x28 = false;
+	m_unk0x2A = false;
+	m_unk0x29 = false;
+	m_unk0x24 = TheGameLogic->getFrame();
+	Int wake = GetGameLogicRandomValue(1, data->m_updateRate, LARGE_GROUP_BONUS_FILE, 107);
+	setWakeFrame(getObject(), (UpdateSleepTime)wake);
+}
 
 // FUNCTION: BFME2 0x0049015C size=89 name=?notify@LargeGroupBonusUpdate@@QAEXH@Z evidence=N:ledger tier=B hypothesis:cohesion
 void LargeGroupBonusUpdate::notify(Int notice)
