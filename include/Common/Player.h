@@ -277,6 +277,7 @@ public:
 	Object * rva002AC629();	// 0x002AC629
 	void rva002AC673();	// 0x002AC673
 	void changeBattlePlan(BattlePlanStatus plan, Int delta, BattlePlanBonuses *bonuses);	// 0x002ADB4F (map: ?changeBattlePlan@Player@@QAEXW4BattlePlanStatus@@HPAVRva002AA14DBonuses@@@Z; BattlePlanUpdate 0x00497AE8 calls it)
+	void applyBattlePlanBonusesForPlayerObjects(const BattlePlanBonuses *bonuses);	// 0x002AC9BF: folds the bonuses into the stored set (allocating it first), then applies them to every object
 	void applyBattlePlanBonusesForObject(Object *) const;	// 0x002AC917
 	void removeBattlePlanBonusesForObject(Object *) const;	// 0x002AC92B
 	void processCreateTeamGameMessage(int, GameMessage const *);	// 0x002ACA86

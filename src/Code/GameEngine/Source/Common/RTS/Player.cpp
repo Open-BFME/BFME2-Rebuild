@@ -55,6 +55,7 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 #include "Common/ScienceStore.h"
 #include "GameLogic/ScriptEngine.h"
 #include "Common/BattlePlanBonuses.h"
+#include "GameLogic/Module/BattlePlanUpdate.h"
 #include "Common/BitFlagsIO.h"
 #include "GameLogic/AICommandInterface.h"
 #include "GameLogic/VictoryConditions.h"
@@ -1242,6 +1243,29 @@ void Player::removeBattlePlanBonusesForObject(Object *obj) const
 }
 
 // FUNCTION: BFME2 0x002AC9BF size=199 name=?applyBattlePlanBonusesForPlayerObjects@Player@@QAEXPBVRva002AA14DBonuses@@@Z evidence=N:ledger tier=A
+void Player::applyBattlePlanBonusesForPlayerObjects(const BattlePlanBonuses *bonus)
+{
+	// The stored set is only allocated once a plan has been applied.
+	if (!m_battlePlanBonuses)
+	{
+		m_battlePlanBonuses = new BattlePlanBonuses;
+		*m_battlePlanBonuses = *bonus;
+	}
+	else
+	{
+		// Fold in the difference: the scalars multiply, the plan counters add and never go negative.
+		m_battlePlanBonuses->m_armorDamageFactor *= bonus->m_armorDamageFactor;
+		m_battlePlanBonuses->m_sightRangeFactor *= bonus->m_sightRangeFactor;
+		m_battlePlanBonuses->m_bombardmentActive += bonus->m_bombardmentActive;
+		m_battlePlanBonuses->m_bombardmentActive = (0 > m_battlePlanBonuses->m_bombardmentActive) ? 0 : m_battlePlanBonuses->m_bombardmentActive;
+		m_battlePlanBonuses->m_holdLineActive += bonus->m_holdLineActive;
+		m_battlePlanBonuses->m_holdLineActive = (0 > m_battlePlanBonuses->m_holdLineActive) ? 0 : m_battlePlanBonuses->m_holdLineActive;
+		m_battlePlanBonuses->m_searchActive += bonus->m_searchActive;
+		m_battlePlanBonuses->m_searchActive = (0 > m_battlePlanBonuses->m_searchActive) ? 0 : m_battlePlanBonuses->m_searchActive;
+	}
+
+	iterateObjects(localApplyBattlePlanBonusesToObject, const_cast<BattlePlanBonuses *>(bonus));
+}
 
 // FUNCTION: BFME2 0x002ACA86 size=117 name=?processCreateTeamGameMessage@Player@@QAEXHPBVGameMessage@@@Z evidence=N:ledger tier=A
 void Player::processCreateTeamGameMessage(int hotkeyNum, GameMessage const *msg)
@@ -1658,6 +1682,54 @@ void Player::removeUpgrade(const UpgradeTemplate *upgradeTemplate, Int x)
 }
 
 // FUNCTION: BFME2 0x002ADB4F size=180 name=?changeBattlePlan@Player@@QAEXW4BattlePlanStatus@@HPAVRva002AA14DBonuses@@@Z evidence=N:ledger tier=A
+void Player::changeBattlePlan(BattlePlanStatus plan, Int delta, BattlePlanBonuses *bonus)
+{
+	Bool addBonus = false;
+	Bool removeBonus = false;
+	switch (plan)
+	{
+	case PLANSTATUS_BOMBARDMENT:
+		m_bombardBattlePlans += delta;
+		if (m_bombardBattlePlans == 1 && delta == 1)
+			addBonus = true;
+		else if (m_bombardBattlePlans == 0 && delta == -1)
+			removeBonus = true;
+		break;
+	case PLANSTATUS_HOLDTHELINE:
+		m_holdTheLineBattlePlans += delta;
+		if (m_holdTheLineBattlePlans == 1 && delta == 1)
+			addBonus = true;
+		else if (m_holdTheLineBattlePlans == 0 && delta == -1)
+			removeBonus = true;
+		break;
+	case PLANSTATUS_SEARCHANDDESTROY:
+		m_searchAndDestroyBattlePlans += delta;
+		if (m_searchAndDestroyBattlePlans == 1 && delta == 1)
+			addBonus = true;
+		else if (m_searchAndDestroyBattlePlans == 0 && delta == -1)
+			removeBonus = true;
+		break;
+	}
+
+	if (addBonus)
+	{
+		applyBattlePlanBonusesForPlayerObjects(bonus);
+	}
+	else if (removeBonus)
+	{
+		// Apply the inverse of the bonuses.
+		bonus->m_armorDamageFactor = 1.0f / (bonus->m_armorDamageFactor > 0.01f ? bonus->m_armorDamageFactor : 0.01f);
+		bonus->m_sightRangeFactor = 1.0f / (bonus->m_sightRangeFactor > 0.01f ? bonus->m_sightRangeFactor : 0.01f);
+		if (bonus->m_bombardmentActive > 0)
+			bonus->m_bombardmentActive = -1;
+		if (bonus->m_holdLineActive > 0)
+			bonus->m_holdLineActive = -1;
+		if (bonus->m_searchActive > 0)
+			bonus->m_searchActive = -1;
+
+		applyBattlePlanBonusesForPlayerObjects(bonus);
+	}
+}
 
 // FUNCTION: BFME2 0x002ADC03 size=127 name=?rva002ADC03@Player@@QAEXPAVRva004B5A65Owner@@H@Z evidence=?:placeholder tier=A
 
