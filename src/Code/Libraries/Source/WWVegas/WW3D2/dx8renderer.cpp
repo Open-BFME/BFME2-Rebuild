@@ -217,6 +217,25 @@ const Vector2 *Vertex_Split_Table::Get_UV_Array(unsigned int uv_array_index) con
 }
 
 // FUNCTION: BFME2 0x001443D0 size=131 name=?Peek_Shader@Vertex_Split_Table@@QAE?AVShaderClass@@II@Z evidence=N:ledger tier=A
+ShaderClass Vertex_Split_Table::Peek_Shader(unsigned int idx, unsigned int pass)
+{
+	// BFME 2 has no gap filler: polygons past the model's own keep the default shader.
+	if (Model->Has_Shader_Array(pass)) {
+		ShaderClass shader;
+		if (idx < Model->Get_Polygon_Count()) {
+			shader = Model->Get_Shader(idx, pass);
+		}
+		if (NPatchEnable) {
+			shader = ShaderClass(shader.Get_Bits() | ShaderClass::MASK_NPATCHENABLE);
+		}
+		return shader;
+	}
+	ShaderClass shader = Model->Get_Single_Shader(pass);
+	if (NPatchEnable) {
+		shader = ShaderClass(shader.Get_Bits() | ShaderClass::MASK_NPATCHENABLE);
+	}
+	return shader;
+}
 
 // FUNCTION: BFME2 0x001444B0 size=114 name=?Reset@DX8SkinFVFCategoryContainer@@AAEXXZ evidence=N:ledger tier=A
 void DX8SkinFVFCategoryContainer::Reset(void)
