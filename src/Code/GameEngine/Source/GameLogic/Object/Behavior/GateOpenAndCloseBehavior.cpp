@@ -65,6 +65,10 @@ GateOpenAndCloseBehavior *findGateOpenAndCloseBehavior(Object *object)
 }
 
 // FUNCTION: BFME2 0x00498798 size=92 name=??1GateOpenAndCloseBehavior@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
+GateOpenAndCloseBehavior::~GateOpenAndCloseBehavior()
+{
+	TheSkirmishAIManager->m_gateList->rva004E908C(this);
+}
 
 // FUNCTION: BFME2 0x004987F4 size=6 name=?name@GateOpenAndCloseBehavior@@QBEPBDXZ evidence=N:ledger tier=B hypothesis:cohesion
 const char *GateOpenAndCloseBehavior::name() const
@@ -126,6 +130,22 @@ NameKeyType GateOpenAndCloseBehavior::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x0049889C size=200 name=??0GateOpenAndCloseBehavior@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+GateOpenAndCloseBehavior::GateOpenAndCloseBehavior(Thing *thing, const ModuleData *moduleData) :
+	UpdateModule(thing, moduleData)
+{
+	const GateOpenAndCloseBehaviorModuleData *data = static_cast<const GateOpenAndCloseBehaviorModuleData *>(m_moduleData);
+	m_wantOpenCount = -1;
+	m_soundHandle = 1;
+	m_soundPlayed = false;
+	m_30 = true;
+	m_state = data->m_openByDefault ? 1 : 3;
+	m_transitionProgress = 100.0f;
+	m_38 = 100.0f / data->m_resetTimeInMilliseconds;
+	m_stateFrame = TheGameLogic->getFrame();
+	m_2C = 0;
+	m_linkedObjectId = INVALID_ID;
+	TheSkirmishAIManager->m_gateList->appendOnce(this);
+}
 
 // FUNCTION: BFME2 0x00498980 size=87 name=?rva00498980@GateOpenAndCloseBehavior@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:cohesion
 // Whether the gate has reached its threshold for its state: state 0 asks if the level is above
