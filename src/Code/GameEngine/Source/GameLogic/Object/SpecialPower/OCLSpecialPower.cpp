@@ -88,6 +88,9 @@ bool OCLSpecialPower::rva0049466D(const Coord3D *location)
 // FUNCTION: BFME2 0x004C3365 size=1051 name=?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x004C37C0 size=92 name=??1OCLSpecialPowerModuleData@@UAE@XZ evidence=N:ledger
+OCLSpecialPowerModuleData::~OCLSpecialPowerModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x004C381C size=61 name=?Rva004C381C_ParseUpgradeOCL@INI@@SAXPAV1@PAX1PBX@Z evidence=?:placeholder
 
