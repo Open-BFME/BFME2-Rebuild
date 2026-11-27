@@ -9,3 +9,5 @@ TextureClass * Font3DInstanceClass::Peek_Texture(void)
 {
 	return FontData->Peek_Texture();
 }
+
+int fontCacheCount = 1;
