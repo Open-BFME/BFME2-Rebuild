@@ -1,4 +1,10 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G006CB9B0 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "Apt/AptValueGC_PoolManager.h"
+
 // FUNCTION: BFME2 0x006CB9B0 size=17 name=?allocValueBlock@@YAPAXH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+void *allocValueBlock(int size)
+{
+	return g_pAptValueGCPoolManager->allocBlock(size);
+}
