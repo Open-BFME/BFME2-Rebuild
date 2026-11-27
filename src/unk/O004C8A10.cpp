@@ -10,6 +10,11 @@
 #include "GameLogic/Module/HordeDispatchSpecialPower.h"
 #include "Common/NameKeyGenerator.h"
 // FUNCTION: BFME2 0x004C89E6 size=42 name=??0HordeDispatchSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+HordeDispatchSpecialPower::HordeDispatchSpecialPower(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerModule(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004C8A10 size=6 name=?Rva004C8A10Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *HordeDispatchSpecialPower::GetSnapshotName() const
 {
