@@ -13,6 +13,7 @@
 #include "GameLogic/Module/SpecialPowerModule.h"
 #include "Common/ThingTemplate.h"
 #include "GameLogic/Object.h"
+#include "GameLogic/GameLogic.h"
 // FUNCTION: BFME2 0x004C8AB5 size=173 name=?doSpecialPowerAtLocation@HordeDispatchSpecialPower@@UAEXPBVCoord3D@@I@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 void HordeDispatchSpecialPower::doSpecialPowerAtLocation(const Coord3D *location, unsigned int commandOptions)
 {
@@ -37,6 +38,41 @@ void HordeDispatchSpecialPower::doSpecialPowerAtLocation(const Coord3D *location
 }
 
 // FUNCTION: BFME2 0x004C8B62 size=278 name=?doSpecialPowerAtObject@HordeDispatchSpecialPower@@UAEXPAVObject@@I@Z evidence=N:ledger tier=B hypothesis:cohesion
+void HordeDispatchSpecialPower::doSpecialPowerAtObject(Object *target, unsigned int commandOptions)
+{
+	Object *object = getObject();
+	if (object && object->getTemplate()->isKindOf0x115())
+	{
+		HordeContainInterface *horde = object->rva0028C197();
+		if (horde)
+		{
+			const SpecialPowerTemplate *power = getSpecialPowerTemplate();
+			HordeConstObjectList members;
+			horde->rva0046D1F7(members);
+			Object *best = target;
+			Real bestDistance = target->Get3DCenterDistanceSquared(object->getPosition());
+			for (HordeConstObjectList::iterator it = members.begin(); it != members.end(); ++it)
+			{
+				SpecialPowerModuleInterface *memberPower = const_cast<Object *>(*it)->getSpecialPowerModule(power);
+				if (memberPower)
+				{
+					memberPower->doSpecialPowerAtObject(target, commandOptions);
+					Object *memberObject = TheGameLogic->findObjectByID(memberPower->specialPowerSlot20());
+					if (memberObject)
+					{
+						Real distance = memberObject->Get3DCenterDistanceSquared(object->getPosition());
+						if (distance > bestDistance)
+						{
+							bestDistance = distance;
+							best = memberObject;
+						}
+					}
+				}
+			}
+			SpecialPowerModule::doSpecialPowerAtObject(best, commandOptions);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x004C8C78 size=163 name=?doSpecialPower@HordeDispatchSpecialPower@@UAEXI@Z evidence=N:ledger tier=B hypothesis:cohesion
 void HordeDispatchSpecialPower::doSpecialPower(unsigned int commandOptions)
