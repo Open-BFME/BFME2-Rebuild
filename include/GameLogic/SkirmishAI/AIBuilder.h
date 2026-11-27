@@ -23,6 +23,7 @@ public:
 	~AIBuilder();
 
 	void update();
+	void DoXfer(Xfer *xfer);	// 0x004EC1D9
 	void onUnitCreated(Object *factory, Object *unit, Bool isHorde);
 	void registerProducedObject(Object *object);	// files a newly owned object under the builders that track its kind
 	void registerBuildable(AIBuildable *buildable);

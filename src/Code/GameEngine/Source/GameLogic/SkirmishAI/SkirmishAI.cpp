@@ -7,6 +7,7 @@ extern "C" void __cdecl free(void *);
 #include "GameLogic/SkirmishAI/SkirmishAI.h"
 #include "GameLogic/SkirmishAI/SkirmishAIManager.h"
 #include "Common/Player.h"
+#include "Common/Xfer.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/PlayerList.h"
 #include "GameLogic/SkirmishAI/AITacticsGenerator.h"
@@ -181,6 +182,45 @@ SkirmishAI::SkirmishAI(Player *player, void *unk, Bool flag)
 }
 
 // FUNCTION: BFME2 0x002C7008 size=374 name=?DoXfer@SkirmishAI@@QAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:K
+void SkirmishAI::DoXfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 1);
+	*xfer == version;
+	*xfer == m_finished;
+	UnsignedInt phase = m_phase;
+	*xfer == phase;
+	m_phase = phase;
+	*xfer == m_phaseProgress;
+	*xfer == m_phaseStartFrame;
+	*xfer == m_masterPlayerIndex;
+	AIBuilder::DoXfer(xfer);
+	m_tacticalAI->DoXfer(xfer);
+
+	UnsignedInt count = m_namedValues.size();
+	*xfer == count;
+	if (xfer->IsStoring())
+	{
+		for (_STL::map<AsciiString, Int>::iterator it = m_namedValues.begin(); it != m_namedValues.end(); ++it)
+		{
+			AsciiString key = it->first;
+			*xfer == key;
+			Int value = it->second;
+			*xfer == value;
+		}
+	}
+	else if (xfer->IsLoading())
+	{
+		m_namedValues.clear();
+		for (UnsignedInt i = 0; i < count; ++i)
+		{
+			AsciiString key;
+			*xfer == key;
+			Int value;
+			*xfer == value;
+			m_namedValues[key] = value;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x002C717E size=24 name=?rva002C717E@Rva002A8AB1Record@@QAEXABVAsciiString@@H@Z evidence=?:placeholder tier=B hypothesis:K
 
