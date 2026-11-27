@@ -8,6 +8,9 @@
 #include "GameLogic/Module/UnitCrateCollideModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x00255A72 size=70 name=??0UnitCrateCollideModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+UnitCrateCollideModuleData::UnitCrateCollideModuleData() : m_unitCount(0), m_unitName("")
+{
+}
 
 // FUNCTION: BFME2 0x00255AB8 size=81 name=?friend_newModuleData@UnitCrateCollideModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *UnitCrateCollideModuleData::friend_newModuleData(INI *ini)
