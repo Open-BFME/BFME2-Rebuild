@@ -10,13 +10,23 @@
 // FUNCTION: BFME2 0x0048BCBB size=86 name=?Rva0048BCBBParse@@YAXPAVINI@@PAX1PBX@Z evidence=?:placeholder
 // FUNCTION: BFME2 0x0048BD11 size=156 name=??1FireWeaponUpdate@@UAE@XZ evidence=N:ledger
 // FUNCTION: BFME2 0x0048BDAD size=6 name=?GetSnapshotName@FireWeaponUpdate@@MBEPBDXZ evidence=N:ledger
+const char *FireWeaponUpdate::GetSnapshotName() const
+{
+	return "FireWeaponUpdate";
+}
 // FUNCTION: BFME2 0x0048BDB3 size=69 name=?getModuleNameKey@FireWeaponUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType FireWeaponUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheFireWeaponUpdateNameKey = TheNameKeyGenerator->nameToKey("FireWeaponUpdate");
+	return TheFireWeaponUpdateNameKey;
+}
 // FUNCTION: BFME2 0x0048BDF8 size=240 name=?Rva0048BDF8Helper@FireWeaponUpdate@@QAEXXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x0048BEE8 size=432 name=?update@FireWeaponUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
 // FUNCTION: BFME2 0x0048C0B4 size=17 name=?buildFieldParse@FireWeaponUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger
 // stlport46
 #include <list>
 #include "GameLogic/Module/FireWeaponUpdate.h"
+#include "Common/NameKeyGenerator.h"
 #include "Common/INI.h"
 #include "GameLogic/Object.h"
 #include "GameLogic/Weapon.h"
