@@ -78,6 +78,7 @@ public:
 	void Get_Bounding_Box(AABoxClass *set_box);						// 0x001692F0
 	void Get_Bounding_Sphere(SphereClass *set_sphere);					// 0x00169370
 
+	const unsigned short *Get_Vertex_Bone_Links(void);				// 0x0018C30E: the bone links, created on demand
 	unsigned char *Get_Poly_Surface_Type_Array(void);					// 0x0016A000
 	unsigned char Get_Poly_Surface_Type(int poly_index) const { return PolySurfaceType->Get_Array()[poly_index]; }	// 0x0016A220
 
