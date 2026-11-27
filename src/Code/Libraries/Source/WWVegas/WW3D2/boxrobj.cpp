@@ -268,6 +268,12 @@ OBBoxRenderObjClass &OBBoxRenderObjClass::operator=(const OBBoxRenderObjClass &t
 }
 
 // FUNCTION: BFME2 0x001760F0 size=297 name=?Render@OBBoxRenderObjClass@@UAEXAAVRenderInfoClass@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void OBBoxRenderObjClass::Render(RenderInfoClass &rinfo)
+{
+	DXWrapper::Set_Transform(D3DTS_WORLD, Matrix4x4(Transform));
+	render_box(rinfo, ObjSpaceCenter, ObjSpaceExtent);
+}
+
 // FUNCTION: BFME2 0x001762A0 size=87 name=??0AABoxRenderObjClass@@QAE@ABV0@@Z evidence=N:ledger tier=B hypothesis:cohesion
 AABoxRenderObjClass::AABoxRenderObjClass(const AABoxRenderObjClass &src)
 {
