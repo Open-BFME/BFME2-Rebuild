@@ -15,6 +15,11 @@
 #include "Common/SpecialPowerTemplate.h"
 #include "Common/RandomValue.h"
 #include "GameLogic/Waypoint.h"
+#include "GameLogic/TeamInQueue.h"
+#include "Common/Team.h"
+#include "Common/TeamFactory.h"
+#include "Common/GlobalData.h"
+#include "GameLogic/ScriptEngine.h"
 
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:cohesion, hypothesis:name:invented
@@ -183,6 +188,50 @@ Bool AISkirmishPlayer::startTraining(WorkOrder *order, Bool busyOK, AsciiString 
 // FUNCTION: BFME2 0x004EF6A0 size=154 name=?checkBridges@AISkirmishPlayer@@UAE_NPAVObject@@PAVWaypoint@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x004EF73A size=323 name=?isAGoodIdeaToBuildTeam@AISkirmishPlayer@@MAE_NPAVTeamPrototype@@@Z evidence=N:ledger tier=A
+Bool AISkirmishPlayer::isAGoodIdeaToBuildTeam(TeamPrototype *proto)
+{
+	// Check condition.
+	if (!proto->evaluateProductionCondition())
+		return false;
+
+	// check build limit
+	if (proto->countTeamInstances() >= proto->getTemplateInfo()->m_maxInstances)
+	{
+		if (TheWritableGlobalData->m_debugAI)
+		{
+			AsciiString str;
+			str.format("Team %s not chosen - %d already exist.", proto->getName().str(), proto->countTeamInstances());
+			TheScriptEngine->AppendDebugMessage(str, false);
+		}
+		return false; // Max already built.
+	}
+
+	for (DLINK_ITERATOR<TeamInQueue> iter = iterate_TeamBuildQueue(); !iter.done(); iter.advance())
+	{
+		TeamInQueue *team = iter.cur();
+		if (team->m_team->getPrototype() == proto)
+			return false; // currently building one of these.
+	}
+
+	if (rva004F13D8(proto))
+		return true;
+
+	Bool needMoney;
+	if (!isPossibleToBuildTeam(proto, true, needMoney))
+	{
+		if (TheWritableGlobalData->m_debugAI)
+		{
+			AsciiString str;
+			if (needMoney)
+				str.format("Team %s not chosen - Not enough money.", proto->getName().str());
+			else
+				str.format("Team %s not chosen - Factory/tech missing or busy.", proto->getName().str());
+			TheScriptEngine->AppendDebugMessage(str, false);
+		}
+		return false;
+	}
+	return true;
+}
 
 // FUNCTION: BFME2 0x004EF87D size=668 name=?adjustBuildList@AISkirmishPlayer@@IAEXPAVBuildListInfo@@@Z evidence=N:ledger tier=A
 
