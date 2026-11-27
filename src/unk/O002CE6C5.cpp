@@ -33,6 +33,10 @@ bool Weapon::fireProjectileDetonationWeapon(const Object *object, const Coord3D 
 }
 
 // FUNCTION: BFME2 0x002CE74B size=36 name=?rva002CE74B@Weapon@@QAE_NPBVObject@@0@Z evidence=?:placeholder tier=B hypothesis:K
+Bool Weapon::rva002CE74B(const Object *source, const Object *victim)
+{
+	return privateFireWeapon(source, &source->m_cachedPos, victim, victim->m_id, 0, 1, 1, 0, 0);
+}
 
 // FUNCTION: BFME2 0x002CE76F size=53 name=?forceFireWeapon@Weapon@@QAEPAVObject@@PBV2@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:K
 Object *Weapon::forceFireWeapon(const Object *source, const Coord3D *pos)
@@ -55,6 +59,15 @@ Object *Weapon::forceFireWeapon(const Object *source, const Object *target)
 // FUNCTION: BFME2 0x002CE849 size=97 name=?Rva002CE849Parse@@YAXPAVINI@@PAX@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x002CE8AA size=90 name=?handleProjectileDetonation@WeaponStore@@QAEXPBVWeaponTemplate@@PBVCoord3D@@PBVObject@@1H@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:K
+void WeaponStore::handleProjectileDetonation(const WeaponTemplate *tmpl, const Coord3D *pos, const Object *source, const Coord3D *dir, Int arg)
+{
+	Weapon *weapon = TheWeaponStore->allocateNewWeapon(tmpl, PRIMARY_WEAPON);
+	if (source != NULL)
+		weapon->setOwnerID(source->getID());
+	weapon->loadAmmoNow(source);
+	weapon->fireProjectileDetonationWeapon(source, pos, dir, arg);
+	::delete weapon;
+}
 
 // FUNCTION: BFME2 0x002CE904 size=96 name=?createAndFireTempWeapon@WeaponStore@@QAEXPBVWeaponTemplate@@PBVObject@@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:Z
 void WeaponStore::createAndFireTempWeapon(const WeaponTemplate *tmpl, const Object *source, const Coord3D *pos)
