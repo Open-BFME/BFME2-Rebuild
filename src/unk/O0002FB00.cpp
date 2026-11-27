@@ -4,7 +4,21 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented, hypothesis:padding
+#include "Common/CopyProtect.h"
+
+// Latched on first set: -1 until the edition check has run.
+static volatile int s_verified = -1;
+
 // FUNCTION: BFME2 0x0002FB00 size=26 name=?setVerified@CopyProtect@@SAX_N@Z evidence=N:ledger tier=B hypothesis:name:invented
+void CopyProtect::setVerified(bool verified)
+{
+	if (s_verified == -1)
+		s_verified = verified ? 1 : 0;
+}
 
 // FUNCTION: BFME2 0x0002FB20 size=15 name=?isVerified@CopyProtect@@SA_NXZ evidence=N:ledger tier=B hypothesis:Z
+bool CopyProtect::isVerified()
+{
+	return s_verified == 1;
+}
 
