@@ -108,8 +108,16 @@ bool HordeMeleeSwarm::getUnitAttackPosition(int index, Coord3D *pos)
 // FUNCTION: BFME2 0x0058431D size=189 name=?rva0058431D@Rva0058431D@@QAEXPAVRva002337F0@@PBURva002337F0Blk@@HIUArg5@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x005843DA size=43 name=??0HordeMeleeSwarm@@QAE@PAX@Z evidence=N:ledger tier=A
+HordeMeleeSwarm::HordeMeleeSwarm(HordeContain *horde)
+	: HordeMeleeBase(horde)
+{
+	m_membershipChanged = false;
+}
 
 // FUNCTION: BFME2 0x00584502 size=59 name=??1HordeMeleeSwarm@@UAE@XZ evidence=N:ledger tier=A
+HordeMeleeSwarm::~HordeMeleeSwarm()
+{
+}
 
 // FUNCTION: BFME2 0x0058453D size=263 name=?startMeleeAttack@HordeMeleeSwarm@@UAEXPAVObject@@@Z evidence=N:ledger tier=A
 
