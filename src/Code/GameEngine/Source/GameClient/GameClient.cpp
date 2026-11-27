@@ -92,8 +92,18 @@ void GameClient::removeFromRayEffects(Drawable *draw)
 }
 
 // FUNCTION: BFME2 0x00238F3F size=29 name=?releaseShadows@GameClient@@UAEXXZ evidence=N:ledger
+void GameClient::releaseShadows()
+{
+	for (Drawable *draw = firstDrawable(); draw; draw = draw->getNextDrawable())
+		draw->releaseShadows();
+}
 
 // FUNCTION: BFME2 0x00238F5C size=29 name=?allocateShadows@GameClient@@UAEXXZ evidence=N:ledger
+void GameClient::allocateShadows()
+{
+	for (Drawable *draw = firstDrawable(); draw; draw = draw->getNextDrawable())
+		draw->allocateShadows();
+}
 
 // FUNCTION: BFME2 0x00238F79 size=24 name=?shouldSaveDrawable@@YA_NPBVDrawable@@@Z evidence=N:ledger
 
