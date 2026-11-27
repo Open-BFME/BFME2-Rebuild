@@ -140,6 +140,7 @@ public:
 
 	void xferSaveData(Xfer *xfer, SnapshotType which);				// 0x002DCE24
 	AsciiString getMapLeafName(const AsciiString &path) const;		// 0x002DC802
+	SaveGameInfo *getSaveGameInfo() { return &m_saveGameInfo; }		// inline: GameStateMap::DoXfer 0x0041AFDA reads the record at +0x24
 	void friend_xferSaveDataForCRC(Xfer *xfer, SnapshotType which);	// 0x002DDD0B
 	void addPostProcessSnapshot(Snapshot *snapshot, UnsignedInt flag);	// 0x002DCF6C
 	void removePostProcessSnapshotsSince(void *unused, UnsignedInt sequence);	// 0x002DC4B8 (map: rva002DC4B8@GameState): drops the entries recorded at or after the sequence

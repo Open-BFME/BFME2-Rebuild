@@ -96,6 +96,7 @@ public:
 	virtual Int slot21() { return 0; }			// slot 21, 0x000D43D0 (name not evidenced)
 	virtual UnicodeString getGameName() const;	// slot 22, 0x0022C4DF: returns the string at +4
 
+	void init();								// 0x001F34BA: a jump through the reset slot (GameStateMap::DoXfer 0x0041AFDA calls it on a new skirmish record)
 	void clearSlotList();						// 0x003FFDB7
 	void setSlot(Int slotNum, GameSlot slot);	// 0x003FFDFA
 	GameSlot *getSlot(Int slotNum);				// 0x003FF29F
