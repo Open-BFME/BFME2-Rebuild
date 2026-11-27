@@ -1,5 +1,16 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G00580154 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameClient/GameSorter.h"
+
 // FUNCTION: BFME2 0x00580154 size=30 name=?rva00580154@Rva00580154@@QBEH_N0@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00580172 size=16 name=?rva00580172@GameSorter@@QAE_NXZ evidence=X:map request (standalone ca6e45a3dd) tier=B hypothesis:mm1-gap-unit
+bool GameSorter::rva00580172()
+{
+	if (m_changed)
+	{
+		m_changed = false;
+		return true;
+	}
+	return false;
+}
