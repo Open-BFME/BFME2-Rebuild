@@ -15,12 +15,16 @@
 #include "Common/GameType.h"
 #include "Common/Xfer.h"
 
-class File;
+#include "Common/File.h"
+
+// The ledger spells the save stream Open takes with this struct name; it is a File (the stream the save file is read from).
+struct Rva0060C3C3Stream : public File {};
 class Snapshot;
 
 class XferLoad : public Xfer
 {
 public:
+	Bool Open(Rva0060C3C3Stream *file, Int *version);										// 0x0060C3C3: checks the save header, reads the version (0 for the older format) and the string-table flag
 	virtual Int BeginBlock(const char *name);									// slot 5, 0x0060C629
 	virtual void EndBlock();													// slot 6, 0x0060C469
 	virtual void SkipBlock(const char *name);									// slot 7, 0x0060C6F6
