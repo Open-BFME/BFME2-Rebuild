@@ -86,6 +86,11 @@ public:
 	void Re_Orthogonalize();											// 0x00713810
 	static void Lerp(const Matrix3D &a, const Matrix3D &b, float factor, Matrix3D &result);	// 0x00713AB0
 
+	// Column scales; retail keeps one out-of-line copy of each in its own unit.
+	void Scale(float scale);
+	void Scale(float x, float y, float z);
+	void Scale(const Vector3 &scale);
+
 	// WWMath's static point transforms; CameraClass::Transform_To_View_Space
 	// 0x00135770 and Rotate_To_View_Space 0x00135870 (and LineSegClass::Set
 	// 0x00718F70) expand them in place, including the copy to a temporary when
