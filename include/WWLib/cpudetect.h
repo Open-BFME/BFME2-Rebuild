@@ -125,6 +125,7 @@ public:
 	static bool Has_SSE2_Instruction_Set();
 	static bool Has_3DNow_Instruction_Set();
 	static bool Has_Extended_3DNow_Instruction_Set();
+	static bool Has_CMOV_Instruction();
 
 	static const char *Get_Processor_Manufacturer_Name();
 	static const char *Get_Processor_String();			// 0x00611030 (the map has a placeholder row: returns &ProcessorString)
