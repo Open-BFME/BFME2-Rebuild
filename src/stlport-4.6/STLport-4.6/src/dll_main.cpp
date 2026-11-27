@@ -5,13 +5,27 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:L, hypothesis:padding
+#include "Common/StlMap.h"
+
 // FUNCTION: BFME2 0x000237B0 size=12 name=?deallocate@__new_alloc@_STL@@SAXPAXI@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000237C0 size=48 name=?fill@_STL@@YAXPAD0ABD@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000237F0 size=26 name=?_S_minimum@_Rb_tree_node_base@_STL@@SAPAU12@PAU12@@Z evidence=N:ledger tier=B hypothesis:K
+_STL::_Rb_tree_node_base *_STL::_Rb_tree_node_base::_S_minimum(_Rb_tree_node_base *__x)
+{
+	while (__x->_M_left != 0)
+		__x = __x->_M_left;
+	return __x;
+}
 
 // FUNCTION: BFME2 0x00023810 size=26 name=?_S_maximum@_Rb_tree_node_base@_STL@@SAPAU12@PAU12@@Z evidence=N:ledger tier=B hypothesis:K
+_STL::_Rb_tree_node_base *_STL::_Rb_tree_node_base::_S_maximum(_Rb_tree_node_base *__x)
+{
+	while (__x->_M_right != 0)
+		__x = __x->_M_right;
+	return __x;
+}
 
 // FUNCTION: BFME2 0x00023830 size=17 name=?what@__Named_exception@_STL@@UBEPBDXZ evidence=N:ledger tier=L hypothesis:name:L
 

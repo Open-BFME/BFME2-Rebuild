@@ -33,6 +33,9 @@ struct _Rb_tree_node_base
 	_Rb_tree_node_base *_M_parent;
 	_Rb_tree_node_base *_M_left;
 	_Rb_tree_node_base *_M_right;
+
+	static _Rb_tree_node_base *_S_minimum(_Rb_tree_node_base *__x);
+	static _Rb_tree_node_base *_S_maximum(_Rb_tree_node_base *__x);
 };
 
 template <class _Key, class _Tp, class _Compare = less<_Key> >
