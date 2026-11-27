@@ -20,6 +20,7 @@ class SlaveWatcherBehaviorModuleData : public ModuleData
 {
 public:
 	SlaveWatcherBehaviorModuleData();
+	virtual ~SlaveWatcherBehaviorModuleData();					// slot 0
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 

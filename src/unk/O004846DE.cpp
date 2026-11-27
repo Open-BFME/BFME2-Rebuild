@@ -5,6 +5,15 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "GameLogic/Module/SlaveWatcherBehaviorModuleData.h"
 // FUNCTION: BFME2 0x004846C7 size=23 name=??0SlaveWatcherBehaviorModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class
-// FUNCTION: BFME2 0x004846FA size=63 name=??1SlaveWatcherBehaviorModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+SlaveWatcherBehaviorModuleData::SlaveWatcherBehaviorModuleData()
+{
+	m_shareUpgrades = false;
+	m_letSlaveLive = false;
+}
 
+// FUNCTION: BFME2 0x004846FA size=63 name=??1SlaveWatcherBehaviorModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+SlaveWatcherBehaviorModuleData::~SlaveWatcherBehaviorModuleData()
+{
+}
