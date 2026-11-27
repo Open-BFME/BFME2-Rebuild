@@ -41,6 +41,9 @@ public:
 	void Rotate_AABox_Extent(const Vector3 &extent, Vector3 *set_extent);			// 0x00149310 (pushes an axis-aligned box's extent through the absolute-value matrix)
 	void Set(const Matrix3D &m);								// 0x007168F0 (the rotation part of a transform: OBBoxRenderObjClass::update_cached_box 0x001758C0)
 
+	// Post-multiplies by a rotation about Y given its sine and cosine (Zero Hour's WWINLINE, out of line here).
+	void Rotate_Y(float s, float c);
+
 	// Zero Hour's out-of-line Multiply(Matrix3D, Matrix3x3): OBBoxClass::Transform 0x000B2A4C calls it.
 	static void Multiply(const Matrix3D &a, const Matrix3 &b, Matrix3 *res);			// 0x00716A20
 
