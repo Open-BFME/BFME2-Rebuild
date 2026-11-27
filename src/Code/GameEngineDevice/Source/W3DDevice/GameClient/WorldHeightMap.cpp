@@ -6,6 +6,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:padding
+// Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "GameClient/WorldHeightMap.h"
 #include "Common/GlobalData.h"
 // FUNCTION: BFME2 0x000ABD00 size=25 name=?rva000ABD00@Rva000ABD00@@QAEHI@Z evidence=?:placeholder tier=B hypothesis:K
