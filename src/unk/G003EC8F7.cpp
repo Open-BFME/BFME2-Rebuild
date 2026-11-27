@@ -4,14 +4,15 @@
 // FUNCTION: BFME2 0x003EC8F7 size=43 name=?ComputeCRC@@YAIPBEII@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 unsigned int ComputeCRC(const unsigned char *data, unsigned int length, unsigned int crc)
 {
+	unsigned int result = crc;
 	if (data == 0) {
-		return crc;
+		return result;
 	}
 	while (length != 0) {
-		unsigned int carry = crc >> 31;
-		crc = crc * 2 + *data + carry;
+		unsigned int carry = result >> 31;
+		result = result * 2 + *data + carry;
 		++data;
 		--length;
 	}
-	return crc;
+	return result;
 }
