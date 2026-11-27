@@ -170,6 +170,52 @@ Object *CreateCrateDie::createCrate(const CrateTemplate *currentCrateData)
 
 
 // FUNCTION: BFME2 0x004857B3 size=321 name=?onDie@CreateCrateDie@@UAEXPBVDamageInfo@@@Z evidence=N:ledger tier=A
+void CreateCrateDie::onDie(const DamageInfo *damageInfo)
+{
+	if (!isDieApplicable(damageInfo))
+		return;
+
+	Object *killer = TheGameLogic->findObjectByID(damageInfo->in.m_sourceID);
+	Object *me = getObject();
+
+	if (killer && killer->getRelationship(me) == ALLIES)
+		return;
+
+	for (std::list<AsciiString>::const_iterator iter = getCreateCrateDieModuleData()->m_crateNameList.begin();
+			iter != getCreateCrateDieModuleData()->m_crateNameList.end();
+			iter++)
+	{
+		CrateTemplate *currentCrateData = TheCrateSystem->friend_findCrateTemplate(*iter);
+		if (!currentCrateData)
+			continue;
+
+		if (!testCreationChance(currentCrateData))
+			continue;
+
+		if (currentCrateData->m_killedByTypeKindof.any() && !testKillerType(currentCrateData, killer))
+			continue;
+
+		if (currentCrateData->m_killerScience != -1 && !testKillerScience(currentCrateData, killer))
+			continue;
+
+		Object *crate = createCrate(currentCrateData);
+		if (crate)
+		{
+			if (currentCrateData->m_isOwnedByMaker)
+				crate->setTeam(me->getControllingPlayer()->getDefaultTeam());
+
+			if (killer)
+			{
+				if (killer->getControllingPlayer() && killer->getControllingPlayer()->m_playerType == PLAYER_COMPUTER)
+				{
+					AIUpdateInterface *ai = killer->getAIUpdateInterface();
+					if (ai)
+						ai->m_crateCreated = crate->getID();
+				}
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x004858F4 size=73 name=?parseCrateData@CreateCrateDieModuleData@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=A
 void CreateCrateDieModuleData::parseCrateData(INI *ini, void *instance, void * /*store*/, const void * /*userData*/)
