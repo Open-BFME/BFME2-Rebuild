@@ -3566,4 +3566,12 @@ void AptActionInterpreter::_FunctionAptActionDictCallMethodSetVar(AptActionInter
 // FUNCTION: BFME2 0x007092F0 size=491 name=?rva007092F0@AptActionInterpreter@@AAEXPAVAptCIH@@PAVAptValue@@11H1@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x007094E0 size=267 name=?_FunctionAptActionCloneSprite@AptActionInterpreter@@CAXQAU1@QAULocalContextT@1@@Z evidence=N:ledger
+void AptActionInterpreter::_FunctionAptActionCloneSprite(AptActionInterpreter *const interp, LocalContextT *const context)
+{
+    AptValue *depth = interp->stack.At(0);
+    AptValue *name = interp->stack.At(1);
+    AptValue *clip = interp->stack.At(2);
+    interp->rva007092F0(context->pCurrentContext, context->pCurWith, clip, name, depth->toInteger(), 0);
+    interp->stack.Pop(3);
+}
 
