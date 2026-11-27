@@ -25,6 +25,7 @@ class WeaponChangeSpecialPowerModuleData : public SpecialPowerModuleData
 {
 public:
 	WeaponChangeSpecialPowerModuleData();
+	virtual ~WeaponChangeSpecialPowerModuleData();	// 0x004C42EE (deleting destructor in slot 0)
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
