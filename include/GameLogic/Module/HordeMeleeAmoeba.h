@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Common/Coord3D.h"
+#include "Common/GameType.h"
 #include "Common/Vector.h"
 #include "GameLogic/Module/HordeMeleeBase.h"
 
@@ -14,7 +15,8 @@ struct HordeMeleeAmoebaUnit
 	Bool m_needsNewAttackPos;
 	unsigned char m_unk0x0D[0x3];
 	Int m_unk0x10;
-	unsigned char m_unk0x14[0x25];
+	ObjectID m_unk0x14;  // +0x14: xfer'd through XferObjectID
+	unsigned char m_unk0x18[0x21];
 	Bool m_attackPositionValid;  // +0x39: getUnitAttackPosition requires it
 	unsigned char m_unk0x3A[0x2];
 };
