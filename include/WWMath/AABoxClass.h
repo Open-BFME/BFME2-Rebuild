@@ -66,6 +66,7 @@ public:
 		MaxCorner.Update_Max(box.Center + box.Extent);
 	}
 	void Init_Empty(void);		// 0x007197D0
+	void Add_Point(const Vector3 &point);
 
 	Vector3 MinCorner;		// +0x00
 	Vector3 MaxCorner;		// +0x0C

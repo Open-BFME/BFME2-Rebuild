@@ -5,6 +5,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z
+#include "WWMath/AABoxClass.h"
 // FUNCTION: BFME2 0x00111F0E size=97 name=?rva00111F0E@W3DTerrainBackground@@QAEXXZ evidence=P:provisional (wb-file) tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00111F6F size=77 name=?rva00111F6F@W3DTerrainBackground@@QAEXPAVRvaRef@@HHH@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x00111FBC size=19 name=?rva00111FBC@W3DTerrainBackground@@QAEHPAE@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-callers
@@ -19,6 +20,16 @@
 // FUNCTION: BFME2 0x00112197 size=50 name=?rva00112197@Rva0011216CSlotQuartet@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x001121C9 size=103 name=?Add_Point@MinMaxAABoxClass@@QAEXABVVector3@@@Z evidence=N:ledger tier=B hypothesis:Z
+void MinMaxAABoxClass::Add_Point(const Vector3 &point)
+{
+	if (point.X < MinCorner.X) MinCorner.X = point.X;
+	if (point.Y < MinCorner.Y) MinCorner.Y = point.Y;
+	if (point.Z < MinCorner.Z) MinCorner.Z = point.Z;
+
+	if (point.X > MaxCorner.X) MaxCorner.X = point.X;
+	if (point.Y > MaxCorner.Y) MaxCorner.Y = point.Y;
+	if (point.Z > MaxCorner.Z) MaxCorner.Z = point.Z;
+}
 
 // FUNCTION: BFME2 0x00112259 size=56 name=?rva00112259@Rva00112259@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 
