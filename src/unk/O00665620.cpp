@@ -4,5 +4,10 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
-// FUNCTION: BFME2 0x00665620 size=10 name=?Set_V_Addr_Mode@TextureFilterClass@@QAEXW4TxtAddrMode@1@@Z evidence=N:ledger tier=B hypothesis:name:invented
+#include "WW3D2/TextureFilterClass.h"
 
+// FUNCTION: BFME2 0x00665620 size=10 name=?Set_V_Addr_Mode@TextureFilterClass@@QAEXW4TxtAddrMode@1@@Z evidence=N:ledger tier=B hypothesis:name:invented
+void TextureFilterClass::Set_V_Addr_Mode(TxtAddrMode mode)
+{
+	VAddressMode = mode;
+}

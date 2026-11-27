@@ -26,6 +26,7 @@ public:
 
 	TxtAddrMode Get_U_Addr_Mode(void) const { return UAddressMode; }
 	TxtAddrMode Get_V_Addr_Mode(void) const { return VAddressMode; }
+	void Set_V_Addr_Mode(TxtAddrMode mode);
 
 	static void _Init_Filters(TextureFilterMode texture_filter);		// 0x0013EB60
 
