@@ -14,6 +14,14 @@
 // Edges: left=rests-on:name right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:name:Z
 // FUNCTION: BFME2 0x0047E268 size=120 name=??0RiderChangeContain@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:name:Z
+RiderChangeContain::RiderChangeContain(Thing *thing, const ModuleData *moduleData)
+	: SiegeEngineContain(thing, moduleData)
+{
+	m_unk0x138 = 0;
+	m_unk0x13C = 0;
+	m_unk0x144 = false;
+	m_unk0x140 = 0;
+}
 
 // FUNCTION: BFME2 0x0047E2E0 size=69 name=?getModuleNameKey@RiderChangeContain@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:Z
 NameKeyType RiderChangeContain::getModuleNameKey() const
