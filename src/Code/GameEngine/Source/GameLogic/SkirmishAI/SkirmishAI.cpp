@@ -78,6 +78,16 @@ Bool SkirmishAI::isAPartialBrain()
 // FUNCTION: BFME2 0x002C6845 size=52 name=?rva002C6845@Rva002C6845@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002C6879 size=85 name=?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ evidence=N:ledger tier=A
+void SkirmishAI::doSpecialSlaveAIUpdate()
+{
+	Player *master = ThePlayerList->getNthPlayer(m_masterPlayerIndex);
+	Real skillPoints = m_player->getSkillPoints();
+	if (skillPoints > 0.0f)
+	{
+		m_player->resetRank();
+		master->rva003805BB(skillPoints, false);
+	}
+}
 
 // FUNCTION: BFME2 0x002C68CE size=109 name=?resetMaster@SkirmishAI@@QAEHXZ evidence=N:ledger tier=A
 Int SkirmishAI::resetMaster()
@@ -141,6 +151,19 @@ void SkirmishAI::onHordeCreated(Object *factory, Object *unit)
 // FUNCTION: BFME2 0x002C6AFA size=152 name=?transferUnitsToPlayer@SkirmishAI@@QAEXPAVPlayer@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002C6B92 size=79 name=?doSpecialMasterAIDying@SkirmishAI@@QAEXXZ evidence=N:ledger tier=A
+void SkirmishAI::doSpecialMasterAIDying()
+{
+	Int newMaster = resetMaster();
+	if (newMaster != -1)
+	{
+		m_masterPlayerIndex = newMaster;
+		doSpecialSlaveAIUpdate();
+		Player *master = ThePlayerList->getNthPlayer(newMaster);
+		master->rva002AE2ED(m_player);
+		master->m_sciencePurchasePoints = m_player->m_sciencePurchasePoints;
+		transferUnitsToPlayer(master);
+	}
+}
 
 // FUNCTION: BFME2 0x002C6BE1 size=30 name=?doSpecialSlaveAIDying@SkirmishAI@@QAEXXZ evidence=N:ledger tier=A
 void SkirmishAI::doSpecialSlaveAIDying()

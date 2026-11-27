@@ -46,6 +46,7 @@ public:
 	Int getSciencePurchasePoints() const { return m_sciencePurchasePoints; }
 	Real getSkillPoints() const { return m_skillPoints; }
 	Int getRankLevel() const { return m_rankLevel; }
+	Bool rva003805BB(Real points, Bool flag);	// 0x003805BB (adds to the skill points; the map holds it as rva003805BB)
 	Int getRankLevelLimit();	// 0x003802DF (the map spells it ?getRankLevelLimit@SciencePurchasePointTracker@@QAEHXZ, non-const; ScriptConditions 0x003E4519 compares the rank level with it)
 
 	void *m_unk0x04;							// +0x04 resetRank takes the intrinsic points from its +4
