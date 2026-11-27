@@ -13,6 +13,7 @@
 #endif
 #define _CRTIMP __declspec(dllimport)
 #include <string.h>
+#include <wchar.h>
 #undef _CRTIMP
 #define _CRTIMP
 #include "GameClient/Keyboard.h"
@@ -533,6 +534,89 @@ void Keyboard::createStreamMessages()
 }
 
 // FUNCTION: BFME2 0x00232763 size=445 name=?translateKey@Keyboard@@QAEGG@Z evidence=N:ledger
+unsigned short Keyboard::translateKey(unsigned short keyCode)
+{
+	if (keyCode > 0x00FF)
+		return keyCode;
+
+	unsigned char ubKeyCode = (unsigned char)keyCode;
+	switch (ubKeyCode)
+	{
+	case KEY_CAPS:
+		if (getKeyStatusData(KEY_CAPS) == KeyboardIO::STATUS_UNUSED)
+		{
+			if (getKeyStateBit(KEY_CAPS, KEY_STATE_DOWN))
+			{
+				if (m_modifiers & KEY_STATE_CAPSLOCK)
+					m_modifiers &= ~KEY_STATE_CAPSLOCK;
+				else
+					m_modifiers |= KEY_STATE_CAPSLOCK;
+			}
+			setKeyStatusData(KEY_CAPS, KeyboardIO::STATUS_USED);
+		}
+		return 0;
+
+	case KEY_LSHIFT:
+		if (getKeyStateBit(KEY_LSHIFT, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_LSHIFT;
+		else
+			m_modifiers &= ~KEY_STATE_LSHIFT;
+		return 0;
+
+	case KEY_RSHIFT:
+		if (getKeyStateBit(KEY_RSHIFT, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_RSHIFT;
+		else
+			m_modifiers &= ~KEY_STATE_RSHIFT;
+		return 0;
+
+	case KEY_LCTRL:
+		if (getKeyStateBit(KEY_LCTRL, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_LCONTROL;
+		else
+			m_modifiers &= ~KEY_STATE_LCONTROL;
+		return 0;
+
+	case KEY_RCTRL:
+		if (getKeyStateBit(KEY_RCTRL, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_RCONTROL;
+		else
+			m_modifiers &= ~KEY_STATE_RCONTROL;
+		return 0;
+
+	case KEY_LALT:
+		if (getKeyStateBit(KEY_LALT, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_LALT;
+		else
+			m_modifiers &= ~KEY_STATE_LALT;
+		return 0;
+
+	case KEY_RALT:
+		if (getKeyStateBit(KEY_RALT, KEY_STATE_DOWN))
+			m_modifiers |= KEY_STATE_RALT;
+		else
+			m_modifiers &= ~KEY_STATE_RALT;
+		return 0;
+
+	default:
+		if (ubKeyCode == m_shift2Key)
+		{
+			if (getKeyStateBit(m_shift2Key, KEY_STATE_DOWN))
+				m_modifiers |= KEY_STATE_SHIFT2;
+			else
+				m_modifiers &= ~KEY_STATE_SHIFT2;
+			return 0;
+		}
+
+		if (m_modifiers & KEY_STATE_SHIFT2)
+			return m_keyNames[ubKeyCode].shifted2;
+
+		if (isShift() || getCapsState() && iswalpha(m_keyNames[ubKeyCode].stdKey))
+			return m_keyNames[ubKeyCode].shifted;
+
+		return m_keyNames[ubKeyCode].stdKey;
+	}
+}
 
 // FUNCTION: BFME2 0x00232920 size=86 name=??0Keyboard@@QAE@XZ evidence=N:ledger
 Keyboard::Keyboard()
