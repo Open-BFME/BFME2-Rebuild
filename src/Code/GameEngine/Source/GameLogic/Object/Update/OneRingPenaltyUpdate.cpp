@@ -2,6 +2,11 @@
 // FUNCTION: BFME2 0x00499954 size=6 name=?name@Rva00499954Named@@QBEPBDXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x0049995A size=82 name=?xfer@OneRingPenaltyUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x004999AC size=69 name=?getModuleNameKey@OneRingPenaltyUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+NameKeyType OneRingPenaltyUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheOneRingPenaltyUpdateNameKey = TheNameKeyGenerator->nameToKey("OneRingPenaltyUpdate");
+	return TheOneRingPenaltyUpdateNameKey;
+}
 // FUNCTION: BFME2 0x004999F1 size=37 name=??0OneRingPenaltyUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00499A16 size=73 name=??1OneRingPenaltyUpdateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00499A5F size=17 name=?buildFieldParse@OneRingPenaltyUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
