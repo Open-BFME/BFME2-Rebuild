@@ -4,7 +4,15 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "Common/RGBColor.h"
 // FUNCTION: BFME2 0x00004F2B size=58 name=??8@YA_NABURGBColor@@0@Z evidence=N:ledger tier=B hypothesis:name:invented
+bool operator==(const RGBColor &left, const RGBColor &right)
+{
+	return left.red == right.red && left.green == right.green && left.blue == right.blue;
+}
 
 // FUNCTION: BFME2 0x00004F65 size=21 name=??9@YA_NABURGBColor@@0@Z evidence=N:ledger tier=B hypothesis:K
-
+bool operator!=(const RGBColor &left, const RGBColor &right)
+{
+	return !(left == right);
+}

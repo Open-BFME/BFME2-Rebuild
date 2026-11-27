@@ -28,4 +28,7 @@ struct RGBColor
 // SIZE 0xC
 typedef char RGBColorSize[(sizeof(RGBColor) == 0xC) ? 1 : -1];
 
+bool operator==(const RGBColor &left, const RGBColor &right);	// 0x00004F2B
+bool operator!=(const RGBColor &left, const RGBColor &right);	// 0x00004F65
+
 #endif
