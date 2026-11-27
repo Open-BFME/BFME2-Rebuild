@@ -3,6 +3,11 @@
 // FUNCTION: BFME2 0x004A4C39 size=6 name=?name@Rva004A4C39Named@@QBEPBDXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x004A4C3F size=67 name=?rva004A4C3F@@YAXHHQAH@Z evidence=?:placeholder
 // FUNCTION: BFME2 0x004A4C82 size=69 name=?getModuleNameKey@RubbleRiseUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType RubbleRiseUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheRubbleRiseUpdateNameKey = TheNameKeyGenerator->nameToKey("RubbleRiseUpdate");
+	return TheRubbleRiseUpdateNameKey;
+}
 // FUNCTION: BFME2 0x004A4CC7 size=141 name=??0RubbleRiseUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x004A4D70 size=40 name=?rva004A4D70@RubbleRiseUpdate@@QAEXXZ evidence=?:placeholder
 // FUNCTION: BFME2 0x004A4D98 size=38 name=?onDie@RubbleRiseUpdate@@UAEXPBVDamageInfo@@@Z evidence=N:ledger
