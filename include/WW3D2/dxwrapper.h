@@ -429,6 +429,7 @@ protected:
 
 	friend void DX8_Assert();
 	friend void bfmeSetProjectionDepthBias(float bias);
+	friend void bfmeGo1054E(int transform, int matrix);
 	friend class WW3D;
 	friend bool SaveRenderDeviceRegistrySettings(const char *sub_key, int device, int width, int height, int depth, bool windowed, int texture_depth);
 	static void Set_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture);

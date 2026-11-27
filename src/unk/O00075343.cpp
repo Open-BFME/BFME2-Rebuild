@@ -39,6 +39,12 @@ void DXWrapper::Set_Pixel_Shader_Constant(int reg, const void *data, int count)
 }
 
 // FUNCTION: BFME2 0x000753EF size=35 name=?bfmeGo1054E@@YAXHH@Z evidence=N:ledger tier=B hypothesis:Z
+void bfmeGo1054E(int transform, int matrix)
+{
+	DXWrapper::matrix_changes++;
+	DX8_SET_TRANSFORM(DXWrapper::_Get_D3D_Device8(), static_cast<D3DTRANSFORMSTATETYPE>(transform), matrix);
+	number_of_DX8_calls++;
+}
 
 // FUNCTION: BFME2 0x00075412 size=110 name=?Set_DX8_Texture@DXWrapper@@SAXIPAUIDirect3DBaseTexture9@@@Z evidence=N:ledger tier=B hypothesis:Z
 void DXWrapper::Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture9 *texture)
