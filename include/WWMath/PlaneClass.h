@@ -35,6 +35,9 @@ public:
 	// 0x00069168 in BaseHeightMap's unit, and Bridge::getBridgeHeight 0x0027FD2A calls it.
 	bool Compute_Intersection(const Vector3 &p0, const Vector3 &p1, float *set_t) const;	// 0x00069168
 
+	// True when the point lies on the normal's side of the plane (Zero Hour's plane.h); retail's out-of-line copy is 0x00100291.
+	bool In_Front(const Vector3 &point) const;
+
 	Vector3 N;		// +0x00
 	Real D;			// +0x0C
 };
