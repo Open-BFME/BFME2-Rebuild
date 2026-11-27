@@ -9,6 +9,7 @@
 #include "GameLogic/LivingWorldRegionManager.h"
 #include "GameLogic/LivingWorldBattle.h"
 #include "GameLogic/LivingWorldRegion.h"
+#include "GameLogic/LivingWorldPlayer.h"
 // FUNCTION: BFME2 0x0020E27B size=105 name=?rva0020E27B@LivingWorldRegionManager@@QAEXM@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x0020E2E4 size=7 name=?get@Rva0020E2E4ByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x0020E2EB size=7 name=?get@Rva0020E2EBByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
@@ -16,6 +17,11 @@
 // FUNCTION: BFME2 0x0020E2F8 size=9 name=?get@Rva0020E2F8CmpBoolField@@QBE_NXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0020E301 size=17 name=?rva0020E301@LivingWorldPlayer@@QAE_NH@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0020E312 size=17 name=?rva0020E312@LivingWorldPlayer@@QBE_NPBV1@@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-shared-data
+bool LivingWorldPlayer::rva0020E312(const LivingWorldPlayer *other) const
+{
+	return !rva002E071E(other);
+}
+
 // FUNCTION: BFME2 0x0020E323 size=7 name=?get@Rva0020E323DwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0020E34F size=5 name=?clear@AITargetHeuristicExpansionBase@@UAEXXZ evidence=X:proven (vtable) tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0020E354 size=32 name=?rva0020E354@LivingWorldRegionManager@@QAE_NPAVRenderObjClass@@ABVVector3@@1@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-neighbour-callers
@@ -149,6 +155,16 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 }
 
 // FUNCTION: BFME2 0x0020E7E8 size=43 name=?EnumerateCompletedBattles@LivingWorldRegionManager@@QAEXPAVRva0020E7E8Callback@@@Z evidence=N:ledger tier=A
+void LivingWorldRegionManager::EnumerateCompletedBattles(PendingBattleVisitor *visitor)
+{
+	LivingWorldBattle **end = m_completedBattles.end();
+	for (LivingWorldBattle **it = m_completedBattles.begin(); it != end; ++it)
+	{
+		LivingWorldBattle *battle = *it;
+		if (!visitor->call(battle))
+			break;
+	}
+}
 
 // FUNCTION: BFME2 0x0020E813 size=87 name=?rva0020E813@LivingWorldRegionManager@@QBE_NPAURegionBattleView@@@Z evidence=?:placeholder tier=A
 
@@ -174,6 +190,7 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 
 // FUNCTION: BFME2 0x0020EB07 size=58 name=?BeginTurn@LivingWorldRegionManager@@UAEXHH@Z evidence=N:ledger tier=A
 
+
 // FUNCTION: BFME2 0x0020EB41 size=13 name=?rva0020EB41@Rva0020EB41@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0020EB4E size=82 name=?rva0020EB4E@Rva0020EB4EOuter@@QAEXPAX@Z evidence=?:placeholder tier=A
@@ -194,7 +211,14 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 
 // FUNCTION: BFME2 0x0020EE8F size=57 name=?GetDefaultArmyPlacementPos@LivingWorldRegionManager@@QAE_NHPAUPair8@@@Z evidence=N:ledger tier=A
 
+
 // FUNCTION: BFME2 0x0020EEC8 size=44 name=?SetRegionReinforcements@LivingWorldRegionManager@@QAEXHHHHHHH@Z evidence=N:ledger tier=A
+void LivingWorldRegionManager::SetRegionReinforcements(Int regionIndex, Int a, Int b, Int c, Int d, Int e, Int f)
+{
+	LivingWorldRegion *region = rva0020EAF6(regionIndex);
+	if (region)
+		region->rva003F1AB9(a, b, c, d, e, f);
+}
 
 // FUNCTION: BFME2 0x0020EEF4 size=74 name=?rva0020EEF4@Rva0020EEF4Outer@@QAEHH@Z evidence=?:placeholder tier=A
 
@@ -252,6 +276,7 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 
 // FUNCTION: BFME2 0x0020FB41 size=74 name=?OnTurnEnding@LivingWorldRegionManager@@UAEXHH@Z evidence=N:ledger tier=A
 
+
 // FUNCTION: BFME2 0x0020FB8B size=132 name=?rva0020FB8B@LivingWorldRegionManager@@QAEXPAVLivingWorldBattle@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0020FD42 size=61 name=?rva0020FD42@Rva0020FD42@@QAEXPAX0@Z evidence=?:placeholder tier=A
@@ -265,6 +290,7 @@ void LivingWorldRegionManager::EnumeratePendingBattles(PendingBattleVisitor &vis
 // FUNCTION: BFME2 0x00210202 size=200 name=?xfer@LivingWorldRegionManager@@UAEXPAVXfer@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002102CA size=68 name=?loadPostProcess@LivingWorldRegionManager@@UAEXXZ evidence=N:ledger tier=A
+
 
 // FUNCTION: BFME2 0x00210390 size=38 name=?rva00210390@Rva00210390@@QAEPAXPBVAsciiString@@@Z evidence=?:placeholder tier=A
 

@@ -27,6 +27,8 @@ public:
 	bool rva002E12F3(int id);				// 0x002E12F3: true when a revival record carries the id
 	int GetNumRegionsOwned();				// 0x002E1001: regions whose owner id is this player's id
 	int rva002E199E(const ThingTemplate *unitTemplate);
+	bool rva0020E312(const LivingWorldPlayer *other) const;	// 0x0020E312: the negation of rva002E071E
+	bool rva002E071E(const LivingWorldPlayer *other) const;	// 0x002E071E
 	bool rva002E0B30();					// 0x002E0B30 (LivingWorldLogic::rva002B4B83 calls it for each player)
 	LivingWorldArmy *findArmy(int id);			// 0x002E0A9F: the m_armies entry whose +0x20 id matches (LivingWorldLogic::findPlayerArmy 0x002B488E asks each player)
 	void removeArmy(LivingWorldArmy *army);		// 0x002E10BD: erase it from m_armies, then GameLogic::rva0023D007(army +0x78)

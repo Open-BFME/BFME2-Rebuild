@@ -48,9 +48,11 @@ public:
 	LivingWorldBattle *SelectPendingBattle(); // The first pending battle whose rva003F4831 is positive
 	LivingWorldRegion *rva0020EAF6(int index); // (LivingWorldLogic::getBattleRegion 0x002B2B2D passes the battle region index)
 	void UpdateBattleMarkers();
+	void SetRegionReinforcements(Int regionIndex, Int a, Int b, Int c, Int d, Int e, Int f); // 0x0020EEC8
 	LivingWorldRegion *rva0020FAEA(float *pos, LivingWorldRegion *hint); // (LivingWorldArmy::getRegion 0x00318C32: the region at a position, given the last one)
 	LivingWorldRegion *rva0020EEF4(int id); // (LivingWorldLogic::getRegionByID 0x002B2579 forwards a non-zero id)
 	void EnumeratePendingBattles(PendingBattleVisitor &visitor) const;
+	void EnumerateCompletedBattles(PendingBattleVisitor *visitor); // 0x0020E7E8: the completed battle list, stopping when the visitor returns false
 
 private:
 	Int m_unk0x2C;

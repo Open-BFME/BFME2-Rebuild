@@ -51,6 +51,7 @@ public:
 
 	int rva003F1053();					// Plots whose +0x20 is zero
 	void rva003F0F48(PlacementRange *list, void *request);	// (body not written)
+	void rva003F1AB9(Int a, Int b, Int c, Int d, Int e, Int f);	// 0x003F1AB9: the six reinforcement values SetRegionReinforcements forwards
 	void rva003F0FA3(void *request);			// Picks the list by the request's name
 
 private:
