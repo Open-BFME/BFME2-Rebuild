@@ -2,6 +2,7 @@
 #include "GameClient/AptOnlineHome.h"
 #include "stdio.h"
 #include "string.h"
+#include <stdlib.h>
 #include "GameClient/GameWindow.h"
 #include "GameClient/GadgetListBox.h"
 #include "Common/UnicodeString.h"
@@ -19,6 +20,13 @@ void bfmeGo924A(BfmeKeyLC *, char);
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:init-votes
 // FUNCTION: BFME2 0x005B901E size=6 name=?Rva005B901EGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x005B9024 size=49 name=?grabHexInt@@YAHPBD@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-shared-data
+int grabHexInt(const char *text)
+{
+	char hex[] = "0xff";
+	hex[2] = text[0];
+	hex[3] = text[1];
+	return strtol(hex, NULL, 16);
+}
 // FUNCTION: BFME2 0x005B9055 size=23 name=?rva00545D60@@YAXH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x005B906C size=51 name=?NumTickerFields@OnlineHome@AptOnline@@QAEXHPAD_N@Z evidence=N:ledger tier=B hypothesis:K
 void AptOnline::OnlineHome::NumTickerFields(int query, char *result, bool set)
