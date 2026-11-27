@@ -65,6 +65,7 @@ public:
 	Int getInt(Int key, Bool *exists = 0) const;		// 0x003131CA
 	float getReal(Int key, Bool *exists = 0) const;		// 0x003131FC
 	DataType getType(Int key) const;					// 0x0031317C
+	Bool known(NameKeyType key, DataType type) const;	// 0x002A9880
 	// 0x00306BA9, 0x00306BCD: out-of-line copies in DataChunk's unit; the pair count is read inline (m_used).
 	UnsignedShort getPairCount() const { return m_data ? m_data->m_used : 0; }
 	NameKeyType getNthKey(Int index) const;
