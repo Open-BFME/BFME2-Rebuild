@@ -2,3 +2,7 @@
 // object=G0031312F name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0031312F size=12 name=?Rva0031312FCombineBits@@YAIII@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+unsigned int Rva0031312FCombineBits(unsigned int high, unsigned int low)
+{
+	return (high << 8) | low;
+}
