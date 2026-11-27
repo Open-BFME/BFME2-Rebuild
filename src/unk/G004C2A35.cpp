@@ -1,4 +1,21 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G004C2A35 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameLogic/Module/DefectorSpecialPower.h"
+#include "GameLogic/Object.h"
+
 // FUNCTION: BFME2 0x004C2A35 size=53 name=?doSpecialPowerAtObject@DefectorSpecialPower@@UAEXPAVObject@@I@Z evidence=X:proven (vtable+own-this-calls) tier=B hypothesis:mm1-gap-unit
+void DefectorSpecialPower::doSpecialPowerAtObject(Object *objectToMakeDefector, unsigned int commandOptions)
+{
+	const Object *self = getObject();
+	if (self->isDisabled())
+		return;
+
+	if (!objectToMakeDefector)
+		return;
+
+	if (!self)
+		return;
+
+	SpecialPowerModule::doSpecialPowerAtObject(objectToMakeDefector, commandOptions);
+}
