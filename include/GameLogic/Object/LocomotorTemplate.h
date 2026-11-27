@@ -21,6 +21,7 @@ class LocomotorTemplate : public Overridable
 {
 public:
 	LocomotorTemplate();									// 0x001E4ABE
+	LocomotorTemplate(const LocomotorTemplate &that);				// 0x001E4DEB
 	LocomotorTemplate &operator=(const LocomotorTemplate &that);	// 0x001E3955
 	virtual ~LocomotorTemplate();							// (deleting dtor 0x001E67A3)
 

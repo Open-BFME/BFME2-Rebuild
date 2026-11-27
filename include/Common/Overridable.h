@@ -20,6 +20,7 @@ class Overridable
 {
 public:
 	Overridable() : m_nextOverride(0), m_isOverride(false), m_reloadState(-1) {}
+	Overridable(const Overridable &that);							// 0x003664DD: retail's out-of-line copy constructor starts a fresh chain, as the default one does
 	virtual ~Overridable();											// 0x001E3624
 
 	// Zero Hour's inline recursion; retail inlines the +4 test at call sites and calls
@@ -50,6 +51,7 @@ public:
 	Int getReloadState() const { return m_reloadState; }				// CommandSet::refreshIfStale re-looks a button up once this is at least 1
 	Bool isOverride() const { return m_isOverride; }
 	Overridable *deleteOverrides();									// 0x001E35ED
+	Overridable &operator=(const Overridable &that);					// 0x001FD28E: retail's out-of-line empty assignment; the chain links and reload state are not copied
 
 private:
 	Overridable *m_nextOverride;									// 0x04
