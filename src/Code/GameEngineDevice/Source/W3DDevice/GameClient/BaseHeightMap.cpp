@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
+#include "WWMath/Matrix4.h"
 #include "GameClient/BaseHeightMapRenderObjClass.h"
 #include "WW3D2/SceneClass.h"
 // FUNCTION: BFME2 0x000664BE size=49 name=?Rva006C5BE0@@YANNH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
@@ -180,6 +181,13 @@ void BaseHeightMapRenderObjClass::Notify_Added(SceneClass *scene)
 // FUNCTION: BFME2 0x00068FEF size=108 name=?Init@Matrix4x4@@QAEXABVMatrix3D@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0006905B size=110 name=?Init@Matrix4x4@@QAEXABVVector4@@000@Z evidence=N:ledger tier=A
+void Matrix4x4::Init(const Vector4 &r0, const Vector4 &r1, const Vector4 &r2, const Vector4 &r3)
+{
+	Row[0] = r0;
+	Row[1] = r1;
+	Row[2] = r2;
+	Row[3] = r3;
+}
 
 // FUNCTION: BFME2 0x00069130 size=22 name=?bfmeGoTKD@@YAXNH@Z evidence=N:ledger tier=A
 
