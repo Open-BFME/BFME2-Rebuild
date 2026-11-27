@@ -43,6 +43,12 @@ void NameKeyGenerator::freeSockets()
 }
 
 // FUNCTION: BFME2 0x00148BC2 size=127 name=??1NameKeyGenerator@@UAE@XZ evidence=N:ledger
+NameKeyGenerator::~NameKeyGenerator()
+{
+	ScopedCriticalSection lock(&m_lock);
+	freeSockets();
+}
+
 // FUNCTION: BFME2 0x00148C95 size=107 name=?keyToName@NameKeyGenerator@@QAEABVAsciiString@@W4NameKeyType@@@Z evidence=N:ledger
 const AsciiString &NameKeyGenerator::keyToName(NameKeyType key)
 {
@@ -118,3 +124,10 @@ Xfer &XferNameKey(Xfer &xfer, NameKeyType &key)
 }
 
 // FUNCTION: BFME2 0x001491AC size=114 name=??0NameKeyGenerator@@QAE@XZ evidence=N:ledger
+NameKeyGenerator::NameKeyGenerator() : m_lock(0)
+{
+	m_nextID = 0;
+	for (Int i = 0; i < SOCKET_COUNT; ++i)
+		m_sockets[i] = NULL;
+	m_lock.exit();
+}
