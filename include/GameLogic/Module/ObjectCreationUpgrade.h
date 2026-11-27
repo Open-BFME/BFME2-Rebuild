@@ -59,6 +59,8 @@ protected:
 	virtual void processUpgradeRemoval() { ((const ObjectCreationUpgradeModuleData *)getModuleData())->m_upgradeMuxData.muxDataProcessUpgradeRemoval(getObject()); }	// slot 15: retail 0x004B4075, ICF-folded with performUpgradeFX (both call the mux data's `ret 4` 0x0047A69C)
 
 public:
+	const ObjectCreationUpgradeModuleData *getObjectCreationData() const { return (const ObjectCreationUpgradeModuleData *)getModuleData(); }
+
 	// Slot 8's body (the map spells it a non-virtual member of this class, `this` is the UpgradeMux at +0): clears the
 	// pending creation, and when the data says DestroyWhenSold kills the object the SlaveWatcherBehavior module watches, then
 	// plays the data's death animation as a special model condition on it.

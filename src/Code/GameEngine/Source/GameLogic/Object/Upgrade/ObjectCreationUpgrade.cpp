@@ -53,7 +53,7 @@ NameKeyType ObjectCreationUpgrade::getModuleNameKey() const
 // FUNCTION: BFME2 0x004B403A size=39 name=?getUpgradeActivationMasks@ObjectCreationUpgrade@@MBEXAAUUpgradeMaskType@@0@Z evidence=N:ledger tier=B hypothesis:cohesion
 void ObjectCreationUpgrade::getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
 {
-	const UpgradeMuxData *mux = &((const ObjectCreationUpgradeModuleData *)getModuleData())->m_upgradeMuxData;
+	const UpgradeMuxData *mux = &getObjectCreationData()->m_upgradeMuxData;
 	activation = mux->m_triggeredBy;
 	conflicting = mux->m_conflictsWith;
 }
@@ -61,19 +61,19 @@ void ObjectCreationUpgrade::getUpgradeActivationMasks(UpgradeMaskType &activatio
 // FUNCTION: BFME2 0x004B4061 size=10 name=?get@Rva004B4061ByteChase32Field@@QBEEXZ evidence=?:placeholder tier=B hypothesis:cohesion
 Bool ObjectCreationUpgrade::requiresAllActivationUpgrades() const
 {
-	return ((const ObjectCreationUpgradeModuleData *)getModuleData())->m_upgradeMuxData.m_requiresAllTriggers;
+	return getObjectCreationData()->m_upgradeMuxData.m_requiresAllTriggers;
 }
 
 // FUNCTION: BFME2 0x004B406B size=10 name=?get@Rva004B406BByteChase32Field@@QBEEXZ evidence=?:placeholder tier=B hypothesis:cohesion
 Bool ObjectCreationUpgrade::requiresAllConflictingUpgrades() const
 {
-	return ((const ObjectCreationUpgradeModuleData *)getModuleData())->m_upgradeMuxData.m_requiresAllConflictingTriggers;
+	return getObjectCreationData()->m_upgradeMuxData.m_requiresAllConflictingTriggers;
 }
 
 // FUNCTION: BFME2 0x004B4075 size=15 name=?performUpgradeFX@ObjectCreationUpgrade@@MAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 void ObjectCreationUpgrade::performUpgradeFX()
 {
-	((const ObjectCreationUpgradeModuleData *)getModuleData())->m_upgradeMuxData.performUpgradeFX(getObject());
+	getObjectCreationData()->m_upgradeMuxData.performUpgradeFX(getObject());
 }
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00857708), read back entry by entry.
@@ -113,13 +113,27 @@ void ObjectCreationUpgrade::upgradeImplementation()
 {
 	if (!m_createPending)
 	{
-		m_createFrame = ((const ObjectCreationUpgradeModuleData *)getModuleData())->m_delay + TheGameLogic->getFrame();
+		m_createFrame = getObjectCreationData()->m_delay + TheGameLogic->getFrame();
 		m_createPending = true;
 		setWakeFrame(getObject(), UPDATE_SLEEP_NONE);
 	}
 }
 
 // FUNCTION: BFME2 0x004B4130 size=121 name=?rva004B4130@Rva004B4130@@QAE_NPAVRva00406F9C@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
+Bool ObjectCreationUpgrade::wouldUpgrade(const BitFlags<128> &keyMask) const
+{
+	const UpgradeMaskType *mask = (const UpgradeMaskType *)&keyMask;
+	UpgradeMaskType activation;
+	UpgradeMaskType conflicting;
+	getUpgradeActivationMasks(activation, conflicting);
+	if (!activation.any())
+		return false;
+	if (conflicting.rva00406F9C(mask))
+		return false;
+	if (requiresAllActivationUpgrades())
+		return mask->hasAllBitsOf(&activation);
+	return mask->rva00406F9C(&activation);
+}
 
 // FUNCTION: BFME2 0x004B41A9 size=91 name=?rva004B41A9@Rva004B4130@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
@@ -143,7 +157,7 @@ void ObjectCreationUpgrade::rva004B463C()
 	setUpgradeExecuted(false);
 	m_createFrame = UPDATE_SLEEP_FOREVER;
 	m_createPending = false;
-	const ObjectCreationUpgradeModuleData *data = (const ObjectCreationUpgradeModuleData *)getModuleData();
+	const ObjectCreationUpgradeModuleData *data = getObjectCreationData();
 	if (data && data->m_destroyWhenSold)
 	{
 		static NameKeyType TheSlaveWatcherBehaviorNameKey = TheNameKeyGenerator->nameToKey("SlaveWatcherBehavior");
