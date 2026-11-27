@@ -45,6 +45,12 @@ NameKeyType WeaponModeSpecialPowerUpdate::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x00494B38 size=102 name=??0WeaponModeSpecialPowerUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+WeaponModeSpecialPowerUpdate::WeaponModeSpecialPowerUpdate(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerUpdateModule(thing, moduleData)
+{
+	m_active = false;
+	setWakeFrame(getObject(), UPDATE_SLEEP_FOREVER);
+}
 
 
 // FUNCTION: BFME2 0x00494BBA size=42 name=?xfer@Rva00494A97@@MAEXPAVXfer@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
