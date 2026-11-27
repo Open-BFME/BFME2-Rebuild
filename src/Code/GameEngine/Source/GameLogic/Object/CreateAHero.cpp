@@ -409,9 +409,10 @@ void *CreateAHeroManager::GetFactionMaskType(UnsignedInt classIndex, UnsignedInt
 // FUNCTION: BFME2 0x00219FE3 size=51 name=?GetPreferedFaction@CreateAHeroManager@@QAEHII@Z evidence=N:ledger tier=A
 Int CreateAHeroManager::GetPreferedFaction(UnsignedInt classIndex, UnsignedInt index)
 {
-	if (classIndex < m_classes.size())
-		return m_classes.first[classIndex].GetPreferedFaction(index);
-	return -1;
+	if (classIndex >= m_classes.size())
+		return -1;
+	CreateAHeroClass *classes = m_classes.first;
+	return classes[classIndex].GetPreferedFaction(index);
 }
 
 // FUNCTION: BFME2 0x0021A016 size=43 name=?rva0021A016@CreateAHeroManager@@QAEHII@Z evidence=?:placeholder tier=A
