@@ -5,12 +5,17 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:Z
+#include <math.h>
 #include <stddef.h>
 #include "Common/INI.h"
 #include "GameLogic/Module/FloatUpdateModuleData.h"
 #include "GameLogic/Module/FloatUpdate.h"
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
+#include "GameClient/Drawable.h"
+#include "GameLogic/GameLogic.h"
+#include "GameLogic/Object.h"
+#include "GameLogic/TerrainLogic.h"
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00C4C7A4), read back
 // entry by entry from the image.
@@ -57,6 +62,42 @@ FloatUpdate::FloatUpdate(Thing *thing, const ModuleData *moduleData) :
 }
 
 // FUNCTION: BFME2 0x0048D813 size=945 name=?update@FloatUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:cohesion
+UpdateSleepTime FloatUpdate::update()
+{
+	if (m_unk0x20 == TRUE) {
+		const Coord3D *pos = getObject()->getPosition();
+
+		Real waterZ;
+		TheTerrainLogic->isUnderwater(pos->x, pos->y, &waterZ, 0, 0);
+
+		Coord3D newPos;
+		newPos.x = pos->x;
+		newPos.y = pos->y;
+		newPos.z = waterZ;
+		getObject()->setPosition(&newPos);
+	}
+
+	Drawable *draw = getObject()->getDrawable();
+	if (draw) {
+		Real angle = TheGameLogic->getFrame();
+		Real yaw;
+		Real pitch;
+		yaw = sin(angle * 0.0291f) * 0.05f;
+		pitch = sin(angle * 0.0515f) * 0.05f;
+
+		Matrix3D mx = *draw->getInstanceMatrix();
+
+		Real zRot = mx.Get_Z_Rotation();
+		mx.Make_Identity();
+		mx.Rotate_Z(zRot);
+		mx.Rotate_Y(yaw);
+		mx.Rotate_X(pitch);
+
+		draw->setInstanceMatrix(&mx, false);
+	}
+
+	return UPDATE_SLEEP_NONE;
+}
 
 // FUNCTION: BFME2 0x0048DBC4 size=42 name=?xfer@Rva0048D742@@MAEXPAVXfer@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 void FloatUpdate::xfer(Xfer *xfer)
