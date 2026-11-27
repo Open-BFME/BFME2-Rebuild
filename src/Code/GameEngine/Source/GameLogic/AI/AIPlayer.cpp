@@ -25,6 +25,8 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/Player.h"
+#include "GameLogic/Module/ProductionUpdate.h"
+#include "Common/BuildAssistant.h"
 #include "GameLogic/Module/BodyModule.h"
 #include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/Module/DozerAIUpdate.h"
@@ -354,6 +356,62 @@ AIPlayer::~AIPlayer()
 // FUNCTION: BFME2 0x004F08A8 size=295 name=?isLocationSafe@AIPlayer@@QAE_NPBVCoord3D@@PBVThingTemplate@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x004F09CF size=371 name=?findFactory@AIPlayer@@IAEPAVObject@@PBVThingTemplate@@_NPAH@Z evidence=N:ledger tier=A
+Object *AIPlayer::findFactory(const ThingTemplate *thing, Bool busyOK, Int *buildIndex)
+{
+	Object *busyFactory = NULL;
+	if (thing == NULL)
+		return NULL;
+	if (buildIndex)
+		*buildIndex = -1;
+	for (Object *factory = TheGameLogic->getFirstObject(); factory; factory = factory->getNextObject())
+	{
+		if (factory->getControllingPlayer() != m_player)
+			continue;
+		if (!factory->isKindOf(KINDOF_FS_FACTORY))
+			continue;
+		if (factory->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+			continue;
+		if (factory->testStatus(OBJECT_STATUS_SOLD))
+			continue;
+		if (factory->isDisabled())
+			continue;
+		ProductionUpdateInterface *pu = factory->getProductionUpdateInterface(false);
+		if (pu == NULL)
+			continue;
+		if (factory->m_privateStatus & 1)
+			continue;
+		Int index = m_player->m_unitRevivalTracker.findEntryIndex(thing, -1, 0);
+		if (index != -1)
+		{
+			if (!TheBuildAssistant->isPossibleToMakeUnit(factory, NULL, index))
+				continue;
+			if (buildIndex)
+				*buildIndex = index;
+		}
+		else
+		{
+			if (!TheBuildAssistant->isPossibleToMakeUnit(factory, thing, -1))
+				continue;
+		}
+		if (pu->getProductionCount() <= 0)
+			return factory;
+		if (m_player->m_unk0x735[0])
+		{
+			const ProductionEntry *entry = pu->firstProduction();
+			if (entry && (entry->m_unk0x04 == 1 || entry->m_unk0x04 == 3))
+			{
+				const ThingTemplate *queued = entry->m_unk0x08;
+				if (queued && queued->m_isAutoBuilt && !thing->isEquivalentTo(queued))
+					return factory;
+			}
+		}
+		if (busyOK)
+			busyFactory = factory;
+	}
+	if (busyOK)
+		return busyFactory;
+	return NULL;
+}
 
 // FUNCTION: BFME2 0x004F0B42 size=323 name=?isPossibleToBuildTeam@AIPlayer@@IAE_NPAVTeamPrototype@@_NAA_N@Z evidence=N:ledger tier=A
 

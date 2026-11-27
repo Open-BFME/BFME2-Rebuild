@@ -126,7 +126,7 @@ public:
 	virtual void rva0049CC15(ProductionID, Int) = 0;															// 14 0x0049CC15
 	virtual void cancelAndRefundAllProduction() = 0;															// 15
 	virtual void rva0049DEC8() = 0;																			// 16 0x0049DEC8
-	virtual void pslot17() = 0;																				// 17 folded
+	virtual Int getProductionCount() const = 0;	// 17 folded (slot 0x44), the queue length findFactory tests
 	virtual UnsignedInt rva0049CEAE(const ThingTemplate *) const = 0;											// 18 0x0049CEAE
 	virtual UnsignedInt rva0049CEE1(Int) const = 0;																// 19 0x0049CEE1
 	virtual UnsignedInt rva0049D0DE(const ProductionIDSet *mask) const = 0;									// 20 0x0049D0DE: how many queued entries have their +0x30 bit set in the mask
@@ -166,7 +166,7 @@ public:
 	virtual Bool queueUpgrade(const UpgradeTemplate *upgrade);	// ProductionUpdateInterface slot 3, retail word 0x0049D867
 	virtual Bool queueCreateUnit(const ThingTemplate *unitType, Int, ProductionID productionID, Int, Bool, const AsciiString &, const AsciiString &);	// ProductionUpdateInterface slot 8, retail word 0x0049DA34
 	virtual void pslot12(Int);	// ProductionUpdateInterface slot 12, retail word 0x0049CCF0
-	virtual void pslot17();	// ProductionUpdateInterface slot 17, retail word 0x0057E556
+	virtual Int getProductionCount() const;	// ProductionUpdateInterface slot 17, retail word 0x0057E556 (the folded getter: the word at +0x14 of the interface)
 	virtual void pslot24(UnsignedByte);	// ProductionUpdateInterface slot 24, retail word 0x003BA5D0
 	virtual UnsignedByte pslot25() const;	// ProductionUpdateInterface slot 25, retail word 0x002C8E83
 	virtual Real pslot26(const ThingTemplate *);	// ProductionUpdateInterface slot 26, retail word 0x0049D1CA
