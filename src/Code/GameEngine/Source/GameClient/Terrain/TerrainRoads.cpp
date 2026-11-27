@@ -151,6 +151,20 @@ void TerrainRoadType::friend_setRepairedToFXString( BodyDamageType state, Int in
 // FUNCTION: BFME2 0x002DB0DB size=238 name=?parseTransitionToFX@TerrainRoadType@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x002DB1CA size=327 name=??0TerrainRoadType@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
+TerrainRoadType::TerrainRoadType()
+{
+	m_isBridge = false;
+	m_id = 0;
+	m_next = NULL;
+	m_roadWidth = 0.0f;
+	m_roadWidthInTexture = 0.0f;
+	m_bridgeScale = 1.0f;
+	m_radarColor.red = 0.0f;
+	m_radarColor.green = 0.0f;
+	m_radarColor.blue = 0.0f;
+	m_transitionEffectsHeight = 0.0f;
+	m_numFXPerType = 0;
+}
 
 // FUNCTION: BFME2 0x002DB311 size=318 name=??1TerrainRoadType@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
 TerrainRoadType::~TerrainRoadType()
