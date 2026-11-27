@@ -214,6 +214,76 @@ void invertWord(unsigned int *value)
 }
 
 // FUNCTION: BFME2 0x00481C0C size=320 name=?update@PropagandaTowerBehavior@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
+UpdateSleepTime PropagandaTowerBehavior::update()
+{
+	const PropagandaTowerBehaviorModuleData *modData = static_cast<const PropagandaTowerBehaviorModuleData *>(m_moduleData);
+
+	// the tower does nothing while it is being built
+	Object *self = getObject();
+	if (self->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+		return UPDATE_SLEEP_NONE;
+
+	if (self->testStatus(OBJECT_STATUS_SOLD))
+	{
+		removeAllInfluence();
+		return UPDATE_SLEEP_FOREVER;
+	}
+
+	if (self->isEffectivelyDead())
+		return UPDATE_SLEEP_FOREVER;
+
+	if (self->isDisabled())
+	{
+		// let go of everyone unless the tower is only held
+		DisabledMaskType allButHeld(DisabledMaskType::kInit, DISABLED_HELD);
+		allButHeld.flip();
+		if (allButHeld.test(&self->getDisabledFlags()))
+		{
+			removeAllInfluence();
+			return UPDATE_SLEEP_NONE;
+		}
+	}
+
+	// a tower inside a container that is itself contained switches off
+	if (self->getContainedBy() && self->getContainedBy()->getContainedBy())
+	{
+		removeAllInfluence();
+		return UPDATE_SLEEP_NONE;
+	}
+
+	UnsignedInt currentFrame = TheGameLogic->getFrame();
+	if (currentFrame - m_lastScanFrame >= modData->m_delayBetweenUpdates)
+	{
+		doScan();
+		m_lastScanFrame = currentFrame;
+	}
+
+	// apply the effect to everything still inside, dropping entries that are gone
+	ObjectTracker *prev = NULL;
+	for (ObjectTracker *curr = m_insideList; curr; )
+	{
+		ObjectTracker *next = curr->next;
+		Object *obj = TheGameLogic->findObjectByID(curr->objectID);
+		if (obj != NULL &&
+			(obj->isKindOf(KINDOF_SCORE) || obj->isKindOf(KINDOF_SCORE_CREATE) || obj->isKindOf(KINDOF_SCORE_DESTROY) || obj->isKindOf(KINDOF_MP_COUNT_FOR_VICTORY)))
+		{
+			effectLogic(obj, true, static_cast<const PropagandaTowerBehaviorModuleData *>(m_moduleData));
+			prev = curr;
+		}
+		else
+		{
+			if (prev != NULL)
+				prev->next = next;
+			else
+				m_insideList = next;
+			curr->~ObjectTracker();
+			::operator delete(curr);
+		}
+		curr = next;
+	}
+
+	return UPDATE_SLEEP_NONE;
+}
 // FUNCTION: BFME2 0x00481D4C size=88 name=?removeAllInfluence@PropagandaTowerBehavior@@MAEXXZ evidence=N:ledger
 void PropagandaTowerBehavior::removeAllInfluence()
 {
