@@ -61,6 +61,7 @@ public:
 
 	StringEntry *m_entry;										// +0
 private:
+	unsigned int getHash(const char *text, int length) const;	// 0x006CB780 (case-folded rotate-xor hash)
 	void setString(const char *text);
 };
 // SIZE 0x4

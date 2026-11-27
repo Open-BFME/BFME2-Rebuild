@@ -5,7 +5,19 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented, hypothesis:padding
+#include "Common/PooledString.h"
+namespace Msvcr71 {
+	extern "C" __declspec(dllimport) __declspec(nothrow) int __cdecl tolower(int);
+}
 // FUNCTION: BFME2 0x006CB780 size=60 name=?getHash@PooledString@@ABEIPBDH@Z evidence=N:ledger tier=B hypothesis:K
+unsigned int PooledString::getHash(const char *text, int length) const
+{
+	unsigned int hash = 0;
+	for (int i = 0; i < length; i++) {
+		hash = ((hash << 4) | (hash >> 28)) ^ Msvcr71::tolower(*text++);
+	}
+	return hash;
+}
 
 // FUNCTION: BFME2 0x006CB7C0 size=492 name=?setString@PooledString@@AAEXPBD@Z evidence=N:ledger tier=B hypothesis:name:invented
 
