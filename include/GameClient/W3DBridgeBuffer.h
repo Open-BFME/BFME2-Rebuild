@@ -82,6 +82,7 @@ public:
 	W3DBridgeBuffer(void);													// 0x000DE52E
 	~W3DBridgeBuffer(void);
 	void clearAllBridges(void);
+	void rva000DD878(Int camera);				// culls every bridge against the camera (Zero Hour's cull)
 	enum { MAX_BRIDGE_VERTEX = 8000,MAX_BRIDGE_INDEX = 2 * MAX_BRIDGE_VERTEX, MAX_BRIDGES = 200 };
 
 protected:
@@ -92,6 +93,8 @@ protected:
 	W3DBridge m_bridges[MAX_BRIDGES];		// +0x10
 	Int m_numBridges;						// +0xD7B0
 	Bool m_initialized;						// +0xD7B4
+	Bool m_updateVis;						// +0xD7B5 true when the camera moved and visibility must be recalculated
+	Bool m_anythingChanged;					// +0xD7B6 set when a bridge changed visibility
 
 	void allocateBridgeBuffers(void);
 	void freeBridgeBuffers(void);			// 0x0074011F

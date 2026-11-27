@@ -27,6 +27,17 @@ Bool W3DBridge::cullBridge(CameraClass *camera)
 }
 
 // FUNCTION: BFME2 0x000DD878 size=64 name=?rva000DD878@W3DBridgeBuffer@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:K
+void W3DBridgeBuffer::rva000DD878(Int camera)
+{
+	m_anythingChanged = m_updateVis;
+
+	Int curBridge;
+	for (curBridge = 0; curBridge < m_numBridges; curBridge++) {
+		if (m_bridges[curBridge].cullBridge(NULL)) {
+			m_anythingChanged = true;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x000DD8B8 size=144 name=?allocateBridgeBuffers@W3DBridgeBuffer@@QAEXXZ evidence=N:ledger tier=B hypothesis:K
 
