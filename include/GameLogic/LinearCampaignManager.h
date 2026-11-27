@@ -31,6 +31,7 @@ public:
 	LinearCampaignManager();										// 0x001ED3C0
 	virtual ~LinearCampaignManager();								// 0x001ED41B; deleting 0x001ED52D
 
+	bool hasCurrentCampaign() const { return m_currentCampaign != 0; }
 	void rva001ECEF6();												// (AptCampaignMenu::OnBttnLastMission 0x0052119F calls it with the current campaign)
 
 	virtual void init() {}											// SubsystemInterface slot 1: the shared empty body

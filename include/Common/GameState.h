@@ -137,6 +137,7 @@ public:
 	Bool doesSaveGameExist(UnicodeString fileName);							// 0x002DCCFB (map: Rva002DCCFB): the save file exists in the save directory
 	Bool isInSaveDirectory(const UnicodeString &path) const;				// 0x002DC7C1 (map: Rva002DC7C1)
 	const UnsignedShort *getSaveFileExtension(Int mode);					// 0x002DBC97 (map: rva002DBC97Get@GameState): the file name suffix of a save mode
+	Int determineCurrentGameSaveFileMode();									// the save mode the running game uses
 
 	void xferSaveData(Xfer *xfer, SnapshotType which);				// 0x002DCE24
 	AsciiString getMapLeafName(const AsciiString &path) const;		// 0x002DC802

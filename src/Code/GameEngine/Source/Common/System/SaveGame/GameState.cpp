@@ -10,6 +10,10 @@
 #include "Common/GlobalData.h"
 #include "GameLogic/FPModeScope.h"
 #include "GameNetwork/GameSlot.h"
+#include "GameLogic/GameLogic.h"
+#include "GameLogic/LivingWorldLogic.h"
+#include "GameLogic/LinearCampaignManager.h"
+extern LivingWorldLogic *TheLivingWorldLogic;
 
 // The end-of-file token (.data 0x009BD038, a pointer to "SG_EOF" in game.dat): the block list's end marker
 // (used at lines below as the save token and the load loop's stop token).
@@ -199,6 +203,23 @@ void GameState::xfer(Xfer *xfer)
 // FUNCTION: BFME2 0x002DBDB4 size=174 name=?rva002DBDB4@Rva002DBDB4@@QAEXPAVRva002DBD05@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002DBE62 size=123 name=?determineCurrentGameSaveFileMode@GameState@@QAEHXZ evidence=N:ledger tier=A
+Int GameState::determineCurrentGameSaveFileMode()
+{
+	if (TheGameLogic == 0 || TheLivingWorldLogic == 0)
+		return 2;
+
+	if (TheLivingWorldLogic->isSelectionLocked())
+		return (TheGameLogic->m_unk0x114 != 0) * 2 + 4;
+
+	if (TheLinearCampaignManager->hasCurrentCampaign())
+		return TheGameLogic->m_gameMode == 9;
+
+	if (TheGameLogic->m_unk0x114 == 0)
+		return 3;
+	if (TheGameLogic->isWarOfTheRingGame())
+		return 5;
+	return (TheGameLogic->m_gameMode != 6) ? 2 : 0;
+}
 
 // FUNCTION: BFME2 0x002DBF50 size=22 name=?length@AsciiStringPlusText@@QBEHXZ evidence=N:ledger tier=A
 
