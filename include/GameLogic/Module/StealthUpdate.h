@@ -97,6 +97,7 @@ public:
 	void changeVisualDisguise();   // 0x00374BC8
 	void setStatusOnSelfAndContained(const ObjectStatusTypes &status, Bool set);   // 0x003743CF (map: placeholder class Rva003743CF): sets the status on the AI via the callback, then the object
 	void rva003748BD();   // 0x003748BD (public, placeholder name)
+	UpdateSleepTime rva00374FD5();   // 0x00374FD5 (public, placeholder name; 1747 B): update's body while this module owns the stealth
 	Real getFriendlyOpacityMin() const;   // 0x00373D45: the module data's FriendlyOpacityMin (x87 result)
 	UnsignedByte isOneRingReady();   // 0x00373EB6: the logic frame has reached the ring cooldown at +0x28 (updateOneRing tests the same word)
 	Bool hasRequiredUpgrades() const;   // 0x00373EC6: the object's upgrades hold every required bit and no forbidden bit (the masks rva003748BD fills)
@@ -107,7 +108,7 @@ public:
 public:
 	void rva00373D23();   // 0x00373D23 (public void, placeholder name)
 	// Zero Hour's inline accessor (module data +0x8 StealthDelay): AIGroup::groupIdle 0x0036FC23 reads it in place.
-	UnsignedInt getStealthDelay() const { return ((const StealthUpdateModuleData *)getModuleData())->m_stealthDelay; }
+	UnsignedInt getStealthDelay() const { return static_cast<const StealthUpdateModuleData *>(m_moduleData)->m_stealthDelay; }
 	UnsignedInt m_unk0x20;                         // +0x20; xfer UnsignedInt
 	UnsignedInt m_unk0x24;                         // +0x24; xfer UnsignedInt
 	UnsignedInt m_unk0x28;                         // +0x28; xfer UnsignedInt

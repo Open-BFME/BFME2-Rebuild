@@ -5,9 +5,122 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:name:invented
+#include "GameLogic/Module/StealthUpdate.h"
+#include "GameLogic/Module/StealthUpdateModuleData.h"
+#include "GameLogic/Object.h"
+#include "GameLogic/FXList.h"
+#include "GameClient/Drawable.h"
+#include "Common/Player.h"
+#include "Common/PlayerList.h"
+
+// Seconds per logic frame, next to the logic frame rate.
+extern Real g_secondsPerLogicFrame;
+
+static inline const StealthUpdateModuleData *stealthData(const ModuleData *data)
+{
+	return static_cast<const StealthUpdateModuleData *>(data);
+}
+
 // FUNCTION: BFME2 0x00374FD5 size=1747 name=?rva00374FD5@StealthUpdate@@QAE?AW4UpdateSleepTime@@XZ evidence=?:placeholder tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x003756A8 size=483 name=?update@StealthUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:K
+UpdateSleepTime StealthUpdate::update()
+{
+	// A disguise restored from a save is rebuilt first; a hidden drawable stays hidden.
+	if (m_unk0x47 == true)
+	{
+		Drawable *draw = getObject()->getDrawable();
+		Bool wasHidden = false;
+		if (draw && draw->isDrawableEffectivelyHidden())
+			wasHidden = true;
+		changeVisualDisguise();
+		draw = getObject()->getDrawable();
+		if (wasHidden && draw)
+			draw->setDrawableHidden(true);
+	}
+
+	Object *self = getObject();
+	StealthUpdate *stealthOwner = (StealthUpdate *)self->rva0028F4BC();
+	if (this != stealthOwner)
+	{
+		// Another module (a rider's) owns the stealth: drop everything this one held.
+		if (m_unk0x148)
+		{
+			m_unk0x148 = false;
+			if (stealthOwner == NULL)
+			{
+				markAsDetected(0, 1, NULL, true);
+			}
+			else
+			{
+				rva00373EEC(0);
+				disguiseAsObject(NULL);
+			}
+			changeVisualDisguise();
+		}
+		return m_unk0x30 ? UPDATE_SLEEP_NONE : UPDATE_SLEEP_FOREVER;
+	}
+
+	m_unk0x148 = true;
+	UpdateSleepTime sleepTime = rva00374FD5();
+
+	Drawable *draw = self->getDrawable();
+	const StealthUpdateModuleData *data = stealthData(getModuleData());
+	if (draw)
+	{
+		StealthLookType look = calcStealthedStatusForPlayer(self, ThePlayerList->getLocalPlayer());
+		draw->rva00275DCE(look, data->m_friendlyOpacityMin, data->m_friendlyOpacityMax, (Real)data->m_pulseFrequency * g_secondsPerLogicFrame);
+	}
+
+	Bool wasStealthed = m_unk0x32;
+	if (wasStealthed != self->testStatus((ObjectStatusTypes)0xF))
+	{
+		if (!m_unk0x34)
+		{
+			if (wasStealthed)
+			{
+				if (m_unk0x33)
+					FXList::doFXObj(stealthData(getModuleData())->m_exitStealthOneRingFX, getObject(), NULL);
+				else
+					FXList::doFXObj(stealthData(getModuleData())->m_exitStealthFX, getObject(), NULL);
+			}
+			else
+			{
+				if (m_unk0x31)
+					FXList::doFXObj(stealthData(getModuleData())->m_becomeStealthedOneRingFX, getObject(), NULL);
+				else
+					FXList::doFXObj(stealthData(getModuleData())->m_becomeStealthedFX, getObject(), NULL);
+			}
+		}
+		if (m_unk0x32)
+			rva00373D5E();
+		m_unk0x32 = self->testStatus((ObjectStatusTypes)0xF);
+		m_unk0x33 = m_unk0x31;
+	}
+	else
+	{
+		Bool wasOneRing = m_unk0x33;
+		if (wasOneRing != m_unk0x31)
+		{
+			if (self->testStatus((ObjectStatusTypes)0xF))
+			{
+				if (wasOneRing)
+				{
+					FXList::doFXObj(stealthData(getModuleData())->m_exitStealthOneRingFX, getObject(), NULL);
+					FXList::doFXObj(stealthData(getModuleData())->m_becomeStealthedFX, getObject(), NULL);
+				}
+				else
+				{
+					FXList::doFXObj(stealthData(getModuleData())->m_exitStealthFX, getObject(), NULL);
+					FXList::doFXObj(stealthData(getModuleData())->m_becomeStealthedOneRingFX, getObject(), NULL);
+				}
+			}
+			m_unk0x33 = m_unk0x31;
+		}
+	}
+	m_unk0x34 = false;
+	return sleepTime;
+}
 
 // FUNCTION: BFME2 0x0037588B size=334 name=??0StealthUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
 
