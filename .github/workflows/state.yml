@@ -132,7 +132,7 @@ jobs:
     timeout-minutes: 40
     strategy:
       fail-fast: false
-      max-parallel: ${{ fromJSON(vars.BFME_STATE_MAX_PARALLEL || '4') }}
+      max-parallel: 3
       matrix:
         batch: '${{ fromJSON(needs.plan.outputs.batches) }}'
     permissions:
@@ -402,7 +402,8 @@ jobs:
     needs: [plan, assemble, publish]
     if: >-
       always() && !cancelled() && github.repository_id == '1464323350' &&
-      github.ref == 'refs/heads/main' && env.BFME_STATE_SEED == 'true' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && inputs.seed &&
       needs.assemble.result == 'success' &&
       (needs.publish.result == 'success' || needs.publish.result == 'skipped')
     runs-on: '${{ vars.BFME_STATE_CONTROL_RUNNER || ''ubuntu-24.04'' }}'

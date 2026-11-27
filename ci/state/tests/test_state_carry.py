@@ -55,8 +55,11 @@ class AutoSeedMigrationTest(unittest.TestCase):
         import hashlib
         pair = state_delta.SEED_LIFECYCLE_MIGRATION
         self.assertIn(pair, state_delta.STATE_FLOW_MIGRATIONS)
+        self.assertEqual(pair[1], state_delta.SEED_YAML_FIX_MIGRATION[0])
+        pair2 = state_delta.SEED_YAML_FIX_MIGRATION
+        self.assertIn(pair2, state_delta.STATE_FLOW_MIGRATIONS)
         text = (Path(__file__).resolve().parents[3] / ".github/workflows/state.yml").read_bytes()
-        self.assertEqual(hashlib.sha256(text).hexdigest(), pair[1])
+        self.assertEqual(hashlib.sha256(text).hexdigest(), pair2[1])
 
 
 class ArtifactFirstLookupTest(unittest.TestCase):
