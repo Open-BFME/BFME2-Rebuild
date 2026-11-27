@@ -203,6 +203,7 @@ public:
 	Real rva002C9846(const Coord3D *pos) const;
 	Bool getWorldspaceBestContactPoint(Coord3D *result, const Coord3D *from, const char *boneName, Int a, Int b, Bool c) const;	// 0x002904DC (SpecialAbilityUpdate::isWithinStartAbilityRange 0x0044F28E)
 	Real Get3DCenterDistanceSquared(const Coord3D *point) const;	// 0x001E435D (map spells the parameter with the provisional class BfmeVec3EJ)
+	Real rva00375AE7(const Object *other) const;	// 0x00375AE7: the squared 3D centre distance to another object
 	Coord3D rva00265514(const Object *other) const;	// 0x00265514: the 2D border vector from other to this object (Weapon::computeApproachTarget 0x002CAEA3)
 	Coord3D Get2DBorderVectorTo(const Coord3D *pos) const;	// 0x002C986B (Weapon::computeApproachTarget 0x002CAEA3)
 	Real rva002C9856(const Coord3D *pos, const Object *other) const;
