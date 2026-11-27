@@ -35,6 +35,12 @@ Int LANGameInfo::getLocalSlotNum() const
 }
 
 // FUNCTION: BFME2 0x004477C7 size=20 name=?amIHost@LANGameInfo@@QBE_NXZ evidence=N:ledger tier=B hypothesis:cohesion
+Bool LANGameInfo::amIHost()
+{
+	if (!m_inGame)
+		return false;
+	return m_LANSlot[0].isLocalPlayer();
+}
 
 // FUNCTION: BFME2 0x004477E0 size=47 name=?resetAccepted@LANGameInfo@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 void LANGameInfo::resetAccepted()

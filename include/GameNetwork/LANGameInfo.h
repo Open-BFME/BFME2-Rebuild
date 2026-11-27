@@ -49,7 +49,7 @@ public:
 	virtual LANGameInfo *slot4() { return this; }
 	virtual Int slot7() const { return 3; }
 	const LANGameSlot *getLANSlot(Int slotNum) const;
-	Bool amIHost() const;									// 0x004477C7
+	Bool amIHost();									// 0x004477C7
 	Int getSlotNum(UnicodeString userName);					// 0x004483BC
 	void setSlot(Int slotNum, LANGameSlot slotInfo);		// 0x00448352
 	void setSlotLastHeard(Int slotNum, UnsignedInt time);	// 0x00248D35 (stamps a slot's last-heard time; the map has no better name)
