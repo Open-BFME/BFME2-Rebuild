@@ -12,6 +12,8 @@
 #include "GameLogic/PathfindCell.h"
 #include "GameLogic/Map/PolygonTrigger.h"
 #include "Common/Xfer.h"
+#include "GameLogic/AI.h"
+#include "GameLogic/AIPathfind.h"
 void FreePooledNode(void *node);	// 0x00265488: returns a path node to its pool
 
 // FUNCTION: BFME2 0x003638BA size=67 name=?rva003638BA@Rva003638BA@@QAE_NXZ evidence=?:placeholder tier=A
@@ -19,6 +21,48 @@ void FreePooledNode(void *node);	// 0x00265488: returns a path node to its pool
 // FUNCTION: BFME2 0x003638FD size=51 name=?rva003638FD@Rva003638BA@@QAEXPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x00363930 size=328 name=?DoAdvanceAlongPath@Path@@QAE_NPBVCoord3D@@_N@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Bool Path::DoAdvanceAlongPath(const Coord3D *pos, Bool flag)
+{
+	if (!m_path)
+		return false;
+	if (!m_unk0x10)
+		m_unk0x10 = m_path;
+
+	PathNode *closest = NULL;
+	Real closestT = 0.0f;
+	Real closestDistSqr = 1.0e10f;
+	PathNode *node = m_unk0x10;
+	for (PathNode *next = node->m_next; next; next = node->m_next)
+	{
+		PathNode *end = flag ? next : node->m_nextOpti;
+		Real dx = end->m_pos.x - node->m_pos.x;
+		Real dy = end->m_pos.y - node->m_pos.y;
+		Real t = ((pos->x - node->m_pos.x) * dx + (pos->y - node->m_pos.y) * dy) / (dx * dx + dy * dy);
+		if (t < 0.0f)
+			t = 0.0f;
+		else if (t > 1.0f)
+			t = 1.0f;
+		Real offX = node->m_pos.x + t * dx - pos->x;
+		Real offY = node->m_pos.y + t * dy - pos->y;
+		Real distSqr = offX * offX + offY * offY;
+		if (distSqr < closestDistSqr)
+		{
+			closestDistSqr = distSqr;
+			closest = node;
+			closestT = t;
+		}
+		else if (closestDistSqr < 0.1f)
+			break;
+		node = flag ? next : node->m_nextOpti;
+	}
+
+	if (!closest)
+		return false;
+	m_unk0x10 = closest;
+	m_unk0x14 = closestT;
+	TheAI->m_pathfinder->SetDebugPathPosition(pos);
+	return true;
+}
 
 // FUNCTION: BFME2 0x00363A78 size=48 name=?rva00363A78@Rva00363A78@@QAEXXZ evidence=?:placeholder tier=A
 void Path::skipNonPortalNodes()
