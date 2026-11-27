@@ -41,6 +41,18 @@ void ShellGameLoadScreen::update(int percent)
 // FUNCTION: BFME2 0x00356413 size=35 name=?rva00356413@Rva00355F3E@@UAEXH@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x00356436 size=128 name=?processProgress@MapTransferLoadScreen@@UAEXHHVAsciiString@@@Z evidence=N:ledger
+void MapTransferLoadScreen::processProgress(int player, int percent, AsciiString stateStr)
+{
+	if (m_oldProgress[player] == percent)
+		return;
+	m_oldProgress[player] = percent;
+
+	int slot = m_playerLookup[player];
+	if (m_progressBars[slot])
+		GadgetProgressBarSetProgress(m_progressBars[slot], percent);
+	if (m_progressText[slot])
+		GadgetStaticTextSetText(m_progressText[slot], TheGameText->fetch(stateStr));
+}
 
 // FUNCTION: BFME2 0x003564B6 size=139 name=?processTimeout@MapTransferLoadScreen@@QAEXH@Z evidence=N:ledger
 void MapTransferLoadScreen::processTimeout(int secondsLeft)

@@ -56,11 +56,11 @@ public:
     void processProgress(int player, int percent, AsciiString fileName);
     void processTimeout(int player);
     void setCurrentFilename(AsciiString fileName);
-    GameWindow *m_playerWindows[8];          // 10
-    GameWindow *m_progressBars[8];           // 30
-    GameWindow *m_fileWindows[8];            // 50
-    int m_progress[8];                      // 70
-    int m_timeout[8];                       // 90
+    GameWindow *m_progressBars[8];           // 10, indexed by the lookup's screen slot
+    GameWindow *m_playerNames[8];            // 30
+    GameWindow *m_progressText[8];           // 50, the transfer state text
+    int m_playerLookup[8];                  // 70, network slot -> screen slot (-1 for none)
+    int m_oldProgress[8];                   // 90, the percent processProgress last showed
     GameWindow *m_fileNameText;             // B0: setCurrentFilename 0x00356E8E sets its text
     GameWindow *m_timeoutText;              // B4: processTimeout 0x003564B6 sets its text
     int m_oldTimeout;                       // B8: the seconds processTimeout last showed
