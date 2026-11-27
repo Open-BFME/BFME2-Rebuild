@@ -53,6 +53,7 @@ public:
 
 	Bool isAttackPointless() const;
 	Bool isMemberWounded(const Object *member) const;			// 0x0048F64E: health ratio below MembersGetHealedAtLifeRatio (Zero Hour's name)
+	void giveFinalOrders();										// 0x0048F6EE: a dead transport hands the assault's order to the members now outside
 	void retrieveMembers();										// 0x0048F690: orders every member outside back in (aiEnter) (Zero Hour's name)
 	void reset();												// 0x0048F365, the constructor calls it after setting 10 members
 

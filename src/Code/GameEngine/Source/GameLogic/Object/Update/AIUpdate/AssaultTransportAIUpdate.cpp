@@ -157,6 +157,25 @@ void AssaultTransportAIUpdate::retrieveMembers()
 }
 
 // FUNCTION: BFME2 0x0048F6EE size=185 name=?Rva0048F6EEHelper@AssaultTransportAIUpdate@@QAEXXZ evidence=?:placeholder
+void AssaultTransportAIUpdate::giveFinalOrders()
+{
+	for (Int i = 0; i < m_currentMembers; i++)
+	{
+		Object *member = TheGameLogic->findObjectByID(m_memberIDs[i]);
+		AIUpdateInterface *ai = member ? member->getAI() : NULL;
+		if (member && ai)
+		{
+			Object *designatedTarget = TheGameLogic->findObjectByID(m_designatedTarget);
+
+			if (m_isAttackObject && designatedTarget)
+				ai->rva0026C2D9(designatedTarget, 0x7FFFFFFF, CMD_FROM_PLAYER);
+			else if (m_isAttackMove)
+				ai->aiAttackMoveToPosition(&m_attackMoveGoalPos, 0x7FFFFFFF, CMD_FROM_PLAYER);
+
+			ai->m_unk0x3C1 = false;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0048F7A7 size=129 name=?aiDoCommand@AssaultTransportAIUpdate@@UAEXPBUAICommandParms@@@Z evidence=N:ledger
 // A command from outside (not the AI itself) resets the assault; an attack-move remembers its goal and an
