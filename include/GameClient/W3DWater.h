@@ -42,6 +42,8 @@ public:
 	WaterRenderObjClass();
 	virtual ~WaterRenderObjClass();
 
+	const char *name() const;
+
 	virtual RenderObjClass *Clone() const;
 	virtual int Class_ID() const;
 	virtual void Render(RenderInfoClass &renderInfo);

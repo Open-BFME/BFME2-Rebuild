@@ -174,6 +174,10 @@ void WaterRenderObjClass::Get_Obj_Space_Bounding_Box(AABoxClass &box) const
 // FUNCTION: BFME2 0x00082140 size=439 name=??1WaterRenderObjClass@@UAE@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000822F7 size=6 name=?name@WaterRenderObjClass@@QBEPBDXZ evidence=N:ledger tier=A
+const char *WaterRenderObjClass::name() const
+{
+	return "WaterRenderObjClass";
+}
 
 // FUNCTION: BFME2 0x00082329 size=410 name=??0WaterRenderObjClass@@QAE@XZ evidence=N:ledger tier=A
 

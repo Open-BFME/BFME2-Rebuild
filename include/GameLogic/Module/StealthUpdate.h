@@ -76,6 +76,7 @@ public:
 	virtual NameKeyType getModuleNameKey() const;
 	virtual const char *GetSnapshotName() const;
 	virtual ~StealthUpdate();
+	bool isDisguised() const;					// true while a disguise template is set (+0x3C)
 	virtual UpdateSleepTime update();   // UpdateModuleInterface slot 0 (+0x10 table; 0x003756A8, defined in the next object)
 	virtual DisabledMaskType getDisabledTypesToProcess() const { return DisabledMaskType(DisabledMaskType::kInit, 3); }	// UpdateModuleInterface slot 1: retail 0x004A2D67 (DISABLED_HELD only), as AutoAbilityBehavior
 	virtual void onObjectCreated();   // slot 5 (0x00374FD0: a 5-byte `jmp rva003748BD`)
