@@ -173,6 +173,8 @@ public:
 		const Coord3D *normal);												// 0x0028E868
 
     int rva0028B511() const;
+    signed char rva0028CE7B() const;	// 0x0028CE7B (ToppleUpdate::onCollide compares it against the colliding object's level)
+    char rva00294815();	// 0x00294815 (ToppleUpdate::onCollide)
     Bool rva0028B35B(const Object *other) const;	// 0x0028B35B (CollisionShouldCollide 0x0028C0E3 forwards to it)
     void *rva0028BD5D(int) const;
     void setLayer(PathfindLayerEnum);

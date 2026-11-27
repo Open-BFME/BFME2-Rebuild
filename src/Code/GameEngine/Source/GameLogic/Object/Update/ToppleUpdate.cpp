@@ -126,6 +126,24 @@ void Rva004A82BAAttemptDamage(Object *obj)
 }
 
 // FUNCTION: BFME2 0x004A82F5 size=150 name=?rva004A82F5@Rva004A82F5@@QAEXPAVObject@@HH@Z evidence=?:placeholder tier=A
+void ToppleUpdate::onCollide(Object *other, const Coord3D *loc, const Coord3D *normal)
+{
+	if (other == NULL)
+		return;
+
+	if (other->rva00294815() > getObject()->rva0028CE7B())
+	{
+		Coord3D toppleVector = *getObject()->getPosition();
+		toppleVector.x -= other->getPosition()->x;
+		toppleVector.y -= other->getPosition()->y;
+		toppleVector.z = 0;
+
+		Real speed = other->getLocomotorSpeed();
+		if (speed == 0 && other->m_containedBy)
+			speed = other->m_containedBy->getLocomotorSpeed();
+		getObject()->topple(&toppleVector, speed, 0);
+	}
+}
 
 // FUNCTION: BFME2 0x004A83D7 size=784 name=?applyTopplingForce@ToppleUpdate@@QAEXPBVCoord3D@@MI@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 void ToppleUpdate::applyTopplingForce(const Coord3D *toppleDirection, Real toppleSpeed, UnsignedInt options)
