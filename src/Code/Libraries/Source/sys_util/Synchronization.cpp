@@ -64,7 +64,22 @@ CriticalSection::CriticalSection(int initiallyUnlocked)
 }
 
 // FUNCTION: BFME2 0x00041037 size=30 name=?Lock@SingleSyncObjectLock@@QAE_NH@Z evidence=X:map request tier=B hypothesis:mm1-neighbour-class
+bool SingleSyncObjectLock::Lock(int timeout)
+{
+	if (m_locked)
+		return false;
+	m_locked = m_object->Lock(timeout);
+	return m_locked;
+}
+
 // FUNCTION: BFME2 0x00041055 size=35 name=?Unlock@SingleSyncObjectLock@@QAE_NXZ evidence=X:map request tier=B hypothesis:mm1-neighbour-class
+bool SingleSyncObjectLock::Unlock()
+{
+	if (m_locked)
+		m_locked = !m_object->Unlock();
+	return !m_locked;
+}
+
 // FUNCTION: BFME2 0x00041078 size=160 name=?rva00041078@Rva00041078@@QAE_NKHPAH@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-class
 // FUNCTION: BFME2 0x00041118 size=54 name=?rva00041118@Rva00041078@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:K
 
@@ -73,8 +88,19 @@ CriticalSection::CriticalSection(int initiallyUnlocked)
 // FUNCTION: BFME2 0x00041168 size=28 name=?rva00041168@Rva00041168@@QAEXPAX@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0004120E size=33 name=??0MilesMutexGuard@@QAE@PAXH@Z evidence=N:ledger tier=B hypothesis:K
+SingleSyncObjectLock::SingleSyncObjectLock(SyncObject *object, int initiallyUnlocked)
+	: m_object(object), m_locked(false)
+{
+	if (!initiallyUnlocked)
+		Lock(SyncObject::INFINITE_TIMEOUT);
+}
 
 // FUNCTION: BFME2 0x0004122F size=12 name=??1MilesMutexGuard@@QAE@XZ evidence=N:ledger tier=A
+SingleSyncObjectLock::~SingleSyncObjectLock()
+{
+	if (m_locked)
+		Unlock();
+}
 
 // FUNCTION: BFME2 0x0004123B size=83 name=?rva0004123B@Rva00041078@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:K
 

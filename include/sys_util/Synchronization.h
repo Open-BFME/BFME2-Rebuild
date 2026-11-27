@@ -103,6 +103,21 @@ private:
 };
 // SIZE 0x24
 
+class SingleSyncObjectLock
+{
+public:
+	SingleSyncObjectLock(SyncObject *object, int initiallyUnlocked);
+	~SingleSyncObjectLock();
+
+	bool Lock(int timeout = SyncObject::INFINITE_TIMEOUT);
+	bool Unlock();
+
+private:
+	SyncObject *m_object;
+	bool m_locked;
+};
+// SIZE 0x8
+
 class ScopedCriticalSection
 {
 public:
