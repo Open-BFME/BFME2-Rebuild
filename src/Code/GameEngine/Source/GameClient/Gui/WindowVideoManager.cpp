@@ -150,6 +150,18 @@ void WindowVideoManager::stopAndRemoveMovie(GameWindow *win)
 }
 
 // FUNCTION: BFME2 0x0053F45C size=136 name=??1WindowVideoManager@@UAE@XZ evidence=N:ledger
+WindowVideoManager::~WindowVideoManager()
+{
+	WindowVideoMap::iterator cursor = m_playingVideos.begin();
+	while (cursor != m_playingVideos.end())
+	{
+		WindowVideo *video = cursor->second;
+		if (video != 0)
+			delete video;
+		cursor++;
+	}
+	m_playingVideos.clear();
+}
 
 // FUNCTION: BFME2 0x0053F4E4 size=88 name=?reset@WindowVideoManager@@UAEXXZ evidence=N:ledger
 void WindowVideoManager::reset()
@@ -283,4 +295,18 @@ void WindowVideoManager::resumeAllMovies()
 }
 
 // FUNCTION: BFME2 0x0053F85C size=137 name=??0WindowVideoManager@@QAE@XZ evidence=N:ledger
+WindowVideoManager::WindowVideoManager()
+{
+	WindowVideoMap::iterator cursor = m_playingVideos.begin();
+	while (cursor != m_playingVideos.end())
+	{
+		WindowVideo *video = cursor->second;
+		if (video != 0)
+			delete video;
+		cursor++;
+	}
+	m_playingVideos.clear();
+	m_stopAllMovies = false;
+	m_pauseAllMovies = false;
+}
 
