@@ -32,8 +32,32 @@ DisabledMaskType SlowDeathBehavior::getDisabledTypesToProcess() const
 }
 
 // FUNCTION: BFME2 0x0045D1BD size=67 name=?parseOCL@InstantDeathBehaviorModuleData@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+void InstantDeathBehaviorModuleData::parseOCL(INI *ini, void *instance, void *store, const void *userData)
+{
+	_STL::vector<ObjectCreationList *> *list = &((InstantDeathBehaviorModuleData *)instance)->m_ocls;
+	for (const char *name = ini->getNextTokenOrNull(); name; name = ini->getNextTokenOrNull())
+	{
+		ObjectCreationList *ocl = (ObjectCreationList *)TheObjectCreationListStore->findObjectCreationList(name);
+		list->push_back(ocl);
+	}
+}
+
 // FUNCTION: BFME2 0x0045D200 size=113 name=?parseWeapon@InstantDeathBehaviorModuleData@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+void InstantDeathBehaviorModuleData::parseWeapon(INI *ini, void *instance, void *store, const void *userData)
+{
+	_STL::vector<const WeaponTemplate *> *list = &((InstantDeathBehaviorModuleData *)instance)->m_weapons;
+	for (const char *name = ini->getNextTokenOrNull(); name; name = ini->getNextTokenOrNull())
+	{
+		const WeaponTemplate *weapon = TheWeaponStore->findWeaponTemplate(AsciiString(name));
+		list->push_back(weapon);
+	}
+}
+
 // FUNCTION: BFME2 0x0045D28D size=105 name=??1InstantDeathBehaviorModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+InstantDeathBehaviorModuleData::~InstantDeathBehaviorModuleData()
+{
+}
+
 // FUNCTION: BFME2 0x0045D2F6 size=105 name=?Rva0045D2F6Parse@@YAXPAVINI@@PAX1PBX@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 void iniParseFXListVec(INI *ini, void *instance, void *store, const void *userData);
 void Rva0045D2F6Parse(INI *ini, void *instance, void *store, const void *userData);
