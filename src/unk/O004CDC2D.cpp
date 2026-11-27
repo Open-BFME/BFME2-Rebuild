@@ -14,6 +14,11 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
 // FUNCTION: BFME2 0x004CDBFC size=49 name=??0EvacuateGarrisonSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+EvacuateGarrisonSpecialPower::EvacuateGarrisonSpecialPower(Thing *thing, const ModuleData *moduleData)
+	: SpecialAbilityUpdate(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004CDC2D size=6 name=?Rva004CDC2DGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *EvacuateGarrisonSpecialPower::GetSnapshotName() const
 {
