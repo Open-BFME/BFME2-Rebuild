@@ -40,6 +40,11 @@ int GadgetSliderGetPosition(GameWindow *slider)
 }
 // FUNCTION: BFME2 0x0051825B size=7 name=?get@Rva0051825BDwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x00518262 size=21 name=?Rva00518262Enable@@YAXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
+void Rva00518262Enable(void)
+{
+	if (g_Va00A04908 != 0)
+		g_bfmeAptWindowManager->enable();
+}
 // FUNCTION: BFME2 0x00518277 size=52 name=?AdvancedOptionNum@AptOptions@@QAEXHPAD_N@Z evidence=N:ledger tier=B hypothesis:K
 // The enum table of the LOD and option rows (BfmeEnumTableEntry, declared in Common/OptionPreferences.h).
 extern BfmeEnumTableEntry BfmeEnumTable[];
