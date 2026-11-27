@@ -499,6 +499,51 @@ bool MeshGeometryClass::read_vertex_shade_indices(ChunkLoadClass &cload)
 }
 
 // FUNCTION: BFME2 0x0016B3F0 size=652 name=?Scale@MeshGeometryClass@@QAEXABVVector3@@@Z evidence=N:ledger tier=A
+void MeshGeometryClass::Scale(const Vector3 &sc)
+{
+	Vector3 *vert = Vertex->Get_Array();
+	for (int i = 0; i < VertexCount; i++) {
+		vert[i].Scale(sc);
+	}
+
+	if (SecondaryVertex) {
+		Vector3 *vert2 = SecondaryVertex->Get_Array();
+		for (int i = 0; i < VertexCount; i++) {
+			vert2[i].Scale(sc);
+		}
+	}
+
+	BoundBoxMin.Scale(sc);
+	BoundBoxMax.Scale(sc);
+	BoundSphereCenter.Scale(sc);
+
+	float max;
+	max = (sc.X > sc.Y) ? sc.X : sc.Y;
+	max = (max > sc.Z) ? max : sc.Z;
+	BoundSphereRadius *= max;
+
+	if (sc.X != sc.Y || sc.Y != sc.Z) {
+		Set_Flag(DIRTY_VNORMALS, true);
+	}
+	Set_Flag(DIRTY_PLANES, true);
+
+	if (CullTree) {
+		if (fabs(sc[0] - sc[1]) < 0.0001f && fabs(sc[0] - sc[2]) < 0.0001f) {
+			AABTreeClass *temp = new AABTreeClass();
+			*temp = *CullTree;
+			temp->Set_Mesh(this);
+			if (temp) temp->Add_Ref();
+			if (CullTree) CullTree->Release_Ref();
+			CullTree = temp;
+			if (temp) temp->Release_Ref();
+			CullTree->Scale(sc[0]);
+		} else {
+			if (CullTree) CullTree->Release_Ref();
+			CullTree = NULL;
+			Generate_Culling_Tree();
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0016B680 size=2237 name=?get_deformed_vertices@MeshModelClass@@QAEXPAVVector3@@PBVHTreeClass@@@Z evidence=N:ledger tier=A
 
