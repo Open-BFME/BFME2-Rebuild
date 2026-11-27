@@ -4,7 +4,20 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=rests-on:veto; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:name:invented
+#include "Common/Geometry.h"
 // FUNCTION: BFME2 0x004BBA15 size=40 name=?rva004BBA15@GeometryInfo@@QAEXM@Z evidence=?:placeholder tier=B hypothesis:name:invented
+void GeometryInfo::rva004BBA15(Real majorRadius)
+{
+	if (m_shapes.size() > 0)
+		m_shapes[0].m_majorRadius = majorRadius;
+	calcBoundingStuff();
+}
 
 // FUNCTION: BFME2 0x004BBA3D size=40 name=?rva004BBA3D@GeometryInfo@@QAEXM@Z evidence=?:placeholder tier=B hypothesis:Z
+void GeometryInfo::rva004BBA3D(Real minorRadius)
+{
+	if (m_shapes.size() > 0)
+		m_shapes[0].m_minorRadius = minorRadius;
+	calcBoundingStuff();
+}
 

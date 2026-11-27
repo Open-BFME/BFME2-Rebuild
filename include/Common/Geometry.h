@@ -88,6 +88,9 @@ public:
 	Bool isIntersectedByLineSegment(const Coord3D &loc, const Coord3D &from, const Coord3D &to) const;
 	// 0x006BEB40: grows the major and minor radius of every enabled shape by radius, then refreshes the bounds.
 	void expandFootprint(Real radius);
+	// 0x004BBA15 / 0x004BBA3D: set the first shape's major / minor radius (when there is one), then refresh the bounds.
+	void rva004BBA15(Real majorRadius);
+	void rva004BBA3D(Real minorRadius);
 	// Static INI field parsers (tokens of the Geometry block): the table's parse functions; each stores into the
 	// object or its last shape and refreshes the bounds (retail 0x006BE9D0 .. 0x006BEAB0).
 	static void parseGeometryActive(INI *ini, void *instance, void *store, const void *userData);		// 0x006BD590
