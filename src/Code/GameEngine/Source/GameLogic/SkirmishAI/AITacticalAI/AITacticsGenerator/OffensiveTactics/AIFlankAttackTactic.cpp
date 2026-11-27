@@ -14,8 +14,23 @@
 // FUNCTION: BFME2 0x005AA0D8 size=274 name=?canRun@AIFlankAttackTactic@@UAE_NPAX@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x005AA1EA size=84 name=?update@AIFlankAttackTactic@@UAEXXZ evidence=N:ledger tier=A
+void AIFlankAttackTactic::update()
+{
+	if (m_active && (rva004ED169() || m_owner20->m_flag18))
+	{
+		AIFlankAttackTacticImp *impl = m_impl;
+		if (impl->m_nextWaypoint == impl->m_waypoints.size())
+			end(true, false);
+		else
+			rva004ED342(&impl->m_waypoints[impl->m_nextWaypoint++]);
+	}
+}
 
 // FUNCTION: BFME2 0x005AA23E size=105 name=??0AIFlankAttackTactic@@QAE@XZ evidence=N:ledger tier=A
+AIFlankAttackTactic::AIFlankAttackTactic() : AITacticOffensive(AsciiString("FlankAttack"))
+{
+	m_impl = new AIFlankAttackTacticImp;
+}
 
 // FUNCTION: BFME2 0x005AA2A7 size=50 name=?create@AIFlankAttackTactic@@UAEPAVAITactic@@XZ evidence=N:ledger tier=A
 AITactic *AIFlankAttackTactic::create()
@@ -28,6 +43,10 @@ AITactic *AIFlankAttackTactic::create()
 // FUNCTION: BFME2 0x005AA4C1 size=156 name=?DoXfer@AIFlankAttackTacticImp@@QAEXPAVXfer@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x005AA55D size=81 name=??1AIFlankAttackTactic@@UAE@XZ evidence=N:ledger tier=A
+AIFlankAttackTactic::~AIFlankAttackTactic()
+{
+	delete m_impl;
+}
 
 // FUNCTION: BFME2 0x005AA5AE size=97 name=?run@AIFlankAttackTactic@@UAEXXZ evidence=N:ledger tier=A
 

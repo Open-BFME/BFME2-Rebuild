@@ -11,6 +11,10 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/Module/SpecialPowerUpdateInterface.h"
 // FUNCTION: BFME2 0x004C676C size=46 name=??0StopSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+StopSpecialPower::StopSpecialPower(Thing *thing, const ModuleData *moduleData) : SpecialPowerModule(thing, moduleData), m_unk0x34(NULL)
+{
+}
+
 // FUNCTION: BFME2 0x004C679A size=6 name=?Rva004C679AGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *StopSpecialPower::GetSnapshotName() const
 {
