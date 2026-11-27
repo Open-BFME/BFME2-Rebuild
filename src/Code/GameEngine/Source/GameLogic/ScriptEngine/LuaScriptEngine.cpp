@@ -32,6 +32,16 @@ extern FileSystem *TheFileSystem;
 #include "Common/FileSystem.h"
 #include "GameClient/Drawable.h"
 #include "GameLogic/Object.h"
+#include "GameLogic/Module/BodyModule.h"
+#include "Common/Team.h"
+#include "Common/Player.h"
+#include "Common/Upgrade.h"
+#include "Common/GameAudio.h"
+#include "GameLogic/Module/AIUpdate.h"
+#include "GameLogic/WeaponStore.h"
+#include "Common/SpecialPowerStore.h"
+#include "Common/SpecialPowerTemplate.h"
+#include "GameLogic/Module/SpecialPowerModule.h"
 #include "GameLogic/GameLogic.h"
 #include "Common/ThingTemplate.h"
 #include "Common/BitFlagsIO.h"
@@ -44,6 +54,17 @@ extern "C" {
 LuaScriptEngine *TheLuaScriptEngine = 0;
 }
 extern "C" void bfmeGo1039E(lua_State *L, int b);
+void bfmeLogMsg574(const char *message);
+struct LuaAr;
+int Rva00333CD1Console(lua_State *state, LuaAr *ar);
+extern "C" int lua_toboolean(lua_State *L, int index);
+extern "C" ObjectID lua_tablesizehint(lua_State *L, int index);
+
+// The reference-returning maximum this unit selects with `a > b ? a : b`.
+template <class T> inline const T &greaterOf(const T &a, const T &b)
+{
+	return a > b ? a : b;
+}
 
 extern FileSystem *TheFileSystem;
 
@@ -54,7 +75,34 @@ extern FileSystem *TheFileSystem;
 // FUNCTION: BFME2 0x00332B7A size=256 name=?InitializeInternalEvents@LuaScriptEngine@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00332C7A size=117 name=?ProcessInternalEvent@LuaScriptEngine@@QAEXPAVXmlNameSlotList@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x00332CFB size=46 name=?GetFrame@@YAHPAUlua_State@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+int GetFrame(lua_State *state)
+{
+	lua_pushnumber(state, TheGameLogic->getFrame());
+	return 1;
+}
 // FUNCTION: BFME2 0x00332D29 size=76 name=?CurDrawableGetCurrentTargetHeight@@YAHPAUlua_State@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+int CurDrawableGetCurrentTargetHeight(lua_State *state)
+{
+	LuaDrawableLink *drawable = TheLuaScriptEngine->m_drawable;
+	if (drawable != 0) {
+		Drawable *owner = drawable->m_drawable;
+		if (owner != 0) {
+			if (owner->m_object != 0) {
+				lua_pushnumber(state, owner->m_object->m_currentTargetPosition.z - owner->m_object->getPosition()->z);
+			}
+			else {
+				lua_pushnil(state);
+			}
+		}
+		else {
+			lua_pushnil(state);
+		}
+	}
+	else {
+		lua_pushnil(state);
+	}
+	return 1;
+}
 // FUNCTION: BFME2 0x00332D75 size=103 name=?GetClientRandomNumberReal@@YAHPAUlua_State@@@Z evidence=N:ledger
 int GetClientRandomNumberReal(lua_State *state)
 {
@@ -313,8 +361,18 @@ bool Rva003336ADGet(bool flag, const char *name)
 }
 
 // FUNCTION: BFME2 0x00333722 size=25 name=?CurDrawableHideModule@@YAHPAX@Z evidence=N:ledger
+int CurDrawableHideModule(void *state)
+{
+	Rva003336ADGet(true, lua_tostring(static_cast<lua_State *>(state), 1));
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0033373B size=25 name=?CurDrawableShowModule@@YAHPAX@Z evidence=N:ledger
+int CurDrawableShowModule(void *state)
+{
+	Rva003336ADGet(false, lua_tostring(static_cast<lua_State *>(state), 1));
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00333754 size=108 name=?CurDrawablePrevAnimationState@@YAHPAUlua_State@@@Z evidence=N:ledger
 int CurDrawablePrevAnimationState(lua_State *state)
@@ -368,6 +426,11 @@ template Bool BitFlags<101>::rva003339CE(const char *token, Bool *sawName, Bool 
 // FUNCTION: BFME2 0x00333CD1 size=369 name=?Rva00333CD1Console@@YAHPAXPAULuaAr@@@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x00333E42 size=25 name=_io_debug evidence=N:ledger
+extern "C" int io_debug(lua_State *state)
+{
+	bfmeLogMsg574("\nEntering LUA debug mode.  Type ? for help, 'cont' to exit debug mode\n");
+	return Rva00333CD1Console(state, 0);
+}
 
 // FUNCTION: BFME2 0x00333E5B size=220 name=?rva00333E5B@LuaDrawableState@@QAEXPAVObject@@@Z evidence=?:placeholder
 
@@ -458,18 +521,93 @@ int CurDrawableIsCurrentTargetKindof(lua_State *state)
 // FUNCTION: BFME2 0x00334F2E size=125 name=?ObjectCapturingObjectPlayerSide@@YAHPAUlua_State@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x00334FAB size=98 name=?ObjectTemplateName@@YAHPAUlua_State@@@Z evidence=N:ledger
+int ObjectTemplateName(lua_State *state)
+{
+	ObjectID id = lua_tablesizehint(state, 1);
+	if (id != INVALID_ID || lua_type(state, 1) == LUA_TNIL)
+	{
+		Object *object = TheGameLogic->findObjectByID(id);
+		if (object)
+		{
+			lua_pushstring(state, object->getTemplate()->getName().str());
+			return 1;
+		}
+	}
+	lua_pushnil(state);
+	return 1;
+}
 
 // FUNCTION: BFME2 0x0033500D size=130 name=?ObjectTestModelCondition@@YAHPAUlua_State@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0033508F size=187 name=?ObjectTestCanSufferFear@@YAHPAUlua_State@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0033514A size=120 name=?bfmeHelper6280@@YAHPAUlua_State@@@Z evidence=N:ledger
+int bfmeHelper6280(lua_State *state)
+{
+	ObjectID firstID = lua_tablesizehint(state, 1);
+	if (firstID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	Object *first = TheGameLogic->findObjectByID(firstID);
+	if (first)
+	{
+		ObjectID secondID = lua_tablesizehint(state, 2);
+		if (secondID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+			return 0;
+		Object *second = TheGameLogic->findObjectByID(secondID);
+		if (second)
+			first->rva0028EC68(6, second, 1);
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x003351C2 size=120 name=?bfmeHelper6320@@YAHPAUlua_State@@@Z evidence=N:ledger
+int bfmeHelper6320(lua_State *state)
+{
+	ObjectID firstID = lua_tablesizehint(state, 1);
+	if (firstID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	Object *first = TheGameLogic->findObjectByID(firstID);
+	if (first)
+	{
+		ObjectID secondID = lua_tablesizehint(state, 2);
+		if (secondID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+			return 0;
+		Object *second = TheGameLogic->findObjectByID(secondID);
+		if (second)
+			first->rva0028EC68(4, second, 1);
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0033523A size=71 name=?ObjectEnterAlertState@@YAHPAUlua_State@@@Z evidence=N:ledger
+int ObjectEnterAlertState(lua_State *state)
+{
+	ObjectID id = lua_tablesizehint(state, 1);
+	if (id != INVALID_ID || lua_type(state, 1) == LUA_TNIL)
+	{
+		Object *object = TheGameLogic->findObjectByID(id);
+		if (object)
+			object->rva0028EC68(9, 0, 1);
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00335281 size=118 name=?ObjectEnterUncontrollableCowerState@@YAHPAUlua_State@@@Z evidence=N:ledger
+int ObjectEnterUncontrollableCowerState(lua_State *state)
+{
+	ObjectID firstID = lua_tablesizehint(state, 1);
+	if (firstID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	ObjectID secondID = lua_tablesizehint(state, 2);
+	if (secondID == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	GameLogic *logic = TheGameLogic;
+	Object *first = logic->findObjectByID(firstID);
+	Object *second = logic->findObjectByID(secondID);
+	if (first && second)
+		first->rva0028EC68(5, second, 1);
+	return 0;
+}
 
 // FUNCTION: BFME2 0x003352F7 size=178 name=?ObjectDoSpecialPower@@YAHPAUlua_State@@@Z evidence=N:ledger
 
@@ -498,8 +636,37 @@ int ObjectRemoveUpgrade(lua_State *state)
 // FUNCTION: BFME2 0x003357E0 size=113 name=?ObjectSetChanting@@YAHPAUlua_State@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x00335851 size=136 name=?ObjectSetFearFactor@@YAHPAUlua_State@@@Z evidence=N:ledger
+int ObjectSetFearFactor(lua_State *state)
+{
+	if (lua_gettop(state) < 2)
+		return 0;
+	ObjectID id = lua_tablesizehint(state, 1);
+	if (id == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	Object *object = TheGameLogic->findObjectByID(id);
+	if (!object)
+		return 0;
+	Int value = lua_tonumber(state, 2);
+	Int current = static_cast<Int>(object->m_1ac);
+	object->m_1ac = greaterOf(value, current);
+	return 1;
+}
 
 // FUNCTION: BFME2 0x003358D9 size=113 name=?ObjectSetEnragedState@@YAHPAUlua_State@@@Z evidence=N:ledger
+int ObjectSetEnragedState(lua_State *state)
+{
+	if (lua_gettop(state) < 2)
+		return 0;
+	ObjectID id = lua_tablesizehint(state, 1);
+	if (id == INVALID_ID && lua_type(state, 1) != LUA_TNIL)
+		return 0;
+	Object *object = TheGameLogic->findObjectByID(id);
+	if (!object)
+		return 0;
+	Bool enraged = lua_toboolean(state, 2) != 0;
+	object->rva0028EBDA(enraged);
+	return 1;
+}
 
 // FUNCTION: BFME2 0x0033594A size=279 name=?ObjectDispatchEvent@@YAHPAUlua_State@@@Z evidence=N:ledger
 

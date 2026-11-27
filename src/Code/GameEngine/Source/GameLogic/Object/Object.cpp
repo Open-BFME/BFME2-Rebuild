@@ -1138,12 +1138,42 @@ void Object::rva0028C24C()
 }
 
 // FUNCTION: BFME2 0x0028C264 size=121 name=?rva0028C264@Object@@QAE_NPAHH@Z evidence=?:placeholder tier=A
+Bool Object::rva0028C264(Int *out, Int value)
+{
+	UnsignedInt frames = BfmeLogicFramesPerSecond * value;
+	HordeContainInterface *horde = getHordeContainInterface();
+	if (horde)
+		return horde->rva0046BB6F(out, frames);
+
+	BodyModuleInterface *body = m_body;
+	if (body)
+	{
+		UnsignedInt timestamp = body->getLastDamageTimestamp();
+		if (timestamp != 0xFFFFFFFF && timestamp + frames >= TheGameLogic->getFrame())
+		{
+			const DamageInfo *info = body->getLastDamageInfo();
+			if (info)
+				*out = info->in.m_sourceID;
+			return true;
+		}
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x0028C2DD size=331 name=?rva0028C2DD@Object@@QBEXPAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x0028C428 size=142 name=?rva0028C428@Object@@QBE_NXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0028C4B6 size=55 name=?rva0028C4B6@Object@@QAEXXZ evidence=?:placeholder tier=A
+void Object::rva0028C4B6()
+{
+	HordeContainInterface *horde = rva0028C197();
+	if (horde && horde->rva0046F8F4() && horde->rva0046CDC9())
+	{
+		horde->rva004696E5();
+		TheControlBar->markUIDirty();
+	}
+}
 
 // FUNCTION: BFME2 0x0028C4ED size=38 name=?rva0028C4ED@Object@@QBE_NXZ evidence=?:placeholder tier=A
 Bool Object::isSlaved() const
@@ -1765,6 +1795,17 @@ void Object::enterGroup(AIGroup *group)
 // FUNCTION: BFME2 0x0028E775 size=131 name=?ShroudHideIfFogged@Object@@UBE_NH@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0028E7F8 size=82 name=?PartitionGetPlayerIndex@Object@@UBEHXZ evidence=N:ledger tier=A
+Int Object::PartitionGetPlayerIndex() const
+{
+	Player *player = getControllingPlayer();
+	if (player && !(m_privateStatus & UNDETECTED_DEFECTOR) && !isKindOf(KINDOF_MINE))
+	{
+		Team *team = m_team;
+		if (team && !team->rva0039F0D2() && !team->rva0039F824())
+			return player->getPlayerIndex();
+	}
+	return -1;
+}
 
 // FUNCTION: BFME2 0x0028E84A size=30 name=?rva0028E84A@Object@@UBEIXZ evidence=?:placeholder tier=A
 
@@ -2575,6 +2616,15 @@ void Object::clearScriptStatus(ObjectScriptStatusBit bit)
 // FUNCTION: BFME2 0x002934E7 size=1087 name=?initObject@Object@@QAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00293926 size=47 name=?rva00293926@Object@@QAE_NW4KindOfType@@@Z evidence=?:placeholder tier=A
+Bool Object::rva00293926(KindOfType kind)
+{
+	if (testModelConditionState((ModelConditionFlagType)kind))
+		return true;
+	Object *leader = rva002931F5(false);
+	if (leader)
+		return leader->testModelConditionState((ModelConditionFlagType)kind);
+	return false;
+}
 
 // FUNCTION: BFME2 0x00293955 size=176 name=?clearModelConditionStateForHorde@Object@@QAEXW4ModelConditionFlagType@@@Z evidence=N:ledger tier=A
 void Object::clearModelConditionStateForHorde(ModelConditionFlagType flag)
