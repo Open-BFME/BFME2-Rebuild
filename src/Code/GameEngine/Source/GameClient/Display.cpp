@@ -21,6 +21,7 @@ Display *TheDisplay;	// VA 0x00DFE9D8
 
 extern "C" __declspec(dllimport) int __stdcall ReleaseMutex(void *);
 extern "C" __declspec(dllimport) unsigned long __stdcall WaitForSingleObject(void *, unsigned long);
+extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long);
 void NetworkDebugDisplay(DebugDisplayInterface *, void *, FILE *);
 
 // FUNCTION: BFME2 0x0025C262 size=278 name=?setDisplayMode@Display@@UAE_NIII_N@Z evidence=N:ledger tier=B hypothesis:cohesion
@@ -156,6 +157,36 @@ void Display::rva0025D10F()
 }
 
 // FUNCTION: BFME2 0x0025D128 size=118 name=?bfmeVM0WorkerThread@@YAKPAX@Z evidence=N:ledger tier=B hypothesis:cohesion
+unsigned long bfmeVM0WorkerThread(void *param)
+{
+	Display *display = static_cast<Display *>(param);
+	bool running = true;
+	WaitForSingleObject(display->field40, 0xFFFFFFFF);
+	do
+	{
+		if (display->field60 == 5)
+		{
+			display->rva0025C4A4(1);
+			Sleep(33);
+		}
+		else
+		{
+			if (running)
+			{
+				if (!display->slot70())
+				{
+					display->rva0025CF2A(1);
+					Sleep(1);
+					continue;
+				}
+				running = false;
+			}
+			Sleep(100);
+		}
+	} while (WaitForSingleObject(display->field44, 0) == 0x102);
+	ReleaseMutex(display->field40);
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0025D19E size=103 name=?rva0025D19E@Display@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 void Display::rva0025D19E()

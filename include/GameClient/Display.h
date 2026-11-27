@@ -123,6 +123,7 @@ public:
 
     void bfmeTickVM0();
     void StartRenderThread(int);
+    friend unsigned long bfmeVM0WorkerThread(void *);	// the render thread reads the handles and the state
     void Rva006F2890RegisterVideoBuffer(VideoBuffer *);
     void rva002B2466(float, float, float, float);
     void rva0025C46E();
