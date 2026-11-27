@@ -49,6 +49,7 @@ public:
 	virtual bool Is_Light_Source(void) { return true; }						// 129: 0x0050B5C6 (role name)
 
 	LightType Get_Type(void) const { return Type; }
+	float Get_Spot_Angle_Cos(void) const;						// 0x0013F240
 	void Set_Ambient(const Vector3 &color);							// 0x00042EBD
 	void Set_Diffuse(const Vector3 &color);							// 0x00042EDA
 	void Set_Specular(const Vector3 &color);						// 0x00042EF7
