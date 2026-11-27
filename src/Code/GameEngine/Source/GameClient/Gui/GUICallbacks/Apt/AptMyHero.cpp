@@ -4,6 +4,8 @@
 #include <map>
 #include "GameClient/AptMyHero.h"
 #include "GameClient/CreateAHeroCamera.h"
+#include "GameClient/Keyboard.h"
+#include "GameLogic/CreateAHeroManager.h"
 #include "Common/RandomValue.h"
 #include "GameLogic/Object.h"
 extern int g_00E06450;
@@ -27,10 +29,38 @@ bool rva005B2295(const CommandButton *, const char *, int, int);
 // FUNCTION: BFME2 0x005B0232 size=8 name=?disable@Rva005B0232ByteZeroSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x005B023A size=15 name=?slot14@AptMyHero@@UAEXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+pointers-mixed
 // FUNCTION: BFME2 0x005B0249 size=54 name=?rva005B0249@AptMyHero@@QAEXXZ evidence=X:proven (caller-this) tier=B hypothesis:mm1-contiguity-class+pointers-mixed
+void AptMyHero::RotateLeft()
+{
+	float step = TheKeyboard->isShift() ? 0.2f : 0.1f;
+	m_x168 -= step;
+}
 // FUNCTION: BFME2 0x005B027F size=54 name=?rva005B027F@AptMyHero@@QAEXXZ evidence=X:proven (caller-this) tier=B hypothesis:mm1-contiguity-class+pointers-mixed
+void AptMyHero::RotateRight()
+{
+	float step = TheKeyboard->isShift() ? 0.2f : 0.1f;
+	m_x168 += step;
+}
 // FUNCTION: BFME2 0x005B02B5 size=72 name=?rva005B02B5@AptMyHero@@QAEXXZ evidence=X:proven (caller-this) tier=B hypothesis:mm1-contiguity-class+pointers-mixed
+void AptMyHero::ZoomIn()
+{
+	float step = TheKeyboard->isShift() ? 0.1f : 0.05f;
+	m_x16C -= step;
+	if (m_x16C < 0.0f)
+		m_x16C = 0.0f;
+}
 // FUNCTION: BFME2 0x005B02FD size=77 name=?rva005B02FD@AptMyHero@@QAEXXZ evidence=X:proven (caller-this) tier=B hypothesis:mm1-contiguity-class+pointers-mixed
+void AptMyHero::ZoomOut()
+{
+	float step = TheKeyboard->isShift() ? 0.1f : 0.05f;
+	m_x16C += step;
+	if (m_x16C > 1.0f)
+		m_x16C = 1.0f;
+}
 // FUNCTION: BFME2 0x005B034A size=13 name=?set@AptMyHero@@QAEXH@Z evidence=P:provisional (wb-file) tier=B hypothesis:mm1-contiguity-class+pointers-mixed
+void AptMyHero::rva005B034A(int value)
+{
+	m_x170 = value;
+}
 // FUNCTION: BFME2 0x005B0357 size=93 name=?rva005B0357@CreateAHeroHero@@QAEXHPADH@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x005B03B4 size=98 name=?rva005B03B4@Rva005B03B4@@QAEXHPADH@Z evidence=?:placeholder tier=B hypothesis:K
@@ -61,6 +91,11 @@ void *AptMyHero::rva005B045D()
 // FUNCTION: BFME2 0x005B0473 size=20 name=?rva005B0473@AptMyHero@@QAEPAURva005B0473View@@XZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x005B0487 size=47 name=?rva005B0487@AptMyHero@@QAEXXZ evidence=?:placeholder tier=A
+void AptMyHero::rva005B0487()
+{
+	m_x168 = 0.0f;
+	m_x16C = TheCreateAHeroManager->GetViewInfo(m_heroClass, m_heroSubclass)->m_defaultFraction;
+}
 
 // FUNCTION: BFME2 0x005B04B6 size=29 name=?rva005B04B6@Rva005B045D@@QAEXXZ evidence=?:placeholder tier=A
 void AptMyHero::rva005B04B6()
