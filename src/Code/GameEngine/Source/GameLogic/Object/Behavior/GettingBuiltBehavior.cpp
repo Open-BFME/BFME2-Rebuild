@@ -45,8 +45,27 @@ static const FieldParse s_gettingBuiltBehaviorModuleDataFieldParse[] =
 // FUNCTION: BFME2 0x0045323C size=18 name=?Rva0045323CCopy@@YAXPAVRva004530ED@@ABV1@@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x0045324E size=199 name=??0GettingBuiltBehaviorModuleData@@QAE@XZ evidence=N:ledger
+GettingBuiltBehaviorModuleData::GettingBuiltBehaviorModuleData() :
+	m_rebuildTimeSeconds(60.0f),
+	m_healWeapon(NULL),
+	m_disallowRebuildRange(0.0f),
+	m_useSpawnTimerWithoutWorker(false)
+{
+	m_workerName.set("");
+	m_evilWorkerName.set("");
+	m_testFaction = false;
+	m_spawnTimer = 30.0f;
+	m_rebuildWhenDead = false;
+	m_percentOfBuildCostToRebuildPristine = 0.25f;
+	m_percentOfBuildCostToRebuildDamaged = 0.5f;
+	m_percentOfBuildCostToRebuildReallyDamaged = 0.75f;
+	m_percentOfBuildCostToRebuildRubble = 1.0f;
+}
 
 // FUNCTION: BFME2 0x00453315 size=129 name=??1GettingBuiltBehaviorModuleData@@UAE@XZ evidence=N:ledger
+GettingBuiltBehaviorModuleData::~GettingBuiltBehaviorModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x00453396 size=17 name=?buildFieldParse@GettingBuiltBehaviorModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger
 void GettingBuiltBehaviorModuleData::buildFieldParse(MultiIniFieldParse &parse)

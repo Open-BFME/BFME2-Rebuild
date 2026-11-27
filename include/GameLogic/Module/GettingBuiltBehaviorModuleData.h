@@ -16,6 +16,7 @@
 #include "Common/GameType.h"
 #include "GameLogic/Module/ModuleData.h"
 #include "Common/AsciiString.h"
+#include "Common/OpaqueRefElement4.h"
 #include "GameLogic/ObjectFilter.h"
 
 class INI;
@@ -26,12 +27,13 @@ class GettingBuiltBehaviorModuleData : public ModuleData
 {
 public:
 	GettingBuiltBehaviorModuleData();
+	virtual ~GettingBuiltBehaviorModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
-	UnsignedByte m_selfBuildingLoop[0x4];                  // +0x8 SelfBuildingLoop; unresolved: INI::parseAudioEventRTS
-	UnsignedByte m_selfRepairFromDamageLoop[0x4];          // +0xC SelfRepairFromDamageLoop; unresolved: INI::parseAudioEventRTS
-	UnsignedByte m_selfRepairFromRubbleLoop[0x4];          // +0x10 SelfRepairFromRubbleLoop; unresolved: INI::parseAudioEventRTS
+	OpaqueRefElement4 m_selfBuildingLoop; // +0x8 SelfBuildingLoop; unresolved: INI::parseAudioEventRTS
+	OpaqueRefElement4 m_selfRepairFromDamageLoop; // +0xC SelfRepairFromDamageLoop; unresolved: INI::parseAudioEventRTS
+	OpaqueRefElement4 m_selfRepairFromRubbleLoop; // +0x10 SelfRepairFromRubbleLoop; unresolved: INI::parseAudioEventRTS
 	AsciiString m_workerName;                              // +0x14 WorkerName
 	AsciiString m_evilWorkerName;                          // +0x18 EvilWorkerName
 	Bool m_testFaction;                                    // +0x1C TestFaction
