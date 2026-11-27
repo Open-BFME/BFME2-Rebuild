@@ -53,6 +53,8 @@ public:
 	// 0x003F5CA9 transfers these records at a 0x30 stride.
 	struct BattlePlayer
 	{
+		void SwapArmies(int first, int second);
+
 		LivingWorldPlayer *m_player;	// +0x00, findPlayerOnSide 0x003F4798
 		_STL::vector<LivingWorldArmy *> m_armies;	// +0x04, resolved by army ID in 0x002B8D06
 		_STL::vector<ArmySummary> m_armySummaries;	// +0x10, transferred by 0x003F5CA9 at 0x68 stride

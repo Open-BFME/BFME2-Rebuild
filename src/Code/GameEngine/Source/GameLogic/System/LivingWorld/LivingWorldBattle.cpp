@@ -15,6 +15,11 @@
 // FUNCTION: BFME2 0x003F41A4 size=26 name=?rva003F41A4@Rva005E957C@@QAEXPAX@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x003F427D size=64 name=?SwapArmies@BattlePlayer@LivingWorldBattle@@QAEXHH@Z evidence=N:ledger tier=B hypothesis:K
+void LivingWorldBattle::BattlePlayer::SwapArmies(int first, int second)
+{
+	_STL::swap(m_armies[first], m_armies[second]);
+	_STL::swap(m_armySummaries[first], m_armySummaries[second]);
+}
 
 // FUNCTION: BFME2 0x003F42BD size=58 name=?rva003F42BD@Rva003F42BD@@QAEXPAVRva003F42BDCallback@@@Z evidence=?:placeholder tier=B hypothesis:K
 
