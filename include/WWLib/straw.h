@@ -64,6 +64,7 @@ class CacheStraw : public Straw
 {
 public:
 	CacheStraw(int length = 4096);					// 0x00615940
+	virtual ~CacheStraw();							// 0x006159A0
 	virtual int Get(void *buffer, int slen);		// 0x0061B430
 
 private:
