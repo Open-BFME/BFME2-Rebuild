@@ -16,6 +16,7 @@
 #include "WW3D2/MeshLoadContextClass.h"
 #include "WWLib/chunkio.h"
 #include "WW3D2/VertexMaterialClass.h"
+#include "WW3D2/TextureBaseClass.h"
 
 #include "WW3D2/dxwrapper.h"
 #include "WW3D2/W3dUtilityClass.h"
@@ -530,6 +531,13 @@ int MeshLoadContextClass::Add_Vertex_Material(VertexMaterialClass *vmat)
 }
 
 // FUNCTION: BFME2 0x0018A2F0 size=93 name=?Add_Texture@MeshLoadContextClass@@AAEHPAVTextureClass@@@Z evidence=N:ledger tier=A
+int MeshLoadContextClass::Add_Texture(TextureClass *tex)
+{
+	tex->Add_Ref();
+	int index = Textures.Count();
+	Textures.Add(tex);
+	return index;
+}
 
 // FUNCTION: BFME2 0x0018A350 size=29 name=?Add_Texture@MeshLoadContextClass@@QAEHABVBfmeHandleCX@@@Z evidence=N:ledger tier=A
 
