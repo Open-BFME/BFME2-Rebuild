@@ -1,4 +1,11 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G0050968B name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include <string.h>
+#include "GameLogic/WeaponEffects/WeaponOCLNugget.h"
+
 // FUNCTION: BFME2 0x0050968B size=32 name=??0WeaponOCLNugget@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+WeaponOCLNugget::WeaponOCLNugget()
+{
+	memset(m_unk0x128, 0, sizeof(m_unk0x128));
+}
