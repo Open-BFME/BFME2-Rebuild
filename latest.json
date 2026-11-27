@@ -6,7 +6,7 @@
   "save_load": "not run",
   "starts": "not run"
  },
- "commit": "9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54",
+ "commit": "a7123daa62f79955a42d41a2c33d989af9dbf36a",
  "compile": {
   "compile_errors": 0,
   "compiled": 0,
@@ -21,7 +21,7 @@
  },
  "compile_ok": false,
  "control_caught": null,
- "date": "2026-11-26",
+ "date": "2026-11-27",
  "equal_frames": null,
  "event": "schedule",
  "files_substituted": null,
@@ -53,16 +53,16 @@
   8253
  ],
  "result": "fail",
- "run_id": "45730483259",
- "run_url": "https://github.com/Open-BFME/BFME2-Rebuild/actions/runs/45730483259",
+ "run_id": "45918941094",
+ "run_url": "https://github.com/Open-BFME/BFME2-Rebuild/actions/runs/45918941094",
  "save_load": null,
  "schema": "bfme2-nightly/1",
- "sha": "9dd2e2d4ee8a152e0864cc9597323b70b1c3dd54",
+ "sha": "a7123daa62f79955a42d41a2c33d989af9dbf36a",
  "simulation_equal": null,
  "size_check": null,
  "skirmish": null,
  "stages": {
-  "compile": "failure",
+  "compile": "cancelled",
   "link_and_play": "not live"
  },
  "starts": null,
@@ -74,9 +74,10 @@
   "run": {
    "jobs": 18,
    "runner_minutes": {
-    "compile": 1.6
+    "compile": 644.8,
+    "publish": 0.0
    },
-   "wall_minutes": 3.0
+   "wall_minutes": 253.6
   }
  }
 }

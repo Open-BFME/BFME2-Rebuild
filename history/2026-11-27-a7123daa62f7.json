@@ -1,0 +1,83 @@
+{
+ "checks": {
+  "control": "not run",
+  "maps": "not run",
+  "menu": "not run",
+  "save_load": "not run",
+  "starts": "not run"
+ },
+ "commit": "a7123daa62f79955a42d41a2c33d989af9dbf36a",
+ "compile": {
+  "compile_errors": 0,
+  "compiled": 0,
+  "expected_shards": 16,
+  "fastest_shard_s": null,
+  "files": 0,
+  "fully_matching": 0,
+  "per_shard": [],
+  "problem": "expected 16 compile shard summaries from this run; found none",
+  "shards": 0,
+  "slowest_shard_s": null
+ },
+ "compile_ok": false,
+ "control_caught": null,
+ "date": "2026-11-27",
+ "equal_frames": null,
+ "event": "schedule",
+ "files_substituted": null,
+ "frames": {
+  "compared": 0,
+  "equal": 0,
+  "first_divergent": {}
+ },
+ "functions": null,
+ "games_skipped": false,
+ "headline": "compile stage failed: expected 16 compile shard summaries from this run; found none",
+ "image_manifest_sha256": null,
+ "image_sha256": null,
+ "link": null,
+ "link_census": null,
+ "linking_headline": "referenced",
+ "linking_measured": {
+  "date": "2026-11-24",
+  "reason": "this run measured no linking figure",
+  "run_url": "https://github.com/Open-BFME/BFME2-Rebuild/actions/runs/45316803520",
+  "sha": "0fc7d30e48cfd0424b96d4582bce4db53e2d5b1b",
+  "this_run": false
+ },
+ "linking_unit": "names",
+ "menu": null,
+ "plan": null,
+ "provided_required_symbols": [
+  5010,
+  8253
+ ],
+ "result": "fail",
+ "run_id": "45918941094",
+ "run_url": "https://github.com/Open-BFME/BFME2-Rebuild/actions/runs/45918941094",
+ "save_load": null,
+ "schema": "bfme2-nightly/1",
+ "sha": "a7123daa62f79955a42d41a2c33d989af9dbf36a",
+ "simulation_equal": null,
+ "size_check": null,
+ "skirmish": null,
+ "stages": {
+  "compile": "cancelled",
+  "link_and_play": "not live"
+ },
+ "starts": null,
+ "stopped": null,
+ "tests": {},
+ "timings": {
+  "compile_slowest_shard_s": null,
+  "link_and_play": null,
+  "run": {
+   "jobs": 18,
+   "runner_minutes": {
+    "compile": 644.8,
+    "publish": 0.0
+   },
+   "wall_minutes": 253.6
+  }
+ }
+}
