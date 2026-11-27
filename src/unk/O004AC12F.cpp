@@ -3,10 +3,19 @@
 // screen. Retail layout is the 0x38-byte module the header describes: UpdateModule
 // 0x20, the two-slot interface at +0x20, the start frame +0x24 and four floats.
 // FUNCTION: BFME2 0x004AC12F size=6 name=?GetSnapshotName@RainOfFireUpdate@@MBEPBDXZ evidence=N:ledger
+const char *RainOfFireUpdate::GetSnapshotName() const
+{
+	return "RainOfFireUpdate";
+}
 
 // FUNCTION: BFME2 0x004AC135 size=19 name=?rva004AC135@RainOfFireUpdate@@UAEXM@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x004AC148 size=69 name=?getModuleNameKey@RainOfFireUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType RainOfFireUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheRainOfFireUpdateNameKey = TheNameKeyGenerator->nameToKey("RainOfFireUpdate");
+	return TheRainOfFireUpdateNameKey;
+}
 
 // FUNCTION: BFME2 0x004AC18D size=62 name=?rva004AC18D@RainOfFireUpdate@@QAEXM@Z evidence=?:placeholder
 
