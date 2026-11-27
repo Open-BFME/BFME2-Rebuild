@@ -21,6 +21,7 @@ class GrantUpgradeCreateModuleData : public ModuleData
 {
 public:
 	GrantUpgradeCreateModuleData();
+	virtual ~GrantUpgradeCreateModuleData();	// out of line in retail (ModuleFactory deletes through slot 0)
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 

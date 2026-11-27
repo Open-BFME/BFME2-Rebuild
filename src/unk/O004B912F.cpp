@@ -5,5 +5,9 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
-// FUNCTION: BFME2 0x004B914B size=48 name=??1GrantUpgradeCreateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+#include "GameLogic/Module/GrantUpgradeCreateModuleData.h"
 
+// FUNCTION: BFME2 0x004B914B size=48 name=??1GrantUpgradeCreateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+GrantUpgradeCreateModuleData::~GrantUpgradeCreateModuleData()
+{
+}
