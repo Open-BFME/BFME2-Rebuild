@@ -11,6 +11,10 @@
 #include "Common/AsciiString.h"
 #include "Common/XferException.h"
 #include "Common/ScienceStore.h"
+#include "Common/BitFlags.h"
+#include "Common/KindOf.h"
+#include "Common/ThingFactory.h"
+#include "Common/ThingTemplate.h"
 
 // FUNCTION: BFME2 0x00305F92 size=24 name=?XferDistributionType@@YAXPAVXfer@@PAH@Z evidence=N:ledger tier=B hypothesis:K
 
@@ -166,6 +170,12 @@ Xfer &xferRandomVariable(Xfer &xfer, GameClientRandomVariable &variable)
 }
 
 // FUNCTION: BFME2 0x00306218 size=26 name=?getNameFromSingleBit@KindOfMaskType@@SAPBDH@Z evidence=N:ledger tier=B hypothesis:K
+const char *KindOfNameFromBit(Int bit)
+{
+	if (bit < 0 || (UnsignedInt)bit >= 218)
+		return NULL;
+	return BitFlags<218>::s_bitNameList[bit];
+}
 
 // FUNCTION: BFME2 0x00306232 size=204 name=?Rva00306232XferScience@@YAPAVXfer@@PAV1@PAW4ScienceType@@@Z evidence=?:placeholder tier=B hypothesis:K
 Xfer *XferScience(Xfer *xfer, ScienceType *science)
@@ -212,5 +222,31 @@ void xferMapName(Xfer *xfer, AsciiString *mapName)
 }
 
 // FUNCTION: BFME2 0x003063A9 size=112 name=?Rva003063A9XferThingTemplate@@YAXPAVXfer@@PAPBVThingTemplate@@@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
+void Rva003063A9XferThingTemplate(Xfer *xfer, const ThingTemplate **thingTemplate)
+{
+	AsciiString name(*thingTemplate ? (*thingTemplate)->getName() : AsciiString::TheEmptyString);
+	*xfer == name;
+	if (xfer->IsLoading())
+		*thingTemplate = TheThingFactory->findTemplate(name);
+}
 
 // FUNCTION: BFME2 0x00306419 size=178 name=?Rva00306419XferKindOf@@YAPAVXfer@@PAV1@PAW4KindOfType@@@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-shared-data
+Xfer *XferKindOf(Xfer *xfer, KindOfType *kindOf)
+{
+	if (xfer->IsLightCRC())
+		xfer->XferEnum("KindOfType", kindOf, 4);
+	else if (xfer->IsStoring())
+	{
+		AsciiString name(KindOfNameFromBit(*kindOf));
+		*xfer == name;
+	}
+	else
+	{
+		AsciiString name;
+		*xfer == name;
+		Int bit = KindOfMaskType::getSingleBitFromName(name.str());
+		if (bit != -1)
+			*kindOf = (KindOfType)bit;
+	}
+	return xfer;
+}
