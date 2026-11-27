@@ -60,6 +60,7 @@ public:
 		~WriteLockClass();													// 0x00139530
 
 		void *Get_Vertex_Array(void) { return Vertices; }
+		template <class Vertex> Vertex *Get_Vertex_Array_As(void) { return static_cast<Vertex *>(Vertices); }
 	};
 
 	class AppendLockClass

@@ -29,6 +29,9 @@ public:
 	virtual void Get_Obj_Space_Bounding_Sphere(SphereClass &sphere) const;					// slot 67: 0x0008E5B0
 	virtual void Get_Obj_Space_Bounding_Box(AABoxClass &aabox) const;						// slot 68: 0x0008E5F4
 
+	int updateCircleVB(void);												// 0x0008E623
+	int updateScreenVB(int diffuse);										// 0x0008E335
+
 	static void setColor(int r, int g, int b) { m_needUpdate = true; m_diffuse = (b) + (g << 8) + (r << 16); }
 
 protected:
