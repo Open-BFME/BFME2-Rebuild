@@ -4,5 +4,10 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "Common/Team.h"
 // FUNCTION: BFME2 0x003BA5F9 size=20 name=?setRecruitable@Team@@QAEX_N@Z evidence=N:ledger tier=B hypothesis:name:invented
-
+void Team::setRecruitable(bool recruitable)
+{
+	m_unk0x110[0] = true;
+	m_unk0x110[1] = recruitable;
+}
