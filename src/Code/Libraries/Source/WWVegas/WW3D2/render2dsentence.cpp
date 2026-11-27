@@ -385,6 +385,20 @@ void FontCharsClass::Blit_Char_Thai(unsigned short ch, unsigned short *dest_ptr,
 // FUNCTION: BFME2 0x00158990 size=515 name=?Rva00158990@Render2DSentenceClass@@AAEXPAVFontCharsClass@@PBG1_N@Z evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00158BA0 size=192 name=?Get_Text_Extents@Render2DSentenceClass@@QAE?AVVector2@@PBG@Z evidence=N:ledger tier=B hypothesis:K
+Vector2 Render2DSentenceClass::Get_Text_Extents(const unsigned short *text)
+{
+	Vector2 extent(0, m_font->Get_Char_Height());
+
+	while (*text) {
+		unsigned short ch = *text++;
+
+		if (ch != '\n') {
+			extent.X += m_font->Get_Char_Spacing(ch);
+		}
+	}
+
+	return extent;
+}
 
 // FUNCTION: BFME2 0x00158C60 size=551 name=?Allocate_New_Surface@Render2DSentenceClass@@AAEXPBG_N@Z evidence=N:ledger tier=B hypothesis:K
 
