@@ -773,6 +773,22 @@ Int GarrisonContain::getObjectGarrisonPointIndex(ObjectID id)
 }
 
 // FUNCTION: BFME2 0x0047933C size=89 name=?removeInvalidObjectsFromGarrisonPoints@GarrisonContain@@IAEXXZ evidence=N:ledger tier=A
+void GarrisonContain::removeInvalidObjectsFromGarrisonPoints()
+{
+	if (m_garrisonPointsInUse == 0)
+		return;
+
+	for (Int i = 0; i < MAX_GARRISON_POINTS; ++i)
+	{
+		Object *obj = TheGameLogic->findObjectByID(m_garrisonPointData[i].objectID);
+		if (obj)
+		{
+			const Weapon *weapon = obj->getCurrentWeapon();
+			if (weapon && weapon->getTemplate()->isMeleeWeapon())
+				removeObjectFromGarrisonPoint(obj, i);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x00479395 size=157 name=?redeployOccupants@GarrisonContain@@MAEXXZ evidence=N:ledger tier=B hypothesis:K
 void GarrisonContain::redeployOccupants()
