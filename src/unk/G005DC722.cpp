@@ -11,6 +11,9 @@ AITacticOffensive::~AITacticOffensive()
 // FUNCTION: BFME2 0x005DC763 size=252 name=?checkTarget@AITacticOffensive@@QAEEPAX@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x005DC85F size=28 name=??0AITacticSiege@@QAE@ABVAsciiString@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x005DC87B size=11 name=??1AITacticSiege@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+AITacticSiege::~AITacticSiege()
+{
+}
 // FUNCTION: BFME2 0x005DC8A2 size=97 name=?sideHasIdleSiegeWeapons@AITacticSiege@@QAE_NXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x005DC903 size=56 name=?xfer@AITacticSiege@@UAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 void AITacticSiege::xfer(Xfer *xfer)
