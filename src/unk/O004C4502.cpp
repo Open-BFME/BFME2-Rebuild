@@ -8,6 +8,11 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/CloudBreakSpecialPower.h"
 // FUNCTION: BFME2 0x004C44D8 size=42 name=??0CloudBreakSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+CloudBreakSpecialPower::CloudBreakSpecialPower(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerModule(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004C4502 size=6 name=?Rva004C4502Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *CloudBreakSpecialPower::GetSnapshotName() const
 {
