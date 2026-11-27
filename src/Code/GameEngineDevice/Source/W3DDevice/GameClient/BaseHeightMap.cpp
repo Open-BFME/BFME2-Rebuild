@@ -8,6 +8,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
 #include "GameClient/BaseHeightMapRenderObjClass.h"
+#include "GameClient/W3DPropBuffer.h"
 #include "WW3D2/SceneClass.h"
 // FUNCTION: BFME2 0x000664BE size=49 name=?Rva006C5BE0@@YANNH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000664EF size=5 name=?enable@Rva000664EFOneSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
@@ -116,6 +117,13 @@
 // FUNCTION: BFME2 0x0006830A size=18 name=?rva0006830A@Rva000664F4@@QAEXAAVXfer@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0006831C size=87 name=?addProp@BaseHeightMapRenderObjClass@@QAEXHVCoord3D@@MMABVAsciiString@@_N@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void BaseHeightMapRenderObjClass::addProp(Int id, Coord3D location, Real angle, Real scale,
+	const AsciiString &modelName, Bool flag)
+{
+	if (m_propBuffer) {
+		m_propBuffer->addProp(id, location, angle, scale, modelName, flag);
+	}
+}
 
 // FUNCTION: BFME2 0x00068373 size=18 name=?rva00068373@Rva00068373NullForwarder@@QAEXH@Z evidence=?:placeholder tier=A
 
