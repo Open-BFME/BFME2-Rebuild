@@ -174,6 +174,23 @@ int HTreeClass::Capture_Update(int pivot_index)
 
 
 // FUNCTION: BFME2 0x001628A0 size=769 name=?Base_Update@HTreeClass@@QAEXABVMatrix3D@@@Z evidence=N:ledger tier=B hypothesis:K
+void HTreeClass::Base_Update(const Matrix3D &root)
+{
+	Pivot[0].Current = root;
+	Pivot[0].IsVisible = true;
+	Pivot[0].Fade = 1.0f;
+
+	int next_captured = Get_First_Captured_Bone();
+	for (int piv_idx = 1; piv_idx < NumPivots; piv_idx++) {
+		PivotClass *pivot = &Pivot[piv_idx];
+		PivotTransform::Multiply(pivot->Parent->Current, pivot->Base, &pivot->Current);
+		pivot->IsVisible = true;
+		pivot->Fade = 1.0f;
+		if (piv_idx == next_captured) {
+			next_captured = Capture_Update(piv_idx);
+		}
+	}
+}
 // FUNCTION: BFME2 0x00162BB0 size=3785 name=?Anim_Update@HTreeClass@@QAEXABVMatrix3D@@PAVHAnimClass@@M@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00163A80 size=2850 name=?Anim_Update@HTreeClass@@QAEXABVMatrix3D@@PAVHRawAnimClass@@M@Z evidence=N:ledger tier=B hypothesis:K
