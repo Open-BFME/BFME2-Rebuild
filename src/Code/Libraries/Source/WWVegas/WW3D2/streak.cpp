@@ -249,6 +249,59 @@ int StreakLineClass::Get_Num_Polys() const
 }
 
 // FUNCTION: BFME2 0x00741D10 size=1653 name=?Get_Obj_Space_Bounding_Box@StreakLineClass@@UBEXAAVAABoxClass@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void StreakLineClass::Get_Obj_Space_Bounding_Box(AABoxClass &box) const
+{
+	unsigned int num_points = PointLocations.Count();
+
+	// Line must have at least two points to be valid
+	if (num_points >= 2) {
+		Vector3 max_coords;
+		Vector3 min_coords;
+		unsigned int i;
+
+		// First box covers the points, enlarged by half the width
+		max_coords = PointLocations[0];
+		min_coords = PointLocations[0];
+		for (i = 1; i < num_points; i++) {
+			max_coords.Update_Max(PointLocations[i]);
+			min_coords.Update_Min(PointLocations[i]);
+		}
+		float enlarge_factor = LineRenderer.Get_Width() * 0.5f;
+		Vector3 enlarge_offset;
+		enlarge_offset.Set(enlarge_factor, enlarge_factor, enlarge_factor);
+		max_coords += enlarge_offset;
+		min_coords = min_coords - enlarge_offset;
+
+		if (MaxSubdivisionLevels > 0) {
+			// Second box covers the midpoints plus the noise amplitude
+			Vector3 max_coords2;
+			Vector3 min_coords2;
+			Vector3 midpoint = (PointLocations[0] + PointLocations[1]) * 0.5f;
+			max_coords2 = midpoint;
+			min_coords2 = midpoint;
+			for (i = 1; i < num_points - 1; i++) {
+				midpoint = (PointLocations[i] + PointLocations[i + 1]) * 0.5f;
+				max_coords2.Update_Max(midpoint);
+				min_coords2.Update_Min(midpoint);
+			}
+
+			enlarge_factor += (2 * LineRenderer.Get_Noise_Amplitude());
+			enlarge_offset.Set(enlarge_factor, enlarge_factor, enlarge_factor);
+			max_coords2 += enlarge_offset;
+			min_coords2 = min_coords2 - enlarge_offset;
+
+			max_coords.Update_Max(max_coords2);
+			min_coords.Update_Min(min_coords2);
+		}
+
+		MinMaxAABoxClass minmax;
+		minmax.MinCorner = min_coords;
+		minmax.MaxCorner = max_coords;
+		box.Init(minmax);
+	} else {
+		box.Init(Vector3(0, 0, 0), Vector3(1, 1, 1));
+	}
+}
 
 // FUNCTION: BFME2 0x00742390 size=78 name=?Render_Seg_Line@StreakLineClass@@IAEXAAVRenderInfoClass@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 void StreakLineClass::Render_Seg_Line(RenderInfoClass &rinfo)
