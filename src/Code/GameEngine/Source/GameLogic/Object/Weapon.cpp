@@ -32,6 +32,7 @@
 #include "Common/GlobalData.h"
 #include "Common/DisabledTypes.h"
 #include "GameLogic/AI.h"
+#include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/Module/ContainModule.h"
 #include "Common/Player.h"
 #include "GameLogic/WeaponStore.h"
@@ -859,6 +860,81 @@ void WeaponTemplate::addNugget(WeaponEffectNugget *nugget)
 }
 
 // FUNCTION: BFME2 0x002CBA7C size=377 name=?shouldProjectileCollideWith@WeaponTemplate@@QBE_NPBVObject@@00W4ObjectID@@@Z evidence=N:ledger tier=A
+Bool WeaponTemplate::shouldProjectileCollideWith(
+	const Object *projectileLauncher,
+	const Object *projectile,
+	const Object *thingWeCollidedWith,
+	ObjectID intendedVictimID) const
+{
+	if (!projectile || !thingWeCollidedWith)
+		return false;
+
+	if (intendedVictimID == thingWeCollidedWith->getID())
+		return true;
+
+	if (projectileLauncher != NULL)
+	{
+		if (projectileLauncher == thingWeCollidedWith)
+			return false;
+
+		if (projectileLauncher->m_containedBy == thingWeCollidedWith)
+			return false;
+
+		if (rva002CA9CA(6, projectileLauncher->getCurrentWeapon(NULL)))
+		{
+			if (thingWeCollidedWith->testStatus(OBJECT_STATUS_BURNED))
+				return false;
+		}
+	}
+
+	const AIUpdateInterface *ai = thingWeCollidedWith->getAI();
+	if (ai != NULL && ai->getSneakyTargetingOffset(NULL))
+		return false;
+
+	UnsignedInt requiredMask = 0;
+
+	Relationship r = projectile->getRelationship(thingWeCollidedWith);
+	if (r == ALLIES)
+		requiredMask = 0x1;
+	else if (r == ENEMIES)
+		requiredMask = 0x2;
+	else if (r == NEUTRAL)
+		requiredMask = 0x4;
+
+	if (thingWeCollidedWith->getTemplate()->isKindOf(KINDOF_STRUCTURE))
+	{
+		if (projectile->getControllingPlayer() == thingWeCollidedWith->getControllingPlayer())
+			requiredMask |= 0x200;
+		else
+			requiredMask |= 0x8;
+	}
+
+	const ThingTemplate *tmpl = thingWeCollidedWith->getTemplate();
+	if (tmpl->isKindOf(KINDOF_SHRUBBERY))
+		requiredMask |= 0x10;
+	if (tmpl->isKindOf(KINDOF_PROJECTILE))
+		requiredMask |= 0x20;
+	if (tmpl->m_fenceWidth > 0.0f)
+		requiredMask |= 0x40;
+	if (tmpl->isKindOf(KINDOF_SMALL_MISSILE))
+		requiredMask |= 0x80;
+	if (tmpl->isKindOf(KINDOF_BALLISTIC_MISSILE))
+		requiredMask |= 0x100;
+	if (tmpl->isKindOf(KINDOF_MONSTER))
+		requiredMask |= 0x400;
+
+	if ((m_collideMask & requiredMask) == 0)
+		return false;
+
+	if (tmpl->isKindOf(KINDOF_WALK_ON_TOP_OF_WALL) && intendedVictimID != INVALID_ID)
+	{
+		Object *victim = TheGameLogic->findObjectByID(intendedVictimID);
+		if (victim != NULL && victim->rva0028B511() > 1)
+			return false;
+	}
+
+	return true;
+}
 
 // FUNCTION: BFME2 0x002CBBF5 size=1561 name=?fireWeaponTemplate@WeaponTemplate@@QAEXPAVObject@@HHH0HPBVCoord3D@@ABVWeaponBonus@@_NPAVWeapon@@H@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
