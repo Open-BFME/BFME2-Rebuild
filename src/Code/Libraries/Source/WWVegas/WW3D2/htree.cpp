@@ -136,6 +136,39 @@ void HTreeClass::Control_Bone(int boneindex, const Matrix3D &relative_tm, bool w
 }
 
 // FUNCTION: BFME2 0x001620D0 size=442 name=?Get_Bone_Control@HTreeClass@@QBEXHAAVMatrix3D@@@Z evidence=N:ledger tier=B hypothesis:K
+void HTreeClass::Get_Bone_Control(int boneindex, Matrix3D &relative_tm) const
+{
+	_STL::vector<HTreeCapture>::const_iterator capture = CaptureList.begin();
+	while (capture != CaptureList.end() && capture->BoneIndex < boneindex) {
+		capture++;
+	}
+	if (capture != CaptureList.end() && capture->BoneIndex == boneindex) {
+		const Quaternion &q = capture->Transform.Rotation;
+		float xy = q.X * q.Y * 2.0f;
+		float xw = q.X * q.W * 2.0f;
+		float yw = q.Y * q.W * 2.0f;
+		float zz = q.Z * q.Z * 2.0f;
+		float xx = q.X * q.X * 2.0f;
+		float yy = q.Y * q.Y * 2.0f;
+		float yz = q.Y * q.Z * 2.0f;
+		float zw = q.W * q.Z * 2.0f;
+		float xz = q.X * q.Z * 2.0f;
+		relative_tm[0][0] = 1.0f - yy - zz;
+		relative_tm[0][1] = xy - zw;
+		relative_tm[0][2] = yw + xz;
+		relative_tm[1][0] = zw + xy;
+		relative_tm[1][1] = 1.0f - zz - xx;
+		relative_tm[1][2] = yz - xw;
+		relative_tm[2][0] = xz - yw;
+		relative_tm[2][1] = yz + xw;
+		relative_tm[2][2] = 1.0f - yy - xx;
+		relative_tm[0][3] = capture->Transform.Translation.X;
+		relative_tm[1][3] = capture->Transform.Translation.Y;
+		relative_tm[2][3] = capture->Transform.Translation.Z;
+	} else {
+		relative_tm.Make_Identity();
+	}
+}
 
 // FUNCTION: BFME2 0x00162290 size=18 name=?rva00162290@HTreeClass@@QBEHXZ evidence=?:placeholder tier=B hypothesis:K
 int HTreeClass::Get_First_Captured_Bone(void) const
