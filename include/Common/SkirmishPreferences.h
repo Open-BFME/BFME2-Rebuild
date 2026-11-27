@@ -31,6 +31,7 @@ public:
 	AsciiString buildProfileKey(const char *name);
 	void setCurrentUserName(const UnicodeString &newName);
 	AsciiString getPreferredMap();
+	bool usesSystemMapDir();
 	bool Rva0043B9E8();
 	_STL::list<UnicodeString> getUserNames_Rva0043C2D0();						// 0x0043C2D0: a copy of the user name list
 	UnicodeString Rva0043B9F5();

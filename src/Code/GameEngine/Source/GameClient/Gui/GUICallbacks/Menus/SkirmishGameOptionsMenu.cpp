@@ -11,6 +11,7 @@ bool isValidMap(AsciiString,bool);
 #include <list>
 #include <map>
 #include <stdlib.h>
+#include <string.h>
 #include "Common/AsciiString.h"
 #include "Common/SkirmishPreferences.h"
 #include "Common/UnicodeString.h"
@@ -126,6 +127,15 @@ SkirmishPreferences::~SkirmishPreferences()
 // FUNCTION: BFME2 0x0043C2EB size=63 name=?Rva0043C2EB@SkirmishPreferences@@QAEXABVUnicodeString@@@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x0043C32A size=90 name=?usesSystemMapDir@LANPreferences@@QAE_NXZ evidence=N:ledger
+bool SkirmishPreferences::usesSystemMapDir()
+{
+	PreferenceMap::iterator entry = find(buildProfileKey("UseSystemMapDir"));
+	if (entry == end())
+		return true;
+	if (_strcmpi(entry->second.str(), "yes") == 0)
+		return true;
+	return false;
+}
 
 // FUNCTION: BFME2 0x0043C384 size=306 name=?getPreferredMap@SkirmishPreferences@@QAE?AVAsciiString@@XZ evidence=N:ledger
 AsciiString SkirmishPreferences::getPreferredMap() {
