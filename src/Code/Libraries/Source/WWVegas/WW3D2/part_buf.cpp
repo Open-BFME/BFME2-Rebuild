@@ -412,6 +412,15 @@ TextureAsset ParticleBufferClass::Get_Texture() const
 }
 
 // FUNCTION: BFME2 0x001A7AD0 size=52 name=?Set_Texture@ParticleBufferClass@@QAEXPAVTextureClass@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void ParticleBufferClass::Set_Texture(TextureClass *texture)
+{
+	if (PointGroup)
+		PointGroup->Set_Texture(texture);
+	else if (LineGroup)
+		LineGroup->Set_Texture(texture);
+	else if (LineRenderer)
+		LineRenderer->Set_Texture(texture);
+}
 
 // FUNCTION: BFME2 0x001A7B10 size=94 name=?Get_Shader@ParticleBufferClass@@QBE?AVShaderClass@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 ShaderClass ParticleBufferClass::Get_Shader(void) const
