@@ -14,7 +14,12 @@
 
 class W3DRadar : public Radar
 {
+public:
+	// Slot 4 of W3DRadar's table 0x007C4E34: extends the base refresh, then rebuilds the terrain texture.
+	virtual void refreshTerrain(TerrainLogic *terrain);
+
 protected:
+	void buildTerrainTexture(TerrainLogic *terrain);
 	// The pixel on screen of a radar cell: the radar window's upper left plus the cell scaled to its size (the grid is 128 x 128).
 	void radarToPixel(const ICoord2D *radar, ICoord2D *pixel, Int radarUpperLeftX, Int radarUpperLeftY, Int radarWidth, Int radarHeight);
 
