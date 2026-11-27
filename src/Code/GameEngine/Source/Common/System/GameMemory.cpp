@@ -262,6 +262,34 @@ void MemoryPool::_VerifyIntegrity()
 }
 
 // FUNCTION: BFME2 0x000306B0 size=128 name=?_AddHeap@MemoryPool@@YAXII@Z evidence=N:ledger
+void MemoryPool::_AddHeap(unsigned int heapId, unsigned int size)
+{
+	if (!g_heaps.initialized)
+		return;
+	int index = g_heaps.lastHeap;
+	if (index >= 30)
+		return;
+	if (heapId == 0)
+	{
+		g_defaultHeapSize = size;
+		return;
+	}
+	HeapEntry **bucket = &g_heaps.buckets[heapId % 101];
+	for (HeapEntry *entry = *bucket; entry; entry = entry->next)
+	{
+		if (entry->id == heapId)
+		{
+			entry->size = size;
+			return;
+		}
+	}
+	HeapEntry *entry = &g_heaps.entries[index];
+	entry->size = size;
+	entry->next = *bucket;
+	entry->id = heapId;
+	g_heaps.lastHeap = index + 1;
+	*bucket = entry;
+}
 
 // FUNCTION: BFME2 0x00030730 size=190 name=?InitFunctionPointers@MemoryPool@@YAXXZ evidence=N:ledger
 void MemoryPool::InitFunctionPointers()
