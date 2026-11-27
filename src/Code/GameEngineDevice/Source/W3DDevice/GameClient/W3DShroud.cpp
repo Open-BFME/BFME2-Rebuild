@@ -34,6 +34,9 @@ void W3DShroudMaterialPassClass::UnInstall_Materials(void) const
 }
 
 // FUNCTION: BFME2 0x000729F4 size=20 name=??0RenderingMethodDelegate@FXShader@@QAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+FXShader::RenderingMethodDelegate::RenderingMethodDelegate()
+{
+}
 
 // FUNCTION: BFME2 0x00072A08 size=17 name=?rva00072A08@RenderingMethodDelegate@FXShader@@QAE_NHH@Z evidence=?:placeholder tier=B hypothesis:cohesion
 bool FXShader::RenderingMethodDelegate::Begin_Rendering(unsigned int *pass_count, int flags)
@@ -45,12 +48,36 @@ bool FXShader::RenderingMethodDelegate::Begin_Rendering(unsigned int *pass_count
 }
 
 // FUNCTION: BFME2 0x00072A19 size=15 name=?Begin_Pass@RenderingMethodDelegate@FXShader@@QAEXH@Z evidence=N:ledger tier=B hypothesis:cohesion
+void FXShader::RenderingMethodDelegate::Begin_Pass(unsigned int pass)
+{
+	RenderingMethod *method = Target.Get();
+	if (method)
+		method->Begin_Pass(pass);
+}
 
 // FUNCTION: BFME2 0x00072A28 size=15 name=?UpdateDynamicParameterSet@RenderingMethodDelegate@FXShader@@QAEXH@Z evidence=N:ledger tier=B hypothesis:cohesion
+void FXShader::RenderingMethodDelegate::UpdateDynamicParameterSet(unsigned int pass)
+{
+	RenderingMethod *method = Target.Get();
+	if (method)
+		method->UpdateDynamicParameterSet(pass);
+}
 
 // FUNCTION: BFME2 0x00072A37 size=13 name=?End_Pass@RenderingMethodDelegate@FXShader@@QAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
+void FXShader::RenderingMethodDelegate::End_Pass()
+{
+	RenderingMethod *method = Target.Get();
+	if (method)
+		method->End_Pass();
+}
 
 // FUNCTION: BFME2 0x00072A44 size=13 name=?End_Rendering@RenderingMethodDelegate@FXShader@@QAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
+void FXShader::RenderingMethodDelegate::End_Rendering()
+{
+	RenderingMethod *method = Target.Get();
+	if (method)
+		method->End_Rendering();
+}
 
 // FUNCTION: BFME2 0x00072A51 size=67 name=?rva00072A51@Rva00072A51@@UAEXVRva00072A94@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
