@@ -401,6 +401,26 @@ void gameStartedCallback(PEER peer, UnsignedInt IP, const char *message, void *p
 
 
 // FUNCTION: BFME2 0x0038A63C size=131 name=?lookupStatForPlayer@PeerThreadClass@@QAEHW4RoomType@@PBD1@Z evidence=N:ledger tier=A
+Int PeerThreadClass::lookupStatForPlayer(RoomType roomType, const char *nick, const char *key)
+{
+	_STL::string fullKey = packStatKey(nick, key);
+	_STL::map<_STL::string, Int> *stats;
+	switch (roomType)
+	{
+		case GroupRoom:
+			stats = &m_groupRoomStats;
+			break;
+		case StagingRoom:
+			stats = &m_stagingRoomStats;
+			break;
+		default:
+			return 0;
+	}
+	_STL::map<_STL::string, Int>::iterator it = stats->find(fullKey);
+	if (it != stats->end())
+		return it->second;
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0038A6BF size=32 name=?clearPlayerStats@PeerThreadClass@@QAEXW4RoomType@@@Z evidence=N:ledger tier=A
 void PeerThreadClass::clearPlayerStats(RoomType roomType)
@@ -418,6 +438,23 @@ void PeerThreadClass::clearPlayerStats(RoomType roomType)
 
 
 // FUNCTION: BFME2 0x0038A6DF size=149 name=?removeServerFromMap@PeerThreadClass@@QAEHPAU_SBServer@@@Z evidence=N:ledger tier=A
+Int PeerThreadClass::removeServerFromMap(_SBServer *server)
+{
+	_STL::queue<Int> matches;
+	for (_STL::map<Int, _SBServer *>::iterator it = m_stagingServers.begin(); it != m_stagingServers.end(); ++it)
+	{
+		if (it->second == server)
+			matches.push(it->first);
+	}
+	Int val = 0;
+	while (!matches.empty())
+	{
+		val = matches.front();
+		matches.pop();
+		m_stagingServers.erase(val);
+	}
+	return val;
+}
 
 // FUNCTION: BFME2 0x0038A774 size=439 name=?findServer@PeerThreadClass@@QAEHPAU_SBServer@@@Z evidence=N:ledger tier=A
 
