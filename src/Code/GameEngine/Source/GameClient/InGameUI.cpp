@@ -229,6 +229,10 @@ void InGameUI::setScrollAmount(Coord2D amount)
 }
 
 // FUNCTION: BFME2 0x0029A872 size=23 name=?rva0029A872@Rva0029A872@@QAE?AURva00SlotFloat2Copy@@XZ evidence=?:placeholder tier=B hypothesis:Z
+Coord2D InGameUI::getScrollAmount()
+{
+	return m_scrollAmt;
+}
 
 // FUNCTION: BFME2 0x0029A889 size=198 name=?setGUICommand@InGameUI@@UAEXPBVCommandButton@@@Z evidence=N:ledger tier=B hypothesis:Z
 
@@ -260,8 +264,16 @@ void InGameUI::setGUICommand(const CommandButton *command)
 // FUNCTION: BFME2 0x0029A94F size=101 name=?rva0029A94F@Rva0029A94F@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x0029A9B4 size=7 name=?rva0029A9B4@Rva0029A9B4@@QAEHXZ evidence=?:placeholder tier=B hypothesis:Z
+const ThingTemplate *InGameUI::getPendingPlaceType()
+{
+	return m_pendingPlaceType;
+}
 
 // FUNCTION: BFME2 0x0029A9BB size=7 name=?get@Rva0029A9BBDwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:Z
+ObjectID InGameUI::getPendingPlaceSourceObjectID()
+{
+	return m_pendingPlaceSourceObjectID;
+}
 
 // FUNCTION: BFME2 0x0029A9C2 size=61 name=?setPlacementStart@InGameUI@@UAEXPBUICoord2D@@@Z evidence=N:ledger tier=B hypothesis:Z
 void InGameUI::setPlacementStart( const ICoord2D *start )
@@ -305,6 +317,10 @@ bool InGameUI::isPlacementAnchored( void )
 }
 
 // FUNCTION: BFME2 0x0029AB03 size=8 name=?disable@Rva0029AB03ByteZeroSetter@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
+void InGameUI::clearPlacementAnchor()
+{
+	m_placeAnchorInProgress = false;
+}
 
 // FUNCTION: BFME2 0x0029AB0B size=23 name=?getPlacementAngle@InGameUI@@UAEMXZ evidence=N:ledger tier=B hypothesis:Z
 float InGameUI::getPlacementAngle()
@@ -377,6 +393,12 @@ void InGameUI::expireAllHints(int type)
 // FUNCTION: BFME2 0x0029ACE3 size=24 name=?bfmeGoBLD@@YGXPAX@Z evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x0029ACFB size=23 name=?rva0029ACFB@Rva0029ACFB@@UAEHXZ evidence=?:placeholder tier=B hypothesis:Z
+VideoBuffer *InGameUI::videoBuffer()
+{
+	if (m_videoStream)
+		return m_videoStream->videoBuffer();
+	return 0;
+}
 
 // FUNCTION: BFME2 0x0029AD12 size=487 name=?drawMilitarySubtitle@InGameUI@@UAEXXZ evidence=N:ledger tier=B hypothesis:Z
 
@@ -416,6 +438,11 @@ void InGameUI::unidentifiedSlot101(const int *a, const int *b, int *out)
 }
 
 // FUNCTION: BFME2 0x0029B04D size=19 name=?setRva0029B04D@InGameUI@@UAEXH@Z evidence=N:ledger tier=B hypothesis:Z
+void InGameUI::disableTooltipsUntil(unsigned int frame)
+{
+	if (frame > field7EC)
+		field7EC = frame;
+}
 
 // FUNCTION: BFME2 0x0029B060 size=8 name=?clearRva0029B060@InGameUI@@UAEXXZ evidence=N:ledger tier=B hypothesis:Z
 void InGameUI::clearTooltipsDisabled()
@@ -945,6 +972,46 @@ int InGameUI::selectMatchingAcrossMap()
 }
 
 // FUNCTION: BFME2 0x0029D0E5 size=283 name=?updateFloatingText@InGameUI@@IAEXXZ evidence=N:ledger tier=A
+void InGameUI::updateFloatingText()
+{
+	UnsignedInt currLogicFrame = TheGameClient->getFrame();
+	UnsignedByte r, g, b, a;
+	Int amount;
+	static UnsignedInt lastLogicFrameUpdate = currLogicFrame;
+
+	// Only move the text when the frame has advanced.
+	if (lastLogicFrameUpdate == currLogicFrame)
+		return;
+
+	lastLogicFrameUpdate = currLogicFrame;
+
+	_STL::list<FloatingTextData *>::iterator it = m_floatingTextList.begin();
+	while (it != m_floatingTextList.end())
+	{
+		FloatingTextData *ftd = *it;
+
+		++ftd->m_frameCount;
+
+		if (currLogicFrame > ftd->m_frameTimeOut)
+		{
+			GameGetColorComponents(ftd->m_color, &r, &g, &b, &a);
+			amount = (Int)((currLogicFrame - ftd->m_frameTimeOut) * (m_floatingTextMoveVanishRate / TheGameEngine->m_maxFPS));
+			if (a - amount < 0)
+				a = 0;
+			else
+				a -= amount;
+			ftd->m_color = GameMakeColor(r, g, b, a);
+
+			if (a <= 0)
+			{
+				it = m_floatingTextList.erase(it);
+				::delete ftd;
+				continue;
+			}
+		}
+		++it;
+	}
+}
 
 // FUNCTION: BFME2 0x0029D200 size=266 name=?drawFloatingText@InGameUI@@IAEXXZ evidence=N:ledger tier=A
 void InGameUI::drawFloatingText()
