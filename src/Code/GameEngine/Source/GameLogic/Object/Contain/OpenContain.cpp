@@ -22,6 +22,7 @@
 #include "Common/ThingTemplate.h"
 #include "GameLogic/Module/OpenContain.h"
 #include "Common/INI.h"
+#include "Common/XferException.h"
 #include "Common/BitFlags.h"
 #include <stddef.h>
 #include "GameLogic/AI.h"
@@ -617,6 +618,51 @@ void OpenContain::pruneDeadWanters()
 // FUNCTION: BFME2 0x00463AD3 size=411 name=?rva00463AD3@Rva00463AD3@@QAEXH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00463C6E size=234 name=?loadPostProcess@OpenContain@@MAEXXZ evidence=N:ledger tier=A
+void OpenContain::loadPostProcess()
+{
+	Object *us = getObject();
+
+	UpdateModule::loadPostProcess();
+
+	if (!m_containList.empty())
+		throw XferException(5, 0);
+
+	Bool enclosed = false;
+	for (OpenContain *cur = this; cur != NULL; )
+	{
+		if (cur->getObjectStatusOfContained(NULL).test(OBJECT_STATUS_ENCLOSED))
+		{
+			enclosed = true;
+			break;
+		}
+		Object *curObj = cur->getObject();
+		if (curObj == NULL)
+			break;
+		Object *parent = curObj->getContainedBy();
+		if (parent == NULL)
+			break;
+		ContainModuleInterface *parentContain = parent->getContain();
+		if (parentContain == NULL)
+			break;
+		cur = parentContain->asOpenContain();
+	}
+
+	for (XferContainIDList::const_iterator idIt = m_xferContainIDList.begin(); idIt != m_xferContainIDList.end(); ++idIt)
+	{
+		Object *obj = TheGameLogic->findObjectByID(*idIt);
+		if (obj == NULL)
+			throw XferException(5, 0);
+
+		m_containList.push_back(obj);
+
+		if (enclosed)
+			vslot24(obj, 0, 0);
+
+		obj->m_containedBy = us;
+	}
+
+	m_xferContainIDList.clear();
+}
 
 // FUNCTION: BFME2 0x00463D72 size=41 name=?rva00463D72@Rva00463782@@QAEXXZ evidence=?:placeholder tier=A
 
