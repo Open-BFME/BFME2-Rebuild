@@ -14,6 +14,7 @@ class W3DHordeModelDraw : public W3DScriptedModelDraw
 {
 public:
 	W3DHordeModelDraw(Thing *thing, const ModuleData *moduleData);
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x00078B38
 	virtual void onDrawableBoundToObject();									// 6: 0x0007A7DD
 

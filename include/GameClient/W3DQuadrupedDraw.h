@@ -14,6 +14,7 @@ class W3DQuadrupedDraw : public W3DScriptedModelDraw
 {
 public:
 	W3DQuadrupedDraw(Thing *thing, const ModuleData *moduleData);
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000CA0CE
 	virtual Bool vslot47(Int *a, void *b);									// ObjectDrawInterface 47: 0x000CA352
 

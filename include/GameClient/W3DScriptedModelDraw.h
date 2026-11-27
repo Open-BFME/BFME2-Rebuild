@@ -25,6 +25,7 @@ class W3DScriptedModelDraw : public DrawModule, public ObjectDrawInterface
 {
 public:
 	W3DScriptedModelDraw(Thing *thing, const ModuleData *moduleData);		// 0x000C0DD8
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 
 	// DrawModule (primary table 0x007CA090)
 	virtual NameKeyType getModuleNameKey() const;							// 4

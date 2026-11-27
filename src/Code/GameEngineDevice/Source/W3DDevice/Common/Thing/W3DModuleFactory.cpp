@@ -1,3 +1,9 @@
+#include "GameClient/W3DBoatWakeModelDraw.h"
+#include "GameClient/W3DSailModelDraw.h"
+#include "GameClient/W3DStreakDraw.h"
+#include "GameClient/W3DHordeModelDraw.h"
+#include "GameClient/W3DQuadrupedDraw.h"
+#include "GameClient/W3DScriptedModelDraw.h"
 #include "GameClient/W3DTornadoDraw.h"
 #include "GameClient/W3DProjectileStreamDraw.h"
 #include "GameClient/W3DLightDraw.h"
@@ -40,6 +46,10 @@ Module *W3DDefaultDraw::friend_newModuleInstance(Thing *thing, const ModuleData 
 	return new W3DDefaultDraw(thing, moduleData);
 }
 // FUNCTION: BFME2 0x0006489B size=59 name=?friend_newModuleInstance@W3DScriptedModelDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DScriptedModelDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DScriptedModelDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x000648D6 size=84 name=?friend_newModuleData@W3DScriptedModelDraw@@SAPAVModuleData@@PAVINI@@@Z evidence=X:map request tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x0006492A size=56 name=?friend_newModuleInstance@W3DLaserDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 Module *W3DLaserDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
@@ -55,12 +65,20 @@ ModuleData *W3DLaserDraw::friend_newModuleData(INI *ini)
 	return data;
 }
 // FUNCTION: BFME2 0x000649B3 size=59 name=?friend_newModuleInstance@W3DQuadrupedDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DQuadrupedDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DQuadrupedDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x000649EE size=56 name=?friend_newModuleInstance@W3DRopeDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 Module *W3DRopeDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
 {
 	return new W3DRopeDraw(thing, moduleData);
 }
 // FUNCTION: BFME2 0x00064A26 size=59 name=?friend_newModuleInstance@W3DSupplyDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DSupplyDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DSupplyDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064A61 size=84 name=?friend_newModuleData@W3DSupplyDraw@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 ModuleData *W3DSupplyDraw::friend_newModuleData(INI *ini)
 {
@@ -70,6 +88,10 @@ ModuleData *W3DSupplyDraw::friend_newModuleData(INI *ini)
 	return data;
 }
 // FUNCTION: BFME2 0x00064AB5 size=59 name=?friend_newModuleInstance@W3DTruckDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DTruckDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DTruckDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064AF0 size=84 name=?friend_newModuleData@W3DTruckDraw@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 ModuleData *W3DTruckDraw::friend_newModuleData(INI *ini)
 {
@@ -79,6 +101,10 @@ ModuleData *W3DTruckDraw::friend_newModuleData(INI *ini)
 	return data;
 }
 // FUNCTION: BFME2 0x00064B44 size=59 name=?friend_newModuleInstance@W3DTankDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DTankDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DTankDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064B7F size=84 name=?friend_newModuleData@W3DTankDraw@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 ModuleData *W3DTankDraw::friend_newModuleData(INI *ini)
 {
@@ -131,10 +157,22 @@ Module *W3DLightDraw::friend_newModuleInstance(Thing *thing, const ModuleData *m
 }
 // FUNCTION: BFME2 0x00064E2F size=81 name=?friend_newModuleData@W3DLightDraw@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00064E80 size=59 name=?friend_newModuleInstance@W3DHordeModelDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DHordeModelDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DHordeModelDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064EBB size=84 name=?friend_newModuleData@W3DHordeModelDrawModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00064F0F size=56 name=?friend_newModuleInstance@W3DStreakDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DStreakDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DStreakDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064F47 size=81 name=?friend_newModuleData@W3DStreakDrawModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00064F98 size=59 name=?friend_newModuleInstance@W3DSailModelDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DSailModelDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DSailModelDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x00064FD3 size=84 name=?friend_newModuleData@W3DSailModelDrawModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 ModuleData *W3DSailModelDrawModuleData::friend_newModuleData(INI *ini)
 {
@@ -145,6 +183,10 @@ ModuleData *W3DSailModelDrawModuleData::friend_newModuleData(INI *ini)
 }
 
 // FUNCTION: BFME2 0x00065027 size=56 name=?friend_newModuleInstance@W3DBoatWakeModelDraw@@SAPAVModule@@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+Module *W3DBoatWakeModelDraw::friend_newModuleInstance(Thing *thing, const ModuleData *moduleData)
+{
+	return new W3DBoatWakeModelDraw(thing, moduleData);
+}
 // FUNCTION: BFME2 0x0006505F size=81 name=?friend_newModuleData@W3DBoatWakeModelDrawModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 ModuleData *W3DBoatWakeModelDrawModuleData::friend_newModuleData(INI *ini)
 {

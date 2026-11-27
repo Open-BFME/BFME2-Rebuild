@@ -16,6 +16,7 @@ class W3DBoatWakeModelDraw : public DrawModule
 {
 public:
 	W3DBoatWakeModelDraw(Thing *thing, const ModuleData *moduleData);		// 0x000D0B34
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000D0C93
 	virtual void doDrawModule(const Matrix3D *transformMtx);				// 11: 0x000D0D24
 	virtual void setShadowsEnabled(Bool enable) {}							// 12: folded `ret 4`

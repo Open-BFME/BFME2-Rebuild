@@ -14,6 +14,7 @@ class W3DSailModelDraw : public W3DScriptedModelDraw
 {
 public:
 	W3DSailModelDraw(Thing *thing, const ModuleData *moduleData);
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000D07CB
 
 protected:

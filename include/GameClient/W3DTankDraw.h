@@ -13,6 +13,7 @@ class W3DTankDraw : public W3DScriptedModelDraw
 {
 public:
 	W3DTankDraw(Thing *thing, const ModuleData *moduleData);				// 0x000CE960
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	static ModuleData *friend_newModuleData(INI *ini);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000CE9EE
 	virtual void doDrawModule(const Matrix3D *transformMtx);				// 11: 0x000CE3E3

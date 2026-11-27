@@ -16,6 +16,7 @@ class W3DStreakDraw : public DrawModule
 {
 public:
 	W3DStreakDraw(Thing *thing, const ModuleData *moduleData);				// 0x000D02A7
+	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;							// 4: 0x000D004C
 	virtual void doDrawModule(const Matrix3D *transformMtx);				// 11: 0x000D0461
 	virtual void setShadowsEnabled(Bool enable) {}							// 12: folded `ret 4`
