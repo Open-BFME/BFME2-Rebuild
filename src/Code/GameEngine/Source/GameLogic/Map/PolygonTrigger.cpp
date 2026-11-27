@@ -14,7 +14,21 @@
 
 // FUNCTION: BFME2 0x002E36D5 size=26 name=?Rva002E36D5Find@@YAPAXH@Z evidence=?:placeholder tier=B hypothesis:Z
 
+// Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+extern PolygonTrigger **ThePolygonTriggerList;
+
 // FUNCTION: BFME2 0x002E36EF size=37 name=?addPolygonTrigger@PolygonTrigger@@SAXPAV1@@Z evidence=N:ledger tier=B hypothesis:Z
+void PolygonTrigger::addPolygonTrigger(PolygonTrigger *trigger)
+{
+	PolygonTrigger *head = *ThePolygonTriggerList;
+	for (PolygonTrigger *current = head; current; current = current->m_nextLayerArea)
+	{
+		if (current == trigger)
+			return;
+	}
+	trigger->m_nextLayerArea = head;
+	*ThePolygonTriggerList = trigger;
+}
 
 // FUNCTION: BFME2 0x002E3714 size=40 name=?Rva002E3714Unlink@@YAXPAURva002E36D5Node@@@Z evidence=?:placeholder tier=B hypothesis:Z
 
