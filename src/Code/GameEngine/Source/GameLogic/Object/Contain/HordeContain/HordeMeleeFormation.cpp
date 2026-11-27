@@ -89,10 +89,19 @@ bool HordeMeleeFormation::getUnitAttackPosition(int index, Coord3D *pos)
 // FUNCTION: BFME2 0x00586BAB size=30 name=?rva00586BAB@Rva00586BAB@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00586D8E size=49 name=??0HordeMeleeFormation@@QAE@PAX0@Z evidence=N:ledger tier=A
+HordeMeleeFormation::HordeMeleeFormation(HordeContain *horde, HordeMeleeFormationConfig *config)
+	: HordeMeleeBase(horde)
+{
+	m_config = config;
+	m_unk0x14 = false;
+}
 
 // FUNCTION: BFME2 0x00586DF9 size=60 name=?rva00586DF9@HordeMeleeFormation@@QAEPAV1@PAX@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00586E51 size=53 name=??1HordeMeleeFormation@@UAE@XZ evidence=N:ledger tier=A
+HordeMeleeFormation::~HordeMeleeFormation()
+{
+}
 
 // FUNCTION: BFME2 0x00586FC0 size=108 name=?rva00586FC0@Rva00586FC0@@QAEXIVRva00585B16@@@Z evidence=?:placeholder tier=A
 
