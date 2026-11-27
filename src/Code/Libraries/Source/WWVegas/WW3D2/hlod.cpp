@@ -1243,6 +1243,49 @@ int HLodClass::Add_Sub_Object_To_Bone(RenderObjClass * subobj,int boneindex,cons
 }
 
 // FUNCTION: BFME2 0x0019F2B0 size=511 name=?Add_Lod_Model@HLodClass@@UAEXHPAVRenderObjClass@@H@Z evidence=N:ledger tier=A
+void HLodClass::Add_Lod_Model(int lod, RenderObjClass *robj, int boneindex)
+{
+	if (boneindex >= HTree->Num_Pivots()) {
+		boneindex = 0;
+	}
+
+	ModelNodeClass newnode;
+	newnode.Model = robj;
+	newnode.Model->Add_Ref();
+	newnode.BoneIndex = boneindex;
+	newnode.Model->Set_Container(this);
+
+	const PivotTransform &pivot = HTree->Peek_Pivot(boneindex).Current;
+	const float xx = pivot.Rotation.X * pivot.Rotation.X * 2.0f;
+	const float xy = pivot.Rotation.X * pivot.Rotation.Y * 2.0f;
+	const float xz = pivot.Rotation.Z * pivot.Rotation.X * 2.0f;
+	const float wx = pivot.Rotation.W * pivot.Rotation.X * 2.0f;
+	const float yy = pivot.Rotation.Y * pivot.Rotation.Y * 2.0f;
+	const float yz = pivot.Rotation.Z * pivot.Rotation.Y * 2.0f;
+	const float wy = pivot.Rotation.W * pivot.Rotation.Y * 2.0f;
+	const float zz = pivot.Rotation.Z * pivot.Rotation.Z * 2.0f;
+	const float wz = pivot.Rotation.W * pivot.Rotation.Z * 2.0f;
+
+	Matrix3D tm;
+	tm[0][0] = 1.0f - yy - zz;
+	tm[0][1] = xy - wz;
+	tm[0][2] = xz + wy;
+	tm[1][0] = xy + wz;
+	tm[1][1] = 1.0f - zz - xx;
+	tm[1][2] = yz - wx;
+	tm[2][0] = xz - wy;
+	tm[2][1] = yz + wx;
+	tm[2][2] = 1.0f - yy - xx;
+	tm.Set_Translation(pivot.Translation);
+	newnode.Model->Set_Transform(tm);
+
+	newnode.Offset.X = newnode.Offset.Y = newnode.Offset.Z = 0.0f;
+
+	if (Is_In_Scene() && lod == CurLod) {
+		newnode.Model->Notify_Added(Scene);
+	}
+	Lod[lod].Add(newnode);
+}
 
 // FUNCTION: BFME2 0x0019F5B0 size=112 name=?Free@HLodDefClass@@AAEXXZ evidence=N:ledger tier=A
 void HLodDefClass::Free(void)
