@@ -93,6 +93,21 @@ Bool TransportContain::isSpecificRiderFreeToExit(Object *rider)
 }
 
 // FUNCTION: BFME2 0x004672B7 size=99 name=?onCapture@TransportContain@@UAEXHH@Z evidence=N:ledger tier=A
+void TransportContain::onCapture(Player *oldOwner, Player *newOwner)
+{
+	if (oldOwner != newOwner)
+	{
+		// A sniped vehicle throws everyone out at once; otherwise the next rider to leave would recapture it.
+		if (getObject()->isDisabledByType(DISABLED_UNMANNED))
+			removeAllContained(false);
+		else
+		{
+			orderAllPassengersToExit(CMD_FROM_AI);
+			if (containSlot54() && containSlot56() != newOwner)
+				containSlot35(CMD_FROM_AI);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0046731A size=166 name=?rva0046731A@Rva0046731A@@QAEXPAVObject@@@Z evidence=?:placeholder tier=A
 
