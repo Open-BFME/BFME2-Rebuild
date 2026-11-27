@@ -795,6 +795,18 @@ void BackAwayAndCowerStateMachine::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x003402FC size=70 name=?onExit@AICowerState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
+void AICowerState::onExit(StateExitType status)
+{
+	State::onExit(status);
+	Object *owner = getMachine()->getOwner();
+	if (owner != NULL)
+	{
+		owner->rva0028EC88(4);
+		HordeContainInterface *horde = owner->getHordeContainInterface();
+		if (horde != NULL)
+			horde->hordeSlot104(false);
+	}
+}
 
 // FUNCTION: BFME2 0x00340342 size=45 name=?onExit@AIQuarrelState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
 void AIQuarrelState::onExit(StateExitType status)

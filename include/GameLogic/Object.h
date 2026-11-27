@@ -180,6 +180,7 @@ public:
     bool rva0028F518();
     Rva00373EC6 *rva0028F4BC();
     void rva0028EC68(int,void *,int);
+    void rva0028EC88(int);
     BehaviorModule *rva0028F2C4(int key) const;	// 0x0028F2C4 (Object.cpp); ActivateModuleSpecialPower::SetWakeState looks up a module by key
     void rva0028C2DD(Coord3D *) const;
     void rva0029660C(const Coord3D *,int);
