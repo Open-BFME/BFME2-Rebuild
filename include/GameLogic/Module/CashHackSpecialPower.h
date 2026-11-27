@@ -23,6 +23,7 @@ public:
         Upgrades(const Upgrades &);
     };
     CashHackSpecialPowerModuleData();
+    virtual ~CashHackSpecialPowerModuleData();
     static void buildFieldParse(MultiIniFieldParse &);
     static ModuleData *friend_newModuleData(INI *ini);
     _STL::vector<Upgrades> m_upgrades; //7C
