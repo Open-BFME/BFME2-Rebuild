@@ -97,6 +97,7 @@ public:
 	virtual void rva00238EBF(GameClientFuncPtr userFunc, void *userData);	// slot 27, 0x00238EBF
 	virtual Drawable *friend_createDrawable(const ThingTemplate *thing, DrawableStatus statusBits, Int value) = 0;	// slot 28
 	virtual void destroyDrawable(Drawable *draw);				// slot 29, 0x00239F40
+	void addDrawableToLookupTable(Drawable *draw);			// 0x00239FA0: records the drawable under its ID in the hash at +0x18
 	void removeDrawableFromLookupTable(const Drawable *draw);	// 0x00239C38 (map: a placeholder on Rva00239C38): erases the drawable's ID from the hash at +0x18
 	virtual void setTimeOfDay(TimeOfDay tod);					// slot 30, 0x00238EF2
 	virtual UnsignedInt getFrame() { return m_frame; }			// slot 31

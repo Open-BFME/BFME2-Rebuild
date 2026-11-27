@@ -214,6 +214,10 @@ public:
  void rva00270644(Real a, Real b);	// 0x00270644: +0xD8/+0xDC, stamped with the client frame at +0x380
  void rva00271A80(Real t);			// 0x00271A80: +0xF4 = t; +0xF0 the +0xE8 range at t when +0xE4 is set
  void rva002752F8();				// 0x002752F8: rva00270644(0, -0.03), rva00272BE7, then +0x445 -> +0x446
+ void rva002761F3(const BitFlags<591> *conditions, const BitFlags<591> *previousConditions);	// 0x002761F3: stores the +0x2A4 and +0x2F0 condition sets, then refreshes the drawn state
+ void rva002754E3();				// 0x002754E3: runs when the drawable becomes selected
+ void rva00275545();				// 0x00275545: runs when the drawable stops being selected
+ void rva00278C6B();				// 0x00278C6B: restarts the ambient sound when status byte +0x44B is set
  void rva00272BE7();				// 0x00272BE7: draw-module slot 28, then the third list's slot 18
  void setOrientation(Real);
  void rva00275DCE(Int,Real,Real,Real);

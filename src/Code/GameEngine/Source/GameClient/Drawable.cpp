@@ -16,6 +16,7 @@
 #include "Common/ThingTemplate.h"
 #include "GameLogic/GameLogic.h"
 #include "GameClient/BuffManager.h"
+#include "GameClient/DisplayString.h"
 #include "GameClient/DisplayStringManager.h"
 #include "GameClient/GameClient.h"
 #include "GameClient/InGameUI.h"
@@ -258,6 +259,17 @@ const GeometryInfo *Drawable::getGeometryInfo(Int index) const
 }
 
 // FUNCTION: BFME2 0x00271058 size=61 name=?setID@Drawable@@QAEXPAX@Z evidence=N:ledger tier=A
+void Drawable::setID(DrawableID id)
+{
+	if (m_id != id)
+	{
+		if (m_id != 0)
+			TheGameClient->removeDrawableFromLookupTable(this);
+		m_id = id;
+		if (id != 0)
+			TheGameClient->addDrawableToLookupTable(this);
+	}
+}
 
 // FUNCTION: BFME2 0x00271095 size=25 name=?rva00271095@Drawable@@UAEXXZ evidence=?:placeholder tier=A
 void Drawable::preloadAssets()
@@ -1483,6 +1495,12 @@ void Drawable::colorTint(const RGBColor *peak)
 // FUNCTION: BFME2 0x0027601B size=472 name=?rva0027601B@Rva0027601BHost@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002761F3 size=48 name=?rva002761F3@Drawable@@QAEXPBH0@Z evidence=?:placeholder tier=A
+void Drawable::rva002761F3(const BitFlags<591> *conditions, const BitFlags<591> *previousConditions)
+{
+	m_unk0x2A4 = *conditions;
+	m_unk0x2F0 = *previousConditions;
+	rva00274176(TRUE);
+}
 
 // FUNCTION: BFME2 0x00276223 size=107 name=?rva00276223@Rva00276223@@QAEXVAsciiString@@_NH@Z evidence=?:placeholder tier=A
 
@@ -1545,6 +1563,12 @@ const Coord3D *Drawable::getPosition() const
 // FUNCTION: BFME2 0x00276470 size=202 name=?rva00276470@Rva00276470Drawable@@QBEPBVCoord3D@@XZ evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x0027653A size=53 name=?rva0027653A@Rva0027653A@@QAE?AVUnicodeString@@XZ evidence=?:placeholder tier=A
+UnicodeString Drawable::getCaptionText()
+{
+	if (m_captionDisplayString)
+		return m_captionDisplayString->getText();
+	return UnicodeString::TheEmptyString;
+}
 
 // FUNCTION: BFME2 0x0027656F size=101 name=?rva0027656F@Drawable@@QAEXHVAsciiString@@@Z evidence=?:placeholder tier=A
 
@@ -1559,6 +1583,11 @@ const Coord3D *Drawable::getPosition() const
 // FUNCTION: BFME2 0x0027675F size=166 name=?rva0027675F@Drawable@@QAE?AVRva002390CB@@H@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00276805 size=42 name=?rva00276805@Drawable@@QAE_NH@Z evidence=?:placeholder tier=A
+Bool Drawable::hasSoundAtIndex(Int index)
+{
+	Rva002390CB sound = rva0027675F(index);
+	return sound.m_unk0x04 != NULL;
+}
 
 // FUNCTION: BFME2 0x0027682F size=25 name=?rva0027682F@Drawable@@QAE?AVRva002390CB@@XZ evidence=?:placeholder tier=A
 Rva002390CB Drawable::getSoundMoveLoopDamaged()
@@ -1597,6 +1626,14 @@ Rva002390CB Drawable::getSoundAmbientRubble()
 // FUNCTION: BFME2 0x00276B32 size=99 name=?rva00276B32@Rva00276B32Host@@QAE_NHH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00276B95 size=20 name=?rva00276B95@Drawable@@QAEXXZ evidence=?:placeholder tier=A
+void Drawable::friend_clearSelected()
+{
+	if (m_selected)
+	{
+		m_selected = FALSE;
+		rva00275545();
+	}
+}
 
 // FUNCTION: BFME2 0x00276BA9 size=338 name=?rva00276BA9@Drawable@@QAEX_N@Z evidence=?:placeholder tier=A
 
@@ -1676,6 +1713,11 @@ void Drawable::setFullyObscuredByShroud(Bool fullyObscured)
 }
 
 // FUNCTION: BFME2 0x00278C6B size=17 name=?rva00278C6B@Drawable@@QAEXXZ evidence=?:placeholder tier=A
+void Drawable::rva00278C6B()
+{
+	if (m_unk0x43D[14])
+		startAmbientSound(FALSE);
+}
 
 // FUNCTION: BFME2 0x00278C7C size=381 name=?rva00278C7C@Drawable@@QAEXH@Z evidence=?:placeholder tier=A
 
@@ -1714,6 +1756,15 @@ const char *Drawable::GetSnapshotName() const
 // FUNCTION: BFME2 0x00279677 size=65 name=?rva00279677@Rva00279677@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x002796B8 size=33 name=?rva002796B8@Drawable@@QAEXXZ evidence=?:placeholder tier=A
+void Drawable::friend_setSelected()
+{
+	if (!m_selected)
+	{
+		m_selected = TRUE;
+		rva002754E3();
+	}
+	flashAsSelected(NULL);
+}
 
 // FUNCTION: BFME2 0x002796D9 size=114 name=?drawIconLayer@Rva002796D9Host@@QAEXH@Z evidence=?:placeholder tier=A
 
