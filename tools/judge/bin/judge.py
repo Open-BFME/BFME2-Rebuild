@@ -589,12 +589,43 @@ def pilot_judge_tu(job, tu, led):
         pair_by_position(rva, s)
     order = sorted(exact_of.items(), key=lambda kv: (map_index(MAP)['rows'][kv[0]]['role']!='owned',len(kv[1])))
     def same_eh_root(rva, syms):
-        meta=map_index(MAP)['rows'][rva]
-        if meta['role'] in ('unwind','funclet','ehhandler') and meta.get('parent'):
-            prva=int(meta['parent'],16);ps=pair.get(prva,(None,None,None))[2]
-            if ps:
-                model=coff(obj);root=model.root(model.symbols[model.index(ps)]['section'])
-                return [n for n in syms if model.root(model.symbols[model.index(n)]['section'])==root]
+        meta = map_index(MAP)['rows'][rva]
+        if meta['role'] not in ('unwind', 'funclet', 'ehhandler'):
+            return syms
+        parents = set()
+        if meta.get('parent'):
+            parents.add(int(meta['parent'], 16))
+        for tok in str(meta.get('parent_rvas') or '').split(';'):
+            tok = tok.strip()
+            if tok:
+                parents.add(int(tok, 16))
+        if not parents:
+            return syms
+        model = coff(obj)
+        def root_of(sym_name):
+            try:
+                sec = model.symbols[model.index(sym_name)]['section']
+            except Exception:
+                return None
+            return model.root(sec) if sec > 0 else None
+        paired_roots = {root_of(pair[p][2]) for p in parents if p in pair} - {None}
+        if paired_roots:
+            return [n for n in syms if root_of(n) in paired_roots]
+        # None of this EH row's parents is paired: drop candidates whose COMDAT root
+        # already belongs to a different paired function so unwritten single- or
+        # multi-parent EH rows never steal another function's identical funclet/handler.
+        rows_ = map_index(MAP)['rows']
+        foreign_roots = set()
+        for qrva, (_st, _pct, qs) in pair.items():
+            if qrva in parents:
+                continue
+            if rows_.get(qrva, {}).get('role') in ('unwind', 'funclet', 'ehhandler'):
+                continue
+            qroot = root_of(qs)
+            if qroot is not None and bool(model.sections[qroot - 1]['characteristics'] & 0x1000):
+                foreign_roots.add(qroot)
+        if foreign_roots:
+            return [n for n in syms if root_of(n) not in foreign_roots]
         return syms
     # 1) Identity before order: a compiled symbol carrying a row's own map name belongs to that row.
     for rva, syms in order:
@@ -671,7 +702,7 @@ def pilot_judge_tu(job, tu, led):
                         continue
             if n not in used and n not in generated:
                 ranked.append((-reference_agreement(obj, bodies[n], rva, info[rva][0]), position, rva, n))
-    for _score, _position, rva, n in sorted(ranked, key=lambda x: (x[0], x[1])):
+    for _score, _position, rva, n in sorted(ranked, key=lambda x: (rows_index[x[2]]['role'] in ('unwind', 'funclet', 'ehhandler'), x[0], x[1])):
         if rva in pair or n in used or n not in same_eh_root(rva, [n]):
             continue
         used.add(n); pair[rva] = ("MATCH", 100.0, n)
