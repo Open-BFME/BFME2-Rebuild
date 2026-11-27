@@ -60,6 +60,11 @@ UnpauseSpecialPowerUpgrade::UnpauseSpecialPowerUpgrade(Thing *thing, const Modul
 }
 
 // FUNCTION: BFME2 0x004B54D9 size=16 name=?onCreate@UnpauseSpecialPowerUpgrade@@MAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
+void UnpauseSpecialPowerUpgrade::onObjectCreated()
+{
+	if (getObject())
+		getObject()->AddCreateAHeroSpecialPowerUpgrade(this);
+}
 
 // FUNCTION: BFME2 0x004B54E9 size=102 name=?upgradeImplementation@UnpauseSpecialPowerUpgrade@@MAEXXZ evidence=N:ledger tier=B hypothesis:Z
 void UnpauseSpecialPowerUpgrade::upgradeImplementation()

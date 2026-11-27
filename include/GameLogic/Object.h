@@ -57,6 +57,7 @@ enum RadarPriorityType;
 class WallUpgradeUpdate;
 class Rva00373EC6;
 class StealthUpdate;
+class UnpauseSpecialPowerUpgrade;
 // The map's placeholder name for the 16-byte status mask the status setters take (rva0028CDEB's parameter);
 // the class is BitFlags<101> (ObjectStatusMaskType), renamed here once the map spells it so. Only named in a
 // signature, so only declared; GameLogic/Module/RebuildHoleStatusMask.h holds the layout RebuildHoleBehavior builds one with.
@@ -277,6 +278,7 @@ public:
 	Bool didEnter(PolygonTrigger *trigger);		// 0x0028D718
 	Bool didExit(PolygonTrigger *trigger);		// 0x0028D757
 	Real rva002972B1(Real range);			// 0x002972B1 the threat a unit poses within range
+	void AddCreateAHeroSpecialPowerUpgrade(UnpauseSpecialPowerUpgrade *upgrade);	// 0x002972DE (called from UnpauseSpecialPowerUpgrade::onObjectCreated)
 	// 0x0006F039 (COMDAT in W3DScene.cpp, 17 link referrers): the masked one-bit test of the model
 	// conditions (`and eax,[esi+edx*4+0x10C]; neg; sbb`). Out of line in retail; the map's name
 	// is a rename of the ledger's isKindOf spelling.
