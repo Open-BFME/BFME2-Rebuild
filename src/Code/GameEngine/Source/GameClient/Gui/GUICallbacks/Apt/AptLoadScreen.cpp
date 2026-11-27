@@ -6,6 +6,9 @@
 #include "Common/MultiplayerSettings.h"
 #include "Common/MultiplayerColorDefinition.h"
 #include "GameClient/AptPlayer.h"
+#include "GameClient/WindowLayout.h"
+#include "GameLogic/GameLogic.h"
+#include "GameNetwork/Network.h"
 
 // The C runtime's multibyte copy, called directly in the image.
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
@@ -23,6 +26,29 @@ void AptLoadScreen::reset()
 }
 
 // FUNCTION: BFME2 0x0043A0C1 size=156 name=?rva0043A0C1@Rva0043A0C1@@QAEXH@Z evidence=?:placeholder tier=A
+void AptLoadScreen::update(int percent)
+{
+	if (!m_startSpotsShown)
+	{
+		m_mapPreview.rva0057E24B((int)m_game);
+		m_startSpotsShown = m_mapPreview.UpdateStartSpots(true);
+	}
+	m_layout->runUpdate(0);
+	if (m_loadingType > 0 && (m_loadingType <= 2 || m_loadingType == 5))
+	{
+		if (TheNetwork)
+		{
+			if (percent <= 100)
+				TheNetwork->updateLoadProgress(percent);
+			TheNetwork->vslot3C(0);
+		}
+		else if (percent <= 100)
+		{
+			TheGameLogic->processProgress(m_game->getLocalSlotNum(), percent);
+		}
+	}
+	LoadScreen::update(percent);
+}
 
 // FUNCTION: BFME2 0x0043A15D size=99 name=?processProgress@AptLoadScreen@@UAEXHH@Z evidence=N:ledger tier=A
 void AptLoadScreen::processProgress(int player, int percent)
