@@ -5,9 +5,31 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=rests-on:name+veto right=rests-on:name; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z
+
+#include "Common/MapObject.h"
+#include "GameLogic/Module/BridgeBehavior.h"
+#include "WW3D2/RenderObjClass.h"
+
 // FUNCTION: BFME2 0x0030D3D4 size=52 name=?setBridgeRenderObject@MapObject@@QAEXW4BridgeTowerType@@PAVRenderObjClass@@@Z evidence=N:ledger tier=B hypothesis:K
+void MapObject::setBridgeRenderObject(BridgeTowerType type, RenderObjClass *renderObj)
+{
+	if (type >= 0 && type < BRIDGE_MAX_TOWERS)
+	{
+		if (renderObj)
+			renderObj->Add_Ref();
+		if (m_bridgeTowers[type])
+			m_bridgeTowers[type]->Release_Ref();
+		m_bridgeTowers[type] = renderObj;
+	}
+}
 
 // FUNCTION: BFME2 0x0030D408 size=24 name=?getBridgeRenderObject@MapObject@@QAEPAVRenderObjClass@@W4BridgeTowerType@@@Z evidence=N:ledger tier=B hypothesis:K
+RenderObjClass *MapObject::getBridgeRenderObject(BridgeTowerType type)
+{
+	if (type >= 0 && type < BRIDGE_MAX_TOWERS)
+		return m_bridgeTowers[type];
+	return NULL;
+}
 
 // FUNCTION: BFME2 0x0030D428 size=26 name=?rva0030D428@Rva0030D4F2@@QAEHXZ evidence=?:placeholder tier=B hypothesis:K
 
@@ -84,6 +106,11 @@
 // FUNCTION: BFME2 0x0030E2FE size=130 name=?duplicate@Rva0030DBD5@@QAEPAV1@XZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0030E380 size=16 name=?validate@MapObject@@QAEXXZ evidence=N:ledger tier=B hypothesis:K
+void MapObject::validate(void)
+{
+	verifyValidTeam();
+	verifyValidUniqueID();
+}
 
 // FUNCTION: BFME2 0x0030E390 size=399 name=?fastAssignAllUniqueIDs@MapObject@@SAXXZ evidence=N:ledger tier=B hypothesis:Z
 
