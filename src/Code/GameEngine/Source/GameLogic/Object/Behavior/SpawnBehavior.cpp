@@ -21,6 +21,11 @@
 #include "Common/ThingTemplate.h"
 #include "Common/Player.h"
 #include "Common/KindOf.h"
+#include "Common/CreateMask.h"
+#include "GameClient/GameClient.h"
+#include "GameClient/Drawable.h"
+#include "Common/PlayerList.h"
+#include "GameLogic/Module/ExitInterface.h"
 
 // 0x004A1828 (map: ?Rva004A1828Get@@YAHPAURva004A1828Owner@@@Z): a test on an object the slave walk applies before its callback.
 int Rva004A1828Get(Object *object);
@@ -347,6 +352,98 @@ Bool SpawnBehavior::reclaimOrphanSpawn()
 }
 
 // FUNCTION: BFME2 0x0045FA57 size=676 name=?createSpawn@SpawnBehavior@@AAE_NXZ evidence=N:ledger
+Bool SpawnBehavior::createSpawn()
+{
+	Object *parent = m_object;
+	const ModuleData *moduleData = getModuleData();
+	const SpawnBehaviorModuleData *data = static_cast<const SpawnBehaviorModuleData *>(moduleData);
+
+	ExitInterface *exitInterface = parent->getObjectExitInterface();
+	if (exitInterface == NULL)
+		return false;
+	ExitDoorType exitDoor = exitInterface->reserveDoorForExit(NULL, NULL);
+	if (exitDoor == EXIT_DOOR_NONE)
+		return false;
+
+	m_spawnTemplate = TheThingFactory->findTemplate(*m_unk0x60);
+	if (data->m_respectCommandLimit && m_spawnTemplate) {
+		Player *owner = parent->getControllingPlayer();
+		if (owner) {
+			Command *commandPoints = owner->getCommandPoints();
+			if (commandPoints && commandPoints->rva002A7548(1) < m_spawnTemplate->m_commandPoints)
+				return false;
+		}
+	}
+
+	CreateMask mask;
+	memset(&mask, 0, sizeof(mask));
+	Object *newSpawn = TheThingFactory->newObject(m_spawnTemplate, parent->m_team, &mask, INVALID_ID);
+	newSpawn->getControllingPlayer()->onUnitCreated(parent, newSpawn);
+	if (data->m_spawnInsideBuilding && newSpawn->m_ai)
+		newSpawn->m_ai->ignoreObstacle(parent);
+	if (newSpawn->getDrawable()) {
+		if (parent->getShroudStatusForPlayer(ThePlayerList->getLocalPlayer()->getPlayerIndex()) >= 3)
+			newSpawn->getDrawable()->setFullyObscuredByShroud(true);
+		newSpawn->getDrawable()->fadeIn((UnsignedInt)(BfmeClientFramesPerMillisecond * data->m_fadeInTime));
+	}
+
+	++m_unk0x60;
+	if (m_unk0x60 == data->m_spawnTemplateName.end())
+		m_unk0x60 = data->m_spawnTemplateName.begin();
+
+	newSpawn->setProducer(parent);
+	for (BehaviorModule **module = newSpawn->m_behaviors; *module; ++module) {
+		SlavedUpdateInterface *slaved = (*module)->getSlavedUpdateInterface();
+		if (slaved) {
+			slaved->onEnslave(parent);
+			break;
+		}
+	}
+	Int newSpawnId = newSpawn->m_id;
+	m_slaves.push_back(newSpawnId);
+
+	if (data->m_exitByBudding) {
+		Bool producerExit = false;
+		if (m_unk0x5C > 0) {
+			Object *producer = TheGameLogic->findObjectByID(parent->m_producerID);
+			if (producer && producer->isKindOf(KINDOF_STRUCTURE)) {
+				ExitInterface *producerExitInterface = producer->getObjectExitInterface();
+				if (producerExitInterface) {
+					ExitDoorType producerDoor = producerExitInterface->reserveDoorForExit(NULL, NULL);
+					producerExitInterface->exitObjectViaDoor(newSpawn, producerDoor);
+					newSpawn->setProducer(parent);
+					--m_unk0x5C;
+					producerExit = true;
+				}
+			}
+		}
+		if (!producerExit) {
+			Object *budHost = NULL;
+			Real closest = 999999.9f;
+			for (_STL::list<Int>::iterator slaveId = m_slaves.begin(); slaveId != m_slaves.end(); ++slaveId) {
+				Object *slave = TheGameLogic->findObjectByID((ObjectID)*slaveId);
+				if (slave && slave != newSpawn) {
+					Real distance = slave->rva002615E3(&parent->m_cachedPos);
+					if (distance < closest) {
+						closest = distance;
+						budHost = slave;
+					}
+				}
+			}
+			exitInterface->exitObjectByBudding(newSpawn, budHost);
+		}
+	} else {
+		exitInterface->exitObjectViaDoor(newSpawn, exitDoor);
+	}
+
+	if (data->m_oneShot)
+		--m_unk0x3C;
+	if (m_unk0x54 == -1)
+		m_unk0x54 = 1;
+	else
+		++m_unk0x54;
+	return true;
+}
 
 // FUNCTION: BFME2 0x0045FCFB size=164 name=?onSpawnDeath@SpawnBehavior@@UAEXW4ObjectID@@PAVDamageInfo@@@Z evidence=N:ledger
 void SpawnBehavior::onSpawnDeath(ObjectID deadSlave, DamageInfo *damageInfo)
