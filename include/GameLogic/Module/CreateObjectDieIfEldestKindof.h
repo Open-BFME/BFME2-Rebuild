@@ -54,6 +54,7 @@ public:
 	StatusBitsEldestFrame m_eldest;	// +0x14
 protected:
 	virtual const char *GetSnapshotName() const;	// slot 2 of the class table, 0x0048599C
+	virtual void xfer(Xfer *xfer);	// slot 3, 0x00485BD4: version 1..2, DieModule::xfer, the cached frame, then (version 2) its own xfer
 };
 // SIZE 0x18
 

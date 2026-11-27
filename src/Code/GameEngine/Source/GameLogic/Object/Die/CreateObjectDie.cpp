@@ -121,6 +121,15 @@ void StatusBitsEldestFrame::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x00485BD4 size=69 name=?xfer@Rva00485BD4@@MAEXPAVXfer@@@Z evidence=?:placeholder
+void CreateObjectDieIfEldestKindof::xfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 2);
+	*xfer == version;
+	DieModule::xfer(xfer);
+	*xfer == m_eldest.m_unk0x0;
+	if (version.m_minimum >= 2)
+		m_eldest.xfer(xfer);
+}
 
 // FUNCTION: BFME2 0x00485C19 size=109 name=?rva00485C19@StatusBitsEldestFrame@@QAE_NPAVObject@@PBURva00485C19Data@@PBW4NameKeyType@@@Z evidence=?:placeholder
 Bool StatusBitsEldestFrame::rva00485C19(Object *object, const Rva00485C19Data *filter, const NameKeyType *key)
