@@ -6,6 +6,10 @@
 // FUNCTION: BFME2 0x000421F6 size=7 name=?get@Rva000421F6ByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x000421FD size=21 name=?rva000421FD@GameLogic@@QAEXXZ evidence=S:strong (caller-this) tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x00042212 size=7 name=?dec@GameLogic@@QAEXXZ evidence=S:strong (position+fit) tier=B hypothesis:mm1-gap-unit
+void GameLogic::dec()
+{
+	--m_unk0x1B4;
+}
 // FUNCTION: BFME2 0x00042219 size=28 name=?rva0042219@GameLogic@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 Bool GameLogic::rva0042219()
 {

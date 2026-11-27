@@ -171,6 +171,7 @@ public:
 	Int getGameMode() const { return m_gameMode; }
 	Bool isWarOfTheRingGame() const;	// 0x00210C66: +0x114 == 1 || +0x114 == 2 (the two War of the Ring campaign kinds; AptQuitMenu 0x0051AFF9, 0x0051B04A)
 	void enterFPMode();	// 0x000421FD (FPModeScope constructor 0x0004224C)
+	void dec();	// 0x00042212: drops the FP-mode nesting count
 	void setPlayerQuitStatus(Int slot, Int status);	// 0x0023D201: records why a player slot left and the frame it happened on (Network::vslot98 0x0025E20F)
 	void updateObjectsChangedTriggerAreas() { m_frameObjectsChangedTriggerAreas = m_frame; }
 
