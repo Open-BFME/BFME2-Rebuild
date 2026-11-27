@@ -934,6 +934,10 @@ void AIAttackMeleeHordeWaitState::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x00340744 size=8 name=?rva00340744@Rva00340744@@QAEXXZ evidence=?:placeholder tier=A
+void AIAttackMeleeHordeWaitState::unknownNotify16()
+{
+	onExit(EXIT_RESET);
+}
 
 // FUNCTION: BFME2 0x0034074C size=75 name=?xfer@AIAttackMeleeHordeWaitPathState@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
 void AIAttackMeleeHordeWaitPathState::xfer(Xfer *xfer)
@@ -4135,6 +4139,10 @@ const char *AIStateMachine::GetSnapshotName() const
 // FUNCTION: BFME2 0x00351788 size=449 name=?update@AIAttackAimAtTargetState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00351949 size=8 name=?rva00351949@Rva00351949Host@@QAEXXZ evidence=?:placeholder tier=A
+void AIAttackAimAtTargetState::rva00351949()
+{
+	updateInternal(false);
+}
 
 // FUNCTION: BFME2 0x00351951 size=162 name=?onEnter@AIAttackSquadState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
