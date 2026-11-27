@@ -1,4 +1,9 @@
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G004482B7 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
+#include "GameNetwork/LANGameInfo.h"
 // FUNCTION: BFME2 0x004482B7 size=40 name=?rva004482B7@LANGameInfo@@QAE?AVUnicodeString@@H@Z evidence=S:strong (vtable-slot|wb-file) tier=B hypothesis:mm1-gap-unit
+UnicodeString LANGameInfo::getPlayerName(Int slot) const
+{
+	return m_LANSlot[slot].m_name;
+}
