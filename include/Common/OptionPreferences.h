@@ -63,6 +63,7 @@ public:
 	void setLANIPAddress(AsciiString IP);							// 0x002E505A
 	void setOnlineIPAddress(AsciiString IP);					// 0x002E520C
 	UnsignedInt getLANIPAddress();
+	UnsignedInt getOnlineIPAddress();
 	bool getAllHealthBars();
 	bool getUseEAX3();
 	void setSetting(Int setting, Int value);

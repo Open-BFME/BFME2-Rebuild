@@ -24,6 +24,8 @@ public:
 	~EnumeratedIP() {}
 
 	void setIPstring(AsciiString ip);							// 0x0050BFFD
+	AsciiString getIPstring() const { return m_IPstring; }
+	UnsignedInt getIP() const { return m_IP; }
 	EnumeratedIP *getNext() const { return m_next; }
 
 	AsciiString m_IPstring;										// +0x00

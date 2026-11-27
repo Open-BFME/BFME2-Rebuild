@@ -28,6 +28,7 @@ extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *
 #include "Common/GameLOD.h"
 #include "Common/GameAudio.h"
 #include "Common/AudioSettings.h"
+#include "GameNetwork/IPEnumeration.h"
 extern GameLODManager *TheGameLODManager;
 extern BfmeEnumTableEntry BfmeEnumTable[];
 extern const char *StaticGameLODNames[];	// VA 0x00DB95F4: VeryLow .. Custom (GameLOD.cpp; Zero Hour's name)
@@ -447,6 +448,19 @@ void OptionPreferences::setCampaignDifficulty(Int difficulty)
 }
 
 // FUNCTION: BFME2 0x002E4F98 size=194 name=?getLANIPAddress@OptionPreferences@@QAEIXZ evidence=N:ledger
+UnsignedInt OptionPreferences::getLANIPAddress()
+{
+	AsciiString selectedIP = (*this)["IPAddress"];
+	IPEnumeration IPs;
+	EnumeratedIP *IPlist = IPs.getAddresses();
+	while (IPlist)
+	{
+		if (selectedIP.compareNoCase(IPlist->getIPstring()) == 0)
+			return IPlist->getIP();
+		IPlist = IPlist->getNext();
+	}
+	return TheWritableGlobalData->m_defaultIP;
+}
 
 // FUNCTION: BFME2 0x002E505A size=97 name=?setLANIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z evidence=N:ledger
 void OptionPreferences::setLANIPAddress(AsciiString IP)
@@ -470,6 +484,19 @@ void OptionPreferences::setLANIPAddress(unsigned int ip)
 
 
 // FUNCTION: BFME2 0x002E514A size=194 name=?getOnlineIPAddress@OptionPreferences@@QAEIXZ evidence=N:ledger
+UnsignedInt OptionPreferences::getOnlineIPAddress()
+{
+	AsciiString selectedIP = (*this)["GameSpyIPAddress"];
+	IPEnumeration IPs;
+	EnumeratedIP *IPlist = IPs.getAddresses();
+	while (IPlist)
+	{
+		if (selectedIP.compareNoCase(IPlist->getIPstring()) == 0)
+			return IPlist->getIP();
+		IPlist = IPlist->getNext();
+	}
+	return TheWritableGlobalData->m_defaultIP;
+}
 
 // FUNCTION: BFME2 0x002E520C size=97 name=?setOnlineIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z evidence=N:ledger
 void OptionPreferences::setOnlineIPAddress(AsciiString IP)
