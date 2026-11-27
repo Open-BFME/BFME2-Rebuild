@@ -26,6 +26,7 @@
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/InvisibilityManager.h"
 #include "GameLogic/Module/StealthUpdate.h"
+#include "GameLogic/Module/Rva00373EC6.h"
 #include "Common/RandomValue.h"
 #include "GameClient/Drawable.h"
 #include "GameLogic/Module/SpecialDisguiseUpdate.h"
@@ -93,6 +94,50 @@ void INI::iniParseAnimAndDuration(INI *ini, void *instance, void *store, const v
 		INI::parseDurationUnsignedInt(ini, instance, &anim->m_extra, NULL);
 }
 // FUNCTION: BFME2 0x0044E7A8 size=182 name=?rva0044E7A8@SpecialAbilityUpdate@@QAE_NH@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-held-object-same-path
+bool SpecialAbilityUpdate::rva0044E7A8(const Coord3D *)
+{
+	const SpecialAbilityUpdateModuleData *data = static_cast<const SpecialAbilityUpdateModuleData *>(m_moduleData);
+	UnsignedInt required = data->m_requiredConditions;
+	if (required & 1)
+	{
+		if (!m_object->testModelConditionState((ModelConditionFlagType)0xD6))
+			return false;
+	}
+	if (required & 2)
+	{
+		if (!m_object->testModelConditionState((ModelConditionFlagType)0x12D))
+			return false;
+	}
+	if (required & 4)
+	{
+		if (!m_object->testModelConditionState((ModelConditionFlagType)0x3D))
+			return false;
+	}
+	UnsignedInt rejected = data->m_rejectedConditions;
+	if (rejected & 1)
+	{
+		if (m_object->testModelConditionState((ModelConditionFlagType)0xD6))
+			return false;
+	}
+	if (rejected & 2)
+	{
+		if (m_object->testModelConditionState((ModelConditionFlagType)0x12D))
+			return false;
+	}
+	if (rejected & 4)
+	{
+		if (m_object->testModelConditionState((ModelConditionFlagType)0x3D))
+			return false;
+	}
+	if (data->m_disableWhenWearingTheRing)
+	{
+		Rva00373EC6 *ring = m_object->rva0028F4BC();
+		if (ring && ring->m_31)
+			return false;
+	}
+	return true;
+}
+
 // FUNCTION: BFME2 0x0044E85E size=361 name=?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x0044E9C7 size=300 name=?rva0044E9C7@Rva0044E9C7@@QAEPAV1@HIIIIIIIIIIIIII@Z evidence=?:placeholder
