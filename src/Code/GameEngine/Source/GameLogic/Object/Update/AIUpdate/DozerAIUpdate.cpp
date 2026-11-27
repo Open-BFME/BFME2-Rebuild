@@ -38,6 +38,7 @@ static const FieldParse s_dozerAIUpdateModuleDataFieldParse[] =
 #include "GameLogic/Damage.h"
 #include "Common/GlobalData.h"
 #include "Common/StlAlgobase.h"
+#include "WWMath/Vector3.h"
 
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Object.h"
@@ -490,6 +491,34 @@ Object *DozerAIUpdate::construct(const ThingTemplate *what, const Coord3D *pos, 
 }
 
 // FUNCTION: BFME2 0x00489039 size=421 name=?findGoodBuildOrRepairPosition@DozerAIUpdate@@IAE_NPBVObject@@0AAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+Bool DozerAIUpdate::findGoodBuildOrRepairPosition(const Object *me, const Object *target, Coord3D &pos)
+{
+	Coord3D contact = *target->getPosition();
+	Coord3D desired = *target->getPosition();
+
+	Vector3 away(me->getPosition()->x - target->getPosition()->x,
+		me->getPosition()->y - target->getPosition()->y,
+		me->getPosition()->z - target->getPosition()->z);
+	away.Normalize();
+
+	Real radius = target->getMajorRadius() * 0.5f;
+	desired.x += away.X * radius;
+	desired.y += away.Y * radius;
+	desired.z += away.Z * radius;
+
+	FindPositionOptions options;
+	options.maxRadius = 100.0f;
+	options.sourceToPathToDest = me;
+	if (!me->isUsingAirborneLocomotor())
+		options.maxZDelta = 10.0f;
+	if (me->isUsingAirborneLocomotor())
+		options.ignoreObject = target;
+
+	Bool found = findNearestLabeledContactPointOnTarget(const_cast<Object *>(target), &contact, &desired, true)
+		|| PartitionManager::findPositionAround(&desired, &options, &contact);
+	pos = found ? contact : desired;
+	return found;
+}
 
 // FUNCTION: BFME2 0x004891DE size=120 name=?rva004891DE@Rva004891DE@@QAEXPAURva004891DEArg@@H@Z evidence=?:placeholder tier=A
 
