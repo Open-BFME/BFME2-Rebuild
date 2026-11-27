@@ -291,6 +291,10 @@ void AptArray::toString(EAStringC &out, const char *separator)
     }
 }
 // FUNCTION: BFME2 0x006D9760 size=26 name=?rva008B8F80AtoiOrZero@@YAHPBD@Z evidence=?:placeholder tier=A
+int rva008B8F80AtoiOrZero(const char *text)
+{
+    return atoi(text) != 0 || *text == '0';
+}
 
 // FUNCTION: BFME2 0x006D9780 size=145 name=?rva006D9780@BfmeAptValue006DCD20@@QAE_NPAV1@PAVEAStringC@@0@Z evidence=?:placeholder tier=A
 bool AptValue::rva006D9780(AptValue *pContext, EAStringC *pKey, AptValue *pValue)
