@@ -3,6 +3,13 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 #include "GameLogic/DamageFX.h"
 // FUNCTION: BFME2 0x0036059C size=19 name=?clear@DFX@DamageFX@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+void DamageFX::DFX::clear()
+{
+	m_amountForMajorFX = 0.0f;
+	m_majorDamageFXList = 0;
+	m_minorDamageFXList = 0;
+	m_damageFXThrottleTime = 0;
+}
 // FUNCTION: BFME2 0x003605AF size=38 name=?rva003605AF@Rva003605AF@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x003605D5 size=14 name=?rva003605D5@DamageFX@@QAEHHH@Z evidence=X:map request (link (from standalone link 0cf3e833)) tier=B hypothesis:mm1-gap-unit
 Int DamageFX::rva003605D5(Int damageType, Int source)

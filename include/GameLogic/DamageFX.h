@@ -44,6 +44,8 @@ public:
 		const FXList *m_majorDamageFXList;				// 0x4
 		const FXList *m_minorDamageFXList;				// 0x8
 		UnsignedInt m_damageFXThrottleTime;				// 0xC
+
+		void clear();									// 0x0036059C: zeroes the amount, both lists and the throttle time
 	};
 
 	DFX m_dfx[DAMAGEFX_TYPE_COUNT][DAMAGEFX_LEVEL_COUNT];	// 0x000
