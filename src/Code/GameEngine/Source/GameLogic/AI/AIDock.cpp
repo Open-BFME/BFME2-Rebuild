@@ -214,6 +214,22 @@ StateReturnType AIDockMoveToEntryState::update()
 }
 
 // FUNCTION: BFME2 0x00544425 size=91 name=?onExit@Rva0054482D@@UAEXW4StateExitType@@@Z evidence=?:placeholder
+void AIDockMoveToEntryState::onExit(StateExitType reason)
+{
+	Object *target = getMachine()->getGoalObject();
+	if (target)
+	{
+		DockUpdateInterface *bay = target->getDockUpdateInterface();
+		if (bay)
+		{
+			if (reason != EXIT_RESET && bay->isDockOpen())
+				bay->onEnterReached(getMachineOwner());
+			else
+				bay->cancelDock(getMachineOwner());
+		}
+	}
+	AIInternalMoveToState::onExit(reason);
+}
 
 // FUNCTION: BFME2 0x00544480 size=170 name=?onEnter@Rva0054484A@@UAE?AW4StateReturnType@@XZ evidence=?:placeholder
 StateReturnType AIDockMoveToDockState::onEnter()
