@@ -466,6 +466,49 @@ const char *WorkOrder::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x004F1138 size=286 name=?isSupplySourceAttacked@AIPlayer@@QAE_NXZ evidence=N:ledger tier=A
+Bool AIPlayer::isSupplySourceAttacked()
+{
+	const Int SCAN_RATE = 10;
+	UnsignedInt curFrame = TheGameLogic->getFrame();
+	if (curFrame == 0) {
+		m_supplySourceAttackCheckFrame = SCAN_RATE;
+		return false;
+	}
+	m_attackedSupplyCenter = INVALID_ID;
+	if (curFrame < m_supplySourceAttackCheckFrame)
+		return false;
+	if (m_player->getAttackedFrame() + SCAN_RATE < curFrame)
+		return false;
+	m_supplySourceAttackCheckFrame = curFrame + SCAN_RATE;
+
+	for (PlayerTeamList::const_iterator it = m_player->m_playerTeamPrototypes.begin(); it != m_player->m_playerTeamPrototypes.end(); ++it) {
+		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> objIter = team->iterate_TeamMemberList(); !objIter.done(); objIter.advance()) {
+				Object *obj = objIter.cur();
+				if (!obj)
+					continue;
+				if (!obj->isKindOf(KINDOF_SUPPLY_GATHERING_CENTER) && !obj->isKindOf(KINDOF_DOZER) && !obj->isKindOf(KINDOF_HARVESTER))
+					continue;
+				BodyModuleInterface *body = obj->getBodyModule();
+				if (body) {
+					const DamageInfo *info = body->getLastDamageInfo();
+					if (info) {
+						if (info->out.m_noEffect)
+							continue;
+						if (body->getLastDamageTimestamp() + SCAN_RATE > curFrame) {
+							m_attackedSupplyCenter = objIter.cur()->getID();
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x004F1256 size=386 name=?getPlayerSuperweaponValue@AIPlayer@@KAHPAVCoord3D@@HM@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
