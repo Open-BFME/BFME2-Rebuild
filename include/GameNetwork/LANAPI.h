@@ -330,6 +330,7 @@ protected:
 	void handleInActive(LANMessage *message, const BfmeNetAddress *address);			// 0x0058219D
 	void handleJoinAccept(LANMessage *message, const BfmeNetAddress *address);			// 0x00582287
 	void handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *address, Bool flag);	// 0x00582498
+	void handleGameStart(LANMessage *message, const BfmeNetAddress *address, Bool wotr);	// 0x00582EB0
 	void handleRequestJoin(LANMessage *message, const BfmeNetAddress *address);			// 0x0058277C
 	void removeGame(LANGameInfo *game);													// 0x00449913
 	Bool ValidateGameInfo(LANGameInfo *game);											// 0x00449969
