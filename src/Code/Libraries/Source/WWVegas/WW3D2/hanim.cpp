@@ -225,6 +225,72 @@ HAnimComboClass::HAnimComboClass(int num_animations)
 
 
 // FUNCTION: BFME2 0x00196CA0 size=1173 name=?Normalize_Weights@HAnimComboClass@@QAE_NXZ evidence=N:ledger tier=B hypothesis:K
+bool HAnimComboClass::Normalize_Weights(void)
+{
+	int anim_count = Get_Num_Anims();
+	if (!anim_count) return true;
+
+	int anim_idx = 0;
+	bool all_pivot_maps = true;
+	bool none_pivot_maps = true;
+	int num_anim_pivots = 100000;
+	for (anim_idx = 0; anim_idx < anim_count; anim_idx++) {
+		num_anim_pivots = MIN(num_anim_pivots, Peek_Motion(anim_idx)->Get_Num_Pivots());
+		bool has_pivot_map = Peek_Pivot_Weight_Map(anim_idx) != NULL;
+		all_pivot_maps &= has_pivot_map;
+		none_pivot_maps &= !has_pivot_map;
+	}
+	if (num_anim_pivots == 100000) {
+		num_anim_pivots = 0;
+	}
+
+	if (none_pivot_maps) {
+		float weight_total = 0.0f;
+		for (anim_idx = 0; anim_idx < anim_count; anim_idx++) {
+			if (Peek_Motion(anim_idx) != NULL) {
+				float weight = Get_Weight(anim_idx);
+				weight_total += weight;
+			}
+		}
+
+		if (weight_total != 0.0 && WWMath::Fabs(weight_total - 1.0) > WWMATH_EPSILON) {
+			float oo_total = 1.0f / weight_total;
+			for (anim_idx = 0; anim_idx < anim_count; anim_idx++) {
+				if (Peek_Motion(anim_idx) != NULL) {
+					Set_Weight(anim_idx, Get_Weight(anim_idx) * oo_total);
+				}
+			}
+		}
+	} else {
+		if (all_pivot_maps) {
+			for (int piv_idx = 1; piv_idx < num_anim_pivots; piv_idx++) {
+				float weight_total = 0.0f;
+				for (anim_idx = 0; anim_idx < anim_count; anim_idx++) {
+					if (Peek_Motion(anim_idx) != NULL) {
+						float weight = Get_Weight(anim_idx) * (*Peek_Pivot_Weight_Map(anim_idx))[piv_idx];
+						weight_total += weight;
+					}
+				}
+
+				if (weight_total != 0.0 && WWMath::Fabs(weight_total - 1.0) > WWMATH_EPSILON) {
+					float oo_total = 1.0f / weight_total;
+					for (anim_idx = 0; anim_idx < anim_count; anim_idx++) {
+						if (Peek_Motion(anim_idx) != NULL) {
+							PivotMapClass *pivot_map = Get_Pivot_Weight_Map(anim_idx);
+							float new_weight = (*pivot_map)[piv_idx] * oo_total;
+							(*pivot_map)[piv_idx] = new_weight;
+							pivot_map->Release_Ref();
+						}
+					}
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
+	return true;
+}
 
 // FUNCTION: BFME2 0x00197140 size=67 name=?Append_Anim_Combo_Data@HAnimComboClass@@QAEXPAVHAnimComboDataClass@@@Z evidence=N:ledger tier=B hypothesis:K
 void HAnimComboClass::Append_Anim_Combo_Data(HAnimComboDataClass *data)
