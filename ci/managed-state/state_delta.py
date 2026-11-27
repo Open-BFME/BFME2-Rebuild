@@ -1162,6 +1162,35 @@ ISSUE634_PINGER_UNIT = {
     }),
 }
 
+
+ISSUE742_SET_VIEWPORT_INLINE = {
+    "files": {
+        "config/map.json": (
+            "7ef31f0552fe082ea8319fef38170f3e2f18da09b096d1344308c709bc1d404e",
+            "3194f7848812b0cef7239e0a41ffd99b5d33811c395a04f4ce12ea06bb9a06fc",
+        ),
+        "expected/unk/O0007E6A6.cpp.json": (
+            "c1ee24bdc8fa21f2a0a4bad406f3bb32d955ff00e5ff2e413764934527bc747f",
+            None,
+        ),
+        "expected/unk/O0007E6A6.cpp.neighbours.json": (
+            "c02a2bf3cdd270b9848e542403fade982655724678476c69f76e645cb674b5ef",
+            None,
+        ),
+        "src/unk/O0007E6A6.cpp": (
+            "224bbcdf31f5bd00ed4439ef696f1aa8fd8701725cdc18a721cae79c2ddae261",
+            None,
+        ),
+    },
+    "old_tus": frozenset({
+        "src/unk/O0007E6A6.cpp",
+    }),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/ww3d2/cameraclass.h",
+    }),
+}
+
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -1178,6 +1207,7 @@ TU_MOVE_MIGRATIONS = (
     LEDGER_BATCH_741_747_636_667_650,
     REMOVE_GAMESPY_SDK_SHIMS,
     MIGRATE_D3D8_TO_D3D9,
+    ISSUE742_SET_VIEWPORT_INLINE,
     ISSUE634_PINGER_UNIT,
     LEDGER_BATCH_632_633_746,
 )

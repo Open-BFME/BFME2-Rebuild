@@ -77,10 +77,9 @@ public:
 	virtual bool Cull_Box(const AABoxClass &box) const;						// 130: 0x00135990
 
 	const ViewportClass &Get_Viewport(void) const { return Viewport; }
-	// W3DView::setWidth/setHeight/setOrigin call Get_Viewport(min, max) out of line (the COMDAT row 0x00087AC9) and 0x0007E6A6 for Set_Viewport.
 	void Get_Viewport(Vector2 &set_min, Vector2 &set_max) const { set_min = Viewport.Min; set_max = Viewport.Max; }
 	void Set_Projection_Type(ProjectionType type);				// 0x0007B261
-	void Set_Viewport(const Vector2 &min, const Vector2 &max);				// 0x0007E6A6
+	void Set_Viewport(const Vector2 &min, const Vector2 &max) { Viewport.Min = min; Viewport.Max = max; FrustumValid = false; }
 	float Get_Depth(void) const { return ZFar; }						// W3DView::getPickRay 0x00089658 reads +0xF0 for the far-plane distance
 	void Set_View_Plane(const Vector2 &min, const Vector2 &max);					// 0x00134020
 	void Set_View_Plane(float hfov, float vfov);							// 0x00133AD0
