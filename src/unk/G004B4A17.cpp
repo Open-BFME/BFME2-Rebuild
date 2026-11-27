@@ -4,6 +4,7 @@
 #include "Common/INI.h"
 #include "Common/INI/FieldParse.h"
 #include "GameLogic/Module/StatusBitsUpgradeIfEldestKindofModuleData.h"
+#include "GameLogic/Module/StatusBitsUpgradeIfEldestKindof.h"
 static const FieldParse s_statusBitsUpgradeIfEldestKindofModuleDataFieldParse[] =
 {
 	{ "ObjectFilter", iniParseObjectFilter, 0, 0x138 },
@@ -18,3 +19,8 @@ void StatusBitsUpgradeIfEldestKindofModuleData::buildFieldParse(MultiIniFieldPar
 }
 
 // FUNCTION: BFME2 0x004B4A32 size=84 name=??0StatusBitsUpgradeIfEldestKindof@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+StatusBitsUpgradeIfEldestKindof::StatusBitsUpgradeIfEldestKindof(Thing *thing, const ModuleData *moduleData) :
+	StatusBitsUpgrade(thing, moduleData)
+{
+	m_eldest.cacheGameLogicFrame();
+}

@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include "Common/GameType.h"
 #include "GameLogic/Module/StatusBitsUpgrade.h"
+#include "GameLogic/Module/CreateObjectDieIfEldestKindof.h"
 
 class Thing;
 class ModuleData;
@@ -42,7 +43,7 @@ protected:
 	virtual void xfer(Xfer *xfer);
 
 public:
-	UnsignedByte m_gap0x1C[0x4];
+	StatusBitsEldestFrame m_eldest;	// +0x1C (the constructor caches the logic frame here)
 };
 // SIZE 0x20
 typedef char StatusBitsUpgradeIfEldestKindof_size[(sizeof(StatusBitsUpgradeIfEldestKindof) == 0x20) ? 1 : -1];
