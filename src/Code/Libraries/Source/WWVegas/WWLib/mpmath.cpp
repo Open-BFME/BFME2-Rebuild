@@ -1041,6 +1041,58 @@ int MPEXPORT XMP_Reciprocal(digit * quotient, const digit * divisor, int precisi
 }
 
 // FUNCTION: BFME2 0x0061D080 size=296 name=_XMP_Decode_ASCII evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+void MPEXPORT XMP_Decode_ASCII(char const * str, digit * mpn, int precision)
+{
+	XMP_Init(mpn, 0, precision);
+
+	if (!str) return;
+	int i = strlen(str);
+	if (i == 0) return;
+
+	unsigned short radix;
+	switch (toupper(str[i-1])) {
+		case 'H':
+			radix = 16;
+			break;
+
+		case 'O':
+			radix = 8;
+			break;
+
+		case 'B':
+			radix = 2;
+			break;
+
+		case '.':
+		default:
+			radix = 10;
+			break;
+	}
+
+	bool minus = (*str == '-');
+	if (minus) str++;
+
+	digit c;
+	while ((c = (unsigned char)*str++) != 0) {
+		if (c == ',') continue;
+
+		if (!isxdigit((char)c)) break;
+
+		if (isdigit((char)c)) {
+			c -= '0';
+		} else {
+			c = (unsigned char)(toupper((char)c) - 'A') + 10;
+		}
+
+		if (c >= radix) break;
+
+		XMP_Unsigned_Mult_Int(mpn, mpn, radix, precision);
+		XMP_Add_Int(mpn, mpn, c, 0, precision);
+	}
+	if (minus) {
+		XMP_Neg(mpn, precision);
+	}
+}
 
 // FUNCTION: BFME2 0x0061D1E0 size=359 name=_XMP_Prepare_Modulus evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 int XMP_Prepare_Modulus(const digit * n_modulus, int precision)
