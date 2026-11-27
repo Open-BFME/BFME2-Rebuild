@@ -194,3 +194,8 @@ void AptMessenger::GetSelectedPlayers(int listIndex, int ids, int names)
 
 
 // FUNCTION: BFME2 0x005125ED size=111 name=??1AptMessenger@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+AptMessenger::~AptMessenger()
+{
+	if (this == g_aptMessenger)
+		g_aptMessenger = 0;
+}
