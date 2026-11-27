@@ -361,6 +361,30 @@ void PortNegotiationSchema::playerLeave(UnsignedShort slot)
 }
 
 // FUNCTION: BFME2 0x005DC187 size=266 name=?reconnectPlayers@PortNegotiationSchema@@QAEXGG_N@Z evidence=N:ledger tier=B hypothesis:K
+void PortNegotiationSchema::reconnectPlayers(UnsignedShort first, UnsignedShort second, Bool resetRetries)
+{
+	if (first >= 8 || second >= 8 || first == second)
+		return;
+	m_connectionState[second][first] = 1;
+	m_connectionState[first][second] = 1;
+	m_actionID[second][first] = 0;
+	m_actionID[first][second] = 0;
+	m_unk0x738[second][first] = -1;
+	m_unk0x738[first][second] = -1;
+	m_pings[first][second].reset();
+	m_pings[second][first].reset();
+	if (first == m_slotCount)
+		m_timeToSendPing[second] = 0;
+	if (second == m_slotCount)
+		m_timeToSendPing[first] = 0;
+	if (resetRetries)
+	{
+		m_unk0x838[second][first] = 0;
+		m_unk0x838[first][second] = 0;
+	}
+	m_listeners.forEach(&PortNegotiationListener::onNegotiationChanged, this, first, second);
+	m_listeners.forEach(&PortNegotiationListener::onNegotiationChanged, this, second, first);
+}
 
 // FUNCTION: BFME2 0x005DC291 size=304 name=?playerJoin@PortNegotiationSchema@@QAEXG@Z evidence=N:ledger tier=B hypothesis:K
 void PortNegotiationSchema::playerJoin(UnsignedShort slot)

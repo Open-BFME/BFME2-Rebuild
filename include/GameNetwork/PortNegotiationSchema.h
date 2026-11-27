@@ -82,7 +82,7 @@ public:
 	Bool sentAPingPacket(UnsignedShort first, UnsignedShort second);
 	void negotiationStarted(UnsignedShort first, UnsignedShort second, Int cookie, Bool flag);
 	void playerLeave(UnsignedShort slot);
-	void reconnectPlayers(UnsignedShort first, UnsignedShort second, Int resetRetries);
+	void reconnectPlayers(UnsignedShort first, UnsignedShort second, Bool resetRetries);
 	void playerJoin(UnsignedShort slot);
 	void handleNegotiationResult(UnsignedShort first, UnsignedShort second, Int cookie, Int result);
 
