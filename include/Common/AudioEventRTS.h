@@ -28,6 +28,7 @@ public:
     // 0x0033F15D (an ICF-folded one-store setter): the owning player index
     // (SoundFXNugget::doFXObj 0x001E012E passes the source's player index).
     void setPlayerIndex(Int playerIndex);
+    void rva003EF5DA(float value); // 0x003EF5DA: stores the value at +0x24 (map name; caller-this evidence)
     ObjectID getObjectID();
     void setDrawableID(DrawableID);
     DrawableID getDrawableID();
