@@ -1242,7 +1242,8 @@ void Drawable::changedTeam()
 void Drawable::reactToTransformChange(const Matrix3D *oldMtx, const Coord3D *oldPos, Real oldAngle)
 {
 	m_unk0x244 = -1;
-	m_unk0x3A8[1] = true;
+	Bool &moved = m_unk0x3A8[1];
+	moved = true;
 
 	for (DrawModule **dm = drawModuleList(); *dm; ++dm)
 		(*dm)->reactToTransformChange(oldMtx, oldPos, oldAngle);
