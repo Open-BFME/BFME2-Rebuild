@@ -35,6 +35,7 @@ class ModuleData;
 class Xfer;
 class CommandButton;
 class Object;
+class AIUpdateInterface;
 
 // UpdateModule ends at 0x20; this class's members follow it.
 typedef char CommandButtonHuntUpdate_base_size[(sizeof(UpdateModule) == 0x20) ? 1 : -1];
@@ -54,6 +55,8 @@ protected:
 
 protected:
 	Object *scanClosestTarget();
+	UpdateSleepTime huntWeapon(AIUpdateInterface *ai);			// 0x00495801 (the map's placeholder row; Zero Hour's name)
+	UpdateSleepTime huntSpecialPower(AIUpdateInterface *ai);	// 0x00495840 (the map's placeholder row; Zero Hour's name)
 public:
 	AsciiString m_commandButtonName;               // +0x20; the constructor sets it to the empty string
 	const CommandButton *m_commandButton;          // +0x24; the constructor clears it

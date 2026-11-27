@@ -210,3 +210,30 @@ Object *CommandButtonHuntUpdate::scanClosestTarget()
 // FUNCTION: BFME2 0x00495840 size=110 name=?rva00495840@Rva00495840@@QAEHPAVArg@@@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 
 // FUNCTION: BFME2 0x004958AE size=104 name=?update@CommandButtonHuntUpdate@@UAE?AW4UpdateSleepTime@@XZ evidence=X:map request tier=B hypothesis:mm1-held-object-same-path
+
+UpdateSleepTime CommandButtonHuntUpdate::update()
+{
+	AIUpdateInterface *ai = getObject()->getAI();
+	if (ai == NULL || m_commandButton == NULL)
+		return UPDATE_SLEEP_FOREVER;
+
+	// Anything but the AI's own command (a script or the player) ends the hunt.
+	if (ai->vslot143() != CMD_FROM_AI)
+	{
+		m_commandButton = NULL;
+		m_commandButtonName.clear();
+		return UPDATE_SLEEP_FOREVER;
+	}
+
+	switch (m_commandButton->m_command)
+	{
+		case 0x17:
+		case 0x1B:
+			return huntWeapon(ai);
+		case 0x18:
+		case 0x26:
+			return huntSpecialPower(ai);
+		default:
+			return UPDATE_SLEEP_FOREVER;
+	}
+}
