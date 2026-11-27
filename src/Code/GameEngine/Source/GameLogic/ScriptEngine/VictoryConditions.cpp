@@ -6,10 +6,15 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include <windows.h>
+#include <mmsystem.h>
 #include "GameLogic/VictoryConditions.h"
 #include "Common/Player.h"
 #include "GameLogic/GameLogic.h"
 #include "GameNetwork/GameInfo.h"
+#include "Common/PlayerList.h"
+#include "Common/PlayerTemplate.h"
+#include "Common/NameKeyGenerator.h"
 // .bss 0x00E03138, after MeshInstancingManager.cpp's TheMeshInstancingManager 0x00E03134 (link order);
 // Zero Hour's VictoryConditions.cpp global. The class spelling is the Draft header's.
 VictoryConditions *TheVictoryConditions = 0;
@@ -17,6 +22,12 @@ VictoryConditions *TheVictoryConditions = 0;
 // FUNCTION: BFME2 0x0041FE35 size=46 name=?areAllies@@YA_NPBVPlayer@@0@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0041FE63 size=35 name=?rva0041FE63@VictoryConditions@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
+void VictoryConditions::updateEndGameDisplay()
+{
+	// the end-of-game display times out after a few seconds
+	if (m_endGameShowing && timeGetTime() - m_endGameShowTime > 7000)
+		hideEndGame();
+}
 
 // FUNCTION: BFME2 0x0041FE86 size=101 name=?reset@VictoryConditions@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
 void VictoryConditions::reset(void)
@@ -52,6 +63,20 @@ bool VictoryConditions::hasBeenDefeated(Player *player)
 // FUNCTION: BFME2 0x0041FFAD size=106 name=?cachePlayerPtrs@VictoryConditions@@UAEXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00420017 size=120 name=?rva00420017@VictoryConditions@@UAE_NPAVPlayer@@@Z evidence=?:placeholder tier=A
+Bool VictoryConditions::cachePlayerPtr(Player *player)
+{
+	const PlayerTemplate *civilianTemplate = ThePlayerTemplateStore->findPlayerTemplate(TheNameKeyGenerator->nameToKey("FactionCivilian"));
+	if (player != NULL && player != ThePlayerList->getNeutralPlayer() && player->getPlayerTemplate() != NULL
+		&& player->getPlayerTemplate() != civilianTemplate && !player->isPlayerObserver())
+	{
+		m_players[m_cachedPlayerCount] = player;
+		if (m_players[m_cachedPlayerCount]->isLocalPlayer())
+			m_localSlotNum = m_cachedPlayerCount;
+		++m_cachedPlayerCount;
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x0042008F size=60 name=?isLocalAlliedVictory@VictoryConditions@@UAE_NXZ evidence=N:ledger tier=A
 bool VictoryConditions::isLocalAlliedVictory(void)
@@ -80,20 +105,51 @@ bool VictoryConditions::isLocalAlliedDefeat(void)
 }
 
 // FUNCTION: BFME2 0x004200FD size=19 name=?rva004200FD@Rva004200FD@@QAE_NXZ evidence=?:placeholder tier=A
+Bool VictoryConditions::isLocalDefeat()
+{
+	if (m_isObserver)
+		return false;
+	return m_localPlayerDefeated;
+}
 
 // FUNCTION: BFME2 0x00420110 size=111 name=?rva00420110@VictoryConditions@@QAEXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0042017F size=79 name=??0VictoryConditions@@QAE@XZ evidence=N:ledger tier=A
+VictoryConditions::VictoryConditions()
+	: m_endGameShowing(false), m_endGameShowTime(0), m_cachedPlayerCount(0), m_forceSinglePlayerDefeat(false), m_unk0x91(false)
+{
+	reset();
+}
 
 // FUNCTION: BFME2 0x004201CE size=7 name=?get@Rva004201CEByteField@@QBEEXZ evidence=?:placeholder tier=A
+Bool VictoryConditions::amIObserver() const
+{
+	return m_isObserver;
+}
 
 // FUNCTION: BFME2 0x004201D5 size=11 name=?rva004201D5@Rva004201D5@@QBEEH@Z evidence=?:placeholder tier=A
+Bool VictoryConditions::isPlayerDefeated(Int slot) const
+{
+	return m_isDefeated[slot];
+}
 
 // FUNCTION: BFME2 0x004201E0 size=13 name=?set@Rva004201E0ByteSlot@@QAEXE@Z evidence=?:placeholder tier=A
+void VictoryConditions::setForceSinglePlayerDefeat(Bool force)
+{
+	m_forceSinglePlayerDefeat = force;
+}
 
 // FUNCTION: BFME2 0x004201ED size=13 name=?set@Rva004201EDByteSlot@@QAEXE@Z evidence=?:placeholder tier=A
+void VictoryConditions::rva004201ED(Bool value)
+{
+	m_unk0x91 = value;
+}
 
 // FUNCTION: BFME2 0x004201FA size=62 name=??1VictoryConditions@@UAE@XZ evidence=N:ledger tier=A
+VictoryConditions::~VictoryConditions()
+{
+	hideEndGame();
+}
 
 // FUNCTION: BFME2 0x00420254 size=255 name=?rva00420254@VictoryConditions@@QAEXABVAsciiString@@_N00@Z evidence=?:placeholder tier=A
 
