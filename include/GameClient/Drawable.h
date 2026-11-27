@@ -195,6 +195,7 @@ public:
  void friend_setSelected();	// 0x002796B8 (InGameUI::selectDrawable 0x002A3805)
  void fadeIn(UnsignedInt frames);	// 0x002707A8: fade mode 1 from transparent; 0 frames shows at once
  void fadeOut(UnsignedInt frames);	// 0x00270756: fade mode 2 from opaque; 0 frames hides at once (FoundationAIUpdate::rva0045527A passes 10)
+ void markTransformChanged(UnsignedInt frame);	// 0x0028A7EC: stores the frame at +0x3A4 and clears the first two flag bytes at +0x3A8
  // (ActiveBody 0x004BE47D, 0x004BFE07): 0x0027675F returns the sound record at an index; the five wrappers pass a constant.
  Rva002390CB rva0027675F(Int index);	// 0x0027675F
  Rva002390CB getSoundMoveLoopDamaged();	// 0x0027682F, index 0x25 (donor-order role name)
