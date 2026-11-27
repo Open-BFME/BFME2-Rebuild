@@ -12,6 +12,12 @@
 // FUNCTION: BFME2 0x005096FF size=33 name=?Rva005096FF_ParseWeaponSlot@INI@@SAXPAV1@PAX1PBX@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00509720 size=51 name=?canAffectObject@ProjectileNugget@@QAE_NPBVObject@@H@Z evidence=N:ledger tier=A
+Bool ProjectileNugget::canAffectObject(const ProjectileNuggetFireInfo *info, Object *victim)
+{
+	if (!WeaponEffectNugget::canAffectObject(info, victim) || m_warheadTemplate == NULL)
+		return false;
+	return m_warheadTemplate->rva002CAA59(victim, info);
+}
 
 // FUNCTION: BFME2 0x00509753 size=45 name=?rva00509753@Made002CC7DE@@QAEXHH@Z evidence=?:placeholder tier=A
 
@@ -37,4 +43,8 @@ Bool ProjectileNugget::slot12() const
 }
 
 // FUNCTION: BFME2 0x00509D29 size=7 name=?getPlayerNightColor@Player@@QBEHXZ evidence=N:ledger tier=A
+Int ProjectileNugget::slot11() const
+{
+	return (Int)m_warheadTemplate;
+}
 
