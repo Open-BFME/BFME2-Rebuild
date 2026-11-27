@@ -1,11 +1,21 @@
 // cl: /O1 -Ireference/shims/bfmealloc_alloconly /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport46
+#include <string.h>
 #include "GameClient/Eva.h"
 #include "Common/INI.h"
 #include "Common/INIException.h"
 #include "Common/Xfer.h"
 #include "Common/AsciiString.h"
 #include "GameLogic/GameLogic.h"
+
+static const char *const TheEvaEventNames[] =
+{
+	"DefaultEvaEvent", "BeaconDetected", "GeneralLevelUp", "UnitLevelUp", "UpgradeComplete", "CastleBreached",
+	"AllyDefeated", "EnemyDefeated", "EnemyCampDestroyed", "CampDestroyed", "AllyCampDestroyed",
+	"BuildQueuePausedDueToCPLimit", "CannotBuildDueToCPLimit", "BuildQueuePausedDueToFunds", "CannotBuildDueToFunds",
+	"WallsBeingClimbed", "BuildingBeingStolen", "BuildingStolen", "WorldMustBattle", "WorldMustRetreat",
+	"WorldMustChooseOwner", "WorldRegionLostUncontested"
+};
 
 // The singleton (retail VA 0x00DFDC30).
 Eva *TheEva = NULL;
@@ -217,6 +227,27 @@ void EvaEventStatus::rva001DD7C1(EvaEvent *info, const Coord3D *position)
 // FUNCTION: BFME2 0x001DE973 size=81 name=?parseRecordIntoMap@Rva004255F0@@SAXPAVINI@@PAX1PBX@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x001DE9C4 size=161 name=?iniScanEvaEventID@Eva@@QAEHPBD@Z evidence=N:ledger
+int Eva::iniScanEvaEventID(const char *name)
+{
+	if (stricmp("None", name) == 0)
+		return -1;
+	int id = -1;
+	if (m_eventNameMap.empty())
+	{
+		EvaNameMap::iterator it = m_iniEventNameMap.find(AsciiString(name));
+		if (it != m_iniEventNameMap.end())
+			id = (*it).second;
+	}
+	else
+	{
+		AsciiString key(name);
+		id = rva001DE78E(&key);
+	}
+	if (id == -1)
+		throw INIException(3, "Expected a recognized Eva event name or 'None'; got '%s'", name);
+	return id;
+}
+
 
 // FUNCTION: BFME2 0x001DEA65 size=49 name=?Rva001DEA65Parse@@YAXPAVINI@@PAX1PBX@Z evidence=?:placeholder
 
@@ -231,6 +262,20 @@ void Eva::parseOtherEvaEventsToBlock(INI *ini, void *, void *store, const void *
 // FUNCTION: BFME2 0x001DEA96 size=243 name=?iniParsePredefinedEvaEvent@Eva@@SAXPAVINI@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x001DEB8A size=108 name=?messageToName@Eva@@QAE?AVAsciiString@@H@Z evidence=N:ledger
+AsciiString Eva::messageToName(int message)
+{
+	if (message == -1)
+		return AsciiString("EVA_INVALID");
+	if (message < 22)
+		return AsciiString(TheEvaEventNames[message]);
+	for (EvaNameMap::iterator it = m_eventNameMap.begin(); it != m_eventNameMap.end(); ++it)
+	{
+		if ((*it).second == message)
+			return (*it).first;
+	}
+	return AsciiString("<Unknown>");
+}
+
 
 // FUNCTION: BFME2 0x001DEC48 size=227 name=?xferEvaEventID@Eva@@QAEXPAVXfer@@PAH@Z evidence=N:ledger
 void Eva::xferEvaEventID(Xfer *xfer, int *eventID)
