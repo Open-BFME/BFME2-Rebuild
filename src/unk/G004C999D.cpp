@@ -6,6 +6,18 @@
 #include "GameLogic/Module/EvaAnnounceClientCreateModuleData.h"
 #include "GameClient/Eva.h"
 // FUNCTION: BFME2 0x004C999D size=38 name=??0EvaAnnounceClientCreateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+EvaAnnounceClientCreateModuleData::EvaAnnounceClientCreateModuleData()
+{
+	m_announcementEventEnemy = -1;
+	m_announcementEventAlly = -1;
+	m_announcementEventOwner = -1;
+	m_delayBeforeAnnouncementMS = 0;
+	m_onlyIfVisible = false;
+	m_countAsFirstSightedAnnoucement = false;
+	m_useObjectsPosition = false;
+	m_createFakeRadarEvent = false;
+}
+
 static const FieldParse s_evaAnnounceClientCreateModuleDataFieldParse[] =
 {
 	{ "AnnouncementEventEnemy", Eva::parseEvaEventID, 0, 0x8 },

@@ -4,10 +4,6 @@
 // Offsets are the table entries'; each type is what the entry's parse function stores
 // (INI::parseReal -> Real, parseDurationUnsignedInt -> UnsignedInt, ...);
 // names are the INI tokens. Byte gaps are bytes no table entry writes.
-// Unresolved (byte storage up to the next member, named after the token):
-//   m_announcementEventEnemy +0x8: Rva001DEE74Parse 0x001DEE74
-//   m_announcementEventAlly +0xC: Rva001DEE74Parse 0x001DEE74
-//   m_announcementEventOwner +0x10: Rva001DEE74Parse 0x001DEE74
 #pragma once
 #ifndef BFME2_EVA_ANNOUNCE_CLIENT_CREATE_MODULE_DATA_H
 #define BFME2_EVA_ANNOUNCE_CLIENT_CREATE_MODULE_DATA_H
@@ -26,9 +22,9 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 
-	UnsignedByte m_announcementEventEnemy[0x4];            // +0x8 AnnouncementEventEnemy; unresolved: Rva001DEE74Parse
-	UnsignedByte m_announcementEventAlly[0x4];             // +0xC AnnouncementEventAlly; unresolved: Rva001DEE74Parse
-	UnsignedByte m_announcementEventOwner[0x4];            // +0x10 AnnouncementEventOwner; unresolved: Rva001DEE74Parse
+	Int m_announcementEventEnemy;            // +0x8 AnnouncementEventEnemy; EvaEventID, -1 when unset
+	Int m_announcementEventAlly;             // +0xC AnnouncementEventAlly; EvaEventID, -1 when unset
+	Int m_announcementEventOwner;            // +0x10 AnnouncementEventOwner; EvaEventID, -1 when unset
 	UnsignedInt m_delayBeforeAnnouncementMS;               // +0x14 DelayBeforeAnnouncementMS; duration, frames
 	Bool m_onlyIfVisible;                                  // +0x18 OnlyIfVisible
 	Bool m_countAsFirstSightedAnnoucement;                 // +0x19 CountAsFirstSightedAnnoucement
