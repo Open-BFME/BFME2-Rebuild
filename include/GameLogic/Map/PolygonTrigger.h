@@ -29,6 +29,7 @@ public:
 	virtual ~PolygonTrigger();						// PathfindLayer::reset 0x00366DEC deletes one through vtable slot 0
 	Rva0030B72CPoint getCenterPoint2D() const;		// the centre of the polygon
 	Bool rva002E3A39(const Coord3D &position);		// pointInTrigger for a float position
+	Bool rva002E3AA8(const Coord3D *from, const Coord3D *to, Coord3D *result, Bool flag);	// 0x002E3AA8 (CameraSettings::constrainPosition asks it for the point where the move from the last position leaves the area)
 	Region2D rva0007E03A();							// the polygon's bounds
 	Bool rva002E37B1(const Rva0030B7C2Point *point);	// whether the point lies inside the polygon
 	Rva002E3A8DPair *get(Rva002E3A8DPair *out, Int index);	// the vertex at the index

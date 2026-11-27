@@ -7,6 +7,12 @@
 #include <math.h>
 #include "WWMath/wwmath.h"
 #include "GameClient/W3DView.h"
+#include "Common/PlayerList.h"
+#include "Common/Player.h"
+#include "Common/ICoord3D.h"
+#include "GameLogic/PartitionManager.h"
+#include "GameLogic/TerrainLogic.h"
+#include "GameLogic/Map/PolygonTrigger.h"
 
 // FUNCTION: BFME2 0x0010185A size=115 name=?reload@Rva00BCF670CameraSettings@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 void CameraSettings::reload()
@@ -54,6 +60,14 @@ void CameraSettings::getCameraOffset(Coord3D *offset, Real *angle)
 }
 
 // FUNCTION: BFME2 0x001019DA size=70 name=?isPositionAllowed@Rva00BCF670CameraSettings@@QAE_NPBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+Bool CameraSettings::isPositionAllowed(const Coord3D *position)
+{
+	if (m_triggerArea == 0)
+		return true;
+	if (TheShroudManager->getShroudStatusForPlayer(ThePlayerList->getLocalPlayer()->getPlayerIndex(), position) == CELLSHROUD_SHROUDED)
+		return false;
+	return m_triggerArea->rva002E3A39(*position) != 0;
+}
 
 // FUNCTION: BFME2 0x00101A20 size=68 name=?reset@Rva00BCF670CameraSettings@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 void CameraSettings::reset()
@@ -65,7 +79,7 @@ void CameraSettings::reset()
 	m_scrollSpeedScalar = 1.0f;
 	m_modified = false;
 	m_lastPos.zero();
-	m_unk0x1C = 0;
+	m_triggerArea = 0;
 }
 
 // FUNCTION: BFME2 0x00101A64 size=58 name=?loadMinHeight@Rva00BCF670CameraSettings@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
@@ -79,8 +93,55 @@ void CameraSettings::reset()
 // FUNCTION: BFME2 0x00101B4C size=58 name=?loadScrollSpeedScalar@Rva00BCF670CameraSettings@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00101B86 size=117 name=?setTriggerArea@Rva00BCF670CameraSettings@@UAE_NABVAsciiString@@PBVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+Bool CameraSettings::setTriggerArea(const AsciiString &name, const Coord3D *position)
+{
+	PolygonTrigger *area = TheTerrainLogic->getTriggerAreaByName(name);
+	m_triggerArea = area;
+	if (area && position)
+	{
+		ICoord3D iposition;
+		iposition.x = (Int)position->x;
+		iposition.y = (Int)position->y;
+		iposition.z = (Int)position->z;
+		if (area->pointInTrigger(iposition))
+		{
+			m_lastPos = *position;
+		}
+		else
+		{
+			area->getCenterPoint(&m_lastPos);
+			constrainPosition(const_cast<Coord3D *>(position));
+			return true;
+		}
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x00101BFB size=151 name=?findAllowedNeighbour@Rva00BCF670CameraSettings@@QAE_NPAVCoord3D@@M@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+Bool CameraSettings::findAllowedNeighbour(Coord3D *position, Real step)
+{
+	if (position == 0)
+		return false;
+	for (Int dx = -1; dx <= 1; dx++)
+	{
+		for (Int dy = -1; dy <= 1; dy++)
+		{
+			if (dx == 0 && dy == 0)
+				continue;
+			Coord3D candidate;
+			candidate.x = position->x + dx * step;
+			candidate.y = position->y + dy * step;
+			candidate.z = position->z;
+			if (isPositionAllowed(&candidate))
+			{
+				*position = candidate;
+				m_lastPos = candidate;
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x00101CA0 size=16 name=?get@Rva006DF5E0@@QAEMXZ evidence=?:placeholder tier=B hypothesis:cohesion
 Real CameraSettings::slot5()
@@ -107,6 +168,10 @@ void CameraSettings::slot8(Real value)
 }
 
 // FUNCTION: BFME2 0x00101CDA size=14 name=?setRopeCurLen@W3DRopeDraw@@UAEXM@Z evidence=N:ledger tier=B hypothesis:name:Z
+void CameraSettings::slot9(Real value)
+{
+	m_yawAngle = value;
+}
 
 // FUNCTION: BFME2 0x00101CE8 size=14 name=?set@Rva00101CE8FloatField@@QAEXM@Z evidence=?:placeholder tier=B hypothesis:cohesion
 void CameraSettings::slot10(Real value)
@@ -115,4 +180,41 @@ void CameraSettings::slot10(Real value)
 }
 
 // FUNCTION: BFME2 0x00101CF6 size=296 name=?constrainPosition@Rva00BCF670CameraSettings@@UAEXPAVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+void CameraSettings::constrainPosition(Coord3D *position)
+{
+	if (m_triggerArea == 0 || position == 0)
+		return;
+
+	Coord3D delta;
+	delta.x = position->x - m_lastPos.x;
+	delta.y = position->y - m_lastPos.y;
+	delta.z = position->z - m_lastPos.z;
+	if (delta.Normalize() > 100.0f)
+	{
+		for (Real step = 0.0f; step < 500.0f; step += 30.0f)
+		{
+			if (findAllowedNeighbour(position, step))
+				return;
+		}
+	}
+
+	Bool lastVisible = TheShroudManager->getShroudStatusForPlayer(ThePlayerList->getLocalPlayer()->getPlayerIndex(), &m_lastPos) != CELLSHROUD_SHROUDED;
+	Bool visible = TheShroudManager->getShroudStatusForPlayer(ThePlayerList->getLocalPlayer()->getPlayerIndex(), position) != CELLSHROUD_SHROUDED;
+	if (!lastVisible || visible)
+	{
+		if (m_triggerArea->rva002E3A39(*position))
+		{
+			m_lastPos = *position;
+			return;
+		}
+		Coord3D clipped;
+		if (m_triggerArea->rva002E3AA8(&m_lastPos, position, &clipped, true))
+		{
+			*position = clipped;
+			m_lastPos = clipped;
+			return;
+		}
+	}
+	*position = m_lastPos;
+}
 

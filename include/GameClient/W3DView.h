@@ -31,6 +31,7 @@
 #include "WWMath/Vector3.h"
 
 class CameraClass;
+class PolygonTrigger;
 struct Region3D;
 
 // Zero Hour's camera-move records (W3DView.h). Retail's layouts are the same; each record's implicit constructor builds its ParabolicEase with (0, 0, 1).
@@ -172,13 +173,15 @@ public:
 	virtual void slot20();									// slot 20, 0x002FD7D7
 	virtual void constrainPosition(Coord3D *position);		// slot 21, 0x00101CF6
 	void reset();											// 0x00101A20
+	Bool isPositionAllowed(const Coord3D *position);		// 0x001019DA
+	Bool findAllowedNeighbour(Coord3D *position, Real step);	// 0x00101BFB
 	Real m_minHeight;										// +0x04 (loadMinHeight 0x00101A64; the fallback is GlobalData +0x9C)
 	Real m_maxHeight;										// +0x08 (loadMaxHeight; GlobalData +0xA0)
 	Real m_pitchAngle;										// +0x0C (loadPitchAngle; GlobalData +0xA4; reset stores 37.5)
 	Real m_yawAngle;										// +0x10 (loadYawAngle; GlobalData +0xA8)
 	Real m_scrollSpeedScalar;								// +0x14 (loadScrollSpeedScalar; GlobalData +0xAC; reset stores 1.0)
 	Bool m_modified;										// +0x18 (reload 0x0010185A sets it when any of the four differs from reset's 37.5/0/120/300; slot 5 returns it as a float)
-	void *m_unk0x1C;											// +0x1C (reset clears it)
+	PolygonTrigger *m_triggerArea;							// +0x1C (reset clears it; setTriggerArea 0x00101B86 stores the area looked up by name)
 	Coord3D m_lastPos;										// +0x20 (reset clears it: Zero Hour's Coord3D::zero())
 };
 // SIZE 0x2C
