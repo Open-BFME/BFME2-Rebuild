@@ -166,6 +166,12 @@ FXShader::RenderingMethodRef FXShaderSetup::Get_Method()
 // FUNCTION: BFME2 0x001524EE size=11 name=?clear@Rva0015229CVector@@QAEXXZ evidence=?:placeholder tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x001525FB size=66 name=??0FXShaderSetup@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+FXShaderSetup::FXShaderSetup() :
+	LOD(4),
+	Technique(0),
+	ParameterBlock(0)
+{
+}
 
 // FUNCTION: BFME2 0x00152BDB size=108 name=?resize@Rva00152BDBVector@@QAEXIURva00152BDBEntry@@@Z evidence=?:placeholder tier=B hypothesis:K
 
