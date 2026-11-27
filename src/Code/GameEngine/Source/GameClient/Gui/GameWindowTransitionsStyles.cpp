@@ -645,6 +645,20 @@ FullFadeTransition::FullFadeTransition() : m_startFrame(0), m_endFrame(30)
 // FUNCTION: BFME2 0x0035F312 size=87 name=?s5parse0059D600@@YAXPAVINI@@PAUGen_00489270@@@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035F369 size=197 name=?draw@FullFadeTransition@@UAEXXZ evidence=N:ledger
+void FullFadeTransition::draw()
+{
+	Int alpha;
+	if (m_drawState > m_endFrame / 2)
+		alpha = (m_endFrame - m_drawState) * m_percent * 255.0f;
+	else
+		alpha = m_drawState * m_percent * 255.0f;
+	if (alpha > 255)
+		alpha = 255;
+	TheDisplay->rva0004263F(m_pos.x, m_pos.y, m_size.x, m_size.y,
+		GameMakeColor(0, 0, 0, alpha));
+	static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0(m_pos.x, m_pos.y, m_size.x, m_size.y,
+		1.0f, GameMakeColor(255, 190, 0, alpha));
+}
 
 // FUNCTION: BFME2 0x0035F43D size=97 name=?update@FadeTransition@@UAEXH@Z evidence=N:ledger
 void FadeTransition::update(int frame)

@@ -55,6 +55,7 @@ public:
 	virtual void slot53();
 	virtual void slot54();
 	virtual void slot55();
+	void rva0008EEF0(float, float, float, float, float, int);
 	virtual void drawOpenRect(float, float, float, float, float, unsigned int);
 	virtual void drawFillRect(float, float, float, float, unsigned int);
 	virtual void slot58();
