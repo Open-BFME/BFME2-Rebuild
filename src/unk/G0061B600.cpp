@@ -46,13 +46,13 @@ wchar_t *wcstrim(wchar_t *buffer)
 	}
 	return buffer;
 }
-// FUNCTION: BFME2 0x0061B6E0 size=8 name=_XMP_Digits_To_Bits evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-extern "C" int XMP_Digits_To_Bits(int digits)
+// FUNCTION: BFME2 0x0061B6E0 size=8 name=?XMP_Digits_To_Bits@@YAHH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+int XMP_Digits_To_Bits(int digits)
 {
 	return digits << 5;
 }
-// FUNCTION: BFME2 0x0061B6F0 size=17 name=_XMP_Bits_To_Digits evidence=N:ledger tier=B hypothesis:mm1-gap-unit
-extern "C" int XMP_Bits_To_Digits(int bits)
+// FUNCTION: BFME2 0x0061B6F0 size=17 name=?XMP_Bits_To_Digits@@YAHH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+int XMP_Bits_To_Digits(int bits)
 {
 	return (bits + 31) / 32;
 }

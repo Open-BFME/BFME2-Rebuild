@@ -80352,7 +80352,7 @@
         }
       ]
     },
-    "_DRAWABLE_FRAMES_PER_FLASH": {
+    "?DRAWABLE_FRAMES_PER_FLASH@@3HB": {
       "candidates": [
         {
           "rva": "0x009DE030",
@@ -85643,7 +85643,7 @@
         }
       ]
     },
-    "_ParameterChangesVer2": {
+    "?ParameterChangesVer2@@3PAHA": {
       "candidates": [
         {
           "rva": "0x009C10DC",
@@ -90275,7 +90275,7 @@
         }
       ]
     },
-    "___gameMemAllocatePtr": {
+    "?__gameMemAllocatePtr@@3P6APAXIW4AllocType@MemoryPool@@I@ZA": {
       "candidates": [
         {
           "rva": "0x009E0404",
@@ -90296,7 +90296,7 @@
         }
       ]
     },
-    "___gameMemFreePtr": {
+    "?__gameMemFreePtr@@3P6AXPAXW4AllocType@MemoryPool@@@ZA": {
       "candidates": [
         {
           "rva": "0x009E03FC",
@@ -99795,7 +99795,7 @@
         }
       ]
     },
-    "__nxt": {
+    "?_nxt@@3PAHA": {
       "candidates": [
         {
           "rva": "0x009DDD60",
@@ -100306,7 +100306,7 @@
         }
       ]
     },
-    "_bfmeNotify1209Callback": {
+    "?bfmeNotify1209Callback@@3P6AXPAX@ZA": {
       "candidates": [
         {
           "rva": "0x00A177A4",
@@ -102723,7 +102723,7 @@
         }
       ]
     },
-    "_g_bfmeD1206": {
+    "?g_bfmeD1206@@3UAptMatrix@@A": {
       "candidates": [
         {
           "rva": "0x00A180C4",
@@ -105745,7 +105745,7 @@
         }
       ]
     },
-    "_pointHitTestCallback": {
+    "?pointHitTestCallback@@3P6AHMMPAX@ZA": {
       "candidates": [
         {
           "rva": "0x00A177B4",

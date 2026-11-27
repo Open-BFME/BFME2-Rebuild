@@ -10,9 +10,9 @@
 
 // Retail's version of Zero Hour's doMip works on 16-bit pixels and is an ordinary cdecl function (0x001117E3, the row below;
 // its body is not matched yet).
-extern "C" void downsampleRgb555(const UnsignedShort *pHiRes, Int hiRow, UnsignedShort *pLoRes);
+void downsampleRgb555(const UnsignedShort *pHiRes, Int hiRow, UnsignedShort *pLoRes);
 // 0x001118EC: box-filters a 64 x 64 BGRA tile to RGB555, 64 / step pixels a side (its body is not matched yet).
-extern "C" void resampleRgb555(const UnsignedByte *src, Int srcPitch, Int step, UnsignedShort *dst);
+void resampleRgb555(const UnsignedByte *src, Int srcPitch, Int step, UnsignedShort *dst);
 // FUNCTION: BFME2 0x0011172A size=72 name=??1TileData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:Z
 TileData::~TileData()
 {
@@ -59,8 +59,8 @@ bool TileData::hasRGBDataForWidth(int width)
 	return false;
 }
 
-// FUNCTION: BFME2 0x001117E3 size=109 name=_Rva001117E3Downsample evidence=?:placeholder tier=B hypothesis:K
-extern "C" void downsampleRgb555(const UnsignedShort *pHiRes, Int hiRow, UnsignedShort *pLoRes)
+// FUNCTION: BFME2 0x001117E3 size=109 name=?downsampleRgb555@@YAXPBGHPAG@Z evidence=?:placeholder tier=B hypothesis:K
+void downsampleRgb555(const UnsignedShort *pHiRes, Int hiRow, UnsignedShort *pLoRes)
 {
 	Int i, j;
 	for (i = 0; i < hiRow; i += 2) {
@@ -92,7 +92,7 @@ void TileData::updateMips()
 	downsampleRgb555(m_tileDataMip2, 2, m_tileDataMip1);
 }
 
-// FUNCTION: BFME2 0x001118EC size=281 name=_Rva001118ECResampleRgb555 evidence=?:placeholder tier=B hypothesis:Z
+// FUNCTION: BFME2 0x001118EC size=281 name=?resampleRgb555@@YAXPBEHHPAG@Z evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x00111A05 size=134 name=?rva00111A05@TileData@@QAEXPBEH@Z evidence=?:placeholder tier=B hypothesis:Z
 void TileData::setFromRgba(const UnsignedByte *src, Int srcPitch)

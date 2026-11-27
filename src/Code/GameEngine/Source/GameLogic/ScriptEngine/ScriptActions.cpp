@@ -40,7 +40,7 @@
 #include "GameLogic/PartitionFilterPlayer.h"
 #include "GameLogic/PartitionFilterScriptNamedObject.h"
 #include "GameLogic/ObjectTypes.h"
-extern "C" Int DRAWABLE_FRAMES_PER_FLASH;	// 0x00E02D9C (the map spells it _DRAWABLE_FRAMES_PER_FLASH)
+extern const Int DRAWABLE_FRAMES_PER_FLASH;	// this unit's copy of Drawable.h's constant (Zero Hour: LOGICFRAMES_PER_SECOND / 2)
 Int Rva002AA497Compare(const Object *a, const Object *b);	// 0x002AA497 (the map's free-function spelling: orders two objects for the home-base pick)
 #include "GameLogic/AttackPriorityInfo.h"
 #include "GameClient/CommandButton.h"

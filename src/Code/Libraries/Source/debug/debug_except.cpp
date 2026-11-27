@@ -222,9 +222,9 @@ int __stdcall AssertCrashDialogProc(void *dialog, unsigned int message, unsigned
 
 
 
-// FUNCTION: BFME2 0x0003D770 size=107 name=_Rva0088E090ResumeOtherThreads evidence=?:placeholder
+// FUNCTION: BFME2 0x0003D770 size=107 name=?Rva0088E090ResumeOtherThreads@@YAXP6GPAXKHK@ZPAXKK@Z evidence=?:placeholder
 // Resumes every thread of the process except the asserting one (the assert dialog suspends them while it is up).
-extern "C" void Rva0088E090ResumeOtherThreads(HANDLE (WINAPI *openThread)(DWORD, BOOL, DWORD), HANDLE snapshot,
+void Rva0088E090ResumeOtherThreads(HANDLE (WINAPI *openThread)(DWORD, BOOL, DWORD), HANDLE snapshot,
 											   DWORD processId, DWORD threadId)
 {
 	THREADENTRY32 entry;
@@ -246,9 +246,9 @@ extern "C" void Rva0088E090ResumeOtherThreads(HANDLE (WINAPI *openThread)(DWORD,
 
 // FUNCTION: BFME2 0x0003D7E0 size=139 name=_Rva0088E100WatchdogThread@4 evidence=?:placeholder
 
-// FUNCTION: BFME2 0x0003D870 size=9 name=_Rva0088E190TimerTick@16 evidence=?:placeholder
+// FUNCTION: BFME2 0x0003D870 size=9 name=?Rva0088E190TimerTick@@YGXPAXIIK@Z evidence=?:placeholder
 // The assert dialog's one-second timer: proves to the watchdog that the dialog thread still pumps messages.
-extern "C" void CALLBACK Rva0088E190TimerTick(HWND, UINT, UINT_PTR, DWORD)
+void CALLBACK Rva0088E190TimerTick(HWND, UINT, UINT_PTR, DWORD)
 {
 	assertDialogHeartbeat++;
 }

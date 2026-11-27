@@ -39,10 +39,10 @@ extern FileSystem *TheFileSystem;
 Real normalizeAngle(Real angle);
 extern "C" {
 #include "lua.h"
+}
 
 // The Lua script engine singleton (retail VA 0x00E01DBC).
 LuaScriptEngine *TheLuaScriptEngine = 0;
-}
 extern "C" void bfmeGo1039E(lua_State *L, int b);
 
 extern FileSystem *TheFileSystem;

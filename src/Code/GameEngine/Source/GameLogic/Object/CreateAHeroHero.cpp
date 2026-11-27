@@ -21,8 +21,8 @@
 typedef _STL::_Rb_tree_node<_STL::pair<const Int, _STL::vector<UnsignedInt> > > CreateAHeroBlingTreeNode;
 
 class File;
-// The shared hero-file worker (retail _Rva004097AFWorker, C linkage).
-extern "C" File *__cdecl Rva004097AFWorker(const AsciiString &name, bool systemFile, int access, bool checkOut);
+// The shared hero-file worker.
+File *__cdecl Rva004097AFWorker(const AsciiString &name, bool systemFile, int access, bool checkOut);
 
 // FUNCTION: BFME2 0x00406D67 size=39 name=?rva00406D67@Rva00406D67@@QAEPAV1@III@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00406D8E size=7 name=?get@Rva00406D8ELeaGetter@@QBEPAXXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
@@ -437,7 +437,7 @@ const char *CreateAHeroData::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x004096E6 size=201 name=?Rva004096E6@@YA_NABVAsciiString@@@Z evidence=?:placeholder
 
-// FUNCTION: BFME2 0x004097AF size=227 name=_Rva004097AFWorker evidence=?:placeholder
+// FUNCTION: BFME2 0x004097AF size=227 name=?Rva004097AFWorker@@YAPAVFile@@ABVAsciiString@@_NH1@Z evidence=?:placeholder
 
 // FUNCTION: BFME2 0x00409892 size=23 name=?Rva00409892@@YAPAVFile@@ABVAsciiString@@_N@Z evidence=?:placeholder
 // Retail 0x00409892, 23B: opens a hero file through the shared worker with

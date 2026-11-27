@@ -443,7 +443,7 @@ AptValue *Rva006EC900StartDrag(AptValue *self, int count)
     return gpUndefinedValue;
 }
 
-extern "C" int (__cdecl *pointHitTestCallback)(float x, float y, void *pTarget); // VA 0x00E177B4 (the map's _pointHitTestCallback; retail assert text gAptFuncs.pfnPointHitTest)
+extern int (__cdecl *pointHitTestCallback)(float x, float y, void *pTarget); // retail assert text: gAptFuncs.pfnPointHitTest
 // FUNCTION: BFME2 0x006ECA70 size=431 name=?Rva006ECA70PointHitTest@@YAPAVAptValue@@PAXH@Z evidence=?:placeholder tier=A
 AptValue *Rva006ECA70PointHitTest(void *self, int count)
 {

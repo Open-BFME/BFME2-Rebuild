@@ -36,14 +36,12 @@ unsigned short mp_quo_digit(unsigned short * dividend);
 int _USERENTRY pfunc(const void * pkey, const void * base);
 static int _Byte_Precision(unsigned long value);
 
-extern "C" {
 inline int XMP_Digits_To_Bits(int digits) { return (digits << LOG_UNITSIZE); }
 inline int XMP_Bits_To_Digits(int bits) { return ((bits + (UNITSIZE - 1)) / UNITSIZE); }
 inline digit XMP_Bits_To_Mask(int bits) { if (!bits) return 0; return (1 << ((bits - 1) % UNITSIZE)); }
 inline bool XMP_Is_Negative(const digit * r, int precision) { return ((signeddigit)*(r + (precision - 1)) < 0); }
 inline void XMP_Set_Bit(digit * r, unsigned bit) { r[bit >> LOG_UNITSIZE] |= ((digit)1 << (bit & (UNITSIZE - 1))); }
 inline bool XMP_Test_Bit(const digit * r, unsigned bit) { return ((r[bit >> LOG_UNITSIZE] & ((digit)1 << (bit & (UNITSIZE - 1)))) != 0); }
-}
 
 static int _modulus_shift;
 static unsigned short _reciprical_high_digit;

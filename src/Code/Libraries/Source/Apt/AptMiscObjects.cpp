@@ -41,12 +41,12 @@ AptValue *gapErrorMethodValues[1] = { 0 }; // VA 0x00E1818C: the cached native-f
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:padding
-// FUNCTION: BFME2 0x006E7050 size=1512 name=_bfmeHash1229 evidence=N:ledger tier=B hypothesis:K
+// FUNCTION: BFME2 0x006E7050 size=1512 name=?bfmeHash1229@@YAHPBDI@Z evidence=N:ledger tier=B hypothesis:K
 // gperf-generated lookup for the Key object's members (gperf 3.0 shape: hash + length table + lookup table; selected
 // positions 2, 4 and 8 and no last-character term). The 256-entry association table is a non-static local of the hash
 // function in retail (the compiler expands it into byte stores), so it is written the same way here. The key list is
 // the retail word table at VA 0x00DDC370 (see bfmeFind1229): the Key constants and methods, value = the member id.
-extern "C" int bfmeHash1229(const char *str, unsigned int len)
+int bfmeHash1229(const char *str, unsigned int len)
 {
     const unsigned char asso_values[256] = {
         50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50,

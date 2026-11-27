@@ -65,7 +65,7 @@ int g_nAptSetting = 0;                   // 0x00E17724
 AptXmlImpl *gpAptXmlImpl = 0;           // 0x00E17720
 AptNativeHash *g_pAptRootHash = 0;       // 0x00E180E4: the global object's hash
 AptRenderingContext *g_pAptRenderingContext = 0; // 0x00E180C0: the context Apt renders with
-extern "C" double Rva006CD070Atof(const char *text);
+double Rva006CD070Atof(const char *text);
 
 // Shutdown helpers rva006CC4E0 calls, in the order it calls them (their classes are not recovered).
 void rva008A4630ReleaseGlobals();
@@ -666,7 +666,7 @@ void Rva006CD060SetWord(int value)
     g_nAptOptionWord = value;
 }
 
-// FUNCTION: BFME2 0x006CD070 size=14 name=_Rva006CD070Atof evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x006CD070 size=14 name=?Rva006CD070Atof@@YANPBD@Z evidence=?:placeholder tier=A
 double Rva006CD070Atof(const char *text)
 {
     return atof(text);

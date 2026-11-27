@@ -7,8 +7,8 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented, hypothesis:padding
-// FUNCTION: BFME2 0x0070F880 size=1504 name=_bfmeHash1228 evidence=N:ledger tier=B hypothesis:name:invented
-extern "C" int bfmeHash1228(const char *str, unsigned int len)
+// FUNCTION: BFME2 0x0070F880 size=1504 name=?bfmeHash1228@@YAHPBDI@Z evidence=N:ledger tier=B hypothesis:name:invented
+int bfmeHash1228(const char *str, unsigned int len)
 {
     const unsigned char asso_values[256] = {
         15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,

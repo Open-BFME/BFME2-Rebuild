@@ -19,8 +19,8 @@
 #define WWMATH_EPSILON 0.0001f
 #define SLERP_EPSILON 0.001
 
-// The cyclic index table of the three Build_Quaternion bodies (retail 0x00DDDD60, a plain C global).
-extern "C" int _nxt[3] = { 1, 2, 0 };
+// The cyclic index table of the three Build_Quaternion bodies.
+int _nxt[3] = { 1, 2, 0 };
 
 // FUNCTION: BFME2 0x007173E0 size=116 name=??0Quaternion@@QAE@ABVVector3@@M@Z evidence=N:ledger tier=B hypothesis:name:Z
 Quaternion::Quaternion(const Vector3 &axis, float angle)

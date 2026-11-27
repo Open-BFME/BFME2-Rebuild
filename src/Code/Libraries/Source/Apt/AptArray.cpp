@@ -15,9 +15,9 @@ void Rva006CC110Log(int level, const char *format, ...); // 0x006CC110 (the map 
 #include <string.h>
 #include "Apt/GperfWord.h"
 #include <stdlib.h>
-extern "C" int rva006D9D70Comparator(const void *left, const void *right); // 0x006D9D70 (below)
-extern "C" int rva006D9E40Comparator(const void *left, const void *right); // 0x006D9E40: calls the script function given to sort
-extern "C" int rva006DA0C0Comparator(const void *left, const void *right); // 0x006D9F70: compares by the member sortOn names
+int rva006D9D70Comparator(const void *left, const void *right); // 0x006D9D70 (below)
+int rva006D9E40Comparator(const void *left, const void *right); // 0x006D9E40: calls the script function given to sort
+int rva006DA0C0Comparator(const void *left, const void *right); // 0x006D9F70: compares by the member sortOn names
 extern EAStringC g_sortOnKey;                      // 0x00E18060: the member name sortOn is sorting by (the name is this unit's)
 // The cached native method objects objectMemberLookup 0x006DA630 builds on first use (one per array method; the
 // callbacks are the sMethod_* rows). Their names are this unit's.
@@ -428,8 +428,8 @@ AptValue *rva006D9CE0(AptValue *self, int argc)
     return gpUndefinedValue;
 }
 
-// FUNCTION: BFME2 0x006D9D70 size=203 name=_rva006D9D70Comparator evidence=?:placeholder tier=A
-extern "C" int rva006D9D70Comparator(const void *left, const void *right)
+// FUNCTION: BFME2 0x006D9D70 size=203 name=?rva006D9D70Comparator@@YAHPBX0@Z evidence=?:placeholder tier=A
+int rva006D9D70Comparator(const void *left, const void *right)
 {
     AptValue *first = *static_cast<AptValue *const *>(left);
     AptValue *second = *static_cast<AptValue *const *>(right);
@@ -440,8 +440,8 @@ extern "C" int rva006D9D70Comparator(const void *left, const void *right)
     return strcmp(firstText.GetText(), secondText.GetText());
 }
 
-// FUNCTION: BFME2 0x006D9E40 size=181 name=_rva006D9E40Comparator evidence=?:placeholder tier=A
-extern "C" int rva006D9E40Comparator(const void *left, const void *right)
+// FUNCTION: BFME2 0x006D9E40 size=181 name=?rva006D9E40Comparator@@YAHPBX0@Z evidence=?:placeholder tier=A
+int rva006D9E40Comparator(const void *left, const void *right)
 {
     if (!g_pSortCompareFunction)
         return 0;
@@ -474,8 +474,8 @@ AptValue *rva006D9F00(AptValue *self, int argc)
     return gpUndefinedValue;
 }
 
-// FUNCTION: BFME2 0x006D9F70 size=335 name=_rva006DA0C0Comparator evidence=?:placeholder tier=A
-extern "C" int rva006DA0C0Comparator(const void *left, const void *right)
+// FUNCTION: BFME2 0x006D9F70 size=335 name=?rva006DA0C0Comparator@@YAHPBX0@Z evidence=?:placeholder tier=A
+int rva006DA0C0Comparator(const void *left, const void *right)
 {
     AptValue *first = *static_cast<AptValue *const *>(left);
     AptValue *second = *static_cast<AptValue *const *>(right);

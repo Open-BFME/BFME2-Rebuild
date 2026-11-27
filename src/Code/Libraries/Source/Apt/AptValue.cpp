@@ -26,7 +26,7 @@ extern AptNativeHash *g_pAptRootHash;             // VA 0x00E180E4 (Apt.cpp): th
 extern AptValue *gpUndefinedValue; // VA 0x00E18078
 extern AptValue *gpNoneValue;      // VA 0x00E180DC: the singleton of the None type (built by _constructBuiltInObjects 0x006DE8E0 through the constructor 0x006DE390)
 extern AptValue *gpGlobalGlobalObject; // VA 0x00E18650: the one AptGlobal
-extern "C" double Rva006CD070Atof(const char *text);
+double Rva006CD070Atof(const char *text);
 int Rva006CD220Get();
 
 // The assert expansion every AptValue.inl body writes out (see Apt/Assert.h).

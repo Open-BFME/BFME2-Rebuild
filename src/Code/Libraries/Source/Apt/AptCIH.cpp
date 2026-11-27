@@ -24,7 +24,7 @@ extern AptValueVector *g_releaseVectorAtE17710; // VA 0x00E17710
 AptCIH *_AptGetAnimationAtLevel(int level);     // 0x006CC530 (Apt.cpp)
 void Rva006CC110Log(int level, const char *format, ...); // 0x006CC110 (Apt.cpp)
 void Rva006CD200SetFlag();                      // 0x006CD200 (Apt.cpp)
-extern "C" AptMatrix g_bfmeD1206; // VA 0x00E180C4: the default (identity) matrix the accumulation starts from (the map's C name)
+extern AptMatrix g_bfmeD1206; // the default (identity) matrix the accumulation starts from
 void rva0070E5D0(const AptMatrix *left, const AptMatrix *right, AptMatrix *result); // (AptRenderingContext.cpp, the map name is a placeholder): result = left * right
 #include "Apt/AptPseudoDisplayList.h"
 extern unsigned char g_00E18348; // VA 0x00E18348: set while Apt is shutting down (bfmeFinish1279 clears a CIH without its release step)

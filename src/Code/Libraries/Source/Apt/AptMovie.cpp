@@ -12,7 +12,7 @@
 #include "Apt/AptInteger.h"
 #include "Apt/EAStringC.h"
 void Rva006FD060Forward(void *stream, void *base, void *constants, void *index); // 0x006FD060 (AptActionInterpreter.cpp)
-extern "C" void Rva006FD040(void *first, void *last, void *index); // 0x006FD040 (AptActionInterpreter.cpp): the unrelocating counterpart
+void Rva006FD040(void *first, void *last, void *index); // 0x006FD040 (AptActionInterpreter.cpp): the unrelocating counterpart
 void Rva006CC110Log(int level, const char *format, ...); // 0x006CC110 (Apt.cpp)
 // Host callbacks the movie controls call (VA 0x00E17738, 0x00E17784) and the once-only guard for the first (0x00E176FC);
 // zero until the host installs them. The names are this unit's.

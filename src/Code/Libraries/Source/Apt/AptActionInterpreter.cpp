@@ -225,11 +225,11 @@ bool rva006fc370(AptValue *value)
     return true;
 }
 
-// FUNCTION: BFME2 0x006FC670 size=2400 name=_BfmeAux006FC670 evidence=N:ledger
+// FUNCTION: BFME2 0x006FC670 size=2400 name=?BfmeAux006FC670@@YAXPBEHPAXPAH@Z evidence=N:ledger
 
-// FUNCTION: BFME2 0x006FD040 size=26 name=_Rva006FD040 evidence=?:placeholder
-extern "C" void BfmeAux006FC670(const unsigned char *stream, int base, void *constants, int *index); // 0x006FC670
-extern "C" void Rva006FD040(void *first, void *last, void *index)
+// FUNCTION: BFME2 0x006FD040 size=26 name=?Rva006FD040@@YAXPAX00@Z evidence=?:placeholder
+void BfmeAux006FC670(const unsigned char *stream, int base, void *constants, int *index); // 0x006FC670
+void Rva006FD040(void *first, void *last, void *index)
 {
     BfmeAux006FC670((const unsigned char *)first, (int)last, 0, (int *)index);
 }

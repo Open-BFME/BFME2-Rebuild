@@ -31,8 +31,8 @@ ThreadClass::~ThreadClass()
 {
 }
 
-// FUNCTION: BFME2 0x00610490 size=25 name=_BFMENetworkBackendThreadStart@4 evidence=N:ledger
-extern "C" unsigned __stdcall BFMENetworkBackendThreadStart(void *param)
+// FUNCTION: BFME2 0x00610490 size=25 name=?BFMENetworkBackendThreadStart@@YGIPAX@Z evidence=N:ledger
+unsigned __stdcall BFMENetworkBackendThreadStart(void *param)
 {
 	theDebug->InstallExceptionHandler();
 	((ThreadClass *)param)->Thread_Function();

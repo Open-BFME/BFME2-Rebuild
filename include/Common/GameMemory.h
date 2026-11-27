@@ -242,10 +242,9 @@ extern unsigned long g_heapTlsIndex;		// RVA 0x009B35A4, -1 until _Init
 }
 
 // The function pointers InitFunctionPointers fills (one per export). Names are
-// the data ledger's; the allocate and free pointers carry C linkage in retail
-// (___gameMemAllocatePtr, ___gameMemFreePtr).
-extern "C" void *(__cdecl *__gameMemAllocatePtr)(unsigned int, MemoryPool::AllocType, unsigned int);	// 0x009E0404
-extern "C" void (__cdecl *__gameMemFreePtr)(void *, MemoryPool::AllocType);							// 0x009E03FC
+// the data ledger's.
+extern void *(__cdecl *__gameMemAllocatePtr)(unsigned int, MemoryPool::AllocType, unsigned int);	// 0x009E0404
+extern void (__cdecl *__gameMemFreePtr)(void *, MemoryPool::AllocType);								// 0x009E03FC
 extern void (__cdecl *__gameMemInitPtr)();																// 0x009E0410
 extern void (__cdecl *__gameMemExitPtr)();																// 0x009E040C
 extern void (__cdecl *__gameMemDumpFragmentationPtr)(FILE *, bool, const char *);						// 0x009E0408

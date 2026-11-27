@@ -202,7 +202,7 @@ void MultiIniFieldParse::add(const FieldParse *fields, unsigned int extraOffset)
 	}
 }
 
-// FUNCTION: BFME2 0x0002BCAB size=132 name=_rva002bcab_scanIndex evidence=?:placeholder tier=A
+// FUNCTION: BFME2 0x0002BCAB size=132 name=?scanIndexListChecked@@YAHPBDPBQBDPA_N_N@Z evidence=?:placeholder tier=A
 // Worker behind scanIndexList: reports a hit through *found and returns the index; a clean miss returns 0 unless throwIfMissing.
 int scanIndexListChecked(const char *token, const char *const *nameList, bool *found, bool throwIfMissing)
 {
