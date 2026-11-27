@@ -443,4 +443,60 @@ void Matrix3D::Re_Orthogonalize(void)
 }
 
 // FUNCTION: BFME2 0x00713AB0 size=1049 name=?Lerp@Matrix3D@@SAXABV1@0MAAV1@@Z evidence=N:ledger tier=B hypothesis:Z
+void Matrix3D::Lerp(const Matrix3D &A, const Matrix3D &B, float factor, Matrix3D &result)
+{
+	// Lerp position
+	Vector3 a_trans = A.Get_Translation();
+	Vector3 b_trans = B.Get_Translation();
+	Vector3 pos;
+	pos.X = (a_trans.X + (b_trans.X - a_trans.X) * factor);
+	pos.Y = (a_trans.Y + (b_trans.Y - a_trans.Y) * factor);
+	pos.Z = (a_trans.Z + (b_trans.Z - a_trans.Z) * factor);
+
+	Vector3 row2(A[2][0], A[2][1], A[2][2]);
+	float scale = row2.Length();
+
+	Quaternion rot;
+	if (fabs(scale - 1.0f) > 0.000001f) {
+		Matrix3D tempA = A;
+		Matrix3D tempB = B;
+		float inv_scale = 1.0f / scale;
+
+		tempA.Row[0][0] *= inv_scale;
+		tempA.Row[1][0] *= inv_scale;
+		tempA.Row[2][0] *= inv_scale;
+		tempA.Row[0][1] *= inv_scale;
+		tempA.Row[1][1] *= inv_scale;
+		tempA.Row[2][1] *= inv_scale;
+		tempA.Row[0][2] *= inv_scale;
+		tempA.Row[1][2] *= inv_scale;
+		tempA.Row[2][2] *= inv_scale;
+
+		tempB.Row[0][0] *= inv_scale;
+		tempB.Row[1][0] *= inv_scale;
+		tempB.Row[2][0] *= inv_scale;
+		tempB.Row[0][1] *= inv_scale;
+		tempB.Row[1][1] *= inv_scale;
+		tempB.Row[2][1] *= inv_scale;
+		tempB.Row[0][2] *= inv_scale;
+		tempB.Row[1][2] *= inv_scale;
+		tempB.Row[2][2] *= inv_scale;
+
+		Slerp(rot, Build_Quaternion(tempA), Build_Quaternion(tempB), factor);
+		result.Set(rot, pos);
+
+		result.Row[0][0] *= scale;
+		result.Row[1][0] *= scale;
+		result.Row[2][0] *= scale;
+		result.Row[0][1] *= scale;
+		result.Row[1][1] *= scale;
+		result.Row[2][1] *= scale;
+		result.Row[0][2] *= scale;
+		result.Row[1][2] *= scale;
+		result.Row[2][2] *= scale;
+	} else {
+		Slerp(rot, Build_Quaternion(A), Build_Quaternion(B), factor);
+		result.Set(rot, pos);
+	}
+}
 
