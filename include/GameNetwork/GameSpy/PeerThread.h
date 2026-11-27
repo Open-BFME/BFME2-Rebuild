@@ -358,6 +358,15 @@ public:
 	_STL::string getQMBotName() { return m_matchbotName; }
 	void markAsDisconnected() { m_isConnecting = m_isConnected = false; }
 	Int getQMGroupRoom();												// 0x0038897A (+0x488)
+	Int getUnk0x270();													// 0x0038894A (m_unk0x23C[13])
+	void setUnk0x8C(Bool value);										// 0x00388988
+	Bool getUnk0x49C();													// 0x00388995
+	void setUnk0x49C(Bool value);										// 0x0038899C
+	Int getUnk0x4A4();													// 0x003889A9
+	void setUnk0x4A4(Int value);										// 0x003889B0
+	void setUnk0x4A0(Int value);										// 0x003889BD
+	UnsignedInt getUnk0x4A8();											// 0x003889CA
+	void setUnk0x4A8(Bool value);										// 0x003889D2
 
 	Bool m_isConnecting;												// +0x50 (GameSpyPeerMessageQueue::isConnecting 0x003889F6 reads it)
 	Bool m_isConnected;													// +0x51

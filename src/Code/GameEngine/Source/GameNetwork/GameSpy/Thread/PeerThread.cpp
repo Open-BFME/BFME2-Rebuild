@@ -88,6 +88,10 @@ Int PeerThreadClass::getPlayerHandicap(Int index)
 
 
 // FUNCTION: BFME2 0x0038894A size=7 name=?get@Rva0038894ADwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:Z
+Int PeerThreadClass::getUnk0x270()
+{
+	return m_unk0x23C[13];
+}
 
 // FUNCTION: BFME2 0x00388951 size=13 name=?set@Rva00388951ByteSlot@@QAEXE@Z evidence=?:placeholder tier=B hypothesis:Z
 void PeerThreadClass::roomJoined(Bool joined)
@@ -127,20 +131,52 @@ Int PeerThreadClass::getQMGroupRoom()
 // FUNCTION: BFME2 0x00388981 size=7 name=?get@Rva00388981DwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x00388988 size=13 name=?set@Rva00388988ByteSlot@@QAEXE@Z evidence=?:placeholder tier=B hypothesis:Z
+void PeerThreadClass::setUnk0x8C(Bool value)
+{
+	m_unk0x8C = value;
+}
 
 // FUNCTION: BFME2 0x00388995 size=7 name=?get@Rva00388995ByteField@@QBEEXZ evidence=?:placeholder tier=B hypothesis:Z
+Bool PeerThreadClass::getUnk0x49C()
+{
+	return m_unk0x49C;
+}
 
 // FUNCTION: BFME2 0x0038899C size=13 name=?set@Rva0038899CByteSlot@@QAEXE@Z evidence=?:placeholder tier=B hypothesis:Z
+void PeerThreadClass::setUnk0x49C(Bool value)
+{
+	m_unk0x49C = value;
+}
 
 // FUNCTION: BFME2 0x003889A9 size=7 name=?get@Rva003889A9DwordField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:Z
+Int PeerThreadClass::getUnk0x4A4()
+{
+	return m_unk0x4A4;
+}
 
 // FUNCTION: BFME2 0x003889B0 size=13 name=?set@Rva003889B0DwordSlot@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:Z
+void PeerThreadClass::setUnk0x4A4(Int value)
+{
+	m_unk0x4A4 = value;
+}
 
 // FUNCTION: BFME2 0x003889BD size=13 name=?set@Rva003889BDDwordSlot@@QAEXH@Z evidence=?:placeholder tier=B hypothesis:Z
+void PeerThreadClass::setUnk0x4A0(Int value)
+{
+	m_unk0x4A0 = value;
+}
 
 // FUNCTION: BFME2 0x003889CA size=8 name=?get@Rva003889CAMovzxByteField@@QBEIXZ evidence=?:placeholder tier=B hypothesis:Z
+UnsignedInt PeerThreadClass::getUnk0x4A8()
+{
+	return m_unk0x4A8;
+}
 
 // FUNCTION: BFME2 0x003889D2 size=13 name=?set@Rva003889D2ByteSlot@@QAEXE@Z evidence=?:placeholder tier=B hypothesis:Z
+void PeerThreadClass::setUnk0x4A8(Bool value)
+{
+	m_unk0x4A8 = value;
+}
 
 // FUNCTION: BFME2 0x003889F6 size=14 name=?isConnecting@GameSpyPeerMessageQueue@@UAE_NXZ evidence=N:ledger tier=B hypothesis:cohesion
 Bool GameSpyPeerMessageQueue::isConnecting()
