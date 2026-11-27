@@ -17,6 +17,7 @@ public:
 	AptPalantir(RadarWindowOverrideSource *owner, int level);
 	virtual ~AptPalantir();
 
+	void OnBttnSpellStore(const char *name);
 	void OnBttnOptions(const char *name);
 	void OnBttnObserveNextPlayer(const char *name);
 	void OnBttnObservePriorPlayer(const char *name);
