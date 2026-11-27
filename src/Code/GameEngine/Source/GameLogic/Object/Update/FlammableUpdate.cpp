@@ -9,7 +9,16 @@
 // FUNCTION: BFME2 0x0048C582 size=205 name=?xfer@FlammableUpdate@@MAEXPAVXfer@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x0048C64F size=138 name=??0FlammableUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
 // FUNCTION: BFME2 0x0048C6D9 size=6 name=?GetSnapshotName@FlammableUpdate@@MBEPBDXZ evidence=N:ledger
+const char *FlammableUpdate::GetSnapshotName() const
+{
+	return "FlammableUpdate";
+}
 // FUNCTION: BFME2 0x0048C6DF size=69 name=?getModuleNameKey@FlammableUpdate@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType FlammableUpdate::getModuleNameKey() const
+{
+	static NameKeyType TheFlammableUpdateNameKey = TheNameKeyGenerator->nameToKey("FlammableUpdate");
+	return TheFlammableUpdateNameKey;
+}
 // FUNCTION: BFME2 0x0048C724 size=77 name=??1FlammableUpdate@@UAE@XZ evidence=N:ledger
 // FUNCTION: BFME2 0x0048C771 size=78 name=?doAflameDamage@FlammableUpdate@@QAEXXZ evidence=N:ledger
 // FUNCTION: BFME2 0x0048C7BF size=96 name=?rva0048C7BF@FlammableUpdate@@QAEXXZ evidence=?:placeholder
