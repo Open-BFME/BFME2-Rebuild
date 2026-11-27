@@ -40,6 +40,7 @@ public:
 	AsciiString getLastString() const;						// 0x004FDD6D (the second string of the stats auth key command, the one it prints as authToken; processGameSpyStatsAuthKeyCommand 0x004CFE24 stores it through setLastString 0x004CFBC2)
 	AsciiString getAuthKey() const;							// 0x004CFB6D (the first string of that command, stored by processGameSpyStatsAuthKeyCommand 0x004CFE24)
 	void setAuthKey(AsciiString key);						// 0x004CFB8B
+	void setWins(Int wins);									// 0x005AE60B (stores the dword at +0x1C0)
 	void setLastString(AsciiString token);					// 0x004CFBC2
 
 	Int m_profileID;										// +0x1AC (Zero Hour's order; not read here)
@@ -85,6 +86,11 @@ public:
 	virtual void reset();									// slot 10, 0x004FDC73: a five-byte `jmp` to GameInfo::reset
 	virtual void startGame(Int gameID);						// slot 11, 0x004FF09F (overrides GameInfo::startGame)
 	virtual void rva004FDA42();
+	void setID(Int id);										// 0x005AE618 (stores the key at +0xFE0)
+	void setField0xFF0(Int value);							// 0x005AE625 (stores the dword at +0xFF0)
+	void setReportedNumPlayers(Int numPlayers);				// 0x005AE632 (stores the dword at +0x100C)
+	void setReportedMaxPlayers(Int maxPlayers);				// 0x005AE63F (stores the dword at +0x1010)
+	void setReportedNumObservers(Int numObservers);			// 0x005AE64C (stores the dword at +0x1014)
 
 	GameSpyGameSlot m_gameSpySlot[MAX_SLOTS];				// +0x0DC
 	AsciiString m_roomName;								// +0xFDC (cleared by the constructor)
@@ -92,7 +98,8 @@ public:
 	Transport *m_transport;									// +0xFE4 (the constructor clears it)
 	AsciiString m_localName;								// +0xFE8 (set to the empty string by the constructor)
 	Bool m_requiresPassword;								// +0xFEC (rva00401015 0x004FDC78 tests it)
-	unsigned char m_unk0xFED[7];							// +0xFED
+	unsigned char m_unk0xFED[3];							// +0xFED
+	Int m_unk0xFF0;											// +0xFF0 (setField0xFF0 0x005AE625)
 	Bool m_hasStatsGame;									// +0xFF4
 	unsigned char m_pad0xFF5[3];							// +0xFF5
 	Int m_unk0xFF8;											// +0xFF8
