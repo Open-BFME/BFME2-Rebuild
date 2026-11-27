@@ -1196,6 +1196,46 @@ Bool ScriptConditions::evaluateNamedInsideArea(Parameter *pUnitParm, Parameter *
 }
 
 // FUNCTION: BFME2 0x003E5F73 size=191 name=?evaluatePlayerHasNumberObjectsWithModelCondition@ScriptConditions@@IAE_NPAVParameter@@PAUCondA003E5F73@@PAUCondB003E5F73@@PAUCondC003E5F73@@@Z evidence=N:ledger
+Bool ScriptConditions::evaluatePlayerHasNumberObjectsWithModelCondition(Parameter *pPlayerParm, Parameter *pModelConditionParm, Parameter *pComparisonParm, Parameter *pValueParm)
+{
+	Int mask = TheScriptEngine->rva00357B82(pPlayerParm);
+	Int limit = pValueParm->m_int;
+	Int bit = BitFlags<591>::getSingleBitFromName(pModelConditionParm->getString().str());
+	Int count = 0;
+	while (mask)
+	{
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (player)
+		{
+			count += player->rva002ABD1D(bit, limit);
+			if (count > limit)
+				break;
+		}
+	}
+	Bool result = false;
+	switch (pComparisonParm->m_int)
+	{
+	case 0:
+		result = count < limit;
+		break;
+	case 1:
+		result = count <= limit;
+		break;
+	case 2:
+		result = count == limit;
+		break;
+	case 3:
+		result = count >= limit;
+		break;
+	case 4:
+		result = count > limit;
+		break;
+	case 5:
+		result = count != limit;
+		break;
+	}
+	return result;
+}
 
 // FUNCTION: BFME2 0x003E6032 size=109 name=?Rva003E6032@@YAHPAVObject@@PAURva003E6032Context@@@Z evidence=?:placeholder
 

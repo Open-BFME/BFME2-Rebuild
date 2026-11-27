@@ -185,6 +185,7 @@ protected:
   Bool evaluatePlayerRankLevelComparison(Parameter *pPlayerParm, Parameter *pComparisonParm, Parameter *pValueParm);	// 0x003E52EB
 protected:
   Bool evaluateNumPlayersInGame(Parameter *pComparisonParm, Parameter *pValueParm);
+  Bool evaluatePlayerHasNumberObjectsWithModelCondition(Parameter *pPlayerParm, Parameter *pModelConditionParm, Parameter *pComparisonParm, Parameter *pValueParm);
 };
 // SIZE 0xC
 typedef char ScriptConditionsSize[(sizeof(ScriptConditions) == 0xC) ? 1 : -1];
