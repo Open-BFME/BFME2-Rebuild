@@ -17,6 +17,7 @@
 #include "Common/GameType.h"
 #include "GameLogic/Module/CollideModule.h"
 
+class INI;
 class Thing;
 class ModuleData;
 class Xfer;
@@ -29,6 +30,7 @@ class SquishCollide : public CollideModule
 public:
 	SquishCollide(Thing *thing, const ModuleData *moduleData);
 	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
+	static ModuleData *friend_newModuleData(INI *ini);	// 0x00254AAB: a plain ModuleData (operator new 0x8)
 	virtual NameKeyType getModuleNameKey() const;
 	virtual ~SquishCollide();
 	virtual void onCollide(Object *other, const Coord3D *loc, const Coord3D *normal);	// override: onCollide slot 0 at +0x10 (0x004BBA65)

@@ -7,7 +7,17 @@
 #include "Common/INI/FieldParse.h"
 #include "GameLogic/Module/SpecialPowerCompletionDieModuleData.h"
 #include "GameLogic/Module/DieMuxData.h"
+#include "GameLogic/Module/SquishCollide.h"
+#include "GameLogic/Module/ModuleData.h"
 // FUNCTION: BFME2 0x00254AAB size=81 name=?friend_newModuleData@SquishCollide@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+ModuleData *SquishCollide::friend_newModuleData(INI *ini)
+{
+	ModuleData *data = new ModuleData;
+	if (ini)
+		ini->initFromINIMultiProc(data, ModuleData::buildFieldParse);
+	return data;
+}
+
 // FUNCTION: BFME2 0x00254AFC size=34 name=?buildFieldParse@SpecialPowerCompletionDieModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 static const FieldParse s_specialPowerCompletionDieModuleDataFieldParse[] =
 {
