@@ -98,6 +98,14 @@ void rva000C48DB(void*,void*,void*,void*);
 // FUNCTION: BFME2 0x000B377E size=114 name=?setPauseAnimation@W3DModelDraw@@UAEX_N@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x000B37F0 size=28 name=?isVisible@W3DModelDraw@@UBE_NXZ evidence=N:ledger tier=A
+Bool W3DScriptedModelDraw::isVisible() const
+{
+	if (!m_renderObject)
+		return false;
+	if (!m_renderObject->Is_Really_Visible())
+		return false;
+	return true;
+}
 
 // FUNCTION: BFME2 0x000B380C size=8 name=?enable@Rva000B380CByteOneSetter@@QAEXXZ evidence=?:placeholder tier=A
 
