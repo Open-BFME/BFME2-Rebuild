@@ -5,4 +5,14 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
 // FUNCTION: BFME2 0x00724610 size=218 name=?Project_To_Axis@OBBoxClass@@QBEMABVVector3@@@Z evidence=N:ledger tier=B hypothesis:name:invented
+#include "WWMath/OBBoxClass.h"
 
+
+float OBBoxClass::Project_To_Axis(const Vector3 &axis) const
+{
+	// Each local extent leans along the axis by the dot of the axis with that basis column.
+	float x = Extent[0] * Vector3::Dot_Product(axis, Vector3(Basis[0][0], Basis[1][0], Basis[2][0]));
+	float y = Extent[1] * Vector3::Dot_Product(axis, Vector3(Basis[0][1], Basis[1][1], Basis[2][1]));
+	float z = Extent[2] * Vector3::Dot_Product(axis, Vector3(Basis[0][2], Basis[1][2], Basis[2][2]));
+	return WWMath::Fabs(x) + WWMath::Fabs(y) + WWMath::Fabs(z);
+}

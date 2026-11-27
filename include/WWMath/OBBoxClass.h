@@ -20,6 +20,7 @@ public:
 	OBBoxClass(const Vector3 &center, const Vector3 &extent);		// 0x000B29D3
 	static void Transform(const Matrix3D &tm, const OBBoxClass &in, OBBoxClass *out);	// 0x000B2A4C
 	inline void Compute_Axis_Aligned_Extent(Vector3 *set_extent) const;	// 0x00719D10
+	float Project_To_Axis(const Vector3 &axis) const;	// 0x00724610
 
 	// Matrix3 (WWMath's 3x3): Collide(LineSegClass, OBBoxClass) 0x00714860 calls Matrix3::Transpose 0x00713ED0 on it.
 	Matrix3 Basis;		// +0x00
