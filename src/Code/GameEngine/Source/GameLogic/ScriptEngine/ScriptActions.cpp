@@ -85,6 +85,8 @@ float normalizeAngle(float a);	// 0x00238954 (GameCommon.cpp)
 #include "Common/ThingTemplate.h"
 #include "GameLogic/Module/BodyModule.h"
 extern KindOfMaskType KINDOFMASK_NONE;	// 0x00DFEFA4
+void Rva0043CCDASet(unsigned char value);
+void Rva004E432ASet(unsigned char value);
 extern const char *TheObjectFlagsNames[];	// 0x009C10FC: Enabled, Powered, Indestructible, Unsellable, Selectable, AI Recruitable, Player Targetable (defined by this file in retail)
 #include "GameClient/GameText.h"
 #include "Common/KindOf.h"
@@ -146,6 +148,10 @@ void ScriptActions::setSuppressNewWindows(bool suppress)
 // FUNCTION: BFME2 0x003BA8F3 size=69 name=?Rva003BA8F3Get@@YAEXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x003BA938 size=11 name=?rva003BA938@@YGXABVAsciiString@@_N@Z evidence=?:placeholder tier=B hypothesis:cohesion
+void __stdcall rva003BA938(const AsciiString &message, bool flag)
+{
+	TheScriptEngine->AppendDebugMessage(message, flag);
+}
 
 // FUNCTION: BFME2 0x003BA943 size=44 name=?rva003BA943@ScriptActions@@IAEXPAVParameter@@_N@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
@@ -1830,8 +1836,16 @@ void ScriptActions::doUnitForceEmotion(Parameter *pUnit, int index, float value)
 // FUNCTION: BFME2 0x003BD3CB size=58 name=?rva003BD3CB@ScriptActions@@QAEXPAXMH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x003BD405 size=13 name=?Rva003BD405Set@ScriptActions@@QAEXE@Z evidence=?:placeholder tier=A
+void ScriptActions::Rva003BD405Set(unsigned char value)
+{
+	Rva0043CCDASet(value);
+}
 
 // FUNCTION: BFME2 0x003BD412 size=13 name=?Rva003BD412Set@ScriptActions@@QAEXE@Z evidence=?:placeholder tier=A
+void ScriptActions::Rva003BD412Set(unsigned char value)
+{
+	Rva004E432ASet(value);
+}
 
 // FUNCTION: BFME2 0x003BD424 size=11 name=?doEnablePlanningMode@ScriptActions@@IAEXE@Z evidence=N:ledger tier=A
 void ScriptActions::doEnablePlanningMode(unsigned char enable)

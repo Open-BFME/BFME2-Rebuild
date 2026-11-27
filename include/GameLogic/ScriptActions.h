@@ -108,6 +108,8 @@ public:
   void doClearAudioVolumeAreas();	// 0x003BB654
   void doSetOcclusionMode(Bool);	// 0x003BCA68
   void doSetDynamicLODMode(Bool);	// 0x003BCA8E
+  void Rva003BD405Set(unsigned char);	// 0x003BD405
+  void Rva003BD412Set(unsigned char);	// 0x003BD412
   void doEnableScoring(Bool);	// 0x003BB700
 public:
   void doEnableAudioEvent(const AsciiString &);	// 0x003BC4D1
