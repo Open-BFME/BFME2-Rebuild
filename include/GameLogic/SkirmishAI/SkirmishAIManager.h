@@ -52,7 +52,9 @@ public:
     unsigned char m_unk0x858[0x8];
     // Player::setPlayerType also creates AI for non-computer skirmish players when set.
     bool m_forceSkirmishPlayerAI;
-    unsigned char m_unk0x861[0xDF];
+    unsigned char m_unk0x861[0x13];
+    Real m_teamTimeUntilConsideredIdle;
+    unsigned char m_unk0x878[0xC8];
     // Created by the manager and used by GateOpenAndCloseBehavior.
     GateOpenBehaviorList *m_gateList;
 
