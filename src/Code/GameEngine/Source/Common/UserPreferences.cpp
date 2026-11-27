@@ -747,7 +747,53 @@ AsciiString ProfilePreferences::getMostLossesOpponent(AsciiString key)
 }
 
 // FUNCTION: BFME2 0x005376D2 size=228 name=?rva005376D2@UserPreferences@@QAE?AVAsciiString@@XZ evidence=?:placeholder tier=B hypothesis:Z
+AsciiString ProfilePreferences::getMostWinsOpponentOverall()
+{
+	AsciiString best;
+	AsciiString key;
+	AsciiString opponent;
+	Int most = 0;
+	for (const char *const *side = g_rva0033A3F4Table; side < g_rva0033A3F4Table + 6; ++side)
+	{
+		key.set(*side);
+		for (const char *const *other = g_rva0033A3F4Table; other < g_rva0033A3F4Table + 6; ++other)
+		{
+			opponent.set(*other);
+			Int wins = getWinsVs(key, opponent);
+			if (wins > most)
+			{
+				best = opponent;
+				most = wins;
+			}
+		}
+	}
+	return best;
+}
+
 // FUNCTION: BFME2 0x005377B6 size=228 name=?rva005377B6@UserPreferences@@QAE?AVAsciiString@@XZ evidence=?:placeholder tier=B hypothesis:Z
+AsciiString ProfilePreferences::getMostLossesOpponentOverall()
+{
+	AsciiString best;
+	AsciiString key;
+	AsciiString opponent;
+	Int most = 0;
+	for (const char *const *side = g_rva0033A3F4Table; side < g_rva0033A3F4Table + 6; ++side)
+	{
+		key.set(*side);
+		for (const char *const *other = g_rva0033A3F4Table; other < g_rva0033A3F4Table + 6; ++other)
+		{
+			opponent.set(*other);
+			Int losses = getLossesVs(key, opponent);
+			if (losses > most)
+			{
+				best = opponent;
+				most = losses;
+			}
+		}
+	}
+	return best;
+}
+
 // FUNCTION: BFME2 0x0053789A size=79 name=?deleteStatsFile@StrategicStatsPreferences@@SA_NABVUnicodeString@@@Z evidence=N:ledger tier=B hypothesis:Z
 bool StrategicStatsPreferences::deleteStatsFile(const UnicodeString &profilePath)
 {
