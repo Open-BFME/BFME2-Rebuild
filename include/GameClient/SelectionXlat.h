@@ -29,7 +29,8 @@ public:
 	virtual GameMessageDisposition translateGameMessage(const GameMessage *msg);
 	virtual ~SelectionTranslator();														// 0x0042FE1F (deleting), 0x0042FCE6
 
-	bool selectFriends(Drawable *draw, GameMessage *createTeamMsg, bool dragSelecting);
+	bool selectFriends(Drawable *draw, GameMessage *createTeamMsg, bool dragSelecting);	// 0x0042FE7F
+	bool killThemKillThemAll(Drawable *draw, GameMessage *createTeamMsg);	// 0x0042FB8F: selectFriends without the selection test, count map or selecting
 
 	bool m_leftMouseButtonIsDown;								// +0x04
 	bool m_dragSelecting;										// +0x05

@@ -269,6 +269,7 @@ public:
 	Int rva0028F4EF();
 	Int rva002933CD();
 	Bool isEffectivelyDead() const { return (m_privateStatus & EFFECTIVELY_DEAD) != 0; }
+	Bool isMasked() const { return m_privateStatus2 != 0; }
 	void setEffectivelyDead(Bool dead);						// 0x0028D2FB
 	void onDie(DamageInfo *damageInfo);						// 0x00698517
 	void onDestroy();										// 0x0028FC1D (s05: GameLogic::destroyObject 0x00242C09 calls it last)
