@@ -26,6 +26,10 @@
 #include "GameLogic/AIPathfind.h"
 #include "GameLogic/DockingDesyncLog.h"
 #include "GameClient/GameClient.h"
+#include "GameLogic/Module/StancesBehavior.h"
+#include "WWMath/FloatToLong.h"
+#include <math.h>
+NameKeyType Rva0045EE2CGet();	// 0x0045EE2C: the StancesBehavior module name key
 // FUNCTION: BFME2 0x00542C19 size=11 name=??1AIGuardMachine@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
 AIGuardMachine::~AIGuardMachine()
 {
@@ -228,6 +232,133 @@ Coord3D AIGuardMachine::findPositionToGuard() const
 }
 
 // FUNCTION: BFME2 0x005433FA size=929 name=?lookForInnerTarget@AIGuardMachine@@QAE_NXZ evidence=N:ledger tier=A
+Bool AIGuardMachine::lookForInnerTarget()
+{
+	Object *owner = getOwner();
+	if (!owner->isAbleToAttack())
+		return false;
+
+	// An enemy the owner is already pursuing becomes the nemesis outright.
+	Object *goal = owner->getAI()->getStateMachine()->getGoalObject();
+	if (goal && goal->getRelationship(owner) == ENEMIES)
+	{
+		m_nemesisToAttack = goal->getID();
+		return true;
+	}
+
+	// Check if team auto targets same victim.
+	if (owner->getTeam()->getPrototype()->getTemplateInfo()->m_attackCommonTarget)
+	{
+		Object *teamVictim = owner->getTeam()->getTeamTargetObject();
+		if (teamVictim)
+		{
+			m_nemesisToAttack = teamVictim->getID();
+			return true;
+		}
+	}
+
+	Object *targetToGuard = TheGameLogic->findObjectByID(m_targetToGuard);
+	Team *teamToGuard = TheTeamFactory->findTeamByID(m_teamToGuard);
+	Coord3D pos;
+	if (targetToGuard)
+		pos = *targetToGuard->getPosition();
+	else if (teamToGuard)
+		teamToGuard->rva0039E5B9(&pos);
+	else
+		pos = m_positionToGuard;
+
+	const PolygonTrigger *area = m_areaToGuard;
+	Real visionRange = getStdGuardRange(owner);
+	Bool scanDue = true;
+	if (area)
+	{
+		if (TheGameLogic->getFrame() >= TheAI->getAiData()->m_guardEnemyScanRate + m_unk0x70)
+			m_unk0x70 = TheGameLogic->getFrame();
+		else
+			scanDue = false;
+		visionRange = area->m_polygon.getRadius();
+		area->getCenterPoint(&pos);
+	}
+	if (pos.x == 0.0f && pos.y == 0.0f)
+		pos = *owner->getPosition();
+
+	Int engagement = owner->rva0028F4EF();
+	if (engagement == 0)
+		return false;
+	if (engagement == 1)
+	{
+		UpdateModule *module = owner->findUpdateModule(Rva0045EE2CGet());
+		StancesBehavior *stances = static_cast<StancesBehavior *>(module);
+		if (stances && stances->rva0045ED4B() == 3)
+			return false;
+	}
+
+	const TAiData *aiData = TheAI->getAiData();
+	UnsignedInt flags = 2;
+	if (aiData->m_attackUsesLineOfSight && (owner->getTemplate()->m_kindof.m_bits[1] & 0x08000000))
+		flags = 3;
+	if (aiData->m_attackIgnoreInsignificantBuildings)
+		flags |= 4;
+	if (owner->getAI()->canAutoAcquire())
+		flags |= 8;
+	if (owner->getControllingPlayer() && owner->getControllingPlayer()->m_playerType == PLAYER_HUMAN)
+		flags |= 0x20;
+	flags |= 0x40;
+	if (owner->testStatus(OBJECT_STATUS_STAND_GROUND))
+		flags |= 0x10;
+	if (owner->getControllingPlayer()->m_playerType == PLAYER_COMPUTER)
+		flags |= 0x80;
+
+	Object *victim = NULL;
+	if (scanDue)
+	{
+		victim = TheAI->findClosestEnemy(owner, &pos, visionRange, flags, owner->getAI()->m_attackInfo, NULL, 0);
+		if (victim == NULL && area == NULL)
+		{
+			// Nothing near the guarded spot: when the owner has strayed more than half the range from it, look around the owner instead.
+			Coord3D guardPos = findPositionToGuard();
+			Real dy = guardPos.y - owner->getPosition()->y;
+			Real dx = guardPos.x - owner->getPosition()->x;
+			Real nearRange = visionRange * 0.5f;
+			if (dy * dy + dx * dx > nearRange * nearRange)
+				victim = TheAI->findClosestEnemy(owner, nearRange, flags, owner->getAI()->m_attackInfo, NULL, 0);
+		}
+		if (victim)
+		{
+			if (victim->getTemplate()->isKindOf0x115())
+				victim = victim->adjustVictim(owner, true, 0);
+			if (victim)
+			{
+				m_nemesisToAttack = victim->getID();
+				return true;
+			}
+		}
+	}
+
+	if (area == NULL)
+		return false;
+
+	// A bonus area centre outside the area gets a second look around the guarded spot.
+	Coord3D center = m_unk0x54;
+	ICoord3D cell;
+	cell.z = Float_To_Long((float)floor(center.z));
+	cell.y = Float_To_Long((float)floor(center.y));
+	cell.x = Float_To_Long((float)floor(center.x));
+	if (!m_unk0x60)
+		return false;
+	if (const_cast<PolygonTrigger *>(area)->pointInTrigger(cell))
+		return false;
+
+	victim = TheAI->findClosestEnemy(owner, &pos, visionRange, flags, owner->getAI()->m_attackInfo, NULL, 0);
+	if (victim == NULL)
+		return false;
+	if (victim->getTemplate()->isKindOf0x115())
+		victim = victim->adjustVictim(owner, true, 0);
+	if (victim == NULL)
+		return false;
+	m_nemesisToAttack = victim->getID();
+	return true;
+}
 
 // FUNCTION: BFME2 0x0054379B size=315 name=?onEnter@AIGuardInnerState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 

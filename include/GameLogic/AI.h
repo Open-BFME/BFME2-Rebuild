@@ -32,6 +32,9 @@ class AIGroup;
 class Object;
 class Xfer;
 class INI;
+class Coord3D;
+class AttackPriorityInfo;
+class PartitionFilter;
 
 enum { MAX_AI_UPGRADES = 20 };
 // Native parseScience indexes twenty 4-byte sciences after the count;
@@ -158,6 +161,8 @@ public:
 	void destroyGroup(AIGroup *group);	// 0x002FE712
 	Object *findClosestAlly(const Object *me, Real range, UnsignedInt flags);	// 0x002FDBC4
 	Object *findClosestRepulsor(const Object *me, Real range);	// 0x002FDC9A
+	Object *findClosestEnemy(const Object *me, Real range, UnsignedInt flags, const AttackPriorityInfo *info, PartitionFilter *filter, Int unknownValue);	// 0x002FFFA3 (searches around the object's own position through the position overload)
+	Object *findClosestEnemy(const Object *me, const Coord3D *position, Real range, UnsignedInt flags, const AttackPriorityInfo *info, PartitionFilter *filter, Int unknownValue);	// 0x002FFFCA (the map's placeholder row rva002FFFCA: the position overload)
 	static Real getAdjustedVisionRangeForObject(const Object *obj, Int flags);	// 0x002FDD0A
 	static Bool isTargetInWeaponRange(Object *source, Object *target);	// 0x002FE193 (map ?rva002FE193@AI@@SA_NPAVObject@@0@Z, ?:placeholder; AIGuardOuterState::onEnter 0x005439F2)
 
