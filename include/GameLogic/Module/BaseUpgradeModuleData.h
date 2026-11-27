@@ -22,6 +22,7 @@ class BaseUpgradeModuleData : public UpgradeModuleData
 {
 public:
 	BaseUpgradeModuleData();
+	virtual ~BaseUpgradeModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 

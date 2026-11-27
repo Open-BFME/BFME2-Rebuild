@@ -30,6 +30,12 @@ NameKeyType BaseUpgrade::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x004B3698 size=98 name=??0BaseUpgradeModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+BaseUpgradeModuleData::BaseUpgradeModuleData()
+{
+	m_buildingTemplateName.set("NONE");
+	m_placementPrefix.set("NONE");
+	m_placementIndex = 0;
+}
 
 static const FieldParse s_baseUpgradeModuleDataFieldParse[] =
 {
