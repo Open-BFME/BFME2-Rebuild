@@ -261,6 +261,18 @@ void AIPlayer::clearTeamsInQueue()
 
 
 // FUNCTION: BFME2 0x004F05F0 size=102 name=??1TeamInQueue@@UAE@XZ evidence=N:ledger tier=A
+TeamInQueue::~TeamInQueue()
+{
+	WorkOrder *order, *next;
+	for (order = m_workOrders; order; order = next)
+	{
+		next = order->m_next;
+		::delete order;
+	}
+	if (m_team)
+		m_team->setActive();
+	m_workOrders = 0;
+}
 
 
 // FUNCTION: BFME2 0x004F0656 size=43 name=?isAllBuilt@TeamInQueue@@QAE_NXZ evidence=N:ledger tier=A
