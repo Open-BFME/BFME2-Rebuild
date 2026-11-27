@@ -11,7 +11,10 @@
 #include "GameLogic/PathfindLayer.h"
 #include "GameLogic/PathfindCell.h"
 #include "GameLogic/Map/PolygonTrigger.h"
+#include "GameLogic/AI.h"
+#include "GameLogic/AIPathfind.h"
 #include "Common/Xfer.h"
+int isGroundOrBridgeLayer(int layer);
 void FreePooledNode(void *node);	// 0x00265488: returns a path node to its pool
 
 // FUNCTION: BFME2 0x003638BA size=67 name=?rva003638BA@Rva003638BA@@QAE_NXZ evidence=?:placeholder tier=A
@@ -68,6 +71,137 @@ Path::Path() : m_unk0x00(0), m_path(NULL), m_pathTail(NULL), m_isOptimized(false
 // FUNCTION: BFME2 0x00363EC0 size=228 name=?computeFlightDistToGoal@Path@@QAEMPBVCoord3D@@AAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 
 // FUNCTION: BFME2 0x00363FA4 size=522 name=?optimizeGroundPath@Path@@QAEXH@Z evidence=N:ledger tier=A
+void Path::optimizeGroundPath(Int pathDiameter)
+{
+	// PathNode::m_nextOpti (+0x00) is the plain successor here and m_next (+0x08) the optimized link,
+	// the reverse of what their names say; the offsets are what retail uses.
+	PathNode *node;
+	PathNode *anchor = m_path;
+
+	while (anchor != m_pathTail)
+	{
+		Bool optimizedSegment = false;
+		PathfindLayerEnum layer = anchor->m_layer;
+		PathfindLayerEnum curLayer = anchor->m_layer;
+		Int count = 0;
+		const Int ALLOWED_STEPS = 3;
+		for (node = anchor->m_nextOpti; node->m_nextOpti; node = node->m_nextOpti)
+		{
+			count++;
+			if (isGroundOrBridgeLayer(curLayer))
+			{
+				if (node->m_layer != curLayer)
+				{
+					layer = node->m_layer;
+					curLayer = layer;
+					if (count > ALLOWED_STEPS)
+						break;
+				}
+			}
+			else
+			{
+				if (node->m_nextOpti->m_layer != curLayer)
+				{
+					if (count > ALLOWED_STEPS)
+						break;
+				}
+			}
+			curLayer = node->m_layer;
+		}
+
+		for (; node != anchor; node = node->m_prev)
+		{
+			Bool isPassable = false;
+			if (TheAI->pathfinder()->IsGroundPathPassable(anchor->getPosition(), layer, node->getPosition(), pathDiameter))
+			{
+				isPassable = true;
+			}
+			if (!isPassable)
+			{
+				Int dx = node->getPosition()->x - anchor->getPosition()->x;
+				Int dy = node->getPosition()->y - anchor->getPosition()->y;
+				Bool mightBePassable = false;
+				PathNode *tmpNode;
+				if (dx == 0)
+				{
+					mightBePassable = true;
+					for (tmpNode = node->m_prev; tmpNode && tmpNode != anchor; tmpNode = tmpNode->m_prev)
+					{
+						dx = tmpNode->m_nextOpti->getPosition()->x - tmpNode->getPosition()->x;
+						if (dx != 0)
+							mightBePassable = false;
+					}
+				}
+				if (dy == 0)
+				{
+					mightBePassable = true;
+					for (tmpNode = node->m_prev; tmpNode && tmpNode != anchor; tmpNode = tmpNode->m_prev)
+					{
+						dy = tmpNode->m_nextOpti->getPosition()->y - tmpNode->getPosition()->y;
+						if (dy != 0)
+							mightBePassable = false;
+					}
+				}
+				if (dx == dy)
+				{
+					mightBePassable = true;
+					for (tmpNode = node->m_prev; tmpNode && tmpNode != anchor; tmpNode = tmpNode->m_prev)
+					{
+						dx = tmpNode->m_nextOpti->getPosition()->x - tmpNode->getPosition()->x;
+						dy = tmpNode->m_nextOpti->getPosition()->y - tmpNode->getPosition()->y;
+						if (dy != dx)
+							mightBePassable = false;
+					}
+				}
+				if (dx == -dy)
+				{
+					mightBePassable = true;
+					for (tmpNode = node->m_prev; tmpNode && tmpNode != anchor; tmpNode = tmpNode->m_prev)
+					{
+						dx = tmpNode->m_nextOpti->getPosition()->x - tmpNode->getPosition()->x;
+						dy = tmpNode->m_nextOpti->getPosition()->y - tmpNode->getPosition()->y;
+						if (dy != -dx)
+							mightBePassable = false;
+					}
+				}
+				if (mightBePassable)
+				{
+					isPassable = true;
+				}
+			}
+			if (isPassable)
+			{
+				anchor->m_next = node;
+				anchor = node;
+				optimizedSegment = true;
+				break;
+			}
+		}
+
+		if (optimizedSegment == false)
+		{
+			anchor->m_next = anchor->m_nextOpti;
+			anchor = anchor->m_nextOpti;
+		}
+	}
+
+	// Drop zig-zag nodes closer than two pathfind cells to the previous anchor.
+	for (anchor = m_path; anchor != NULL; anchor = anchor->m_next)
+	{
+		node = anchor->m_next;
+		if (node && node->m_next)
+		{
+			Real dx = node->getPosition()->x - anchor->getPosition()->x;
+			Real dy = node->getPosition()->y - anchor->getPosition()->y;
+			if (dx * dx + dy * dy < 390.0f)
+			{
+				anchor->m_next = node->m_next;
+			}
+		}
+	}
+
+	m_isOptimized = true;
+}
 
 // FUNCTION: BFME2 0x003641AE size=68 name=?rva003641AE@Path@@QAEHMM@Z evidence=?:placeholder tier=A
 
