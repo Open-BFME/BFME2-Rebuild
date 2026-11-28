@@ -1272,6 +1272,17 @@ GRAPH_CHANGES += (GATES_VOID_ABI_CLASS_PTRS_GRAPH,) + tuple(
 )
 GRAPH_PATHS |= set(GATES_VOID_ABI_CLASS_PTRS_GRAPH)
 
+WIDE_DEADLINE_GRAPH = {
+    'ci/managed-check/recovery_broker.py': ('22a4cce5519019c86534849930a0f5704a5b7ee9f0b00d4eb06ede8f8869b51d', 'fa7163ccf7587a923d0497c8b4c231bc70bf95fdcf2a179c6eb49e6a4e94612f'),
+    'ci/managed-check/bundle.sha256': ('66f6483d3c51dae6b9719530ce44a519d7270580837f6cf4d504ecebbbc3bd90', 'd0b16ff08f0c5b1f939e09c238b50a449896199acfcbcc4ed501ef4eb55244f4'),
+}
+GRAPH_CHANGES += (WIDE_DEADLINE_GRAPH,) + tuple(
+    advance_graph(previous, WIDE_DEADLINE_GRAPH)
+    for previous in GRAPH_CHANGES
+    if BUNDLE in previous and previous[BUNDLE][1] == WIDE_DEADLINE_GRAPH[BUNDLE][0]
+)
+GRAPH_PATHS |= set(WIDE_DEADLINE_GRAPH)
+
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
 MAX_DIFF_BYTES = 4 * 1024**2
