@@ -188,9 +188,8 @@ void CameraClass::Update_Frustum(void) const
 	znear = -znear_dist;
 	zfar = -zfar_dist;
 
-	bool ortho = (Projection != PERSPECTIVE);
-	Frustum.Init(cam_mat, vpmin, vpmax, znear, zfar, ortho);
-	ViewSpaceFrustum.Init(Matrix3D(true), vpmin, vpmax, znear, zfar, ortho);
+	Frustum.Init(cam_mat, vpmin, vpmax, znear, zfar, Projection != PERSPECTIVE);
+	ViewSpaceFrustum.Init(Matrix3D(true), vpmin, vpmax, znear, zfar, Projection != PERSPECTIVE);
 	FrustumValid = true;
 
 	// The box around the near clip rectangle.
