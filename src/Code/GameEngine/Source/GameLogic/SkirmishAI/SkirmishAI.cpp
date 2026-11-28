@@ -119,6 +119,11 @@ void SkirmishAI::unRegisterProducedObject(Object *object)
 }
 
 // FUNCTION: BFME2 0x002C6A5F size=23 name=?Register@SkirmishAI@@QAEXPAVTeam@@@Z evidence=N:ledger tier=A
+void SkirmishAI::Register(Team *team)
+{
+	if (!m_finished)
+		m_tacticalAI->Register(team);
+}
 
 // FUNCTION: BFME2 0x002C6A76 size=23 name=?UnRegister@SkirmishAI@@QAEXPAVTeam@@@Z evidence=N:ledger tier=A
 
