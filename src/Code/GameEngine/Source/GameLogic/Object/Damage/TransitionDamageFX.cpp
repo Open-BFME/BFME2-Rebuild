@@ -133,6 +133,13 @@ void TransitionDamageFX::onDrawableBoundToObject()
 // FUNCTION: BFME2 0x004BA3CC size=30 name=?clear@Rva004BA3CC@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x004BA3EA size=71 name=??0TransitionDamageFX@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+TransitionDamageFX::TransitionDamageFX(Thing *thing, const ModuleData *moduleData) :
+	DamageModule(thing, moduleData)
+{
+	Int *ids = &m_particleSystemIDs[0][0];
+	for (Int i = 0; i < 4 * 12; ++i)
+		ids[i] = 0;
+}
 
 // FUNCTION: BFME2 0x004BA431 size=6 name=?Rva004BA431Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *TransitionDamageFX::GetSnapshotName() const
