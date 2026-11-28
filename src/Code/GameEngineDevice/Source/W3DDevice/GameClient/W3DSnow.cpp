@@ -6,7 +6,12 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:name:Z
 #include "GameClient/W3DSnowManager.h"
+#include <string.h>
 // FUNCTION: BFME2 0x00093162 size=113 name=??0W3DSnowManager@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:Z
+W3DSnowManager::W3DSnowManager()
+{
+	memset(m_unk0x74, 0, sizeof(m_unk0x74));
+}
 
 // FUNCTION: BFME2 0x000931D3 size=90 name=?ReleaseResources@W3DSnowManager@@QAEXXZ evidence=N:ledger tier=B hypothesis:Z
 
