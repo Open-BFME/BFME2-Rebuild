@@ -50,6 +50,12 @@ void W3DProjectileStreamDraw::setFullyObscuredByShroud(Bool fullyObscured)
 }
 
 // FUNCTION: BFME2 0x000D11A6 size=44 name=?xfer@W3DProjectileStreamDraw@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DProjectileStreamDraw::xfer(Xfer *xfer)
+{
+	Xfer::Version version(1, 1);
+	*xfer == version;
+	DrawModule::xfer(xfer);
+}
 
 // FUNCTION: BFME2 0x000D11D2 size=84 name=??0W3DProjectileStreamDrawModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
 

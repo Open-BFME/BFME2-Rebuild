@@ -244,7 +244,7 @@ def load_judge_module(tmp_root, variant):
         sys.modules.update(saved_mods)
 
 
-def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, source_text):
+def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, source_text, eh_parents=None):
     """Stage a minimal job directory and run judge.judge_tu against prebuilt COFF + PE bytes."""
     job = tmpdir / f"job_{hashlib.sha256(obj_bytes + source_text.encode()).hexdigest()[:10]}"
     (job / "obj").mkdir(parents=True, exist_ok=True)
@@ -266,6 +266,8 @@ def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, s
         "retail_sha256": pe_sha,
         "data_items": [],
     }
+    if eh_parents is not None:
+        sym_doc["eh_parents"] = eh_parents
     (job / "config").mkdir(parents=True, exist_ok=True)
     (job / "config" / "map.json").write_text(json.dumps(map_doc), encoding="utf-8")
     (job / "config" / "symbols.json").write_text(json.dumps(sym_doc), encoding="utf-8")
@@ -299,7 +301,7 @@ def run_judge_case(judge, tmpdir, *, tu, object_id, rows, pe_bytes, obj_bytes, s
     return judge.judge_tu(job, tu, led), obj_path
 
 
-def make_row(rva, size, role, name, obj_id, *, accepted=None, fold_group="", parent=None):
+def make_row(rva, size, role, name, obj_id, *, accepted=None, fold_group="", parent=None, parent_rvas=""):
     return {
         "rva": f"0x{rva:08X}",
         "size": size,
@@ -311,6 +313,7 @@ def make_row(rva, size, role, name, obj_id, *, accepted=None, fold_group="", par
         "object_id": obj_id,
         "fold_group": fold_group,
         "parent": f"0x{parent:08X}" if parent is not None else None,
+        "parent_rvas": parent_rvas,
     }
 
 
@@ -727,6 +730,131 @@ class ComdatPairingTests(unittest.TestCase):
                 self.assertEqual(exp_by_rva[fx["rva_geom_assign"]]["status"], "PARTIAL")
                 _, rules, _ = compare.reduction(compare.index({fx["tu"]: base_res}), compare.index({fx["tu"]: head_res}))
                 self.assertIn("emitted-row", rules)
+
+    def _issue_625_fixture(self):
+        tu = "src/Test/Issue625.cpp"
+        oid = "O0057F41A"
+        rva_dtor = 0x1000
+        rva_unwritten_a = 0x1100
+        rva_unwritten_b = 0x1200
+        rva_target = 0x1300
+        rva_shared_unwind = 0x2000   # lower position: multi-parent shared unwind (unwritten parents)
+        rva_single_unwind = 0x2010   # lower position: single-parent unwind (unwritten parent)
+        rva_target_unwind = 0x2020   # target's own byte-identical unwind funclet
+
+        # Shared 8-byte unwind funclet: `lea ecx, [ebp-0x10]; jmp rel32` -> rva_dtor
+        def make_unwind(at_rva):
+            rel = (rva_dtor - (at_rva + 8)) & 0xFFFFFFFF
+            return b"\x8D\x4D\xF0\xE9" + struct.pack("<I", rel)
+
+        dtor_bytes = b"\xC3"
+        unwritten_a_bytes = b"\x55\x8B\xEC\x33\xC0\x5D\xC3"
+        unwritten_b_bytes = b"\x55\x8B\xEC\x33\xC0\x40\x5D\xC3"
+        target_bytes = b"\x55\x8B\xEC\x51\x59\x5D\xC3"
+        unwind_shared_retail = make_unwind(rva_shared_unwind)
+        unwind_single_retail = make_unwind(rva_single_unwind)
+        unwind_target_retail = make_unwind(rva_target_unwind)
+        unwind_obj = b"\x8D\x4D\xF0\xE9\x00\x00\x00\x00"
+
+        pe = make_pe_layout(0x1000, [
+            (rva_dtor, dtor_bytes),
+            (rva_unwritten_a, unwritten_a_bytes),
+            (rva_unwritten_b, unwritten_b_bytes),
+            (rva_target, target_bytes),
+            (rva_shared_unwind, unwind_shared_retail),
+            (rva_single_unwind, unwind_single_retail),
+            (rva_target_unwind, unwind_target_retail),
+        ])
+        rows = [
+            make_row(rva_dtor, len(dtor_bytes), "owned", "??1AsciiString@@QAE@XZ", "OOTHER"),
+            make_row(rva_unwritten_a, len(unwritten_a_bytes), "owned", "?UnwrittenA@AptMpClans@@QAEXXZ", oid),
+            make_row(rva_unwritten_b, len(unwritten_b_bytes), "owned", "?UnwrittenB@AptMpClans@@QAEXXZ", oid),
+            make_row(rva_target, len(target_bytes), "owned", "?Delete@AptMpClans@@QAEXXZ", oid),
+            make_row(rva_shared_unwind, 8, "unwind", "$L1458", oid,
+                     parent=None, parent_rvas=f"0x{rva_unwritten_a:08X};0x{rva_unwritten_b:08X}"),
+            make_row(rva_single_unwind, 8, "unwind", "$L1459", oid,
+                     parent=rva_unwritten_a, parent_rvas=f"0x{rva_unwritten_a:08X}"),
+            make_row(rva_target_unwind, 8, "unwind", "$L1460", oid,
+                     parent=rva_target, parent_rvas=f"0x{rva_target:08X}"),
+        ]
+        source = (
+            f"// FUNCTION: BFME2 0x{rva_unwritten_a:08X} size={len(unwritten_a_bytes)} name=?UnwrittenA@AptMpClans@@QAEXXZ\n"
+            f"// FUNCTION: BFME2 0x{rva_unwritten_b:08X} size={len(unwritten_b_bytes)} name=?UnwrittenB@AptMpClans@@QAEXXZ\n"
+            f"// FUNCTION: BFME2 0x{rva_target:08X} size={len(target_bytes)} name=?Delete@AptMpClans@@QAEXXZ\n"
+        )
+        return {
+            "tu": tu, "oid": oid, "pe": pe, "rows": rows, "source": source,
+            "rva_unwritten_a": rva_unwritten_a, "rva_target": rva_target,
+            "rva_shared_unwind": rva_shared_unwind,
+            "rva_single_unwind": rva_single_unwind,
+            "rva_target_unwind": rva_target_unwind,
+            "unwritten_a_bytes": unwritten_a_bytes,
+            "target_bytes": target_bytes,
+            "unwind_obj": unwind_obj,
+        }
+
+    def test_issue_625_unwritten_eh_rows_do_not_steal_paired_function_funclet(self):
+        fx = self._issue_625_fixture()
+        base_obj = build_coff_obj([])
+        head_obj = build_coff_obj(
+            [
+                # Section 1: paired parent Delete (COMDAT NODUPLICATES)
+                {"symbol": "?Delete@AptMpClans@@QAEXXZ", "data": fx["target_bytes"], "selection": 1},
+                # Section 2: Delete's associative unwind funclet (matches all 3 unwind rows by bytes!)
+                {"name": ".text$x", "symbol": "$L9999", "data": fx["unwind_obj"],
+                 "selection": 5, "assoc_section": 1, "storage": 3,
+                 "relocs": [(4, 20, "??1AsciiString@@QAE@XZ")]},
+            ],
+            externs=["??1AsciiString@@QAE@XZ"],
+        )
+        for variant, judge in self.judges.items():
+            with self.subTest(variant=variant):
+                base_res, _ = run_judge_case(judge, self.tmp, tu=fx["tu"], object_id=fx["oid"],
+                                             rows=fx["rows"], pe_bytes=fx["pe"], obj_bytes=base_obj, source_text=fx["source"])
+                head_res, _ = run_judge_case(judge, self.tmp, tu=fx["tu"], object_id=fx["oid"],
+                                             rows=fx["rows"], pe_bytes=fx["pe"], obj_bytes=head_obj, source_text=fx["source"])
+                exp_by_rva = {int(r["rva"], 16): r for r in head_res["expected"]}
+                self.assertEqual(exp_by_rva[fx["rva_shared_unwind"]]["status"], "MISSING")
+                self.assertEqual(exp_by_rva[fx["rva_single_unwind"]]["status"], "MISSING")
+                self.assertEqual(exp_by_rva[fx["rva_target_unwind"]]["status"], "MATCH")
+                self.assertEqual(exp_by_rva[fx["rva_target_unwind"]]["symbol"], "$L9999")
+                _, rules, hints = compare.reduction(compare.index({fx["tu"]: base_res}), compare.index({fx["tu"]: head_res}))
+                self.assertEqual(rules, set(), f"Unexpected refusing rules: {rules}, hints={hints}")
+
+    def test_issue_625_multi_parent_shared_unwind_pairs_to_paired_parent_root(self):
+        fx = self._issue_625_fixture()
+        base_obj = build_coff_obj([])
+        head_obj = build_coff_obj(
+            [
+                # Section 1: paired Delete
+                {"symbol": "?Delete@AptMpClans@@QAEXXZ", "data": fx["target_bytes"], "selection": 1},
+                # Section 2: Delete's own associative unwind
+                {"name": ".text$x", "symbol": "$L9001", "data": fx["unwind_obj"],
+                 "selection": 5, "assoc_section": 1, "storage": 3,
+                 "relocs": [(4, 20, "??1AsciiString@@QAE@XZ")]},
+                # Section 3: paired UnwrittenA (one of the two parents of rva_shared_unwind)
+                {"symbol": "?UnwrittenA@AptMpClans@@QAEXXZ", "data": fx["unwritten_a_bytes"], "selection": 1},
+                # Section 4: UnwrittenA's associative unwind
+                {"name": ".text$x", "symbol": "$L9002", "data": fx["unwind_obj"],
+                 "selection": 5, "assoc_section": 3, "storage": 3,
+                 "relocs": [(4, 20, "??1AsciiString@@QAE@XZ")]},
+            ],
+            externs=["??1AsciiString@@QAE@XZ"],
+        )
+        eh_parents = {
+            f"0x{fx['rva_shared_unwind']:08X}": [{"parent": f"0x{fx['rva_unwritten_a']:08X}"}],
+        }
+        for variant, judge in self.judges.items():
+            with self.subTest(variant=variant):
+                head_res, _ = run_judge_case(judge, self.tmp, tu=fx["tu"], object_id=fx["oid"],
+                                             rows=fx["rows"], pe_bytes=fx["pe"], obj_bytes=head_obj,
+                                             source_text=fx["source"], eh_parents=eh_parents)
+                exp_by_rva = {int(r["rva"], 16): r for r in head_res["expected"]}
+                # Delete's funclet pairs ONLY to Delete's row, while UnwrittenA's funclet pairs to UnwrittenA's rows
+                self.assertEqual(exp_by_rva[fx["rva_target_unwind"]]["status"], "MATCH")
+                self.assertEqual(exp_by_rva[fx["rva_target_unwind"]]["symbol"], "$L9001")
+                self.assertEqual(exp_by_rva[fx["rva_shared_unwind"]]["status"], "MATCH")
+                self.assertEqual(exp_by_rva[fx["rva_shared_unwind"]]["symbol"], "$L9002")
 
 
 if __name__ == "__main__":
