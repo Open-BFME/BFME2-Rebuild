@@ -45,6 +45,7 @@ extern bool BfmeAIExitDoorFlag;		// 0x00A03624: set around ExitInterface::exitOb
 #include "GameLogic/TerrainLogic.h"
 #include "GameLogic/Waypoint.h"
 #include "GameLogic/PathNode.h"
+#include "GameLogic/AICommandParms.h"
 // cl: /O1
 NameKeyType Rva0045EE2CGet();	// 0x0045EE2C: the StancesBehavior module name key
 Real normalizeAngle(Real angle);	// 0x00238954 (GameCommon.cpp)
@@ -4176,6 +4177,12 @@ void AIStateMachine::setGoalSquad(const Squad *squad)
 // FUNCTION: BFME2 0x00352E12 size=184 name=?onEnter@AIChargeTargetState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00352ECA size=101 name=?aiMoveToObject@AICommandInterface@@QAEXPAVObject@@W4CommandSourceType@@@Z evidence=N:ledger tier=A
+void AICommandInterface::aiMoveToObject(Object *obj, CommandSourceType cmdSource)
+{
+	AICommandParms parms((AICommandType)1, cmdSource);
+	parms.m_object = obj;
+	aiDoCommand(&parms);
+}
 
 // FUNCTION: BFME2 0x00352F2F size=110 name=?invoke@Rva00352F2FOpaque@@QAEXPBVWaypoint@@HW4CommandSourceType@@@Z evidence=?:placeholder tier=A
 
