@@ -7,6 +7,13 @@
 #include "GameLogic/Module/FireWeaponCollideModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x00254A36 size=68 name=??0FireWeaponCollideModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+FireWeaponCollideModuleData::FireWeaponCollideModuleData()
+{
+	m_collideWeapon = NULL;
+	m_requiredStatus.clear();
+	m_forbiddenStatus.clear();
+	m_fireOnce = false;
+}
 
 // FUNCTION: BFME2 0x00254A7A size=49 name=?friend_newModuleData@FireWeaponCollideModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *FireWeaponCollideModuleData::friend_newModuleData(INI *ini)
