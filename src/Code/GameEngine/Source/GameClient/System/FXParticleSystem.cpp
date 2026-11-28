@@ -11,6 +11,7 @@
 // FUNCTION: BFME2 0x001F384A size=8 name=?disable@Rva001F384AByteZeroSetter@@QAEXXZ evidence=?:placeholder tier=A
 #include "GameClient/ParticleSys.h"
 #include "GameClient/FXParticleSystem.h"
+#include "GameClient/W3DRoadBuffer.h"
 
 // The particle system manager singleton (retail VA 0x00DFDD04).
 ParticleSystemManager *TheParticleSystemManager = NULL;
@@ -123,6 +124,10 @@ template const CategoryModuleClass<8> *CategoryModuleClass<8>::getFirst();
 // FUNCTION: BFME2 0x001F4983 size=7 name=?get@Rva001F4983LeaGetter@@QBEPAXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x001F499E size=7 name=?getBounds@RoadSegment@@QAEABVSphereClass@@XZ evidence=N:ledger tier=A
+const SphereClass &RoadSegment::getBounds()
+{
+	return m_bounds;
+}
 
 // FUNCTION: BFME2 0x001F49A5 size=7 name=?get@Rva001F49A5LeaGetter@@QBEPAXXZ evidence=?:placeholder tier=A
 
