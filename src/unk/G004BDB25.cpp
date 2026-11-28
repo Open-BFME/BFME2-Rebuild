@@ -7,6 +7,11 @@
 #include "GameClient/Drawable.h"
 #include "GameLogic/Module/ActiveBody.h"
 // FUNCTION: BFME2 0x004BDB25 size=18 name=?invoke@Rva0020DFC0Object@@QAEXXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+void ActiveBody::reapplyDamageState()
+{
+	setDamageState(getDamageState());
+}
+
 // FUNCTION: BFME2 0x004BDB37 size=78 name=?rva004BDB37@ActiveBody@@UAEXXZ evidence=X:map request (link: 5 referrers) tier=B hypothesis:mm1-gap-unit
 void ActiveBody::rva004BDB37()
 {
