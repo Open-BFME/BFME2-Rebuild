@@ -18,6 +18,7 @@
 #include "GameLogic/Damage.h"
 #include "Common/DisabledTypes.h"
 #include "Common/ThingTemplate.h"
+#include "Common/KindOf.h"
 #include "GameClient/Drawable.h"
 #include "GameLogic/Module/BodyModule.h"
 
@@ -279,6 +280,18 @@ UpdateSleepTime TunnelContain::update()
 }
 
 // FUNCTION: BFME2 0x0047E0CE size=157 name=?removeAllContained@TunnelContain@@UAEXH@Z evidence=N:ledger tier=A
+void TunnelContain::removeAllContained(Bool exposeStealthUnits)
+{
+	std::list<Object *> list = getObject()->getControllingPlayer()->m_tunnelSystem->getContainedItemsList().toList();
+	for (std::list<Object *>::iterator it = list.begin(); it != list.end(); )
+	{
+		Object *obj = *it;
+		++it;
+		if (obj->getTemplate()->isKindOf(KINDOF_HORDE))
+			obj->getContain()->iterateContained(removeRiderVisitor, this, 1);
+		removeFromContain(obj, exposeStealthUnits);
+	}
+}
 
 // FUNCTION: BFME2 0x0047E16B size=253 name=?scatterToNearbyPosition@TunnelContain@@IAEXPAVObject@@@Z evidence=N:ledger tier=A
 void TunnelContain::scatterToNearbyPosition(Object *obj)
