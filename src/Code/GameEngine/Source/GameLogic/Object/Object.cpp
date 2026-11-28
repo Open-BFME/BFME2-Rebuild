@@ -290,6 +290,16 @@ void Object::setSpecialModelConditionState(ModelConditionFlagType flag, Unsigned
 }
 
 // FUNCTION: BFME2 0x0028AEF5 size=54 name=?getAmmoPipShowingInfo@Object@@QBE_NPAPAXPAI@Z evidence=N:ledger tier=A
+Bool Object::getAmmoPipShowingInfo(Int *numTotal, Int *numFull) const
+{
+	const Weapon *weapon = m_weaponSet.findAmmoPipShowingWeapon();
+	if (!weapon)
+		return FALSE;
+
+	*numTotal = weapon->getTemplate()->m_clipSize;
+	*numFull = weapon->getRemainingAmmo(TRUE);
+	return TRUE;
+}
 
 // FUNCTION: BFME2 0x0028AF2B size=31 name=?getAbleToUseWeaponAgainstTarget@Object@@QBE?AW4CanAttackResult@@W4AbleToAttackType@@PBV1@PBVCoord3D@@W4CommandSourceType@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 CanAttackResult Object::getAbleToUseWeaponAgainstTarget(AbleToAttackType attackType, const Object *victim, const Coord3D *pos, CommandSourceType commandSource) const
