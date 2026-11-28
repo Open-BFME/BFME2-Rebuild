@@ -340,6 +340,10 @@ class MultiStepComposeAndSeedOriginTest(unittest.TestCase):
             state_origin.after_seed(FakeApi(sha2), sha1)
             disp.assert_called_once()
 
+    def test_wide_deadline_graph_is_registered(self):
+        self.assertIn(state_delta.WIDE_DEADLINE_GRAPH, state_delta.GRAPH_CHANGES)
+        self.assertIn("ci/managed-check/recovery_broker.py", state_delta.GRAPH_PATHS)
+
 
 if __name__ == "__main__":
     unittest.main()
