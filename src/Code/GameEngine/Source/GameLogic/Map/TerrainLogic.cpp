@@ -133,6 +133,41 @@ Bool TerrainLogic::isBridgeBroken(const Object *bridge)
 }
 
 // FUNCTION: BFME2 0x0027D483 size=298 name=?getBridgeAttackPoints@TerrainLogic@@QAEXPBVObject@@PAUTBridgeAttackInfo@@@Z evidence=N:ledger tier=A
+void TerrainLogic::getBridgeAttackPoints(const Object *bridge, TBridgeAttackInfo *attackInfo)
+{
+	ObjectID id = bridge->getID();
+	Bridge *pBridge = getFirstBridge();
+	while (pBridge)
+	{
+		const BridgeInfo *info = pBridge->peekBridgeInfo();
+		if (info->bridgeObjectID == id)
+		{
+			Coord3D delta;
+			delta.x = info->to.x - info->from.x;
+			delta.y = info->to.y - info->from.y;
+			delta.z = info->to.z - info->from.z;
+			delta.normalize();
+
+			Coord3D width;
+			width.x = info->fromRight.x - info->fromLeft.x;
+			width.y = info->fromRight.y - info->fromLeft.y;
+			width.z = info->fromRight.z - info->fromLeft.z;
+			Real halfWidth = width.length() / 2.0f;
+
+			attackInfo->attackPoint1.x = info->from.x + delta.x * halfWidth;
+			attackInfo->attackPoint1.y = info->from.y + delta.y * halfWidth;
+			attackInfo->attackPoint1.z = info->from.z + delta.z * halfWidth;
+			attackInfo->attackPoint2.x = info->to.x - delta.x * halfWidth;
+			attackInfo->attackPoint2.y = info->to.y - delta.y * halfWidth;
+			attackInfo->attackPoint2.z = info->to.z - delta.z * halfWidth;
+			return;
+		}
+		pBridge = pBridge->getNext();
+	}
+
+	attackInfo->attackPoint1 = *bridge->getPosition();
+	attackInfo->attackPoint2 = *bridge->getPosition();
+}
 
 // FUNCTION: BFME2 0x0027D5AD size=51 name=?deleteBridges@TerrainLogic@@IAEXXZ evidence=N:ledger tier=A
 void TerrainLogic::deleteBridges()
