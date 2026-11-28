@@ -26,6 +26,7 @@ void rva00467DE6(INI *ini, void *instance, void *store, const void *userData);
 #include "GameLogic/AIPathfind.h"
 #include "Common/ThingTemplate.h"
 #include "Common/KindOf.h"
+#include "Common/DisabledTypes.h"
 // FUNCTION: BFME2 0x00466D50 size=67 name=?rva00466D50@Rva00466D50@@QAE_NI@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00466D93 size=22 name=?rva00466D93@Rva00466D93@@UAEHPBVThingTemplate@@PAVObject@@@Z evidence=?:placeholder tier=A
@@ -93,6 +94,23 @@ Bool TransportContain::isSpecificRiderFreeToExit(Object *rider)
 }
 
 // FUNCTION: BFME2 0x004672B7 size=99 name=?onCapture@TransportContain@@UAEXHH@Z evidence=N:ledger tier=A
+void TransportContain::onCapture(Player *oldOwner, Player *newOwner)
+{
+	if (oldOwner != newOwner)
+	{
+		if (getObject()->isDisabledByType(DISABLED_UNMANNED))
+		{
+			// Eject everyone immediately on unmanned capture so the next rider cannot recapture it.
+			removeAllContained(false);
+		}
+		else
+		{
+			orderAllPassengersToExit(CMD_FROM_AI);
+			if (containSlot54() && containSlot56() != newOwner)
+				containSlot35(CMD_FROM_AI);
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0046731A size=166 name=?rva0046731A@Rva0046731A@@QAEXPAVObject@@@Z evidence=?:placeholder tier=A
 
