@@ -2,6 +2,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WW3D2/DX8DeviceLock.h"
 #include "GameClient/W3DRoadBuffer.h"
+#include "GameClient/WorldHeightMap.h"
 #include <string.h>
 #include <new>
 #include "Common/Region2D.h"
@@ -162,6 +163,14 @@ void W3DRoadBuffer::adjustStacking(int topUniqueID, int bottomUniqueID)
 }
 
 // FUNCTION: BFME2 0x000D4A24 size=39 name=?setMap@W3DRoadBuffer@@QAEXPAVWorldHeightMap@@@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::setMap(WorldHeightMap *pMap)
+{
+	if (pMap)
+		pMap->Add_Ref();
+	if (m_map)
+		m_map->Release_Ref();
+	m_map = pMap;
+}
 
 // FUNCTION: BFME2 0x000D4A4B size=49 name=?updateLighting@W3DRoadBuffer@@QAEXXZ evidence=N:ledger tier=B hypothesis:K
 void W3DRoadBuffer::updateLighting()
