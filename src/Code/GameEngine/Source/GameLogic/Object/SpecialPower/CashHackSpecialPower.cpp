@@ -83,6 +83,9 @@ CashHackSpecialPowerModuleData::CashHackSpecialPowerModuleData()
 }
 
 // FUNCTION: BFME2 0x004C28DD size=59 name=??1CashHackSpecialPowerModuleData@@UAE@XZ evidence=N:ledger
+CashHackSpecialPowerModuleData::~CashHackSpecialPowerModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x004C2918 size=61 name=?Rva004C2918_ParseUpgradeMoneyAmount@INI@@SAXPAV1@PAX1PBX@Z evidence=?:placeholder
 
