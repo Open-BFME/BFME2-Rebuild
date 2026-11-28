@@ -273,3 +273,11 @@ void PlayerTemplate::parseProductionVeterancyLevel(INI *ini, void *instance, voi
 // FUNCTION: BFME2 0x001FEFEC size=556 name=?parsePlayerTemplateDefinition@PlayerTemplateStore@@SAXPAVINI@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x001FF223 size=95 name=?init@PlayerTemplateStore@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
+void PlayerTemplateStore::init()
+{
+	for (UnsignedInt i = 0; i < m_templates.size(); ++i)
+		m_templates[i].deleteOverrides();
+	m_templates.clear();
+	m_playableIndices.clear();
+	m_observerIndex = -1;
+}
