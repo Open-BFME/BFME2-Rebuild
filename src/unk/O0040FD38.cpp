@@ -9,6 +9,11 @@
 // FUNCTION: BFME2 0x0040FD7C size=19 name=?runInit@WindowLayout@@QAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0040FD8F size=19 name=?runUpdate@WindowLayout@@QAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
+void WindowLayout::runUpdate(void *data)
+{
+	if (m_update)
+		m_update(this, data);
+}
 
 // FUNCTION: BFME2 0x0040FDA2 size=19 name=?runShutdown@WindowLayout@@UAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
 void WindowLayout::runShutdown(void *data)
