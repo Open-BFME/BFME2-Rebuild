@@ -45,3 +45,5 @@ typedef char SubsystemLegendSize[(sizeof(SubsystemLegend) == 0x10) ? 1 : -1];
 extern SubsystemLegend *TheSubsystemLegend;			// 0x009FD93C
 extern Bool TheSubsystemLegendSkipCinematicExclusions;	// 0x009FD944, read by loadIniFilesFromLegend.
 
+void parseSubsystemLegendDefinition(INI *ini);
+
