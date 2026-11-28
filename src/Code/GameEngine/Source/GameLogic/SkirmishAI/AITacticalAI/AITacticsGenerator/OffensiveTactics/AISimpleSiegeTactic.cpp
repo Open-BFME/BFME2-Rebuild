@@ -23,6 +23,10 @@ void AISimpleSiegeTactic::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x005A9D33 size=83 name=??0AISimpleSiegeTactic@@QAE@XZ evidence=N:ledger tier=A
+AISimpleSiegeTactic::AISimpleSiegeTactic()
+	: AITacticSiege(AsciiString("SimpleSiege")), m_unk0x5C(0)
+{
+}
 
 // FUNCTION: BFME2 0x005A9DA2 size=50 name=?create@AISimpleSiegeTactic@@UAEPAVAITactic@@XZ evidence=N:ledger tier=A
 AITactic *AISimpleSiegeTactic::create()
