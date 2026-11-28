@@ -31,4 +31,7 @@ DebugIOInterface *DebugIOOds::Create()
 
 
 // FUNCTION: BFME2 0x0003F460 size=55 name=??1DebugIOOds@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
+DebugIOOds::~DebugIOOds()
+{
+}
 
