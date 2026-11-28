@@ -29,6 +29,10 @@ static void getPlayerInfo(PeerThreadClass *peerThread, PEER peer, const char *ni
 // Zero Hour defines it in PeerThread.cpp).
 class GameSpyPeerMessageQueueInterface;
 GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue = 0;
+Int isThreadHosting = 0;
+static UnsignedInt s_lastStateChangedHeartbeat = 0;
+static Bool s_wantStateChangedHeartbeat = false;
+static SOCKET qr2Sock = INVALID_SOCKET;
 const char *PeerThreadClass::s_keys[PeerThreadClass::NumKeys] = {
 	"b_locale", "b_wins", "b_losses", "b_points", "b_side", "b_pre", "b_BSide", "b_rank1v1", "b_rank2v2"
 };
@@ -739,6 +743,18 @@ Bool GameSpyPeerMessageQueue::getRequest(PeerRequest &req)
 }
 
 // FUNCTION: BFME2 0x0038D526 size=53 name=?stopHostingAlready@PeerThreadClass@@QAEXPAX@Z evidence=N:ledger tier=A
+void PeerThreadClass::stopHostingAlready(PEER peer)
+{
+	isThreadHosting = 0;
+	s_lastStateChangedHeartbeat = 0;
+	s_wantStateChangedHeartbeat = false;
+	peerStopGame(peer);
+	if (qr2Sock != INVALID_SOCKET)
+	{
+		closesocket(qr2Sock);
+		qr2Sock = INVALID_SOCKET;
+	}
+}
 
 // FUNCTION: BFME2 0x0038D770 size=77 name=?addRequest@GameSpyPeerMessageQueue@@UAEXABVPeerRequest@@@Z evidence=N:ledger tier=A
 void GameSpyPeerMessageQueue::addRequest(const PeerRequest &req)
