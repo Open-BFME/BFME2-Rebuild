@@ -22,6 +22,12 @@
 
 
 // FUNCTION: BFME2 0x000B19C3 size=17 name=?bfmeSet@Gen_00750550@@QAEX_N@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DDebrisDraw::setShadowsEnabled(Bool enable)
+{
+	if (m_shadow)
+		m_shadow->m_enabled = enable;
+}
+
 // FUNCTION: BFME2 0x000B19D4 size=17 name=?bfmeSet@Gen_00750570@@QAEX_N@Z evidence=N:ledger tier=B hypothesis:cohesion
 // FUNCTION: BFME2 0x000B19E5 size=22 name=?isAboveTerrain@Thing@@QBE_NXZ evidence=N:ledger tier=B hypothesis:cohesion
 Bool Thing::isAboveTerrain() const
