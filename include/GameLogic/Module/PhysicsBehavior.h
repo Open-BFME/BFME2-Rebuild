@@ -41,6 +41,7 @@ public:
 
 	Bool rva0039051E() const;							// 0x0039051E
 	Bool calcFlightPath(Bool flag, Real strength);		// 0x003901DA
+	void setIgnoreCollisionsWith(const Object *obj);
 	void rva00390557(const Coord3D *where, Real strength, Real value44, Int value60, Int value64);	// 0x00390557
 	UpdateSleepTime rva00390601();						// 0x00390601
 	void rva00390629(Bool enable);						// 0x00390629
