@@ -79,6 +79,7 @@ public:
 
 	// The texture of the renderer in use (retail returns the handle through a hidden pointer: 0x001A7A60).
 	TextureAsset Get_Texture() const;
+	void Set_Texture(TextureClass *texture);
 	ShaderClass Get_Shader() const;
 	int Get_Render_Mode() const { return RenderMode; }
 	int Get_Frame_Mode() const { return FrameMode; }
