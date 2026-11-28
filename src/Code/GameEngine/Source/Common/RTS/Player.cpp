@@ -1006,6 +1006,22 @@ Int Player::rva002ABD1D(Int kindOf, Int limit)
 // FUNCTION: BFME2 0x002ABD48 size=75 name=?removeTeamFromList@Player@@QAEXPAVTeamPrototype@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x002ABD93 size=145 name=?setObjectsEnabled@Player@@QAEXABVAsciiString@@_N@Z evidence=N:ledger tier=A
+void Player::setObjectsEnabled(const AsciiString &templateTypeToAffect, Bool enable)
+{
+	for (ProtoList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it)
+	{
+		Team *team;
+		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); (team = iter.cur()) != NULL; iter.advance())
+		{
+			Object *obj;
+			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); (obj = iterObj.cur()) != NULL; iterObj.advance())
+			{
+				if (obj->getTemplate()->getName().compare(templateTypeToAffect) == 0)
+					obj->setScriptStatus((ObjectScriptStatusBit)1, !enable);
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x002ABE24 size=98 name=?allowedToBuild@Player@@QBE_NPBVThingTemplate@@@Z evidence=N:ledger tier=A
 bool Player::allowedToBuild(const ThingTemplate *tmpl) const
