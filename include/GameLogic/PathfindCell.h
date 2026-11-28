@@ -29,6 +29,12 @@ class PathfindCellInfo
 public:
 	UnsignedByte m_unk0x00[0x28];					// +0x00 (Zero Hour: open-list links, path parent, cell, costs, position, goal and position unit IDs)
 	ObjectID m_obstacleID;							// +0x28
+	// The flag word after the obstacle ID: SetOpen sets and clears bit 3; PutOnClosedList tests and
+	// sets bit 4 and RemoveFromClosedList clears it. Zero Hour has the same pair one bit higher.
+	UnsignedInt m_unkBits0 : 3;						// +0x2C bits 0..2
+	UnsignedInt m_open : 1;							// +0x2C bit 3
+	UnsignedInt m_closed : 1;						// +0x2C bit 4
+	UnsignedInt m_unkBits5 : 27;					// +0x2C bits 5..31
 };
 
 class PathfindCell
@@ -58,6 +64,7 @@ public:
 	Bool setFlag23(Bool set);								// 0x0052E0CE (provisional name): false when bit 23 already equals `set`
 	PathfindCell();											// 0x0052DFF2
 	void rva0052DED3();										// 0x0052DED3, resets the cell then ReleaseInfo
+	void SetOpen(Bool open);
 	void ReleaseInfo();										// 0x0052DE5B
 	void DoXfer(Xfer *xfer);								// 0x0052D84C
 

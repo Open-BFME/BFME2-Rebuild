@@ -19,6 +19,13 @@
 // FUNCTION: BFME2 0x0052DAD2 size=23 name=?set@Rva003F69C0Object@@QAEXPAHH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0052DAE9 size=22 name=?SetOpen@PathfindCell@@QAEX_N@Z evidence=N:ledger tier=A
+void PathfindCell::SetOpen(Bool open)
+{
+	if (open)
+		m_info->m_open = 1;
+	else
+		m_info->m_open = 0;
+}
 
 // FUNCTION: BFME2 0x0052DAFF size=18 name=?RemoveFromClosedList@PathfindCell@@QAEXXZ evidence=N:ledger tier=A
 
