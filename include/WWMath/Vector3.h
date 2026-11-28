@@ -23,6 +23,7 @@ public:
 	static Real Sqrt(Real val);		// inline x87 (WWMath/wwmath.h); out-of-line copy 0x000659D4
 	static Real Max(Real a, Real b);								// 0x00154A60 (comdat copy in render2dsentence)
 	static Real Min(Real a, Real b);								// 0x00154A80
+	static Real Lerp(Real a, Real b, Real factor);
 	// Zero Hour's text. Plain inline: mapper.cpp's Calculate_Texture_Matrix rows (0x001822E0) expand it, while dxwrapper.cpp's unit
 	// emits the out-of-line copy 0x0011F680 that LightEnvironmentClass::Pre_Render_Update 0x00140A20 calls.
 	static Real Clamp(Real val, Real min, Real max)
