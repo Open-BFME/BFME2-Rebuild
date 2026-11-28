@@ -6,9 +6,17 @@
 // Duplicate path; alternative object O0030D3AD
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:name:Z, hypothesis:padding
 #include "WW3D2/MaterialPassClass.h"
+#include "WW3D2/VertexMaterialClass.h"
 // FUNCTION: BFME2 0x0013EDD0 size=104 name=??0MaterialPassClass@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:Z
 
 // FUNCTION: BFME2 0x0013EE40 size=112 name=??1MaterialPassClass@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
+MaterialPassClass::~MaterialPassClass(void)
+{
+	if (Material) {
+		Material->Release_Ref();
+		Material = 0;
+	}
+}
 
 // FUNCTION: BFME2 0x0013EEB0 size=61 name=?Rva0013EEB0@Rva0013EEB0PassClass@@QAEXPAURva0013EEB0Stage@@H@Z evidence=?:placeholder tier=B hypothesis:Z
 
