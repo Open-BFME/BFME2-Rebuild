@@ -43,6 +43,7 @@ public:
 	{
 		Row[0] = m[0]; Row[1] = m[1]; Row[2] = m[2]; Row[3] = Vector4(0.0, 0.0, 0.0, 1.0);
 	}
+	void Init(const Vector4 &r0, const Vector4 &r1, const Vector4 &r2, const Vector4 &r3);
 	// evidence: retail DXWrapper::Set_World_Identity 0x0010737E / Set_View_Identity 0x001100E8 and the Scale/Grid
 	// Calculate_Texture_Matrix rows expand it as twelve stores in place; 0x00076735 is the out-of-line copy.
 	__forceinline void Make_Identity()
