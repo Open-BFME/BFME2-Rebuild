@@ -63,6 +63,9 @@ NameKeyType W3DTreeDraw::getModuleNameKey() const
 // FUNCTION: BFME2 0x000CEBBF size=231 name=??0W3DTreeDrawModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x000CECA6 size=93 name=??1W3DTreeDrawModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
+W3DTreeDrawModuleData::~W3DTreeDrawModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x000CED03 size=17 name=?buildFieldParse@W3DTreeDrawModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:K
 void W3DTreeDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
