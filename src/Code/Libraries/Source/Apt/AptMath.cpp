@@ -15,6 +15,39 @@ unsigned short AptMath::m_nStackCount = 0;
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
 // FUNCTION: BFME2 0x006DFEA0 size=254 name=?ClipStackMakeUnit@AptMath@@SAXXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+void AptMath::ClipStackMakeUnit()
+{
+    if (!(m_nStackCount < m_nStackCapacity)) {
+        g_bfmeAptAssertAtE17734("m_nStackCount < m_nStackCapacity", "..\\..\\include\\apt\\AptStd/AptMath.h", 0x60);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+
+    ClipTransform_t *transform = m_pClipStack + m_nStackCount;
+    transform->matrix[0] = 1.0f;
+    transform->matrix[1] = 0.0f;
+    transform->matrix[2] = 0.0f;
+    transform->matrix[3] = 0.0f;
+    transform->matrix[4] = 0.0f;
+    transform->matrix[5] = 1.0f;
+    transform->matrix[6] = 0.0f;
+    transform->matrix[7] = 0.0f;
+    transform->matrix[8] = 0.0f;
+    transform->matrix[9] = 0.0f;
+    transform->matrix[10] = 1.0f;
+    transform->matrix[11] = 0.0f;
+    transform->matrix[12] = 0.0f;
+    transform->matrix[13] = 0.0f;
+    transform->matrix[14] = 0.0f;
+    transform->matrix[15] = 1.0f;
+    transform->scale[0] = 1.0f;
+    transform->scale[1] = 1.0f;
+    transform->scale[2] = 1.0f;
+    transform->scale[3] = 1.0f;
+    transform->offset[0] = 0.0f;
+    transform->offset[1] = 0.0f;
+    transform->offset[2] = 0.0f;
+    transform->offset[3] = 0.0f;
+}
 // FUNCTION: BFME2 0x006DFFA0 size=10 name=?ClipStackPushUnit@AptMath@@SAXXZ evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
 void AptMath::ClipStackPushUnit()
 {
