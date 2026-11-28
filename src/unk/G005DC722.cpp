@@ -4,6 +4,10 @@
 // object=G005DC722 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x005DC722 size=26 name=??0AITacticOffensive@@QAE@ABVAsciiString@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+AITacticOffensive::AITacticOffensive(const AsciiString &name)
+    : AITactic(name, true)
+{
+}
 // FUNCTION: BFME2 0x005DC73C size=11 name=??1AITacticOffensive@@UAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 AITacticOffensive::~AITacticOffensive()
 {
