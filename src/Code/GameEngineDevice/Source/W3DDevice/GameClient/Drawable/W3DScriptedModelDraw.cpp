@@ -44,6 +44,12 @@ void rva000C48DB(void*,void*,void*,void*);
 // FUNCTION: BFME2 0x000B2DE3 size=40 name=?Rva000B2DE3_ParseShadowBool@INI@@SAXPAV1@PAX1PBX@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x000B2E14 size=21 name=?releaseShadows@W3DModelDraw@@UAEXXZ evidence=N:ledger tier=A
+void W3DScriptedModelDraw::releaseShadows()
+{
+	if (m_shadow != NULL)
+		m_shadow->release();
+	m_shadow = NULL;
+}
 
 // FUNCTION: BFME2 0x000B2E29 size=35 name=?setShadowsEnabled@W3DModelDraw@@UAEX_N@Z evidence=N:ledger tier=A
 
