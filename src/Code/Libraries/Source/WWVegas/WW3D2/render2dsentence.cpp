@@ -292,6 +292,25 @@ FontCharsClass::FontCharsClass() :
 // FUNCTION: BFME2 0x00157FF0 size=1323 name=?Store_Thai_GDI_Glyph@FontCharsClass@@AAEPBVFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00158520 size=81 name=?Get_Char_Data@FontCharsClass@@AAEPBVFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
+const FontCharsClassCharDataStruct *FontCharsClass::Get_Char_Data(unsigned short c)
+{
+	const FontCharsClassCharDataStruct *data = 0;
+
+	_STL::map<unsigned short, FontCharsClassCharDataStruct *>::iterator it = CharTree.find(c);
+	if (it != CharTree.end())
+		data = it->second;
+
+	if (data == 0)
+		data = Store_Thai_GDI_Glyph(c);
+
+	if ((int)data == -1) {
+		if (AlternateUnicodeFont && this != AlternateUnicodeFont)
+			return AlternateUnicodeFont->Get_Char_Data(c);
+		return 0;
+	}
+
+	return data;
+}
 
 // FUNCTION: BFME2 0x00158580 size=260 name=?loadCharacterData@FontCharsClass@@QAEPBUFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
 
