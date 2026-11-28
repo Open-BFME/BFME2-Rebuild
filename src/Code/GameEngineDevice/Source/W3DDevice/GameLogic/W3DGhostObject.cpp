@@ -208,6 +208,18 @@ W3DRenderObjectSnapshot::~W3DRenderObjectSnapshot()
 // FUNCTION: BFME2 0x00063F78 size=694 name=?xfer@W3DGhostObject@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0006422F size=90 name=??1W3DGhostObjectManager@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+W3DGhostObjectManager::~W3DGhostObjectManager()
+{
+	reset();
+
+	W3DGhostObject *mod = m_freeModules;
+	while (mod)
+	{
+		W3DGhostObject *next = mod->m_nextSystem;
+		::delete mod;
+		mod = next;
+	}
+}
 
 // FUNCTION: BFME2 0x000642F1 size=276 name=?xfer@W3DGhostObjectManager@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
