@@ -20,6 +20,7 @@ class WorldHeightMap;
 class W3DShroud;
 class W3DTaint;
 class RefRenderObjListIterator;
+class AsciiString;
 
 class BaseHeightMapRenderObjClass : public RenderObjClass, public DX8_CleanupHook, public Snapshot
 {
@@ -62,6 +63,7 @@ public:
 	Bool rva00067298(Real x, Real y);
 	UnsignedByte rva0006730B(Real x, Real y);
 	void loadRoadsAndBridges(W3DTerrainLogic *terrain, Bool saveGame);
+	void addProp(Int id, Coord3D location, Real angle, Real scale, const AsciiString &modelName, Bool flag);
 
 	WorldHeightMap *getMap() const { return m_map; }
 	Real getTransparentWaterDepth() const { return m_transparentWaterDepth; }
