@@ -146,6 +146,8 @@ protected:
 	virtual void adjustTransformMtx(Matrix3D &mtx) const {}				// 65: the shared `ret 4`; W3DSailModelDraw's override 0x000D08C3 transforms the matrix (Zero Hour's name)
 	virtual Int slot66();													// 66: 0x000C124C returns 100000
 	virtual Int slot67(Int count);											// 67: 0x000B3E96, a client random value in [0, count - 1]
+	UnsignedByte m_unk0x14[0x3C];
+	RenderObjClass *m_renderObject;
 };
 
 #endif
