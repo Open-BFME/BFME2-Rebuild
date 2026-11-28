@@ -34,6 +34,12 @@ __forceinline void Vector3::Rotate_Z(Real angle)
 #include "Common/StlAlgobase.h"
 #include "GameLogic/GameLogic.h"
 
+FireWeaponUpdateEntry::~FireWeaponUpdateEntry()
+{
+	::delete m_weapon;
+	m_weapon = 0;
+}
+
 // Replaces the module's weapon: deletes the old one, allocates a primary from
 // the store, copies the owner id in and loads its ammo.
 void FireWeaponUpdate::rva0048B9D0(const WeaponTemplate *weaponTemplate)

@@ -190,6 +190,7 @@ class Weapon : public Snapshot
 	// owners free their weapons with ::delete (slot 0 with flag 0, then ::operator delete).
 	friend class WeaponSet;
 	friend class FireWeaponUpdate;
+	friend struct FireWeaponUpdateEntry;
 	friend class WeaponFireSpecialAbilityUpdate;
 	friend class FireWeaponWhenDamagedBehavior;
 
