@@ -278,6 +278,13 @@ bool PlaneClass::Compute_Intersection(const Vector3 &p0, const Vector3 &p1, floa
 // FUNCTION: BFME2 0x0006A553 size=1042 name=?Set_Transform@DXWrapper@@SAXW4_D3DTRANSFORMSTATETYPE@@ABVMatrix3D@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0006A965 size=183 name=?Normalized_Cross_Product@Vector3@@SAXABV1@0PAV1@@Z evidence=N:ledger tier=A
+void Vector3::Normalized_Cross_Product(const Vector3 &a, const Vector3 &b, Vector3 *result)
+{
+	result->X = a.Y * b.Z - a.Z * b.Y;
+	result->Y = a.Z * b.X - a.X * b.Z;
+	result->Z = a.X * b.Y - a.Y * b.X;
+	result->Normalize();
+}
 
 // FUNCTION: BFME2 0x0006AA45 size=260 name=?rva0006AA45@Rva0006653B@@QAEXHHPAVVector3@@@Z evidence=?:placeholder tier=A
 
