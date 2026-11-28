@@ -11,6 +11,7 @@
 struct CastResultStruct
 {
 	CastResultStruct(void) : StartBad(false), Fraction(1.0f), Normal(0.0f, 0.0f, 0.0f), SurfaceType(0), ComputeContactPoint(false), ContactPoint(0.0f, 0.0f, 0.0f) {}
+	void Reset(void); // 0x00068E3D
 
 	bool StartBad;			// +0x00
 	Real Fraction;			// +0x04

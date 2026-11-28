@@ -7,6 +7,7 @@
 // Hypothesis rules: hypothesis:cohesion
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "WWMath/PlaneClass.h"
+#include "WWMath/CastResultStruct.h"
 #include "GameClient/BaseHeightMapRenderObjClass.h"
 #include "GameClient/WorldHeightMap.h"
 #include "WW3D2/SceneClass.h"
@@ -205,6 +206,15 @@ void BaseHeightMapRenderObjClass::Notify_Added(SceneClass *scene)
 // FUNCTION: BFME2 0x00068DC6 size=16 name=?get@Rva00068DC6CurrentObject@@QBEPAXXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00068E3D size=57 name=?Reset@CastResultStruct@@QAEXXZ evidence=N:ledger tier=A
+void CastResultStruct::Reset(void)
+{
+	StartBad = false;
+	Fraction = 1.0f;
+	Normal.Set(0.0f, 0.0f, 0.0f);
+	SurfaceType = 0;
+	ComputeContactPoint = false;
+	ContactPoint.Set(0.0f, 0.0f, 0.0f);
+}
 
 // FUNCTION: BFME2 0x00068E76 size=242 name=?Init@AABoxClass@@QAEXPAVVector3@@H@Z evidence=N:ledger tier=A
 
