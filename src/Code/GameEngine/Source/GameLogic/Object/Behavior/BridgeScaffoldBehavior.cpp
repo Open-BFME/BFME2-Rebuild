@@ -103,6 +103,10 @@ NameKeyType BridgeScaffoldBehavior::getModuleNameKey() const
 	return TheBridgeScaffoldBehaviorNameKey;
 }
 
+BridgeScaffoldBehavior::~BridgeScaffoldBehavior()
+{
+}
+
 // FUNCTION: BFME2 0x00458422 size=534 name=?update@BridgeScaffoldBehavior@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger
 UpdateSleepTime BridgeScaffoldBehavior::update()
 {
