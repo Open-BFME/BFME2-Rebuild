@@ -590,6 +590,89 @@ void TeamInQueue::xfer(Xfer *xfer)
 // FUNCTION: BFME2 0x004F1B8C size=400 name=?getPlayerStructureBounds@AIPlayer@@SAXPAURegion2D@@H@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x004F1D38 size=811 name=?computeSuperweaponTarget@AIPlayer@@UAEXPBVSpecialPowerTemplate@@PAVCoord3D@@HM@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void AIPlayer::computeSuperweaponTarget(const SpecialPowerTemplate *power, Coord3D *retPos, Int playerNdx, Real weaponRadius)
+{
+	Region2D bounds;
+	getPlayerStructureBounds(&bounds, playerNdx);
+
+	if (weaponRadius < 1.0f)
+		weaponRadius = 1.0f;
+
+	bounds.lo.x += weaponRadius;
+	bounds.hi.x -= weaponRadius;
+	if (bounds.hi.x < bounds.lo.x)
+		bounds.hi.x = bounds.lo.x = (bounds.hi.x + bounds.lo.x) / 2.0f;
+	if (bounds.hi.y < bounds.lo.y)
+		bounds.hi.y = bounds.lo.y = (bounds.hi.y + bounds.lo.y) / 2.0f;
+
+	Int xCount = Float_To_Long(ceil(bounds.width() / weaponRadius)) + 1;
+	Int yCount = Float_To_Long(ceil(bounds.height() / weaponRadius)) + 1;
+	if (xCount > 10)
+		xCount = 10;
+	if (yCount > 10)
+		yCount = 10;
+
+	Int cash = -1;
+	Coord3D pos;
+	Coord3D bestPos;
+	Int x, y;
+	for (x = 0; x < xCount; x++)
+	{
+		for (y = 0; y < yCount; y++)
+		{
+			pos.x = bounds.lo.x + (bounds.width() * x) / xCount;
+			pos.y = bounds.lo.y + (bounds.height() * y) / yCount;
+			pos.z = 0;
+			Int curCash = getPlayerSuperweaponValue(&pos, playerNdx, 2 * weaponRadius);
+			if (curCash > cash)
+			{
+				cash = curCash;
+				bestPos = pos;
+			}
+		}
+	}
+
+	Coord3D veryBestPos;
+	xCount = 11;
+	yCount = 11;
+	cash = -1;
+	Int count = 0;
+	for (x = 0; x < xCount; x++)
+	{
+		for (y = 0; y < yCount; y++)
+		{
+			pos.x = bestPos.x + (x - 5) * (weaponRadius / 10);
+			pos.y = bestPos.y + (y - 5) * (weaponRadius / 10);
+			pos.z = 0;
+			Int curCash = getPlayerSuperweaponValue(&pos, playerNdx, weaponRadius);
+			if (curCash > cash)
+			{
+				cash = curCash;
+				veryBestPos = pos;
+				count = 1;
+			}
+			else if (curCash == cash)
+			{
+				veryBestPos.x += pos.x;
+				veryBestPos.y += pos.y;
+				count++;
+			}
+		}
+	}
+	if (count > 1)
+	{
+		veryBestPos.x /= count;
+		veryBestPos.y /= count;
+	}
+	if (power->getSpecialPowerType() == (SpecialPowerType)124 || power->getSpecialPowerType() == (SpecialPowerType)123)
+	{
+		FindPositionOptions options;
+		options.maxRadius = 300.0f;
+		PartitionManager::findPositionAround(&veryBestPos, &options, &veryBestPos);
+	}
+	veryBestPos.z = TheTerrainLogic->getGroundHeight(veryBestPos.x, veryBestPos.y);
+	*retPos = veryBestPos;
+}
 
 
 // FUNCTION: BFME2 0x004F2063 size=370 name=?startTraining@AIPlayer@@MAE_NPAVWorkOrder@@_NVAsciiString@@@Z evidence=N:ledger tier=A
