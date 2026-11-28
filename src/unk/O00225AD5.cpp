@@ -5,6 +5,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=rests-on:veto; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:name:invented
+#include "Common/GameEngine.h"
 // FUNCTION: BFME2 0x00225AD5 size=42 name=?rva00225AD5@GameEngine@@UAE_NXZ evidence=?:placeholder tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x00225AFF size=75 name=?rva00225AFF@GameEngine@@UAE_NXZ evidence=?:placeholder tier=B hypothesis:Z
@@ -12,6 +13,9 @@
 // FUNCTION: BFME2 0x00225B4A size=25 name=?shutdownGameEngine@@YIXPAVGameEngine@@@Z evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x00225B9B size=11 name=??1GameEngine@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
+GameEngine::~GameEngine()
+{
+}
 
 // FUNCTION: BFME2 0x00225BA6 size=108 name=?_bfme_shouldSkipClientFrame@GameEngine@@AAE_NXZ evidence=N:ledger tier=B hypothesis:K
 
