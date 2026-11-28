@@ -16,8 +16,8 @@
 //                  by 2002 jumps, the unwind funclets, and 13 calls)
 // so the wrappers' constructors and copy assignment are inline over these, and
 // the destructor is inline (it expands to the releaseBuffer call).
-// str() returns a pooled literal for an empty string (see str()); the
-// function-local TheNullChr this header used before has no reference in retail.
+// str() returns a pooled literal for an empty string (see str()); the wide
+// one is Zero Hour's function-local TheNullChr (see emptyText).
 #pragma once
 #ifndef BFME2_STRINGBASE_H
 #define BFME2_STRINGBASE_H
@@ -37,7 +37,16 @@ public:
 		return m_data ? peek() : emptyText((const CharT *)0);
 	}
 	static const char *emptyText(const char *) { return ""; }
-	static const unsigned short *emptyText(const unsigned short *) { return L""; }
+	// Wide: Zero Hour's UnicodeString::str() returns &TheNullChr. The linker
+	// folds it with the L"" literal (both at VA 0x00BBB5C4), but the compiler
+	// sees two symbols, so `x ? s.str() : L""` keeps two `mov eax,0xBBB5C4; jmp`
+	// blocks (LANAPI::RequestChat 0x0044A652, RequestGameLeave 0x0044A0CF,
+	// RequestEnableMPSetupUI 0x0044A75D); one pooled L"" merges them.
+	static const unsigned short *emptyText(const unsigned short *)
+	{
+		static const unsigned short TheNullChr = 0;
+		return &TheNullChr;
+	}
 	int getLength() const { return m_data ? m_data->length : 0; }
 	CharT *getBufferForRead(int length);				// char 0x00036640 (the chunk reader fills the text in place)
 	// Out of line in retail (char 0x00001E2F), but defined here: FlammableUpdate

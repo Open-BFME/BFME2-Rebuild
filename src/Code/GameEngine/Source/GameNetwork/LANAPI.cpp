@@ -433,6 +433,33 @@ void LANAPI::RequestGameJoinDirectConnect(void *data)
 }
 
 // FUNCTION: BFME2 0x0044A0CF size=325 name=?RequestGameLeave@LANAPI@@UAEXXZ evidence=N:ledger tier=A
+void LANAPI::RequestGameLeave()
+{
+	LANMessage msg;
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+		msg.LANMessageType = LANMessage::MSG_REQUEST_HOST_LEAVE;
+	else
+		msg.LANMessageType = LANMessage::MSG_REQUEST_GAME_LEAVE;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.GameToLeave.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.GameToLeave.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+	{
+		OnPlayerLeave(m_name);
+		removeGame(m_currentGame);
+		::delete m_currentGame;
+		m_currentGame = 0;
+		m_inLobby = true;
+	}
+	else
+	{
+		m_pendingAction = ACT_LEAVE;
+		m_expiration = timeGetTime() + m_actionTimeout;
+	}
+}
 
 // FUNCTION: BFME2 0x0044A214 size=283 name=?RequestGameAnnounce@LANAPI@@UAEXXZ evidence=N:ledger tier=A
 void LANAPI::RequestGameAnnounce()
@@ -512,8 +539,33 @@ void LANAPI::RequestHasMap()
 }
 
 // FUNCTION: BFME2 0x0044A652 size=267 name=?RequestChat@LANAPI@@UAEXVUnicodeString@@W4ChatType@LANAPIInterface@@H@Z evidence=N:ledger tier=A
+void LANAPI::RequestChat(UnicodeString message, ChatType format, Int unused)
+{
+	LANMessage msg;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.Chat.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.Chat.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	msg.LANMessageType = LANMessage::MSG_CHAT;
+	msg.Chat.chatType = format;
+	wcsncpy(msg.Chat.message, message.str(), 100);
+	msg.Chat.message[100] = 0;
+	sendMessage(&msg, 0);
+
+	OnChat(m_name, GetLocalAddress(), message, format);
+}
 
 // FUNCTION: BFME2 0x0044A75D size=171 name=?RequestEnableMPSetupUI@LANAPI@@UAEX_N@Z evidence=N:ledger tier=A
+void LANAPI::RequestEnableMPSetupUI(Bool enable)
+{
+	LANMessage msg;
+	msg.LANMessageType = LANMessage::MSG_ENABLE_MPSETUP_UI;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.EnableMPSetupUI.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.EnableMPSetupUI.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	msg.EnableMPSetupUI.enable = enable;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+}
 
 // FUNCTION: BFME2 0x0044A808 size=249 name=?RequestGameOptions@LANAPI@@UAEXVAsciiString@@HI@Z evidence=N:ledger tier=A
 void LANAPI::RequestGameOptions(AsciiString gameOptions, Int isPublic, UnsignedInt ip)
