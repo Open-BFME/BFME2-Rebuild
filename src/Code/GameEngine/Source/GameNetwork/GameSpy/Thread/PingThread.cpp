@@ -154,6 +154,19 @@ void Pinger::clearPingMap()
 // FUNCTION: BFME2 0x005503B1 size=53 name=?rva005503B1@Rva005503B1@@SAPAVRva0055011A@@XZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x005503E6 size=98 name=?getRequest@Pinger@@UAE_NAAVPingRequest@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+Bool Pinger::getRequest(PingRequest &req)
+{
+	MutexClass::LockClass m(m_requestMutex, 0);
+	if (m.Failed())
+		return false;
+
+	if (m_requests.empty())
+		return false;
+
+	req = m_requests.front();
+	m_requests.pop();
+	return true;
+}
 
 // FUNCTION: BFME2 0x00550448 size=98 name=?getResponse@Pinger@@UAE_NAAVPingResponse@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
