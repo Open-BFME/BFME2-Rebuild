@@ -68,6 +68,24 @@ const ThingTemplate *ThingFactory::findByTemplateID(UnsignedShort id)
 }
 
 // FUNCTION: BFME2 0x002CF21B size=99 name=?newDrawable@ThingFactory@@QAEPAXPAXHH@Z evidence=N:ledger tier=A
+Drawable *ThingFactory::newDrawable(const ThingTemplate *thingTemplate, Int statusBits, Int value)
+{
+	if (!thingTemplate)
+		return NULL;
+
+	Drawable *drawable = TheGameClient->friend_createDrawable(thingTemplate, static_cast<DrawableStatus>(statusBits), value);
+	for (Module **module = drawable->m_modules[2]; *module; ++module)
+	{
+		if (!isLoadingMap)
+			Sleep(0);
+
+		CreateModuleInterface *create = static_cast<BehaviorModule *>(*module)->getCreate();
+		if (create)
+			create->onCreate();
+	}
+
+	return drawable;
+}
 
 // FUNCTION: BFME2 0x002CF2D5 size=45 name=?_M_erase@Rva002CF2D5@@QAEXPAURva002CF2D5Node@@@Z evidence=?:placeholder tier=A
 
