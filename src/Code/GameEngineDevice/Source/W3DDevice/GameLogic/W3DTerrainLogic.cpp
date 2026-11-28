@@ -10,6 +10,12 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:Z, hypothesis:cohesion, hypothesis:name:Z
 // FUNCTION: BFME2 0x00062A7E size=70 name=??0W3DTerrainLogic@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:Z
+W3DTerrainLogic::W3DTerrainLogic() :
+	m_mapMinZ(0.0f),
+	m_mapMaxZ(1.0f)
+{
+	m_unk0x18[0] = 0;
+}
 
 // FUNCTION: BFME2 0x00062AC4 size=6 name=?Rva00062AC4Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:Z
 
