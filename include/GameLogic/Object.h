@@ -569,6 +569,7 @@ public:
 	const ExperienceTracker *getExperienceTracker() const { return m_experienceTracker; }
 	UpdateModule *findUpdateModule(NameKeyType key) const { return (UpdateModule *)findModule(key); }
 	const Weapon *getCurrentWeapon(WeaponSlotType *slot = 0) const;	// 0x0028AEBD
+	Bool getAmmoPipShowingInfo(Int *numTotal, Int *numFull) const;	// 0x0028AEF5
 	void setFiringConditionForCurrentWeapon();	// 0x0028FC8F
 	void fireCurrentWeapon(const Coord3D *pos);	// 0x00291916 (fires the current weapon at pos; AIRampageState helper 0x0034BE57)
 	Bool isMobile() const;						// 0x002907A1 (AIUpdateInterface::privateFacePosition 0x00267D65, privateTightenToPosition 0x00267DAD)
