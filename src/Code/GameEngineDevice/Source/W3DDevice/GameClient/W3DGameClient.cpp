@@ -19,6 +19,8 @@
 #include "Common/ThingFactory.h"
 #include "GameClient/RayEffectSystem.h"
 #include "GameClient/GameClient.h"
+#include "GameClient/BaseHeightMapRenderObjClass.h"
+#include "WWMath/Vector3.h"
 
 extern Int TheW3DFrameLengthInMsec;	// 0x00DE204C
 extern RayEffectSystem *TheRayEffects;	// 0x00DFEFF4
@@ -88,6 +90,14 @@ Drawable *W3DGameClient::friend_createDrawable(const ThingTemplate *thing, Drawa
 }
 
 // FUNCTION: BFME2 0x0004C7A8 size=72 name=?addScorch@W3DGameClient@@UAEXPBVCoord3D@@MW4Scorches@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+void W3DGameClient::addScorch(const Coord3D *pos, Real radius, Scorches type)
+{
+	if (TheTerrainRenderObject)
+	{
+		Vector3 loc(pos->x, pos->y, pos->z);
+		TheTerrainRenderObject->addScorch(loc, radius, type);
+	}
+}
 
 // FUNCTION: BFME2 0x0004C7F0 size=148 name=?createRayEffectByTemplate@W3DGameClient@@UAEXPBVCoord3D@@0PBVThingTemplate@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
 void W3DGameClient::createRayEffectByTemplate(const Coord3D *start, const Coord3D *end, const ThingTemplate *thingTemplate)
