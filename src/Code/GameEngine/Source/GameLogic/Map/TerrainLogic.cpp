@@ -18,11 +18,64 @@
 #include "GameLogic/Object.h"
 #include "GameClient/TerrainRoadType.h"
 #include "GameLogic/AI.h"
+#include "Common/Coord2D.h"
+#include "Common/Region2D.h"
+
+bool LineInRegion(const Coord2D *p1, const Coord2D *p2, const Region2D *clipRegion);
 
 // The singleton (retail VA 0x00DFEC50).
 TerrainLogic *TheTerrainLogic = NULL;
 extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint list (TerrainLogic::getFirstWaypoint, slot 33, returns it)
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
+bool Bridge::isCellOnEnd(const Region2D *cell)
+{
+	Coord3D endVector;
+	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
+	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
+	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	endVector.normalize();
+
+	if (m_polygonTrigger)
+	{
+		endVector.x = m_bridgeInfo.toRight.x - m_bridgeInfo.toLeft.x;
+		endVector.y = m_bridgeInfo.toRight.y - m_bridgeInfo.toLeft.y;
+		endVector.z = m_bridgeInfo.toRight.z - m_bridgeInfo.toLeft.z;
+		endVector.normalize();
+	}
+	endVector.x *= 10.0f;
+	endVector.y *= 10.0f;
+
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x += endVector.x;
+	fromLeft.y += endVector.y;
+
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x -= endVector.x;
+	fromRight.y -= endVector.y;
+
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x += endVector.x;
+	toLeft.y += endVector.y;
+
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x -= endVector.x;
+	toRight.y -= endVector.y;
+
+	Coord2D lineStart;
+	Coord2D lineEnd;
+	lineStart.x = fromLeft.x;
+	lineStart.y = fromLeft.y;
+	lineEnd.x = fromRight.x;
+	lineEnd.y = fromRight.y;
+	if (LineInRegion(&lineStart, &lineEnd, cell))
+		return true;
+
+	lineStart.x = toLeft.x;
+	lineStart.y = toLeft.y;
+	lineEnd.x = toRight.x;
+	lineEnd.y = toRight.y;
+	return LineInRegion(&lineStart, &lineEnd, cell);
+}
 
 // FUNCTION: BFME2 0x0027C95B size=548 name=?isCellOnSide@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 
