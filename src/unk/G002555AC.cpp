@@ -22,6 +22,10 @@ ModuleData *FadeAndDieOrnamentUpdateModuleData::friend_newModuleData(INI *ini)
 	return data;
 }
 // FUNCTION: BFME2 0x00255652 size=70 name=??0CommandSetUpgradeModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+CommandSetUpgradeModuleData::CommandSetUpgradeModuleData()
+{
+	m_commandSet = AsciiString::TheEmptyString;
+}
 // FUNCTION: BFME2 0x00255698 size=84 name=?friend_newModuleData@CommandSetUpgradeModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 ModuleData *CommandSetUpgradeModuleData::friend_newModuleData(INI *ini)
 {
