@@ -57,6 +57,22 @@ void W3DShaderManager::resetShader(ShaderTypes shader)
 
 // FUNCTION: BFME2 0x00075D52 size=228 name=?endRenderToTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ evidence=N:ledger tier=A
 
+IDirect3DTexture9 *W3DShaderManager::endRenderToTexture(void)
+{
+	if (!m_renderingToTexture)
+		return NULL;
+
+	DX8Wrapper::Set_Render_Target(m_oldRenderSurface, m_oldDepthSurface);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_ADDRESSW, D3DTADDRESS_CLAMP);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_MINFILTER, D3DTEXF_LINEAR);
+	DX8Wrapper::Set_DX8_Texture_Stage_State(0, D3DTSS_MIPFILTER, D3DTEXF_NONE);
+	m_renderingToTexture = false;
+	return m_renderTexture;
+}
+
 // FUNCTION: BFME2 0x00075E36 size=6 name=?getRenderTexture@W3DShaderManager@@SAPAUIDirect3DTexture9@@XZ evidence=N:ledger tier=A
 IDirect3DTexture9 *W3DShaderManager::getRenderTexture(void)
 {
