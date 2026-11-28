@@ -1004,6 +1004,20 @@ Int Player::rva002ABD1D(Int kindOf, Int limit)
 }
 
 // FUNCTION: BFME2 0x002ABD48 size=75 name=?removeTeamFromList@Player@@QAEXPAVTeamPrototype@@@Z evidence=N:ledger tier=A
+void Player::removeTeamFromList(TeamPrototype *team)
+{
+	// Retail preserves the two list-size traversals around the removal from a stripped debug check.
+	m_playerTeamPrototypes.size();
+	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it)
+	{
+		if (team == *it)
+		{
+			m_playerTeamPrototypes.erase(it);
+			break;
+		}
+	}
+	m_playerTeamPrototypes.size();
+}
 
 // FUNCTION: BFME2 0x002ABD93 size=145 name=?setObjectsEnabled@Player@@QAEXABVAsciiString@@_N@Z evidence=N:ledger tier=A
 
