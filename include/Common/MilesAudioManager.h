@@ -135,15 +135,14 @@ public:
 	virtual void friend_xferSubAudioEventRTS(Xfer *, PooledAudioEventRTSRef *);	// slot 103, 0x0005987D
 	virtual void unknownAudioSlot104();											// slot 104, folded 0x000B3FD0 (an empty body; signature unresolved in the base)
 
-	// Slots new to MilesAudioManager. Original names are not recovered; the
-	// spellings follow docs/naming.md (table offset) except getScreenToTerrainPositions,
-	// the ledger's name for its target.
-	virtual void vfunc_0x1A4(Coord3D *position);								// slot 105, 0x000511C3: fills *position from a source the focused view (+0x678) selects; zero for other views
+	// Slots new to MilesAudioManager. Original names are not recovered; each slot
+	// takes the ledger's accepted name for its target.
+	virtual void rva000511C3(Coord3D *position);								// slot 105, 0x000511C3: fills *position from a source the focused view (+0x678) selects; zero for other views
 	virtual void getScreenToTerrainPositions(ScreenToTerrainSet *positions);	// slot 106, 0x0005294A
-	virtual Bool vfunc_0x1AC(const Coord3D *position);							// slot 107, 0x000516EF
-	virtual Bool vfunc_0x1B0(AudioEventRTS *event);								// slot 108, 0x000527FB
-	virtual Real vfunc_0x1B4();													// slot 109, 0x0005121F; update 0x00062690 stores its result at +0x90
-	virtual void vfunc_0x1B8();													// slot 110, 0x000541DB: reads audio INI data through three loaders (0x0005407E, 0x000540A7, 0x00054120)
+	virtual Bool rva000516EF(const Coord3D *position);							// slot 107, 0x000516EF
+	virtual Bool slot108(AudioEventRTS *event);									// slot 108, 0x000527FB
+	virtual Real rva0005121F();													// slot 109, 0x0005121F; update 0x00062690 stores its result at +0x90
+	virtual void rva000541DB();													// slot 110, 0x000541DB: reads audio INI data through three loaders (0x0005407E, 0x000540A7, 0x00054120)
 
 	// Snapshot (secondary table at +0xC); access follows the ledger's decorated names.
 	virtual void xfer(Xfer *xfer);												// slot 3, 0x0005E3E5
