@@ -167,6 +167,12 @@ const char *Radar::GetSnapshotName() const
 
 // FUNCTION: BFME2 0x000500E5 size=27 name=?refreshTerrain@W3DRadar@@UAEXPAVTerrainLogic@@@Z evidence=N:ledger tier=B hypothesis:name:Z
 
+void W3DRadar::refreshTerrain(TerrainLogic *terrain)
+{
+	Radar::refreshTerrain(terrain);
+	buildTerrainTexture(terrain);
+}
+
 // FUNCTION: BFME2 0x00050125 size=1049 name=?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0005053E size=1314 name=?draw@W3DRadar@@QAEXHHHHH@Z evidence=N:ledger tier=B hypothesis:cohesion

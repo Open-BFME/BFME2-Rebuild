@@ -15,6 +15,9 @@
 class W3DRadar : public Radar
 {
 protected:
+	virtual void refreshTerrain(TerrainLogic *terrain);
+	void buildTerrainTexture(TerrainLogic *terrain);
+
 	// The pixel on screen of a radar cell: the radar window's upper left plus the cell scaled to its size (the grid is 128 x 128).
 	void radarToPixel(const ICoord2D *radar, ICoord2D *pixel, Int radarUpperLeftX, Int radarUpperLeftY, Int radarWidth, Int radarHeight);
 
