@@ -21,6 +21,7 @@ void rva000C48DB(void*,void*,void*,void*);
 #include "Common/BitFlagsIO.h"
 #include "WW3D2/MaterialInfoClass.h"
 #include "WW3D2/VertexMaterialClass.h"
+#include "WW3D2/Shadow.h"
 // FUNCTION: BFME2 0x000B2B3B size=7 name=?get@LivingWorldBuildPlotIconSubObject@@UBEHXZ evidence=X:proven (vtable) tier=B hypothesis:mm1-neighbour-pointers-mixed
 // FUNCTION: BFME2 0x000B2B42 size=58 name=?Rva000B2B42Clamp@@YAXPAH0H@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x000B2B7C size=11 name=?millisecondsToSeconds@@YAMM@Z evidence=N:ledger tier=B hypothesis:mm1-contiguity-callers
@@ -62,6 +63,14 @@ void rva000C48DB(void*,void*,void*,void*);
 // FUNCTION: BFME2 0x000B3133 size=24 name=?rva000B3133@Rva000B3133Module@@UAEPAVRva000B3133Part@@XZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x000B314B size=32 name=?setTerrainDecalSize@W3DModelDraw@@UAEXMM@Z evidence=N:ledger tier=A
+void W3DScriptedModelDraw::setTerrainDecalSize(Real x, Real y)
+{
+	if (m_terrainDecal != NULL)
+	{
+		m_terrainDecal->m_width = x;
+		m_terrainDecal->m_height = y;
+	}
+}
 
 // FUNCTION: BFME2 0x000B316B size=34 name=?setTerrainDecalOpacity@W3DModelDraw@@UAEXM@Z evidence=N:ledger tier=A
 
