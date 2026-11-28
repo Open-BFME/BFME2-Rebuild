@@ -6,6 +6,7 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K
 #include "WWMath/PlaneClass.h"
+#include "WWMath/Vector2.h"
 // FUNCTION: BFME2 0x0007B638 size=86 name=?Overlap_Test@CollisionMath@@SA?AW4OverlapType@1@ABVPlaneClass@@ABVVector3@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x0007B68E size=94 name=?rva0007B68E@@YA_NPBVPlaneClass@@PBVRva0007B68EObj@@@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
 // FUNCTION: BFME2 0x0007B6EC size=7 name=?rva0007B6EC@Rva0007B6EC@@QAEEXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-callers
@@ -28,6 +29,10 @@ const float *Rva0007B776SelectFloatAddress(const float *a, const float *b)
 // FUNCTION: BFME2 0x0007B7DB size=68 name=?Set@PlaneClass@@QAEXABVVector3@@0@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x0007B81F size=50 name=?Length@Vector2@@QBEMXZ evidence=N:ledger tier=B hypothesis:K
+Real Vector2::Length() const
+{
+	return WWMath::Sqrt(Length2());
+}
 
 // FUNCTION: BFME2 0x0007B851 size=63 name=?distance2D@@YAMPBURva0007B851Point@@0@Z evidence=N:ledger tier=B hypothesis:K
 

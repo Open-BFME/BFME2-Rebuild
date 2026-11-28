@@ -3,11 +3,8 @@
 // Target facts: class (VectorProcessorClass::Copy(Vector2 *, const Vector2 *, int)
 // 0x0071D3E0 mangles PAVVector2; Bfme dynamic vertex buffers take PBVVector2);
 // eight bytes, X +0, Y +4 (that Copy moves count*2 dwords).
-// Every member is inline as in WWMath: the retail bodies that exist (Set 0x0004CAE4
-// and 0x000D43DA, Length2 0x0004238C, Dot_Product 0x000D449F, Perp_Dot_Product
-// 0x0007B32D) have no direct callers, so they are copies emitted where a caller
-// declined to inline. Rotate (0x0007DF4B/0x0007E657) expands WWMath::Sin and Cos in place (rotateAbout
-// 0x000D6911); Length and Normalize (0x0007B81F, 0x0007E60B) are left out until a caller needs them.
+// Inline arithmetic mirrors WWMath. Length has an out-of-line retail copy,
+// while Normalize remains omitted until a caller needs it.
 // The copy constructor is Zero Hour's float-wise one.
 #pragma once
 #ifndef BFME2_VECTOR2_H
@@ -46,6 +43,7 @@ public:
 	const Real &operator[](int i) const { return (&X)[i]; }
 
 	Real Length2() const { return X * X + Y * Y; }
+	Real Length() const;
 
 	// Operand order from the retail copies (0x000D449F loads a.Y*b.Y first).
 	static Real Dot_Product(const Vector2 &a, const Vector2 &b) { return a.Y * b.Y + a.X * b.X; }
