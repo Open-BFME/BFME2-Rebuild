@@ -6,9 +6,13 @@
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+// dxsdk
 #include "GameClient/W3DBibBuffer.h"
 #include "WW3D2/IndexBufferClass.h"
 #include "WW3D2/VertexBufferClass.h"
+#include "WW3D2/dxwrapper.h"
+
+static ShaderClass detailAlphaShader(0x184B7);
 
 // FUNCTION: BFME2 0x000D3C74 size=43 name=?freeBibBuffers@W3DBibBuffer@@IAEXXZ evidence=N:ledger tier=B hypothesis:Z
 void W3DBibBuffer::freeBibBuffers()
@@ -155,6 +159,31 @@ void W3DBibBuffer::addBibDrawable(Vector3 corners[4], DrawableID id, Bool highli
 }
 
 // FUNCTION: BFME2 0x000D4228 size=139 name=?renderBibs@W3DBibBuffer@@QAEXXZ evidence=N:ledger tier=B hypothesis:K
+void W3DBibBuffer::renderBibs()
+{
+	loadBibsInVertexAndIndexBuffers();
+
+	if (m_curNumBibIndices == 0)
+		return;
+
+	DXWrapper::Set_Index_Buffer(m_indexBib, 0);
+	DXWrapper::Set_Vertex_Buffer(m_vertexBib);
+	DXWrapper::Set_Shader(detailAlphaShader);
+
+	if (m_curNumNormalBibIndices) {
+		DXWrapper::Set_Texture(0, m_bibTexture);
+		DXWrapper::Draw_Triangles(0, m_curNumNormalBibIndices / 3, 0, m_curNumNormalBibVertex);
+	}
+
+	if (m_curNumBibIndices > m_curNumNormalBibIndices) {
+		DXWrapper::Set_Texture(0, m_highlightBibTexture);
+		DXWrapper::Draw_Triangles(
+			m_curNumNormalBibIndices,
+			(m_curNumBibIndices - m_curNumNormalBibIndices) / 3,
+			m_curNumNormalBibVertex,
+			m_curNumBibVertices - m_curNumNormalBibVertex);
+	}
+}
 
 // FUNCTION: BFME2 0x000D42B3 size=272 name=??0W3DBibBuffer@@QAE@XZ evidence=N:ledger tier=A
 
