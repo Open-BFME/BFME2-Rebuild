@@ -26,6 +26,7 @@ Bool rva00285B66(const void *point, const void *polygon);	// whether the integer
 class PolygonTrigger
 {
 public:
+	static void addPolygonTrigger(PolygonTrigger *trigger);
 	virtual ~PolygonTrigger();						// PathfindLayer::reset 0x00366DEC deletes one through vtable slot 0
 	Rva0030B72CPoint getCenterPoint2D() const;		// the centre of the polygon
 	Bool rva002E3A39(const Coord3D &position);		// pointInTrigger for a float position
