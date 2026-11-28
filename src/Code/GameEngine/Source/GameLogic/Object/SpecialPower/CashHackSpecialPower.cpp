@@ -32,6 +32,9 @@ CashHackSpecialPower::CashHackSpecialPower(Thing *thing, const ModuleData *modul
 {
 }
 
+CashHackSpecialPower::~CashHackSpecialPower()
+{
+}
 
 // FUNCTION: BFME2 0x004C2650 size=6 name=?Rva004C2650Get@@YAHXZ evidence=?:placeholder
 const char *CashHackSpecialPower::GetSnapshotName() const
