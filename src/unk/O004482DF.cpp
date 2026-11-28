@@ -4,8 +4,23 @@
 // Membership is selected per row. Tier A: structure + F/W name. Tier L: structure + library (upstream) name. Tier B: explicit hypotheses.
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
+// Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+#include "GameNetwork/LANGameInfo.h"
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:name:invented
 // FUNCTION: BFME2 0x004482FB size=87 name=??1LANGameInfo@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x00448352 size=106 name=?setSlot@LANGameInfo@@QAEXHVLANGameSlot@@@Z evidence=N:ledger tier=B hypothesis:Z
+void LANGameInfo::setSlot(Int slotNum, LANGameSlot slotInfo)
+{
+	if (slotNum < 0 || slotNum >= MAX_SLOTS)
+		return;
+
+	m_LANSlot[slotNum] = slotInfo;
+
+	if (slotNum == 0)
+	{
+		m_LANSlot[0].m_isAccepted = true;
+		m_LANSlot[0].setMapAvailability(true);
+	}
+}
 
