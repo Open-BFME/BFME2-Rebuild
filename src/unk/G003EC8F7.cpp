@@ -2,3 +2,17 @@
 // object=G003EC8F7 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x003EC8F7 size=43 name=?ComputeCRC@@YAIPBEII@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+unsigned int ComputeCRC(const unsigned char *data, unsigned int length, unsigned int crc)
+{
+	unsigned int result = crc;
+	if (data == 0) {
+		return result;
+	}
+	while (length != 0) {
+		unsigned int carry = result >> 31;
+		result = result * 2 + *data + carry;
+		++data;
+		--length;
+	}
+	return result;
+}
