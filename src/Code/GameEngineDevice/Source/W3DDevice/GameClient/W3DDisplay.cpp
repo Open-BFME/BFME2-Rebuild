@@ -11,6 +11,11 @@
 #include "GameLogic/GameLogic.h"
 #include "GameClient/Display.h"
 #include "GameClient/W3DDisplay.h"
+#include "GameClient/W3DDynamicLight.h"
+#include "GameClient/W3DScene.h"
+#include "Common/Coord3D.h"
+#include "Common/RGBColor.h"
+#include "WWMath/Vector3.h"
 #include "GameLogic/ObjectIterator.h"
 #include "GameClient/DisplayString.h"
 #include "Common/BitFlagsIO.h"
@@ -194,6 +199,23 @@ void NetworkDebugDisplay(DebugDisplayInterface *, void *, FILE *fp)
 // FUNCTION: BFME2 0x00044235 size=7 name=?get@Rva00044235ByteField@@QBEEXZ evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0004423C size=233 name=?createLightPulse@W3DDisplay@@UAEXPBVCoord3D@@PBURGBColor@@MMII@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+
+void W3DDisplay::createLightPulse(const Coord3D *pos, const RGBColor *color, Real innerRadius, Real attenuationWidth, UnsignedInt increaseFrameTime, UnsignedInt decayFrameTime)
+{
+	if (innerRadius + attenuationWidth < 21.0f)
+		return;
+
+	W3DDynamicLight *dynamicLight = m_3DScene->getADynamicLight();
+	dynamicLight->setEnabled(true);
+	dynamicLight->Set_Ambient(Vector3(color->red, color->green, color->blue));
+	dynamicLight->Set_Diffuse(Vector3(color->red, color->green, color->blue));
+	dynamicLight->Set_Position(Vector3(pos->x, pos->y, pos->z));
+	dynamicLight->Set_Far_Attenuation_Range(innerRadius, innerRadius + attenuationWidth);
+	dynamicLight->setFrameFade(increaseFrameTime, decayFrameTime);
+	dynamicLight->setDecayRange();
+	dynamicLight->setDecayColor();
+	dynamicLight->Set_Flag(LightClass::FAR_ATTENUATION, true);
+}
 
 // FUNCTION: BFME2 0x00044325 size=59 name=?f@Rva0044325@@QAEXXZ evidence=?:placeholder tier=A
 
