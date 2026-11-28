@@ -7,13 +7,15 @@
 #ifndef BFME2_PROFILEFASTCS_H
 #define BFME2_PROFILEFASTCS_H
 
+#include <windows.h>
+
 class ProfileFastCS
 {
 	ProfileFastCS(const ProfileFastCS &);
 	ProfileFastCS &operator=(const ProfileFastCS &);
 
-	volatile unsigned int m_Flag;
-	static void *testEvent;						// 0x00A0C774
+	volatile long m_Flag;
+	static HANDLE testEvent;						// 0x00A0C774
 
 	void ThreadSafeSetFlag();
 	void ThreadSafeClearFlag()
