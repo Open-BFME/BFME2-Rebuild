@@ -174,7 +174,46 @@ void ProcessAnimateWindowSlideFromLeft::initAnimateWindow(AnimateWindow *animWin
 }
 
 // FUNCTION: BFME2 0x005C53DD size=223 name=?updateAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
+bool ProcessAnimateWindowSlideFromLeft::updateAnimateWindow(AnimateWindow *animWin)
+{
+	if (!animWin)
+	{
+		return true;
+	}
 
+	if (animWin->isFinished())
+		return true;
+
+	if (timeGetTime() < animWin->getStartTime())
+		return false;
+
+	GameWindow *win = animWin->getGameWindow();
+	if (!win)
+	{
+		return true;
+	}
+
+	ICoord2D curPos = animWin->getCurPos();
+	ICoord2D endPos = animWin->getEndPos();
+	Coord2D vel = animWin->getVel();
+	curPos.x += (Int)vel.x;
+
+	if (curPos.x > endPos.x)
+	{
+		curPos.x = endPos.x;
+		animWin->setFinished(true);
+		return true;
+	}
+
+	win->winSetPosition(curPos.x, curPos.y);
+	animWin->setCurPos(curPos);
+	if (endPos.x - curPos.x <= m_slowDownThreshold)
+		vel.x *= m_slowDownRatio;
+	if (vel.x < 1.0f)
+		vel.x = 1.0f;
+	animWin->setVel(vel);
+	return false;
+}
 
 // FUNCTION: BFME2 0x005C54BC size=233 name=?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z evidence=N:ledger
 
