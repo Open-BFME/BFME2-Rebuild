@@ -1353,12 +1353,140 @@ void W3DRoadBuffer::miter(Int ndx1, Int ndx2)
 // FUNCTION: BFME2 0x000DC568 size=99 name=??0W3DRoadBuffer@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000DC5CB size=593 name=?loadAlphaJoin@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1M@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::loadAlphaJoin(RoadSegment *pRoad, Vector2 loc1, Vector2 loc2, Real scale)
+{
+	Vector2 roadVector(loc2.X - loc1.X, loc2.Y - loc1.Y);
+	Vector2 roadNormal(-roadVector.Y, roadVector.X);
+	if (fabs(roadVector.X) < MIN_ROAD_SEGMENT && fabs(roadVector.Y) < MIN_ROAD_SEGMENT) {
+		roadVector.Set(1.0f, 0.0f);
+		roadNormal.Set(0.0f, 1.0f);
+	} else {
+		roadVector.Normalize();
+		roadNormal.Normalize();
+	}
+
+	Real uOffset = (106.0f / 512.0f);
+	Real vOffset = (425.0f / 512.0f);
+
+	Real roadwidth = scale;
+	Real uScale = pRoad->m_widthInTexture;
+
+	roadVector *= roadwidth * 48 / 128;
+	roadNormal *= uScale * (1 + 8.0f / 128);
+
+	Vector2 corners[NUM_CORNERS];
+
+	corners[topLeft] = loc1 + roadNormal * 0.5f - roadVector * 0.65f;
+	corners[bottomLeft] = corners[topLeft] - roadNormal;
+	corners[bottomRight] = corners[bottomLeft] + roadVector;
+	corners[topRight] = corners[topLeft] + roadVector;
+	loadFloat4PtSection(pRoad, loc1, roadNormal, roadVector, corners, uOffset, vOffset, scale, uScale);
+}
 
 // FUNCTION: BFME2 0x000DC81C size=623 name=?loadY@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1M@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::loadY(RoadSegment *pRoad, Vector2 loc1, Vector2 loc2, Real scale)
+{
+	Vector2 roadVector(loc2.X - loc1.X, loc2.Y - loc1.Y);
+	Vector2 roadNormal(-roadVector.Y, roadVector.X);
+	if (fabs(roadVector.X) < MIN_ROAD_SEGMENT && fabs(roadVector.Y) < MIN_ROAD_SEGMENT) {
+		roadVector.Set(1.0f, 0.0f);
+		roadNormal.Set(0.0f, 1.0f);
+	} else {
+		roadVector.Normalize();
+		roadNormal.Normalize();
+	}
+
+	Real uOffset = (255.0f / 512.0f);
+	Real vOffset = (226.0f / 512.0f);
+
+	Real roadwidth = scale;
+
+	roadVector *= roadwidth;
+	roadNormal *= roadwidth;
+
+	Vector2 corners[NUM_CORNERS];
+
+	roadVector *= 1.59f;
+	corners[topLeft] = loc1 + roadNormal * 0.29f - roadVector * 0.5f;
+	corners[bottomLeft] = corners[topLeft] - roadNormal * 1.08f;
+	corners[bottomRight] = corners[bottomLeft] + roadVector;
+	corners[topRight] = corners[topLeft] + roadVector;
+	loadFloat4PtSection(pRoad, loc1, roadNormal, roadVector, corners, uOffset, vOffset, scale, scale);
+}
 
 // FUNCTION: BFME2 0x000DCA8B size=726 name=?loadH@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1_NM@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::loadH(RoadSegment *pRoad, Vector2 loc1, Vector2 loc2, bool flip, Real scale)
+{
+	Vector2 roadVector(loc2.X - loc1.X, loc2.Y - loc1.Y);
+	Vector2 roadNormal(-roadVector.Y, roadVector.X);
+	if (fabs(roadVector.X) < MIN_ROAD_SEGMENT && fabs(roadVector.Y) < MIN_ROAD_SEGMENT) {
+		roadVector.Set(1.0f, 0.0f);
+		roadNormal.Set(0.0f, 1.0f);
+	} else {
+		roadVector.Normalize();
+		roadNormal.Normalize();
+	}
+
+	Real uOffset = (202.0f / 512.0f);
+	Real vOffset = (364.0f / 512.0f);
+
+	Real roadwidth = scale;
+
+	roadVector *= roadwidth;
+	roadNormal *= roadwidth;
+
+	Vector2 corners[NUM_CORNERS];
+
+	roadNormal *= 1.35f;
+	if (flip) {
+		corners[bottomLeft] = loc1 - roadNormal * 0.20f - roadVector * pRoad->m_widthInTexture / 2;
+	} else {
+		corners[bottomLeft] = loc1 - roadNormal * 0.8f - roadVector * pRoad->m_widthInTexture / 2;
+	}
+	Vector2 width = roadVector * pRoad->m_widthInTexture / 2;
+	width = width + roadVector * 1.2f;
+	corners[bottomRight] = corners[bottomLeft] + width;
+	corners[topRight] = corners[bottomRight] + roadNormal;
+	corners[topLeft] = corners[bottomLeft] + roadNormal;
+	if (flip) roadNormal = -roadNormal;
+	loadFloat4PtSection(pRoad, loc1, roadNormal, roadVector, corners, uOffset, vOffset, scale, scale);
+}
 
 // FUNCTION: BFME2 0x000DCD61 size=627 name=?loadFloatSection@W3DRoadBuffer@@IAEXPAVRoadSegment@@VVector2@@1MMMMMM@Z evidence=N:ledger tier=B hypothesis:K
+void W3DRoadBuffer::loadFloatSection(RoadSegment *pRoad, Vector2 loc, Vector2 roadVector,
+	Real halfHeight, Real left, Real right, Real uOffset, Real vOffset, Real scale)
+{
+	if (m_map == NULL) {
+		return;
+	}
+
+	Vector2 roadNormal(-roadVector.Y, roadVector.X);
+	roadVector.Normalize();
+	roadVector *= right;
+
+	roadNormal.Normalize();
+	if (halfHeight < 0) halfHeight = -halfHeight;
+	roadNormal *= halfHeight;
+
+	Vector2 roadLeft = roadVector;
+	roadLeft.Normalize();
+	roadLeft *= left;
+	roadVector += roadLeft;
+	Vector2 leftCenter = loc;
+	leftCenter -= roadLeft;
+
+	Vector2 corners[NUM_CORNERS];
+
+	corners[bottomLeft] = leftCenter - roadNormal;
+	corners[bottomRight] = corners[bottomLeft];
+	corners[bottomRight] += roadVector;
+	corners[topRight] = corners[bottomRight];
+	corners[topRight] += 2 * roadNormal;
+	corners[topLeft] = corners[bottomLeft];
+	corners[topLeft] += 2 * roadNormal;
+
+	loadFloat4PtSection(pRoad, loc, roadNormal, roadVector, corners, uOffset, vOffset, scale, scale);
+}
 
 // FUNCTION: BFME2 0x000DCFD4 size=300 name=?insertCurveSegments@W3DRoadBuffer@@IAEXXZ evidence=N:ledger tier=B hypothesis:K
 void W3DRoadBuffer::insertCurveSegments(void)
