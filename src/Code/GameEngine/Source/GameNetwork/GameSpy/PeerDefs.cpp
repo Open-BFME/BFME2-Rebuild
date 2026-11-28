@@ -21,6 +21,7 @@ namespace Msvcr71
 #include "GameNetwork/GameSpy/PeerThread.h"
 #include "GameNetwork/GameSpy/GameSpyConfig.h"
 #include "Common/CustomMatchPreferences.h"
+#include "Common/IgnorePreferences.h"
 #include "GameClient/GameText.h"
 #include "GameClient/MapCache.h"
 extern "C" __declspec(dllimport) unsigned long __stdcall GetTickCount(void);
@@ -640,6 +641,13 @@ void GameSpyInfo::leaveStagingRoom()
 // FUNCTION: BFME2 0x00385956 size=424 name=?TearDownGameSpy@@YAXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00385B1C size=92 name=?removeFromSavedIgnoreList@GameSpyInfo@@UAEXH@Z evidence=N:ledger tier=A
+void GameSpyInfo::removeFromSavedIgnoreList(Int profileID)
+{
+	m_savedIgnoreMap.erase(profileID);
+	IgnorePreferences pref;
+	pref.setNumberedEntry(AsciiString::TheEmptyString, profileID, false);
+	pref.write();
+}
 
 // FUNCTION: BFME2 0x00385B78 size=100 name=?loadSavedIgnoreList@Rva00385B78@@QAEXXZ evidence=?:placeholder tier=A
 
