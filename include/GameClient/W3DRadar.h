@@ -11,15 +11,27 @@
 #include "Common/Radar.h"
 #include "Common/RGBColor.h"
 #include "Common/ICoord2D.h"
+#include "WW3D2/ww3dformat.h"
 
 class W3DRadar : public Radar
 {
 protected:
+	void initializeTextureFormats();
+
 	// The pixel on screen of a radar cell: the radar window's upper left plus the cell scaled to its size (the grid is 128 x 128).
 	void radarToPixel(const ICoord2D *radar, ICoord2D *pixel, Int radarUpperLeftX, Int radarUpperLeftY, Int radarWidth, Int radarHeight);
 
 	// Lightens a cell colour above the middle height and darkens it below (hi / mid / lo are the map's height thirds).
 	void interpolateColorForHeight(RGBColor *color, Real height, Real hiZ, Real midZ, Real loZ);
+
+	UnsignedInt m_unknownFormatPrefix;
+	WW3DFormat m_terrainTextureFormat;
+	UnsignedInt m_unknownFormatGap0[3];
+	WW3DFormat m_overlayTextureFormat;
+	UnsignedInt m_unknownFormatGap1[2];
+	WW3DFormat m_shroudTextureFormat;
+	UnsignedInt m_unknownFormatGap2[2];
+	WW3DFormat m_unknownTextureFormat;
 };
 
 #endif
