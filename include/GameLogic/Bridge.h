@@ -49,10 +49,12 @@ typedef char BridgeInfo_size[(sizeof(BridgeInfo) == 0xA8) ? 1 : -1];
 class Drawable;
 class PolygonTrigger;
 class Vector3;
+struct Region2D;
 class Bridge
 {
 public:
 	virtual ~Bridge();							// slot 0, 0x00280C05 (deleting)
+	bool isCellOnEnd(const Region2D *cell);
 	Bool isPointOnBridge(const Coord3D *pos);
 	Drawable *getDrawable();
 	void updateDamageState();
