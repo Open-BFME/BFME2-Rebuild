@@ -2,6 +2,7 @@
 #include <math.h>
 #include "WWMath/Vector3.h"
 #include "GameClient/W3DStreakDraw.h"
+#include "Common/NameKeyGenerator.h"
 // Tier B; object=O000CFF4C evidence=invented flags=align=U;ehform=EH_prolog
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unproven right=unknown-rows
@@ -22,6 +23,11 @@ const char *W3DStreakDraw::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x000D004C size=69 name=?getModuleNameKey@W3DStreakDraw@@UBE?AW4NameKeyType@@XZ evidence=N:ledger
+NameKeyType W3DStreakDraw::getModuleNameKey() const
+{
+	static NameKeyType TheW3DStreakDrawNameKey = TheNameKeyGenerator->nameToKey("W3DStreakDraw");
+	return TheW3DStreakDrawNameKey;
+}
 
 // FUNCTION: BFME2 0x000D0091 size=534 name=?rva000D0091@W3DStreakDraw@@QAEXXZ evidence=?:placeholder
 
