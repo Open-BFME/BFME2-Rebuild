@@ -5,11 +5,23 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=rests-on:name; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
+#include "GameClient/GameWindow.h"
+#include "GameClient/RadialWindowController.h"
+
 // FUNCTION: BFME2 0x0053EC42 size=21 name=?setIgnoreCollisionsWith@PhysicsBehavior@@QAEXPBVObject@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0053EC7D size=47 name=?PositionButton@RadialWindowController@@UAEXHPBURva0053EC7DPair@@0@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0053ECAC size=37 name=?EnableButtonInput@RadialWindowController@@UAEXH_N@Z evidence=N:ledger tier=A
+void RadialWindowController::EnableButtonInput(Int index, Bool enable)
+{
+	enum { WIN_STATUS_NO_INPUT = 0x200 };
+	GameWindow *button = m_windows[index];
+	if (enable)
+		button->winClearStatus(WIN_STATUS_NO_INPUT);
+	else
+		button->winSetStatus(WIN_STATUS_NO_INPUT);
+}
 
 // FUNCTION: BFME2 0x0053ECD1 size=52 name=?ShouldButtonFlash@RadialWindowController@@UAE_NH@Z evidence=N:ledger tier=A
 
