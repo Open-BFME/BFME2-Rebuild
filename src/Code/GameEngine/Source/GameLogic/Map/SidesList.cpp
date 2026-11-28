@@ -7,10 +7,13 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z, hypothesis:cohesion, hypothesis:padding
 #include "GameLogic/BuildListInfo.h"
+#include "GameLogic/AISideBuildList.h"
 #include "GameLogic/SidesInfo.h"
 #include "GameLogic/SidesList.h"
+#include "Common/INI.h"
 #include "Common/Xfer.h"
 #include "Common/StaticNameKey.h"
+#include <stddef.h>
 
 // The sides list singleton (retail VA 0x00E01D58, .bss: followed by this object's DRAWABLE_FRAMES_PER_FLASH copy and its
 // readPlayerNames static; Zero Hour defines it in SidesList.cpp).
@@ -249,6 +252,27 @@ AsciiString BuildListInfo::getScript() const
 // FUNCTION: BFME2 0x0032A5FC size=838 name=?rva0032A5FC@SidesList@@QAEXAAVDataChunkOutput@@@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x0032A942 size=145 name=?parseStructure@BuildListInfo@@SAXPAVINI@@PAX1PBX@Z evidence=N:ledger tier=A
+// Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+void BuildListInfo::parseStructure(INI *ini, void *instance, void *, const void *)
+{
+	AsciiString templateName(ini->getNextToken());
+	static const FieldParse fields[] =
+	{
+		{ "Name", INI::parseAsciiString, 0, offsetof(BuildListInfo, m_buildingName) },
+		{ "Location", INI::parseCoord2D, 0, offsetof(BuildListInfo, m_location) },
+		{ "Rebuilds", INI::parseInt, 0, offsetof(BuildListInfo, m_numRebuilds) },
+		{ "Angle", INI::parseAngleReal, 0, offsetof(BuildListInfo, m_angle) },
+		{ "InitiallyBuilt", INI::parseBool, 0, offsetof(BuildListInfo, m_isInitiallyBuilt) },
+		{ "RallyPointOffset", INI::parseCoord2D, 0, offsetof(BuildListInfo, m_rallyPointOffset) },
+		{ "AutomaticallyBuild", INI::parseBool, 0, offsetof(BuildListInfo, m_automaticallyBuild) },
+		{ 0, 0, 0, 0 }
+	};
+
+	BuildListInfo *buildInfo = new BuildListInfo;
+	buildInfo->m_templateName = templateName;
+	ini->initFromINI(buildInfo, fields);
+	static_cast<AISideBuildList *>(instance)->addInfo(buildInfo);
+}
 
 // FUNCTION: BFME2 0x0032A9D3 size=141 name=?Rva0032A9D3Split@@YA?AVAsciiString@@AAV1@ABV1@@Z evidence=?:placeholder tier=A
 
