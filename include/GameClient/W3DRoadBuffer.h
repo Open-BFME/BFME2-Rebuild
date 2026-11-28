@@ -97,6 +97,7 @@ public:
 	int GetIndices(unsigned short *destination_ib, int numToCopy, int offset);
 	void GetRoadSegInfo(TRoadSegInfo *pInfo);
 	void updateSegLighting();
+	const SphereClass &getBounds();
 };
 // SIZE 0xBC
 typedef char RoadSegmentSize[(sizeof(RoadSegment) == 0xBC) ? 1 : -1];
