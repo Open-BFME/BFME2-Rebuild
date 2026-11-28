@@ -357,6 +357,7 @@ public:
 	Money *getMoney() { return &m_money; }
 	const Money *getMoney() const { return &m_money; }
 
+	AsciiString m_baseSide; // The string returned by getBaseSide.
 	const PlayerTemplate *m_playerTemplate;	// +0x34
 	UnicodeString m_playerDisplayName;	// +0x38
 	Handicap m_handicap;			// +0x3C (built by 0x003B0E83)
@@ -444,6 +445,7 @@ public:
 };
 // SIZE 0x758
 typedef char PlayerTemplateOffset[(offsetof(Player, m_playerTemplate) == 0x34) ? 1 : -1];
+typedef char PlayerBaseSideOffset[(offsetof(Player, m_baseSide) == 0x2C) ? 1 : -1];
 typedef char PlayerRelationsOffset[(offsetof(Player, m_playerRelations) == 0x330) ? 1 : -1];
 typedef char PlayerSize[(sizeof(Player) == 0x758) ? 1 : -1];
 typedef char PlayerCommandOffset[(offsetof(Player, m_command) == 0x60 && sizeof(Command) == 0x30) ? 1 : -1];

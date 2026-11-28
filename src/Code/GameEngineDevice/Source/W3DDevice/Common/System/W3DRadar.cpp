@@ -7,6 +7,7 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:init-votes, hypothesis:name:Z
 #include "Common/GameType.h"
+#include "Common/Player.h"
 #include "GameLogic/Object.h"
 #include "GameClient/W3DRadar.h"
 // FUNCTION: BFME2 0x0004D729 size=43 name=?rva0004D729@Rva0004D729@@QAEPAV1@PAXPAPAXPAHHHHH@Z evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
@@ -154,6 +155,10 @@ Bool Object::testStatus(ObjectStatusTypes bit) const
 // FUNCTION: BFME2 0x0004F7F4 size=55 name=?rva0004F7F4@Rva004EFE9@@UAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x0004F833 size=27 name=?getBaseSide@Player@@QBE?AVAsciiString@@XZ evidence=N:ledger tier=B hypothesis:cohesion
+AsciiString Player::getBaseSide() const
+{
+	return m_baseSide;
+}
 
 // FUNCTION: BFME2 0x0004F84E size=128 name=?rva0004F84E@Rva0004F7F4Owner@@QAEAAVRva0004E4C9@@AAV2@PBD@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
