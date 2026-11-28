@@ -128,6 +128,9 @@ public:
 	void addTOCEntry(AsciiString name, unsigned short id);			// 0x0023AB78
 	void restorePriorDisplayMode();								// 0x00238FC0 (role name: copies the saved display-mode fields at +0xD8/+0xDC/+0xE0 back over +0xCC/+0xD0/+0xD4)
 
+private:
+	DrawableID allocDrawableID();								// 0x002FDB5D
+
 protected:
 	virtual void loadPostProcess();								// Snapshot slot 1, 0x00239A9D
 	virtual const char *GetSnapshotName() const;				// Snapshot slot 2, 0x0004C457
