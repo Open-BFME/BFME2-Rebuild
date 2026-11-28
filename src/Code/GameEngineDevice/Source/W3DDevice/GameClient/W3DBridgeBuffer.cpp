@@ -87,6 +87,10 @@ void W3DBridge::init(Vector3 fromLoc, Vector3 toLoc, AsciiString bridgeTemplateN
 // FUNCTION: BFME2 0x000DDB94 size=639 name=?getBridgeInfo@W3DBridge@@QAEXPAVRva0027C36A@@@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000DE4EB size=67 name=??1W3DBridgeBuffer@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
+W3DBridgeBuffer::~W3DBridgeBuffer(void)
+{
+	freeBridgeBuffers();
+}
 
 // FUNCTION: BFME2 0x000DE52E size=110 name=??0W3DBridgeBuffer@@QAE@XZ evidence=N:ledger tier=B hypothesis:K
 
