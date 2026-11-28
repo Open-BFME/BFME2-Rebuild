@@ -31,6 +31,7 @@
 #include "Common/AsciiString.h"
 #include "Common/OpaqueRefElement4.h"
 #include "Common/SubsystemInterface.h"
+#include <map>
 
 class Object;
 class Drawable;
@@ -57,6 +58,8 @@ typedef _STL::hash_map<ObjectID, Object *, rts::hash<ObjectID>, _STL::equal_to<O
 // The buildable overrides keyed by template name: retail's operator[] COMDAT 0x002460C3 is
 // hash_map<AsciiString, BuildableStatus, rts::hash<AsciiString>, equal_to<AsciiString> >.
 typedef _STL::hash_map<AsciiString, BuildableStatus, rts::hash<AsciiString>, _STL::equal_to<AsciiString> > BuildableOverrideMap;
+typedef _STL::map<AsciiString, const CommandButton *> ControlBarOverrideMap;
+typedef char ControlBarOverrideMapSize[(sizeof(ControlBarOverrideMap) == 0xC) ? 1 : -1];
 // Pooled, like ObjectIDList: its push_back 0x001EC03C -> insert 0x001EBD16 -> node creator 0x001EB9AC pops the
 // freelist (FreelistPool::pop 0x002393E2); destroyObject 0x00242C09 and prepareLogicForObjectLoad 0x00242C86 call it.
 typedef _STL::list<Object *, FreelistAllocator<Object *> > ObjectPointerList;
@@ -175,7 +178,7 @@ public:
 	void updateObjectsChangedTriggerAreas() { m_frameObjectsChangedTriggerAreas = m_frame; }
 
 	BuildableOverrideMap m_thingTemplateBuildableOverrides;	// +0x10 template name -> BuildableStatus (setBuildableStatusOverride 0x00246F71)
-	unsigned char m_unk0x24[0xC];		// +0x24 _STL::map<int, ?> (ctor 0x0024613C)
+	ControlBarOverrideMap m_controlBarOverrides;
 	Real m_unk0x30;				// +0x30
 	Real m_unk0x34;				// +0x34
 	UnsignedInt m_unk0x38;			// +0x38 the network command timestamp
