@@ -19,6 +19,7 @@
 #include "Common/Snapshot.h"
 
 class Xfer;
+class INI;
 
 class BuildListInfo : public Snapshot
 {
@@ -26,6 +27,7 @@ class BuildListInfo : public Snapshot
 	friend class Player;		// Player::setBuildList 0x002A99D2 deletes the old list
 public:
 	BuildListInfo();									// 0x0032A0CE
+	static void parseStructure(INI *ini, void *instance, void *store, const void *userData);
 	// The copy constructor (0x00329DE6) and assignment (0x003299AD) are the implicit
 	// memberwise ones: the ten dwords at +0x50 are copied in member order (rep movs).
 	BuildListInfo *duplicate();
