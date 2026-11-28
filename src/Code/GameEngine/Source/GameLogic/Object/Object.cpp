@@ -79,6 +79,7 @@
 #include "GameLogic/ScriptEngine.h"
 #include "GameLogic/Module/DieModule.h"
 #include "GameLogic/Module/SpecialAbilityUpdate.h"
+#include "Common/BuildAssistant.h"
 
 // setDisabled 0x00291C9B disables until this frame.
 enum { FOREVER = 0x3FFFFFFF };
@@ -2866,6 +2867,66 @@ void Object::onCapture(Player *oldOwner, Player *newOwner)
 // FUNCTION: BFME2 0x00297000 size=329 name=?rva00297000@Object@@QAEXPBVCommandButton@@PAV1@HH@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00297149 size=274 name=?doCommandButtonAtPosition@Object@@QAEXPBVCommandButton@@PBVCoord3D@@HH@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
+void Object::doCommandButtonAtPosition(const CommandButton *button, const Coord3D *pos, Int arg, Int flag)
+{
+	if (isDisabled())
+		return;
+
+	AIUpdateInterface *ai = getAIUpdateInterface();
+	if (button)
+	{
+		switch (button->m_command)
+		{
+			case 10:	// GUI_COMMAND_ATTACK_MOVE
+				if (ai)
+				{
+					ai->aiAttackMoveToPosition(pos, button->getMaxShotsToFire(), (CommandSourceType)arg);
+					return;
+				}
+				break;
+
+			case 14:	// GUI_COMMAND_STOP
+				if (ai)
+				{
+					ai->aiIdle((CommandSourceType)arg);
+					return;
+				}
+				break;
+
+			case 23:	// GUI_COMMAND_FIRE_WEAPON
+				rva0028C24C();
+				setWeaponLock(button->getWeaponSlot(), LOCKED_TEMPORARILY);
+				if (ai)
+				{
+					ai->aiAttackPosition(pos, 1, (CommandSourceType)arg);
+					return;
+				}
+				break;
+
+			case 24:	// GUI_COMMAND_SPECIAL_POWER
+			case 38:	// GUI_COMMAND_SPELL_BOOK
+			{
+				const SpecialPowerTemplate *spt = button->getSpecialPowerTemplate();
+				if (spt)
+				{
+					UnsignedInt commandOptions = button->getOptions() | 0x40000;
+					if ((UnsignedByte)flag)
+						commandOptions |= 0x20000000;
+					doSpecialPowerAtLocation(spt, pos, commandOptions, arg == CMD_FROM_SCRIPT);
+					return;
+				}
+				break;
+			}
+
+			case 53:	// GUI_COMMAND_DOZER_CONSTRUCT
+				TheBuildAssistant->buildObjectNow(this, button->rva0035B570(), pos, 0.0f, getControllingPlayer());
+				return;
+
+			default:
+				break;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0029725B size=86 name=?bfmeApplyABG@BfmeK1094@@QAEXPAX0@Z evidence=N:ledger tier=A
 
