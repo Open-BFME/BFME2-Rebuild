@@ -1224,6 +1224,24 @@ void Drawable::setIndicatorColor(Int color)
 }
 
 // FUNCTION: BFME2 0x00274240 size=108 name=?friend_bindToObject@Drawable@@QAEXPAVObject@@@Z evidence=N:ledger tier=A
+void Drawable::friend_bindToObject(Object *obj)
+{
+	m_object = obj;
+	if (!obj)
+		return;
+
+	if (TheGameLogic->m_unk0x190 == true)
+		setIndicatorColor(TheGameLogic->m_unk0x194);
+	else if (TheWritableGlobalData->m_timeOfDay == TIME_OF_DAY_NIGHT)
+		setIndicatorColor(obj->getNightIndicatorColor());
+	else
+		setIndicatorColor(obj->getIndicatorColor());
+
+	for (DrawModule **dm = drawModuleList(); *dm; ++dm)
+		(*dm)->onDrawableBoundToObject();
+
+	preloadAssets();
+}
 
 // FUNCTION: BFME2 0x002742AC size=57 name=?changedTeam@Drawable@@QAEXXZ evidence=N:ledger tier=A
 void Drawable::changedTeam()

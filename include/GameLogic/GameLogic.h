@@ -249,7 +249,11 @@ public:
 	InvisibilityManager *m_manager178;	// +0x178
 	Int m_unk0x17C;				// +0x17C
 	UnsignedInt m_frameObjectsChangedTriggerAreas; // +0x180 Object::initObject 0x002934E7 stores the frame
-	unsigned char m_unk0x184[0x30];		// +0x184 a class with ctor 0x0040E039 (the +0x184 forwarders' target)
+	unsigned char m_unk0x184[0x0C];		// +0x184..+0x18F of ArmySummarySystem (the +0x184 forwarders' target)
+	Bool m_unk0x190;			// +0x190 cleared by ArmySummarySystem ctor; Drawable::friend_bindToObject tests == true
+	unsigned char m_pad0x191[3];		// +0x191..+0x193
+	Int m_unk0x194;				// +0x194 ArmySummarySystem indicator colour override; Drawable::friend_bindToObject reads
+	unsigned char m_unk0x198[0x1C];		// +0x198..+0x1B3 rest of ArmySummarySystem
 	Int m_unk0x1B4;				// +0x1B4
 	WindowLayout *m_background;		// +0x1B8 window cleanup 0x00376D49 owns it
 	Bool m_backgroundPending;		// +0x1BC
