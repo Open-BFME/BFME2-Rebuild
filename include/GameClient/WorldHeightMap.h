@@ -13,12 +13,19 @@
 struct DataChunkInfo;
 class DataChunkInput;
 
+class InputStream
+{
+public:
+	virtual Int read(UnsignedByte *buffer, Int numBytes) = 0;
+};
+
 class WorldHeightMap : public RefCountClass
 {
 public:
 	WorldHeightMap();
 	virtual ~WorldHeightMap();
 	virtual bool parseBlendTileData(DataChunkInput &file, DataChunkInfo *info);
+	static Int countTiles(InputStream *stream, Bool *halfTile = 0);
 
 	UnsignedShort getHeight(Int xIndex, Int yIndex) const;
 	void setHeight(Int xIndex, Int yIndex, UnsignedShort height);

@@ -20,6 +20,35 @@
 // FUNCTION: BFME2 0x000ABD9A size=112 name=?ParseWorldDictDataChunk@WorldHeightMap@@SA_NAAVDataChunkInput@@PAUDataChunkInfo@@PAX@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x000ABE0A size=150 name=?countTiles@WorldHeightMap@@SAHPAVInputStream@@PA_N@Z evidence=N:ledger tier=B hypothesis:K
+Int WorldHeightMap::countTiles(InputStream *stream, Bool *halfTile)
+{
+	UnsignedByte header[18];
+	if (halfTile)
+		*halfTile = false;
+	if (stream->read(header, sizeof(header)) != sizeof(header))
+		return 0;
+
+	Int imageWidth = static_cast<short>(header[12] | (header[13] << 8));
+	Int imageHeight = static_cast<short>(header[14] | (header[15] << 8));
+	Int tileWidth = imageWidth / 64;
+	Int tileHeight = imageHeight / 64;
+
+	if (header[1] != 0 || (header[2] != 2 && header[2] != 10))
+		return 0;
+	if (header[16] < 24 || header[16] > 32)
+		return 0;
+	if (tileWidth > 16 || tileHeight > 16)
+		return 0;
+
+	for (Int tiles = 16; tiles > 0; --tiles) {
+		if (tileWidth >= tiles && tileHeight >= tiles)
+			return tiles * tiles;
+	}
+
+	if (halfTile && imageWidth == 32 && imageHeight == 32)
+		*halfTile = true;
+	return 0;
+}
 
 // FUNCTION: BFME2 0x000ABEA0 size=1014 name=?readTiles@WorldHeightMap@@SA_NPAVInputStream@@0PAPAVTileData@@H@Z evidence=N:ledger tier=B hypothesis:K
 
