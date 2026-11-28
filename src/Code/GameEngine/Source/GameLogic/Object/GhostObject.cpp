@@ -87,4 +87,7 @@ const char *GhostObject::GetSnapshotName() const
 // FUNCTION: BFME2 0x00305B56 size=8 name=?ShroudGetData@GhostObject@@$4PPPPPPPM@A@BEPAVPartitionData@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x00305B5E size=88 name=??1GhostObject@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
+GhostObject::~GhostObject()
+{
+}
 
