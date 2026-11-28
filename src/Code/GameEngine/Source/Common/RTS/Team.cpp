@@ -746,6 +746,34 @@ void Team::transferUnitsTo(Team *newTeam)
 }
 
 // FUNCTION: BFME2 0x0039E76C size=134 name=?damageTeamMembers@Team@@QAE_NM@Z evidence=N:ledger tier=A
+Bool Team::damageTeamMembers(Real amount)
+{
+	Object *member;
+	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); (member = iter.cur()) != NULL; iter.advance())
+	{
+		if (member->isEffectivelyDead())
+			continue;
+
+		if (member->m_status.test(OBJECT_STATUS_DESTROYED))
+			continue;
+
+		if (amount < 0.0f)
+		{
+			member->kill(DAMAGE_UNRESISTABLE, DEATH_NORMAL);
+		}
+		else
+		{
+			DamageInfo damageInfo;
+
+			damageInfo.in.m_damageType = DAMAGE_UNRESISTABLE;
+			damageInfo.in.m_deathType = DEATH_NORMAL;
+			damageInfo.in.m_sourceID = INVALID_ID;
+			damageInfo.in.m_amount = amount;
+			member->attemptDamage(&damageInfo);
+		}
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x0039E7F2 size=35 name=?moveTeamTo@Team@@QAEXVCoord3D@@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
 void Team::moveTeamTo(Coord3D destination)
