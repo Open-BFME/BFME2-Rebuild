@@ -184,6 +184,7 @@ protected:
 
 public:
 	void clearAllRoads(void);								// Empties the road buffer.
+	void setMap(WorldHeightMap *pMap);
 };
 
 #endif
